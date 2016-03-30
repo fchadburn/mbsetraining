@@ -1,0 +1,30 @@
+
+[Types]
+Names=Usage Requirements
+
+[Usage Requirements]
+;This type captures requirements from DOORS as follows :
+;- An object is a requirement if it has an attribute 'Requirement'=True
+;- The ObjectID is considered as the Requirement ID
+;The intermediate file is in XML format
+Tool=DoorsXML
+ToolEdit=Doors
+Image=doors
+Variable1Name=profile
+Variable1Label=Profile
+Variable1Type=dynenum
+Variable1EnumValuesMethod=getProfileNames
+Variable2Name=server
+Variable2Label=Server
+Variable2Type=string
+Variable3Name=baseline
+Variable3Label=Baseline
+Variable3Type=string
+IsFileBased=0
+Section1Name=Object
+Section1Tree=<Object number="$i"><Attribute value="$l" name="Object Heading"></Attribute><Picture>$g</Picture></Object>
+Requirement1Name=Requirement
+Requirement1Tree=<Object id="$i"><Attribute value="True" name="Requirement"></Attribute><Picture>$g</Picture><Text show="1">$t</Text></Object>
+TextFormat=1
+Type=xml
+

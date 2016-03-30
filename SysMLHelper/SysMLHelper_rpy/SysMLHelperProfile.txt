@@ -1,0 +1,1 @@
+This profile extends Rhapsody to speed up Model-Based Systems Engineering (MBSE) tasks. This profile was written by MBSE Training and Consulting Ltd who have distributed it under the GNU GENERAL PUBLIC LICENSE Version 3.0. Disclaimer: By using this software you agree to the terms of the license agreement and disclaimer in $OMROOT/Profiles/SysMLHelper. 

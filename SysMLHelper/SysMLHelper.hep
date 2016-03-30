@@ -1,0 +1,18 @@
+[Helpers]
+numberOfElements=2
+
+#REM: Definition of the plug-in
+name1=InvokeSysMLHelper
+JavaMainClass1=sysmlhelperplugin.SysMLHelperPlugin
+JavaClassPath1=$OMROOT\..\Share\Profiles\SysMLHelper\workspace\SysMLHelperPlugin\bin
+isPlugin1=1
+isVisible1=0
+DLLServerCompatible1=1
+
+#REM: Add pop-up menu for packages
+name2=MBSE Method: Requirements Analysis\Create the RequirementsAnalysisPkg package structure
+isPluginCommand2=1
+command2=InvokeSysMLHelper
+applicableTo2=Project,SysML
+isVisible2=1
+DLLServerCompatible2=1

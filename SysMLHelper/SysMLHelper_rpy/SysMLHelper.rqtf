@@ -1,0 +1,50 @@
+[Files]
+Names=UML Model,UsageRequirementsPkg
+RepositoryTool=Boost
+
+[UML Model]
+Cover1=UML Model
+Cover1Position=2200@1700
+GraphicPosition=2200@2200
+Variable1Name=addImages
+Variable1Value=0
+Variable2Name=addHLReqsDeleted
+Variable2Value=0
+Variable3Name=tagValueToDescription
+Variable3Value=0
+Variable4Name=notImportedRequirementsDocuments
+Variable4Value=
+Variable5Name=requirementsPackage
+Variable5Value=SysMLHelper/Packages/RequirementsAnalysisPkg/Packages/RequirementsPkg¥UsageRequirementsPkg
+Variable6Name=requirementDescription
+Variable6Value=0
+Variable7Name=addHLReqsModified
+Variable7Value=0
+Variable8Name=addHLReqsLocally
+Variable8Value=0
+Variable9Name=preserveHierarchy
+Variable9Value=0
+Variable10Name=lg
+Variable10Value=C++
+Variable11Name=createDependency
+Variable11Value=0
+Variable12Name=addHLRichText
+Variable12Value=0
+Type=Rhapsody SysML
+Path=..\SysMLHelper.rpy
+AbsolutePath=C:\Users\fchadbur\IBM\Rational\Rhapsody\8.1.3\Share\Profiles\SysMLHelper\SysMLHelper.rpy
+
+[UsageRequirementsPkg]
+Cover1=UML Model
+Cover1Position=2660@1950
+GraphicPosition=3120@1700
+Variable1Name=uniqueID
+Variable1Value=4797170769fe61aa-003a2821
+Variable2Name=baseline
+Variable2Value=
+Variable3Name=purgeAttributes
+Variable3Value=0
+UseIntermediateFile=1
+Type=Usage Requirements
+Path=/JLR Feature Projects/00 Administration/Templates/02 Customer Concept/F-SOI-xxxxx
+

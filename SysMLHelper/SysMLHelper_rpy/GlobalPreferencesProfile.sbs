@@ -1,0 +1,1506 @@
+I-Logix-RPY-Archive version 8.11.0 C++ 9499822
+{ IProfile 
+	- _id = GUID e6cbeb25-2cf4-4c66-9c75-cbb99e029222;
+	- _myState = 8192;
+	- _properties = { IPropertyContainer 
+		- Subjects = { IRPYRawContainer 
+			- size = 7;
+			- value = 
+			{ IPropertySubject 
+				- _Name = "Activity_diagram";
+				- Metaclasses = { IRPYRawContainer 
+					- size = 30;
+					- value = 
+					{ IPropertyMetaclass 
+						- _Name = "AcceptEventAction";
+						- Properties = { IRPYRawContainer 
+							- size = 1;
+							- value = 
+							{ IProperty 
+								- _Name = "ShowStereotype";
+								- _Value = "Bitmap";
+								- _Type = Enum;
+								- _ExtraTypeInfo = "Label,Bitmap,None";
+							}
+						}
+					}
+					{ IPropertyMetaclass 
+						- _Name = "Action";
+						- Properties = { IRPYRawContainer 
+							- size = 1;
+							- value = 
+							{ IProperty 
+								- _Name = "ShowStereotype";
+								- _Value = "Bitmap";
+								- _Type = Enum;
+								- _ExtraTypeInfo = "Label,Bitmap,None";
+							}
+						}
+					}
+					{ IPropertyMetaclass 
+						- _Name = "ActionBlock";
+						- Properties = { IRPYRawContainer 
+							- size = 1;
+							- value = 
+							{ IProperty 
+								- _Name = "ShowStereotype";
+								- _Value = "Bitmap";
+								- _Type = Enum;
+								- _ExtraTypeInfo = "Label,Bitmap,None";
+							}
+						}
+					}
+					{ IPropertyMetaclass 
+						- _Name = "ActionPin";
+						- Properties = { IRPYRawContainer 
+							- size = 1;
+							- value = 
+							{ IProperty 
+								- _Name = "ShowStereotype";
+								- _Value = "Label";
+								- _Type = Enum;
+								- _ExtraTypeInfo = "Label,None";
+							}
+						}
+					}
+					{ IPropertyMetaclass 
+						- _Name = "ActivityParameter";
+						- Properties = { IRPYRawContainer 
+							- size = 1;
+							- value = 
+							{ IProperty 
+								- _Name = "ShowStereotype";
+								- _Value = "Label";
+								- _Type = Enum;
+								- _ExtraTypeInfo = "Label,None";
+							}
+						}
+					}
+					{ IPropertyMetaclass 
+						- _Name = "ButtonArray";
+						- Properties = { IRPYRawContainer 
+							- size = 1;
+							- value = 
+							{ IProperty 
+								- _Name = "ShowName";
+								- _Value = "BindedElement";
+								- _Type = Enum;
+								- _ExtraTypeInfo = "BindedElementFullPath,BindedElement,Name,None";
+							}
+						}
+					}
+					{ IPropertyMetaclass 
+						- _Name = "CallBehavior";
+						- Properties = { IRPYRawContainer 
+							- size = 2;
+							- value = 
+							{ IProperty 
+								- _Name = "ShowDescription";
+								- _Value = "True";
+								- _Type = Bool;
+							}
+							{ IProperty 
+								- _Name = "ShowStereotype";
+								- _Value = "Bitmap";
+								- _Type = Enum;
+								- _ExtraTypeInfo = "Label,Bitmap,None";
+							}
+						}
+					}
+					{ IPropertyMetaclass 
+						- _Name = "CallOperation";
+						- Properties = { IRPYRawContainer 
+							- size = 1;
+							- value = 
+							{ IProperty 
+								- _Name = "ShowStereotype";
+								- _Value = "Bitmap";
+								- _Type = Enum;
+								- _ExtraTypeInfo = "Label,Bitmap,None";
+							}
+						}
+					}
+					{ IPropertyMetaclass 
+						- _Name = "Comment";
+						- Properties = { IRPYRawContainer 
+							- size = 4;
+							- value = 
+							{ IProperty 
+								- _Name = "CommentNotation";
+								- _Value = "Box_Style";
+								- _Type = Enum;
+								- _ExtraTypeInfo = "Note_Style,Box_Style";
+							}
+							{ IProperty 
+								- _Name = "Compartments";
+								- _Value = "Description";
+								- _Type = MultiLine;
+							}
+							{ IProperty 
+								- _Name = "ShowName";
+								- _Value = "Name_only";
+								- _Type = Enum;
+								- _ExtraTypeInfo = "Full_path,Relative,Name_only,Label";
+							}
+							{ IProperty 
+								- _Name = "ShowStereotype";
+								- _Value = "Label";
+								- _Type = Enum;
+								- _ExtraTypeInfo = "Label,Bitmap,None";
+							}
+						}
+					}
+					{ IPropertyMetaclass 
+						- _Name = "Constraint";
+						- Properties = { IRPYRawContainer 
+							- size = 3;
+							- value = 
+							{ IProperty 
+								- _Name = "ConstraintNotation";
+								- _Value = "Box_Style";
+								- _Type = Enum;
+								- _ExtraTypeInfo = "Note_Style,Box_Style";
+							}
+							{ IProperty 
+								- _Name = "ShowName";
+								- _Value = "Name_only";
+								- _Type = Enum;
+								- _ExtraTypeInfo = "Full_path,Relative,Name_only,Label";
+							}
+							{ IProperty 
+								- _Name = "ShowStereotype";
+								- _Value = "Label";
+								- _Type = Enum;
+								- _ExtraTypeInfo = "Label,Bitmap,None";
+							}
+						}
+					}
+					{ IPropertyMetaclass 
+						- _Name = "ControlFlow";
+						- Properties = { IRPYRawContainer 
+							- size = 2;
+							- value = 
+							{ IProperty 
+								- _Name = "ShowStereotype";
+								- _Value = "Bitmap";
+								- _Type = Enum;
+								- _ExtraTypeInfo = "Label,Bitmap,None";
+							}
+							{ IProperty 
+								- _Name = "line_style";
+								- _Value = "rectilinear_arrows";
+								- _Type = Enum;
+								- _ExtraTypeInfo = "straight_arrows,rectilinear_arrows,spline_arrows";
+							}
+						}
+					}
+					{ IPropertyMetaclass 
+						- _Name = "DecisionNode";
+						- Properties = { IRPYRawContainer 
+							- size = 1;
+							- value = 
+							{ IProperty 
+								- _Name = "show_name";
+								- _Value = "None";
+								- _Type = Enum;
+								- _ExtraTypeInfo = "Name,Label,None";
+							}
+						}
+					}
+					{ IPropertyMetaclass 
+						- _Name = "DefaultTransition";
+						- Properties = { IRPYRawContainer 
+							- size = 1;
+							- value = 
+							{ IProperty 
+								- _Name = "line_style";
+								- _Value = "rectilinear_arrows";
+								- _Type = Enum;
+								- _ExtraTypeInfo = "straight_arrows,rectilinear_arrows,spline_arrows";
+							}
+						}
+					}
+					{ IPropertyMetaclass 
+						- _Name = "DigitalDisplay";
+						- Properties = { IRPYRawContainer 
+							- size = 1;
+							- value = 
+							{ IProperty 
+								- _Name = "ShowName";
+								- _Value = "BindedElement";
+								- _Type = Enum;
+								- _ExtraTypeInfo = "BindedElementFullPath,BindedElement,Name,None";
+							}
+						}
+					}
+					{ IPropertyMetaclass 
+						- _Name = "Gauge";
+						- Properties = { IRPYRawContainer 
+							- size = 1;
+							- value = 
+							{ IProperty 
+								- _Name = "ShowName";
+								- _Value = "BindedElement";
+								- _Type = Enum;
+								- _ExtraTypeInfo = "BindedElementFullPath,BindedElement,Name,None";
+							}
+						}
+					}
+					{ IPropertyMetaclass 
+						- _Name = "Knob";
+						- Properties = { IRPYRawContainer 
+							- size = 1;
+							- value = 
+							{ IProperty 
+								- _Name = "ShowName";
+								- _Value = "BindedElement";
+								- _Type = Enum;
+								- _ExtraTypeInfo = "BindedElementFullPath,BindedElement,Name,None";
+							}
+						}
+					}
+					{ IPropertyMetaclass 
+						- _Name = "Led";
+						- Properties = { IRPYRawContainer 
+							- size = 1;
+							- value = 
+							{ IProperty 
+								- _Name = "ShowName";
+								- _Value = "BindedElement";
+								- _Type = Enum;
+								- _ExtraTypeInfo = "BindedElementFullPath,BindedElement,Name,None";
+							}
+						}
+					}
+					{ IPropertyMetaclass 
+						- _Name = "LevelIndicator";
+						- Properties = { IRPYRawContainer 
+							- size = 1;
+							- value = 
+							{ IProperty 
+								- _Name = "ShowName";
+								- _Value = "BindedElement";
+								- _Type = Enum;
+								- _ExtraTypeInfo = "BindedElementFullPath,BindedElement,Name,None";
+							}
+						}
+					}
+					{ IPropertyMetaclass 
+						- _Name = "LoopTransition";
+						- Properties = { IRPYRawContainer 
+							- size = 1;
+							- value = 
+							{ IProperty 
+								- _Name = "line_style";
+								- _Value = "rectilinear_arrows";
+								- _Type = Enum;
+								- _ExtraTypeInfo = "straight_arrows,rectilinear_arrows,spline_arrows";
+							}
+						}
+					}
+					{ IPropertyMetaclass 
+						- _Name = "MatrixDisplay";
+						- Properties = { IRPYRawContainer 
+							- size = 1;
+							- value = 
+							{ IProperty 
+								- _Name = "ShowName";
+								- _Value = "BindedElement";
+								- _Type = Enum;
+								- _ExtraTypeInfo = "BindedElementFullPath,BindedElement,Name,None";
+							}
+						}
+					}
+					{ IPropertyMetaclass 
+						- _Name = "Meter";
+						- Properties = { IRPYRawContainer 
+							- size = 1;
+							- value = 
+							{ IProperty 
+								- _Name = "ShowName";
+								- _Value = "BindedElement";
+								- _Type = Enum;
+								- _ExtraTypeInfo = "BindedElementFullPath,BindedElement,Name,None";
+							}
+						}
+					}
+					{ IPropertyMetaclass 
+						- _Name = "ObjectFlow";
+						- Properties = { IRPYRawContainer 
+							- size = 2;
+							- value = 
+							{ IProperty 
+								- _Name = "ShowStereotype";
+								- _Value = "Bitmap";
+								- _Type = Enum;
+								- _ExtraTypeInfo = "Label,Bitmap,None";
+							}
+							{ IProperty 
+								- _Name = "line_style";
+								- _Value = "rectilinear_arrows";
+								- _Type = Enum;
+								- _ExtraTypeInfo = "straight_arrows,rectilinear_arrows,spline_arrows";
+							}
+						}
+					}
+					{ IPropertyMetaclass 
+						- _Name = "OnOffSwitch";
+						- Properties = { IRPYRawContainer 
+							- size = 1;
+							- value = 
+							{ IProperty 
+								- _Name = "ShowName";
+								- _Value = "BindedElement";
+								- _Type = Enum;
+								- _ExtraTypeInfo = "BindedElementFullPath,BindedElement,Name,None";
+							}
+						}
+					}
+					{ IPropertyMetaclass 
+						- _Name = "PushButton";
+						- Properties = { IRPYRawContainer 
+							- size = 1;
+							- value = 
+							{ IProperty 
+								- _Name = "ShowName";
+								- _Value = "BindedElement";
+								- _Type = Enum;
+								- _ExtraTypeInfo = "BindedElementFullPath,BindedElement,Name,None";
+							}
+						}
+					}
+					{ IPropertyMetaclass 
+						- _Name = "Requirement";
+						- Properties = { IRPYRawContainer 
+							- size = 3;
+							- value = 
+							{ IProperty 
+								- _Name = "Compartments";
+								- _Value = "Specification";
+								- _Type = MultiLine;
+							}
+							{ IProperty 
+								- _Name = "RequirementNotation";
+								- _Value = "Box_Style";
+								- _Type = Enum;
+								- _ExtraTypeInfo = "Note_Style,Box_Style";
+							}
+							{ IProperty 
+								- _Name = "ShowName";
+								- _Value = "Name_only";
+								- _Type = Enum;
+								- _ExtraTypeInfo = "Full_path,Relative,Name_only,Label";
+							}
+						}
+					}
+					{ IPropertyMetaclass 
+						- _Name = "SendAction";
+						- Properties = { IRPYRawContainer 
+							- size = 2;
+							- value = 
+							{ IProperty 
+								- _Name = "ShowNotation";
+								- _Value = "Label";
+								- _Type = Enum;
+								- _ExtraTypeInfo = "Name,Label,FullNotation,Event";
+							}
+							{ IProperty 
+								- _Name = "ShowStereotype";
+								- _Value = "Bitmap";
+								- _Type = Enum;
+								- _ExtraTypeInfo = "Label,Bitmap,None";
+							}
+						}
+					}
+					{ IPropertyMetaclass 
+						- _Name = "Slider";
+						- Properties = { IRPYRawContainer 
+							- size = 1;
+							- value = 
+							{ IProperty 
+								- _Name = "ShowName";
+								- _Value = "BindedElement";
+								- _Type = Enum;
+								- _ExtraTypeInfo = "BindedElementFullPath,BindedElement,Name,None";
+							}
+						}
+					}
+					{ IPropertyMetaclass 
+						- _Name = "Swimlane";
+						- Properties = { IRPYRawContainer 
+							- size = 2;
+							- value = 
+							{ IProperty 
+								- _Name = "ShowName";
+								- _Value = "Represents";
+								- _Type = Enum;
+								- _ExtraTypeInfo = "Name_only,Represents,RepresentsOnly,Label";
+							}
+							{ IProperty 
+								- _Name = "ShowStereotype";
+								- _Value = "Bitmap";
+								- _Type = Enum;
+								- _ExtraTypeInfo = "Label,Bitmap,None";
+							}
+						}
+					}
+					{ IPropertyMetaclass 
+						- _Name = "TextBox";
+						- Properties = { IRPYRawContainer 
+							- size = 1;
+							- value = 
+							{ IProperty 
+								- _Name = "ShowName";
+								- _Value = "BindedElement";
+								- _Type = Enum;
+								- _ExtraTypeInfo = "BindedElementFullPath,BindedElement,Name,None";
+							}
+						}
+					}
+					{ IPropertyMetaclass 
+						- _Name = "Transition";
+						- Properties = { IRPYRawContainer 
+							- size = 1;
+							- value = 
+							{ IProperty 
+								- _Name = "line_style";
+								- _Value = "rectilinear_arrows";
+								- _Type = Enum;
+								- _ExtraTypeInfo = "straight_arrows,rectilinear_arrows,spline_arrows";
+							}
+						}
+					}
+				}
+			}
+			{ IPropertySubject 
+				- _Name = "General";
+				- Metaclasses = { IRPYRawContainer 
+					- size = 1;
+					- value = 
+					{ IPropertyMetaclass 
+						- _Name = "Graphics";
+						- Properties = { IRPYRawContainer 
+							- size = 1;
+							- value = 
+							{ IProperty 
+								- _Name = "DefaultBoxView";
+								- _Value = "Specification";
+								- _Type = Enum;
+								- _ExtraTypeInfo = "Specification,Structured,Default";
+							}
+						}
+					}
+				}
+			}
+			{ IPropertySubject 
+				- _Name = "ObjectModelGe";
+				- Metaclasses = { IRPYRawContainer 
+					- size = 11;
+					- value = 
+					{ IPropertyMetaclass 
+						- _Name = "Actor";
+						- Properties = { IRPYRawContainer 
+							- size = 1;
+							- value = 
+							{ IProperty 
+								- _Name = "ShowName";
+								- _Value = "Name_only";
+								- _Type = Enum;
+								- _ExtraTypeInfo = "Full_path,Relative,Name_only,Label";
+							}
+						}
+					}
+					{ IPropertyMetaclass 
+						- _Name = "Aggregation";
+						- Properties = { IRPYRawContainer 
+							- size = 2;
+							- value = 
+							{ IProperty 
+								- _Name = "ShowSourceRole";
+								- _Value = "True";
+								- _Type = Bool;
+							}
+							{ IProperty 
+								- _Name = "ShowTargetRole";
+								- _Value = "True";
+								- _Type = Bool;
+							}
+						}
+					}
+					{ IPropertyMetaclass 
+						- _Name = "Association";
+						- Properties = { IRPYRawContainer 
+							- size = 2;
+							- value = 
+							{ IProperty 
+								- _Name = "ShowSourceRole";
+								- _Value = "True";
+								- _Type = Bool;
+							}
+							{ IProperty 
+								- _Name = "ShowTargetRole";
+								- _Value = "True";
+								- _Type = Bool;
+							}
+						}
+					}
+					{ IPropertyMetaclass 
+						- _Name = "Class";
+						- Properties = { IRPYRawContainer 
+							- size = 3;
+							- value = 
+							{ IProperty 
+								- _Name = "ShowAttributes";
+								- _Value = "Public";
+								- _Type = Enum;
+								- _ExtraTypeInfo = "All,None,Public,Explicit";
+							}
+							{ IProperty 
+								- _Name = "ShowName";
+								- _Value = "Name_only";
+								- _Type = Enum;
+								- _ExtraTypeInfo = "Full_path,Relative,Name_only,Label";
+							}
+							{ IProperty 
+								- _Name = "ShowOperations";
+								- _Value = "Public";
+								- _Type = Enum;
+								- _ExtraTypeInfo = "All,None,Public,Explicit";
+							}
+						}
+					}
+					{ IPropertyMetaclass 
+						- _Name = "Comment";
+						- Properties = { IRPYRawContainer 
+							- size = 3;
+							- value = 
+							{ IProperty 
+								- _Name = "CommentNotation";
+								- _Value = "Box_Style";
+								- _Type = Enum;
+								- _ExtraTypeInfo = "Note_Style,Box_Style";
+							}
+							{ IProperty 
+								- _Name = "Compartments";
+								- _Value = "Description";
+								- _Type = MultiLine;
+							}
+							{ IProperty 
+								- _Name = "ShowName";
+								- _Value = "Name_only";
+								- _Type = Enum;
+								- _ExtraTypeInfo = "Full_path,Relative,Name_only,Label";
+							}
+						}
+					}
+					{ IPropertyMetaclass 
+						- _Name = "Composition";
+						- Properties = { IRPYRawContainer 
+							- size = 2;
+							- value = 
+							{ IProperty 
+								- _Name = "ShowSourceRole";
+								- _Value = "True";
+								- _Type = Bool;
+							}
+							{ IProperty 
+								- _Name = "ShowTargetRole";
+								- _Value = "True";
+								- _Type = Bool;
+							}
+						}
+					}
+					{ IPropertyMetaclass 
+						- _Name = "Constraint";
+						- Properties = { IRPYRawContainer 
+							- size = 2;
+							- value = 
+							{ IProperty 
+								- _Name = "ConstraintNotation";
+								- _Value = "Box_Style";
+								- _Type = Enum;
+								- _ExtraTypeInfo = "Note_Style,Box_Style";
+							}
+							{ IProperty 
+								- _Name = "ShowName";
+								- _Value = "Name_only";
+								- _Type = Enum;
+								- _ExtraTypeInfo = "Full_path,Relative,Name_only,Label";
+							}
+						}
+					}
+					{ IPropertyMetaclass 
+						- _Name = "Inheritance";
+						- Properties = { IRPYRawContainer 
+							- size = 1;
+							- value = 
+							{ IProperty 
+								- _Name = "line_style";
+								- _Value = "straight_arrows";
+								- _Type = Enum;
+								- _ExtraTypeInfo = "straight_arrows,rectilinear_arrows,spline_arrows,tree";
+							}
+						}
+					}
+					{ IPropertyMetaclass 
+						- _Name = "Object";
+						- Properties = { IRPYRawContainer 
+							- size = 1;
+							- value = 
+							{ IProperty 
+								- _Name = "ShowName";
+								- _Value = "Name_only";
+								- _Type = Enum;
+								- _ExtraTypeInfo = "Full_path,Relative,Name_only,Type,Label";
+							}
+						}
+					}
+					{ IPropertyMetaclass 
+						- _Name = "Requirement";
+						- Properties = { IRPYRawContainer 
+							- size = 3;
+							- value = 
+							{ IProperty 
+								- _Name = "Compartments";
+								- _Value = "Specification";
+								- _Type = MultiLine;
+							}
+							{ IProperty 
+								- _Name = "RequirementNotation";
+								- _Value = "Box_Style";
+								- _Type = Enum;
+								- _ExtraTypeInfo = "Note_Style,Box_Style";
+							}
+							{ IProperty 
+								- _Name = "ShowName";
+								- _Value = "Name_only";
+								- _Type = Enum;
+								- _ExtraTypeInfo = "Full_path,Relative,Name_only,Label";
+							}
+						}
+					}
+					{ IPropertyMetaclass 
+						- _Name = "UseCase";
+						- Properties = { IRPYRawContainer 
+							- size = 1;
+							- value = 
+							{ IProperty 
+								- _Name = "ShowName";
+								- _Value = "Name_only";
+								- _Type = Enum;
+								- _ExtraTypeInfo = "Full_path,Relative,Name_only,Label";
+							}
+						}
+					}
+				}
+			}
+			{ IPropertySubject 
+				- _Name = "PanelDiagram";
+				- Metaclasses = { IRPYRawContainer 
+					- size = 12;
+					- value = 
+					{ IPropertyMetaclass 
+						- _Name = "ButtonArray";
+						- Properties = { IRPYRawContainer 
+							- size = 1;
+							- value = 
+							{ IProperty 
+								- _Name = "ShowName";
+								- _Value = "BindedElement";
+								- _Type = Enum;
+								- _ExtraTypeInfo = "BindedElementFullPath,BindedElement,Name,None";
+							}
+						}
+					}
+					{ IPropertyMetaclass 
+						- _Name = "DigitalDisplay";
+						- Properties = { IRPYRawContainer 
+							- size = 1;
+							- value = 
+							{ IProperty 
+								- _Name = "ShowName";
+								- _Value = "BindedElement";
+								- _Type = Enum;
+								- _ExtraTypeInfo = "BindedElementFullPath,BindedElement,Name,None";
+							}
+						}
+					}
+					{ IPropertyMetaclass 
+						- _Name = "Gauge";
+						- Properties = { IRPYRawContainer 
+							- size = 1;
+							- value = 
+							{ IProperty 
+								- _Name = "ShowName";
+								- _Value = "BindedElement";
+								- _Type = Enum;
+								- _ExtraTypeInfo = "BindedElementFullPath,BindedElement,Name,None";
+							}
+						}
+					}
+					{ IPropertyMetaclass 
+						- _Name = "Knob";
+						- Properties = { IRPYRawContainer 
+							- size = 1;
+							- value = 
+							{ IProperty 
+								- _Name = "ShowName";
+								- _Value = "BindedElement";
+								- _Type = Enum;
+								- _ExtraTypeInfo = "BindedElementFullPath,BindedElement,Name,None";
+							}
+						}
+					}
+					{ IPropertyMetaclass 
+						- _Name = "Led";
+						- Properties = { IRPYRawContainer 
+							- size = 1;
+							- value = 
+							{ IProperty 
+								- _Name = "ShowName";
+								- _Value = "BindedElement";
+								- _Type = Enum;
+								- _ExtraTypeInfo = "BindedElementFullPath,BindedElement,Name,None";
+							}
+						}
+					}
+					{ IPropertyMetaclass 
+						- _Name = "LevelIndicator";
+						- Properties = { IRPYRawContainer 
+							- size = 1;
+							- value = 
+							{ IProperty 
+								- _Name = "ShowName";
+								- _Value = "BindedElement";
+								- _Type = Enum;
+								- _ExtraTypeInfo = "BindedElementFullPath,BindedElement,Name,None";
+							}
+						}
+					}
+					{ IPropertyMetaclass 
+						- _Name = "MatrixDisplay";
+						- Properties = { IRPYRawContainer 
+							- size = 1;
+							- value = 
+							{ IProperty 
+								- _Name = "ShowName";
+								- _Value = "BindedElement";
+								- _Type = Enum;
+								- _ExtraTypeInfo = "BindedElementFullPath,BindedElement,Name,None";
+							}
+						}
+					}
+					{ IPropertyMetaclass 
+						- _Name = "Meter";
+						- Properties = { IRPYRawContainer 
+							- size = 1;
+							- value = 
+							{ IProperty 
+								- _Name = "ShowName";
+								- _Value = "BindedElement";
+								- _Type = Enum;
+								- _ExtraTypeInfo = "BindedElementFullPath,BindedElement,Name,None";
+							}
+						}
+					}
+					{ IPropertyMetaclass 
+						- _Name = "OnOffSwitch";
+						- Properties = { IRPYRawContainer 
+							- size = 1;
+							- value = 
+							{ IProperty 
+								- _Name = "ShowName";
+								- _Value = "BindedElement";
+								- _Type = Enum;
+								- _ExtraTypeInfo = "BindedElementFullPath,BindedElement,Name,None";
+							}
+						}
+					}
+					{ IPropertyMetaclass 
+						- _Name = "PushButton";
+						- Properties = { IRPYRawContainer 
+							- size = 1;
+							- value = 
+							{ IProperty 
+								- _Name = "ShowName";
+								- _Value = "BindedElement";
+								- _Type = Enum;
+								- _ExtraTypeInfo = "BindedElementFullPath,BindedElement,Name,None";
+							}
+						}
+					}
+					{ IPropertyMetaclass 
+						- _Name = "Slider";
+						- Properties = { IRPYRawContainer 
+							- size = 1;
+							- value = 
+							{ IProperty 
+								- _Name = "ShowName";
+								- _Value = "BindedElement";
+								- _Type = Enum;
+								- _ExtraTypeInfo = "BindedElementFullPath,BindedElement,Name,None";
+							}
+						}
+					}
+					{ IPropertyMetaclass 
+						- _Name = "TextBox";
+						- Properties = { IRPYRawContainer 
+							- size = 1;
+							- value = 
+							{ IProperty 
+								- _Name = "ShowName";
+								- _Value = "BindedElement";
+								- _Type = Enum;
+								- _ExtraTypeInfo = "BindedElementFullPath,BindedElement,Name,None";
+							}
+						}
+					}
+				}
+			}
+			{ IPropertySubject 
+				- _Name = "SequenceDiagram";
+				- Metaclasses = { IRPYRawContainer 
+					- size = 1;
+					- value = 
+					{ IPropertyMetaclass 
+						- _Name = "Requirement";
+						- Properties = { IRPYRawContainer 
+							- size = 1;
+							- value = 
+							{ IProperty 
+								- _Name = "Compartments";
+								- _Value = "Specification";
+								- _Type = MultiLine;
+							}
+						}
+					}
+				}
+			}
+			{ IPropertySubject 
+				- _Name = "StatechartDiagram";
+				- Metaclasses = { IRPYRawContainer 
+					- size = 16;
+					- value = 
+					{ IPropertyMetaclass 
+						- _Name = "ButtonArray";
+						- Properties = { IRPYRawContainer 
+							- size = 1;
+							- value = 
+							{ IProperty 
+								- _Name = "ShowName";
+								- _Value = "BindedElement";
+								- _Type = Enum;
+								- _ExtraTypeInfo = "BindedElementFullPath,BindedElement,Name,None";
+							}
+						}
+					}
+					{ IPropertyMetaclass 
+						- _Name = "Comment";
+						- Properties = { IRPYRawContainer 
+							- size = 3;
+							- value = 
+							{ IProperty 
+								- _Name = "CommentNotation";
+								- _Value = "Box_Style";
+								- _Type = Enum;
+								- _ExtraTypeInfo = "Note_Style,Box_Style";
+							}
+							{ IProperty 
+								- _Name = "Compartments";
+								- _Value = "Description";
+								- _Type = MultiLine;
+							}
+							{ IProperty 
+								- _Name = "ShowName";
+								- _Value = "Name_only";
+								- _Type = Enum;
+								- _ExtraTypeInfo = "Full_path,Relative,Name_only,Label";
+							}
+						}
+					}
+					{ IPropertyMetaclass 
+						- _Name = "DefaultTransition";
+						- Properties = { IRPYRawContainer 
+							- size = 1;
+							- value = 
+							{ IProperty 
+								- _Name = "line_style";
+								- _Value = "rectilinear_arrows";
+								- _Type = Enum;
+								- _ExtraTypeInfo = "straight_arrows,rectilinear_arrows,spline_arrows";
+							}
+						}
+					}
+					{ IPropertyMetaclass 
+						- _Name = "DigitalDisplay";
+						- Properties = { IRPYRawContainer 
+							- size = 1;
+							- value = 
+							{ IProperty 
+								- _Name = "ShowName";
+								- _Value = "BindedElement";
+								- _Type = Enum;
+								- _ExtraTypeInfo = "BindedElementFullPath,BindedElement,Name,None";
+							}
+						}
+					}
+					{ IPropertyMetaclass 
+						- _Name = "Gauge";
+						- Properties = { IRPYRawContainer 
+							- size = 1;
+							- value = 
+							{ IProperty 
+								- _Name = "ShowName";
+								- _Value = "BindedElement";
+								- _Type = Enum;
+								- _ExtraTypeInfo = "BindedElementFullPath,BindedElement,Name,None";
+							}
+						}
+					}
+					{ IPropertyMetaclass 
+						- _Name = "Knob";
+						- Properties = { IRPYRawContainer 
+							- size = 1;
+							- value = 
+							{ IProperty 
+								- _Name = "ShowName";
+								- _Value = "BindedElement";
+								- _Type = Enum;
+								- _ExtraTypeInfo = "BindedElementFullPath,BindedElement,Name,None";
+							}
+						}
+					}
+					{ IPropertyMetaclass 
+						- _Name = "Led";
+						- Properties = { IRPYRawContainer 
+							- size = 1;
+							- value = 
+							{ IProperty 
+								- _Name = "ShowName";
+								- _Value = "BindedElement";
+								- _Type = Enum;
+								- _ExtraTypeInfo = "BindedElementFullPath,BindedElement,Name,None";
+							}
+						}
+					}
+					{ IPropertyMetaclass 
+						- _Name = "LevelIndicator";
+						- Properties = { IRPYRawContainer 
+							- size = 1;
+							- value = 
+							{ IProperty 
+								- _Name = "ShowName";
+								- _Value = "BindedElement";
+								- _Type = Enum;
+								- _ExtraTypeInfo = "BindedElementFullPath,BindedElement,Name,None";
+							}
+						}
+					}
+					{ IPropertyMetaclass 
+						- _Name = "MatrixDisplay";
+						- Properties = { IRPYRawContainer 
+							- size = 1;
+							- value = 
+							{ IProperty 
+								- _Name = "ShowName";
+								- _Value = "BindedElement";
+								- _Type = Enum;
+								- _ExtraTypeInfo = "BindedElementFullPath,BindedElement,Name,None";
+							}
+						}
+					}
+					{ IPropertyMetaclass 
+						- _Name = "Meter";
+						- Properties = { IRPYRawContainer 
+							- size = 1;
+							- value = 
+							{ IProperty 
+								- _Name = "ShowName";
+								- _Value = "BindedElement";
+								- _Type = Enum;
+								- _ExtraTypeInfo = "BindedElementFullPath,BindedElement,Name,None";
+							}
+						}
+					}
+					{ IPropertyMetaclass 
+						- _Name = "OnOffSwitch";
+						- Properties = { IRPYRawContainer 
+							- size = 1;
+							- value = 
+							{ IProperty 
+								- _Name = "ShowName";
+								- _Value = "BindedElement";
+								- _Type = Enum;
+								- _ExtraTypeInfo = "BindedElementFullPath,BindedElement,Name,None";
+							}
+						}
+					}
+					{ IPropertyMetaclass 
+						- _Name = "PushButton";
+						- Properties = { IRPYRawContainer 
+							- size = 1;
+							- value = 
+							{ IProperty 
+								- _Name = "ShowName";
+								- _Value = "BindedElement";
+								- _Type = Enum;
+								- _ExtraTypeInfo = "BindedElementFullPath,BindedElement,Name,None";
+							}
+						}
+					}
+					{ IPropertyMetaclass 
+						- _Name = "Requirement";
+						- Properties = { IRPYRawContainer 
+							- size = 3;
+							- value = 
+							{ IProperty 
+								- _Name = "Compartments";
+								- _Value = "Specification";
+								- _Type = MultiLine;
+							}
+							{ IProperty 
+								- _Name = "RequirementNotation";
+								- _Value = "Box_Style";
+								- _Type = Enum;
+								- _ExtraTypeInfo = "Note_Style,Box_Style";
+							}
+							{ IProperty 
+								- _Name = "ShowName";
+								- _Value = "Name_only";
+								- _Type = Enum;
+								- _ExtraTypeInfo = "Full_path,Relative,Name_only,Label";
+							}
+						}
+					}
+					{ IPropertyMetaclass 
+						- _Name = "Slider";
+						- Properties = { IRPYRawContainer 
+							- size = 1;
+							- value = 
+							{ IProperty 
+								- _Name = "ShowName";
+								- _Value = "BindedElement";
+								- _Type = Enum;
+								- _ExtraTypeInfo = "BindedElementFullPath,BindedElement,Name,None";
+							}
+						}
+					}
+					{ IPropertyMetaclass 
+						- _Name = "TextBox";
+						- Properties = { IRPYRawContainer 
+							- size = 1;
+							- value = 
+							{ IProperty 
+								- _Name = "ShowName";
+								- _Value = "BindedElement";
+								- _Type = Enum;
+								- _ExtraTypeInfo = "BindedElementFullPath,BindedElement,Name,None";
+							}
+						}
+					}
+					{ IPropertyMetaclass 
+						- _Name = "Transition";
+						- Properties = { IRPYRawContainer 
+							- size = 1;
+							- value = 
+							{ IProperty 
+								- _Name = "line_style";
+								- _Value = "rectilinear_arrows";
+								- _Type = Enum;
+								- _ExtraTypeInfo = "straight_arrows,rectilinear_arrows,spline_arrows";
+							}
+						}
+					}
+				}
+			}
+			{ IPropertySubject 
+				- _Name = "UseCaseGe";
+				- Metaclasses = { IRPYRawContainer 
+					- size = 4;
+					- value = 
+					{ IPropertyMetaclass 
+						- _Name = "Comment";
+						- Properties = { IRPYRawContainer 
+							- size = 3;
+							- value = 
+							{ IProperty 
+								- _Name = "CommentNotation";
+								- _Value = "Box_Style";
+								- _Type = Enum;
+								- _ExtraTypeInfo = "Note_Style,Box_Style";
+							}
+							{ IProperty 
+								- _Name = "Compartments";
+								- _Value = "Description";
+								- _Type = MultiLine;
+							}
+							{ IProperty 
+								- _Name = "ShowName";
+								- _Value = "Name_only";
+								- _Type = Enum;
+								- _ExtraTypeInfo = "Full_path,Relative,Name_only,Label";
+							}
+						}
+					}
+					{ IPropertyMetaclass 
+						- _Name = "Inheritance";
+						- Properties = { IRPYRawContainer 
+							- size = 1;
+							- value = 
+							{ IProperty 
+								- _Name = "line_style";
+								- _Value = "straight_arrows";
+								- _Type = Enum;
+								- _ExtraTypeInfo = "straight_arrows,rectilinear_arrows,spline_arrows,tree";
+							}
+						}
+					}
+					{ IPropertyMetaclass 
+						- _Name = "Requirement";
+						- Properties = { IRPYRawContainer 
+							- size = 3;
+							- value = 
+							{ IProperty 
+								- _Name = "Compartments";
+								- _Value = "Specification";
+								- _Type = MultiLine;
+							}
+							{ IProperty 
+								- _Name = "RequirementNotation";
+								- _Value = "Box_Style";
+								- _Type = Enum;
+								- _ExtraTypeInfo = "Note_Style,Box_Style";
+							}
+							{ IProperty 
+								- _Name = "ShowName";
+								- _Value = "Name_only";
+								- _Type = Enum;
+								- _ExtraTypeInfo = "Full_path,Relative,Name_only,Label";
+							}
+						}
+					}
+					{ IPropertyMetaclass 
+						- _Name = "UseCase";
+						- Properties = { IRPYRawContainer 
+							- size = 1;
+							- value = 
+							{ IProperty 
+								- _Name = "ShowName";
+								- _Value = "Name_only";
+								- _Type = Enum;
+								- _ExtraTypeInfo = "Full_path,Relative,Name_only,Label";
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	- _name = "GlobalPreferencesProfile";
+	- _modifiedTimeWeak = 11.8.2015::16:53:3;
+	- _lastID = 1;
+	- Declaratives = { IRPYRawContainer 
+		- size = 5;
+		- value = 
+		{ IStereotype 
+			- _id = GUID d2bf8f28-ec11-4096-86a8-11e063c79c32;
+			- _myState = 8192;
+			- _properties = { IPropertyContainer 
+				- Subjects = { IRPYRawContainer 
+					- size = 1;
+					- value = 
+					{ IPropertySubject 
+						- _Name = "Format";
+						- Metaclasses = { IRPYRawContainer 
+							- size = 2;
+							- value = 
+							{ IPropertyMetaclass 
+								- _Name = "Class";
+								- Properties = { IRPYRawContainer 
+									- size = 2;
+									- value = 
+									{ IProperty 
+										- _Name = "Font.Italic";
+										- _Value = "1";
+										- _Type = Int;
+									}
+									{ IProperty 
+										- _Name = "Font.Weight";
+										- _Value = "400";
+										- _Type = Int;
+									}
+								}
+							}
+							{ IPropertyMetaclass 
+								- _Name = "UseCase";
+								- Properties = { IRPYRawContainer 
+									- size = 3;
+									- value = 
+									{ IProperty 
+										- _Name = "Fill.FillColor";
+										- _Value = "166,202,240";
+										- _Type = Color;
+									}
+									{ IProperty 
+										- _Name = "Fill.FillStyle";
+										- _Value = "2";
+										- _Type = Int;
+									}
+									{ IProperty 
+										- _Name = "Font.Italic";
+										- _Value = "1";
+										- _Type = Int;
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			- _name = "abstract";
+			- _modifiedTimeWeak = 7.10.2015::8:59:3;
+			- _m2Classes = { IRPYRawContainer 
+				- size = 1;
+				- value = "Class"; 
+			}
+		}
+		{ IStereotype 
+			- _id = GUID 8e7e501d-3086-4e7e-b65d-a86980901789;
+			- _myState = 8192;
+			- _properties = { IPropertyContainer 
+				- Subjects = { IRPYRawContainer 
+					- size = 1;
+					- value = 
+					{ IPropertySubject 
+						- _Name = "General";
+						- Metaclasses = { IRPYRawContainer 
+							- size = 1;
+							- value = 
+							{ IPropertyMetaclass 
+								- _Name = "Graphics";
+								- Properties = { IRPYRawContainer 
+									- size = 1;
+									- value = 
+									{ IProperty 
+										- _Name = "ActivityDiagramToolbar";
+										- _Value = "action,actionpin,sendaction,accepteventaction,accepttimeevent,callbehavior,calloperation,defaulttransition,controlflow,objectflow,interruptibleregion,activityparameter,objectnode,decisionnode,mergenode,diagramconnector,joinconnector,forkconnector,activityfinal,flowfinal,swimlaneframe,swimlanedivider,trace";
+										- _Type = String;
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			- _name = "MoreDetailedAD";
+			- _modifiedTimeWeak = 7.24.2015::7:33:12;
+			- _m2Classes = { IRPYRawContainer 
+				- size = 2;
+				- value = "ActivityDiagramGE"; "ActivityDiagram"; 
+			}
+			- _newTerm = 1;
+		}
+		{ IStereotype 
+			- _id = GUID 1c416578-593a-49a8-b29a-61e7fe5ac17b;
+			- _myState = 8192;
+			- _properties = { IPropertyContainer 
+				- Subjects = { IRPYRawContainer 
+					- size = 1;
+					- value = 
+					{ IPropertySubject 
+						- _Name = "Format";
+						- Metaclasses = { IRPYRawContainer 
+							- size = 2;
+							- value = 
+							{ IPropertyMetaclass 
+								- _Name = "Class";
+								- Properties = { IRPYRawContainer 
+									- size = 1;
+									- value = 
+									{ IProperty 
+										- _Name = "Line.LineColor";
+										- _Value = "0,128,0";
+										- _Type = Color;
+									}
+								}
+							}
+							{ IPropertyMetaclass 
+								- _Name = "Object";
+								- Properties = { IRPYRawContainer 
+									- size = 1;
+									- value = 
+									{ IProperty 
+										- _Name = "Line.LineColor";
+										- _Value = "0,128,0";
+										- _Type = Color;
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			- _name = "System";
+			- _modifiedTimeWeak = 7.18.2015::20:53:54;
+			- _m2Classes = { IRPYRawContainer 
+				- size = 3;
+				- value = "Class"; "Object"; "Package"; 
+			}
+		}
+		{ IStereotype 
+			- _id = GUID 144a2d69-d177-4205-82a3-5f02da810459;
+			- _myState = 8192;
+			- _properties = { IPropertyContainer 
+				- Subjects = { IRPYRawContainer 
+					- size = 2;
+					- value = 
+					{ IPropertySubject 
+						- _Name = "Model";
+						- Metaclasses = { IRPYRawContainer 
+							- size = 1;
+							- value = 
+							{ IPropertyMetaclass 
+								- _Name = "Stereotype";
+								- Properties = { IRPYRawContainer 
+									- size = 2;
+									- value = 
+									{ IProperty 
+										- _Name = "BrowserIcon";
+										- _Value = "../icons/requirementsDiagram.ico";
+										- _Type = File;
+									}
+									{ IProperty 
+										- _Name = "DrawingToolbar";
+										- _Value = "Requirement, Problem, Rationale, Package, RpySeparator, Derivation, Satisfaction, Verification, Refinement, Dependency, RpySeparator, UseCase, RpySeparator,Allocation";
+										- _Type = String;
+									}
+								}
+							}
+						}
+					}
+					{ IPropertySubject 
+						- _Name = "ObjectModelGe";
+						- Metaclasses = { IRPYRawContainer 
+							- size = 4;
+							- value = 
+							{ IPropertyMetaclass 
+								- _Name = "ClassDiagram";
+								- Properties = { IRPYRawContainer 
+									- size = 1;
+									- value = 
+									{ IProperty 
+										- _Name = "TreeContainmentStyle";
+										- _Value = "True";
+										- _Type = Bool;
+									}
+								}
+							}
+							{ IPropertyMetaclass 
+								- _Name = "General";
+								- Properties = { IRPYRawContainer 
+									- size = 1;
+									- value = 
+									{ IProperty 
+										- _Name = "SysMLDiagramKindTitle";
+										- _Value = "req";
+										- _Type = String;
+									}
+								}
+							}
+							{ IPropertyMetaclass 
+								- _Name = "Object";
+								- Properties = { IRPYRawContainer 
+									- size = 1;
+									- value = 
+									{ IProperty 
+										- _Name = "ShowStereotypeOfClass";
+										- _Value = "False";
+										- _Type = Bool;
+									}
+								}
+							}
+							{ IPropertyMetaclass 
+								- _Name = "Requirement";
+								- Properties = { IRPYRawContainer 
+									- size = 1;
+									- value = 
+									{ IProperty 
+										- _Name = "RequirementNotation";
+										- _Value = "Box_Style";
+										- _Type = Enum;
+										- _ExtraTypeInfo = "Note_Style,Box_Style";
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			- _name = "MoreDetailedRD";
+			- _modifiedTimeWeak = 7.19.2015::11:28:44;
+			- _m2Classes = { IRPYRawContainer 
+				- size = 1;
+				- value = "ObjectModelDiagram"; 
+			}
+			- _newTerm = 1;
+		}
+		{ IStereotype 
+			- _id = GUID 19ef2a3d-9903-4546-a24b-bb06e0030b6e;
+			- _myState = 8192;
+			- _properties = { IPropertyContainer 
+				- Subjects = { IRPYRawContainer 
+					- size = 1;
+					- value = 
+					{ IPropertySubject 
+						- _Name = "General";
+						- Metaclasses = { IRPYRawContainer 
+							- size = 1;
+							- value = 
+							{ IPropertyMetaclass 
+								- _Name = "Graphics";
+								- Properties = { IRPYRawContainer 
+									- size = 1;
+									- value = 
+									{ IProperty 
+										- _Name = "ActivityDiagramToolbar";
+										- _Value = "Action,AcceptEventAction,SendAction,AcceptTimeEvent,InterruptibleRegion,CallBehavior,InitialFlow,ControlFlow,DecisionNode,MergeNode,DiagramConnector,ForkConnector,JoinConnector,ActivityFinal,FlowFInal,trace";
+										- _Type = String;
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			- _name = "SimpleAD";
+			- _modifiedTimeWeak = 7.24.2015::12:20:38;
+			- _m2Classes = { IRPYRawContainer 
+				- size = 1;
+				- value = "ActivityDiagram"; 
+			}
+		}
+	}
+	- weakCGTime = 11.8.2015::16:53:3;
+	- strongCGTime = 11.8.2015::16:53:3;
+	- _defaultComposite = GUID d99cf07a-d91b-4fe7-8454-c53a4512e0b1;
+	- _eventsBaseID = -1;
+	- Classes = { IRPYRawContainer 
+		- size = 1;
+		- value = 
+		{ IClass 
+			- _id = GUID d99cf07a-d91b-4fe7-8454-c53a4512e0b1;
+			- _myState = 40960;
+			- _name = "TopLevel";
+			- _modifiedTimeWeak = 10.11.2015::9:21:29;
+			- weakCGTime = 10.11.2015::9:21:29;
+			- strongCGTime = 10.11.2015::9:21:29;
+			- _multiplicity = "";
+			- _itsStateChart = { IHandle 
+				- _m2Class = "";
+			}
+			- _classModifier = Unspecified;
+		}
+	}
+	- _configurationRelatedTime = 1.2.1990::0:0:0;
+}
+

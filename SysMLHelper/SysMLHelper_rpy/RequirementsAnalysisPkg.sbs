@@ -1,0 +1,176 @@
+I-Logix-RPY-Archive version 8.11.0 C++ 9499822
+{ ISubsystem 
+	- _id = GUID a225e158-d38b-4900-b98e-97d73f017e2a;
+	- _myState = 8192;
+	- _properties = { IPropertyContainer 
+		- Subjects = { IRPYRawContainer 
+			- size = 1;
+			- value = 
+			{ IPropertySubject 
+				- _Name = "Model";
+				- Metaclasses = { IRPYRawContainer 
+					- size = 1;
+					- value = 
+					{ IPropertyMetaclass 
+						- _Name = "Profile";
+						- Properties = { IRPYRawContainer 
+							- size = 1;
+							- value = 
+							{ IProperty 
+								- _Name = "GloballyApplied";
+								- _Value = "False";
+								- _Type = Bool;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	- _name = "RequirementsAnalysisPkg";
+	- Dependencies = { IRPYRawContainer 
+		- size = 1;
+		- value = 
+		{ IDependency 
+			- _id = GUID 6239c6df-bdc8-4b03-bcad-ce9cd9968c8a;
+			- _myState = 2048;
+			- _name = "RequirementsAnalysisProfile";
+			- Stereotypes = { IRPYRawContainer 
+				- size = 1;
+				- value = 
+				{ IHandle 
+					- _m2Class = "IStereotype";
+					- _filename = "PredefinedTypes.sbs";
+					- _subsystem = "PredefinedTypes";
+					- _class = "";
+					- _name = "AppliedProfile";
+					- _id = GUID d2eca2c1-e5a5-4296-9453-29283c4ed8bc;
+				}
+			}
+			- _modifiedTimeWeak = 3.30.2016::18:33:35;
+			- _dependsOn = { INObjectHandle 
+				- _m2Class = "IProfile";
+				- _filename = "RequirementsAnalysisProfile.sbs";
+				- _subsystem = "";
+				- _class = "";
+				- _name = "RequirementsAnalysisProfile";
+				- _id = GUID ee68d643-007f-404c-89e5-7c61c7008170;
+			}
+		}
+	}
+	- _modifiedTimeWeak = 3.30.2016::18:33:35;
+	- Tags = { IRPYRawContainer 
+		- size = 3;
+		- value = 
+		{ ITag 
+			- _id = GUID 4008d7bf-3951-4d15-94e6-8780899d5810;
+			- _myState = 8192;
+			- _name = "traceabilityTypeToUseForActions";
+			- _modifiedTimeWeak = 3.29.2016::13:1:5;
+			- ValueSpecifications = { IRPYRawContainer 
+				- size = 1;
+				- value = 
+				{ ILiteralSpecification 
+					- _id = GUID 34432f5a-a9d8-43e3-8ef4-343236c6c1f3;
+					- _modifiedTimeWeak = 3.10.2016::7:59:53;
+					- _value = "derive";
+				}
+			}
+			- _typeOf = { IHandle 
+				- _m2Class = "IType";
+				- _filename = "PredefinedTypes.sbs";
+				- _subsystem = "PredefinedTypes";
+				- _class = "";
+				- _name = "RhpString";
+				- _id = GUID ae5e3720-4e3e-40f1-9346-9a8b4e501f35;
+			}
+			- _isOrdered = 0;
+		}
+		{ ITag 
+			- _id = GUID 4e68ed8c-3024-48e4-bab6-9c06a1f21f34;
+			- _myState = 8192;
+			- _name = "traceabilityTypeToUseForUseCases";
+			- _modifiedTimeWeak = 3.29.2016::13:1:5;
+			- ValueSpecifications = { IRPYRawContainer 
+				- size = 1;
+				- value = 
+				{ ILiteralSpecification 
+					- _id = GUID d96bd6d6-1fe4-406e-9ad7-d60a487481ae;
+					- _modifiedTimeWeak = 3.29.2016::12:57:33;
+					- _value = "refine";
+				}
+			}
+			- _typeOf = { IHandle 
+				- _m2Class = "IType";
+				- _filename = "PredefinedTypes.sbs";
+				- _subsystem = "PredefinedTypes";
+				- _class = "";
+				- _name = "RhpString";
+				- _id = GUID ae5e3720-4e3e-40f1-9346-9a8b4e501f35;
+			}
+			- _isOrdered = 0;
+		}
+		{ ITag 
+			- _id = GUID 2dfde3ab-5a9f-49f9-a2f0-e578f457aa4e;
+			- _myState = 8192;
+			- _name = "createRequirementTextForPrefixing";
+			- _modifiedTimeWeak = 3.30.2016::10:57:38;
+			- ValueSpecifications = { IRPYRawContainer 
+				- size = 1;
+				- value = 
+				{ ILiteralSpecification 
+					- _id = GUID cc923bdd-5666-40dc-b52e-6973fa6c6e1e;
+					- _modifiedTimeWeak = 3.30.2016::10:57:38;
+					- _value = "The feature shall be able to ";
+				}
+			}
+			- _typeOf = { IHandle 
+				- _m2Class = "IType";
+				- _filename = "PredefinedTypes.sbs";
+				- _subsystem = "PredefinedTypes";
+				- _class = "";
+				- _name = "RhpString";
+				- _id = GUID ae5e3720-4e3e-40f1-9346-9a8b4e501f35;
+			}
+			- _isOrdered = 0;
+		}
+	}
+	- _lastID = 3;
+	- Declaratives = { IRPYRawContainer 
+		- size = 2;
+		- value = 
+		{ ISubsystem 
+			- fileName = "RequirementsPkg_1";
+			- _id = GUID ca6b33bc-c2d2-466c-abc1-de271487bbd0;
+			- _name = "RequirementsPkg";
+		}
+		{ ISubsystem 
+			- fileName = "UseCaseDiagramsPkg_1";
+			- _id = GUID 3c0801dd-4e35-4dc6-9467-38e2e272f19c;
+			- _name = "UseCaseDiagramsPkg";
+		}
+	}
+	- weakCGTime = 3.30.2016::18:33:35;
+	- strongCGTime = 3.30.2016::18:33:35;
+	- _defaultComposite = GUID 33122e50-b01a-434c-ae29-f0a9c54785a9;
+	- _eventsBaseID = -1;
+	- Classes = { IRPYRawContainer 
+		- size = 1;
+		- value = 
+		{ IClass 
+			- _id = GUID 33122e50-b01a-434c-ae29-f0a9c54785a9;
+			- _myState = 40960;
+			- _name = "TopLevel";
+			- _modifiedTimeWeak = 3.30.2016::10:57:38;
+			- weakCGTime = 3.30.2016::10:57:38;
+			- strongCGTime = 3.29.2016::13:1:5;
+			- _multiplicity = "";
+			- _itsStateChart = { IHandle 
+				- _m2Class = "";
+			}
+			- _classModifier = Unspecified;
+		}
+	}
+	- _configurationRelatedTime = 3.29.2016::13:1:5;
+}
+

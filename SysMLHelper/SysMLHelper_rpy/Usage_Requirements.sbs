@@ -1,0 +1,251 @@
+I-Logix-RPY-Archive version 8.11.0 C++ 9499822
+{ ISubsystem 
+	- _ownerHandle = { IHandle 
+		- _m2Class = "ISubsystem";
+		- _filename = "FunctionalAnalysisPkg.sbs";
+		- _subsystem = "";
+		- _class = "";
+		- _name = "FunctionalAnalysisPkg";
+		- _id = GUID e667478a-1089-4ffb-add5-60eb5bfbbb1e;
+	}
+	- _id = GUID 852a1cb3-dcec-4ff8-aee3-b79bd67a0890;
+	- _myState = 8192;
+	- _name = "Usage_Requirements";
+	- _displayName = "Usage Requirements";
+	- Stereotypes = { IRPYRawContainer 
+		- size = 1;
+		- value = 
+		{ IHandle 
+			- _m2Class = "IStereotype";
+			- _id = GUID b15d3b30-271d-44a4-af71-d81ba199d371;
+		}
+	}
+	- Annotations = { IRPYRawContainer 
+		- size = 9;
+		- value = 
+		{ IRequirement 
+			- _id = GUID e3a17303-31cf-4bd2-a9aa-befe38f41935;
+			- _myState = 8192;
+			- _name = "REQ-2";
+			- Stereotypes = { IRPYRawContainer 
+				- size = 1;
+				- value = 
+				{ IHandle 
+					- _m2Class = "IStereotype";
+					- _id = GUID b15d3b30-271d-44a4-af71-d81ba199d371;
+				}
+			}
+			- _modifiedTimeWeak = 1.31.2016::12:37:11;
+			- _body = "It shall reduce the costs (of filming) by avoiding unfeasible and unaffordable sets and model filming";
+			- reqID = "REQ-2";
+		}
+		{ IRequirement 
+			- _id = GUID 7ae744a4-b1eb-4556-bf1e-377906bd8ccf;
+			- _myState = 8192;
+			- _name = "REQ-3";
+			- Stereotypes = { IRPYRawContainer 
+				- size = 1;
+				- value = 
+				{ IHandle 
+					- _m2Class = "IStereotype";
+					- _id = GUID b15d3b30-271d-44a4-af71-d81ba199d371;
+				}
+			}
+			- _modifiedTimeWeak = 1.31.2016::12:37:11;
+			- _body = "It shall allow the episode time to focus on story without time landing, taking off, etc";
+			- reqID = "REQ-3";
+		}
+		{ IRequirement 
+			- _id = GUID 31c30d9e-bba8-453f-a0bc-3ef946aa6892;
+			- _myState = 8192;
+			- _name = "REQ-4";
+			- Stereotypes = { IRPYRawContainer 
+				- size = 1;
+				- value = 
+				{ IHandle 
+					- _m2Class = "IStereotype";
+					- _id = GUID b15d3b30-271d-44a4-af71-d81ba199d371;
+				}
+			}
+			- _modifiedTimeWeak = 1.31.2016::12:37:11;
+			- _body = "It shall be conceivable by the audience as possible in the future, i.e. in the realms of the possible";
+			- reqID = "REQ-4";
+		}
+		{ IRequirement 
+			- _id = GUID ee02f031-f241-4805-9a16-5c454003a438;
+			- _myState = 8192;
+			- _name = "REQ-5";
+			- Stereotypes = { IRPYRawContainer 
+				- size = 1;
+				- value = 
+				{ IHandle 
+					- _m2Class = "IStereotype";
+					- _id = GUID b15d3b30-271d-44a4-af71-d81ba199d371;
+				}
+			}
+			- _modifiedTimeWeak = 1.31.2016::12:37:11;
+			- _body = "It shall incorporate affordable visual effects to convey that transport is occurring";
+			- reqID = "REQ-5";
+		}
+		{ IRequirement 
+			- _id = GUID 4464222d-9810-4413-a52b-84e5e5bc07bd;
+			- _myState = 8192;
+			- _name = "REQ-6";
+			- Stereotypes = { IRPYRawContainer 
+				- size = 1;
+				- value = 
+				{ IHandle 
+					- _m2Class = "IStereotype";
+					- _id = GUID b15d3b30-271d-44a4-af71-d81ba199d371;
+				}
+			}
+			- _modifiedTimeWeak = 1.31.2016::12:37:11;
+			- _body = "It shall be possible for multiple people or objects to be transported at the same time, e.g. a landing crew of 6 that includes both regular members of the cast plus additional cast members that may have a 'reduced probability of survival'";
+			- reqID = "REQ-6";
+		}
+		{ IRequirement 
+			- _id = GUID 52c627aa-cf14-45f7-863b-ad390533f69f;
+			- _myState = 8192;
+			- _name = "REQ-7";
+			- Stereotypes = { IRPYRawContainer 
+				- size = 1;
+				- value = 
+				{ IHandle 
+					- _m2Class = "IStereotype";
+					- _id = GUID b15d3b30-271d-44a4-af71-d81ba199d371;
+				}
+			}
+			- _modifiedTimeWeak = 1.31.2016::12:37:11;
+			- _body = "It shall be possible for crew members to communicate with the ship when on the planet in order to help with the plot/story telling";
+			- reqID = "REQ-7";
+		}
+		{ IRequirement 
+			- _id = GUID dcb622e2-a617-42c6-8135-bed9ac134553;
+			- _myState = 8192;
+			- _name = "REQ-8";
+			- Stereotypes = { IRPYRawContainer 
+				- size = 1;
+				- value = 
+				{ IHandle 
+					- _m2Class = "IStereotype";
+					- _id = GUID b15d3b30-271d-44a4-af71-d81ba199d371;
+				}
+			}
+			- _modifiedTimeWeak = 1.31.2016::12:37:11;
+			- _body = "It shall incorporate features and possibilities related to its operation that can be used to add to tension to a plot or increase interest levels";
+			- reqID = "REQ-8";
+		}
+		{ IRequirement 
+			- _id = GUID 81fd541b-9b72-42ee-9706-58712815ffa3;
+			- _myState = 8192;
+			- _name = "REQ-9";
+			- Stereotypes = { IRPYRawContainer 
+				- size = 1;
+				- value = 
+				{ IHandle 
+					- _m2Class = "IStereotype";
+					- _id = GUID b15d3b30-271d-44a4-af71-d81ba199d371;
+				}
+			}
+			- _modifiedTimeWeak = 1.31.2016::12:37:11;
+			- _body = "It shall be possible for a member of the crew or cast to be transported to a planet or similar device around which the Ship is located";
+			- reqID = "REQ-9";
+		}
+		{ IRequirement 
+			- _id = GUID 0ecb6b4f-c084-4018-82d4-d4719734aad7;
+			- _myState = 8192;
+			- _name = "REQ-10";
+			- Stereotypes = { IRPYRawContainer 
+				- size = 1;
+				- value = 
+				{ IHandle 
+					- _m2Class = "IStereotype";
+					- _id = GUID b15d3b30-271d-44a4-af71-d81ba199d371;
+				}
+			}
+			- _modifiedTimeWeak = 1.31.2016::12:37:11;
+			- _body = "It shall raise/exploit emergent scientific features of the time that may appeal to a 'slightly scientific/geek-like' fan base";
+			- reqID = "REQ-10";
+		}
+	}
+	- _modifiedTimeWeak = 1.31.2016::12:37:11;
+	- Declaratives = { IRPYRawContainer 
+		- size = 1;
+		- value = 
+		{ IStereotype 
+			- _id = GUID b15d3b30-271d-44a4-af71-d81ba199d371;
+			- _myState = 8192;
+			- _name = "fromUsage Requirements";
+			- _modifiedTimeWeak = 1.31.2016::12:37:11;
+			- _m2Classes = { IRPYRawContainer 
+				- size = 5;
+				- value = "Requirement"; "Dependency"; "Package"; "HyperLink"; "Type"; 
+			}
+		}
+	}
+	- weakCGTime = 1.31.2016::12:37:11;
+	- strongCGTime = 1.31.2016::12:37:11;
+	- _defaultComposite = GUID 7d64c60f-b9e9-4961-9bf8-a9a19c02826f;
+	- _eventsBaseID = -1;
+	- Classes = { IRPYRawContainer 
+		- size = 1;
+		- value = 
+		{ IClass 
+			- _id = GUID 7d64c60f-b9e9-4961-9bf8-a9a19c02826f;
+			- _myState = 40960;
+			- _name = "TopLevel";
+			- _modifiedTimeWeak = 1.2.1990::0:0:0;
+			- weakCGTime = 1.2.1990::0:0:0;
+			- strongCGTime = 1.2.1990::0:0:0;
+			- _multiplicity = "";
+			- _itsStateChart = { IHandle 
+				- _m2Class = "";
+			}
+			- _classModifier = Unspecified;
+		}
+	}
+	- Types = { IRPYRawContainer 
+		- size = 1;
+		- value = 
+		{ IType 
+			- _id = GUID 3ebb78ea-1b04-438b-ace3-cf2a59123050;
+			- _myState = 8192;
+			- _name = "Usage_Requirements_Priority";
+			- _displayName = "Usage Requirements_Priority";
+			- Stereotypes = { IRPYRawContainer 
+				- size = 1;
+				- value = 
+				{ IHandle 
+					- _m2Class = "IStereotype";
+					- _id = GUID b15d3b30-271d-44a4-af71-d81ba199d371;
+				}
+			}
+			- _modifiedTimeWeak = 1.31.2016::12:37:11;
+			- Literals = { IRPYRawContainer 
+				- size = 3;
+				- value = 
+				{ IEnumerationLiteral 
+					- _id = GUID ea004fb1-04fa-43f8-a36e-f758ade09575;
+					- _name = "High";
+					- _modifiedTimeWeak = 1.31.2016::12:37:11;
+					- _value = "";
+				}
+				{ IEnumerationLiteral 
+					- _id = GUID 0a489794-9f6b-4f93-85a8-3a21d0d45817;
+					- _name = "Medium";
+					- _modifiedTimeWeak = 1.31.2016::12:37:11;
+					- _value = "";
+				}
+				{ IEnumerationLiteral 
+					- _id = GUID 42bccea4-c2c7-4ded-9da1-909f3afbbaa1;
+					- _name = "Low";
+					- _modifiedTimeWeak = 1.31.2016::12:37:11;
+					- _value = "";
+				}
+			}
+			- _kind = Enumeration;
+		}
+	}
+	- _configurationRelatedTime = 1.1.1970::0:0:0;
+}
+
