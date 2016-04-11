@@ -56,7 +56,7 @@ I-Logix-RPY-Archive version 8.11.0 C++ 9499822
 							}
 							{ IProperty 
 								- _Name = "UseCaseDiagramToolbar";
-								- _Value = "rpyDefault,Refinement,Higher Level Goal";
+								- _Value = "rpyDefault,Refinement";
 								- _Type = String;
 							}
 						}
@@ -87,7 +87,7 @@ I-Logix-RPY-Archive version 8.11.0 C++ 9499822
 							- value = 
 							{ IProperty 
 								- _Name = "AdditionalHelpersFiles";
-								- _Value = "$OMROOT/Profiles/SysMLHelper/RequirementsAnalysisProfile/RequirementsAnalysisProfile.hep";
+								- _Value = "$OMROOT/Profiles/SysMLHelper/RequirementsAnalysisProfile.hep";
 								- _Type = String;
 							}
 							{ IProperty 
@@ -102,46 +102,11 @@ I-Logix-RPY-Archive version 8.11.0 C++ 9499822
 		}
 	}
 	- _name = "RequirementsAnalysisProfile";
-	- _modifiedTimeWeak = 3.30.2016::18:39:37;
-	- _lastID = 40;
+	- _modifiedTimeWeak = 4.10.2016::21:23:2;
+	- _lastID = 41;
 	- Declaratives = { IRPYRawContainer 
 		- size = 2;
 		- value = 
-		{ IStereotype 
-			- _id = GUID 8d2ff742-0459-4aad-b4f7-82047a2330e5;
-			- _myState = 8192;
-			- _properties = { IPropertyContainer 
-				- Subjects = { IRPYRawContainer 
-					- size = 1;
-					- value = 
-					{ IPropertySubject 
-						- _Name = "Format";
-						- Metaclasses = { IRPYRawContainer 
-							- size = 1;
-							- value = 
-							{ IPropertyMetaclass 
-								- _Name = "Requirement";
-								- Properties = { IRPYRawContainer 
-									- size = 1;
-									- value = 
-									{ IProperty 
-										- _Name = "Line.LineColor";
-										- _Value = "255,0,255";
-										- _Type = Color;
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-			- _name = "Higher Level Goal";
-			- _modifiedTimeWeak = 3.30.2016::7:22:38;
-			- _m2Classes = { IRPYRawContainer 
-				- size = 1;
-				- value = "Requirement"; 
-			}
-		}
 		{ IStereotype 
 			- _id = GUID 47f1a7be-3b10-4ec3-9b4b-45b40969ee9b;
 			- _myState = 8192;
@@ -181,9 +146,44 @@ cStruct, DDS/tpQosPolicy, DDS/udQosPolicy, DDS/wdlQosPolicy, DDS/ddsDiagram, DDS
 				- value = "Project"; 
 			}
 		}
+		{ IStereotype 
+			- _id = GUID 8d2ff742-0459-4aad-b4f7-82047a2330e5;
+			- _myState = 8192;
+			- _properties = { IPropertyContainer 
+				- Subjects = { IRPYRawContainer 
+					- size = 1;
+					- value = 
+					{ IPropertySubject 
+						- _Name = "Format";
+						- Metaclasses = { IRPYRawContainer 
+							- size = 1;
+							- value = 
+							{ IPropertyMetaclass 
+								- _Name = "Requirement";
+								- Properties = { IRPYRawContainer 
+									- size = 1;
+									- value = 
+									{ IProperty 
+										- _Name = "Line.LineColor";
+										- _Value = "255,0,255";
+										- _Type = Color;
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			- _name = "HigherLevelGoal";
+			- _modifiedTimeWeak = 4.10.2016::11:33:10;
+			- _m2Classes = { IRPYRawContainer 
+				- size = 1;
+				- value = "Requirement"; 
+			}
+		}
 	}
-	- weakCGTime = 3.30.2016::18:39:37;
-	- strongCGTime = 3.30.2016::18:33:35;
+	- weakCGTime = 4.10.2016::21:23:2;
+	- strongCGTime = 4.10.2016::9:17:57;
 	- _defaultComposite = GUID 47ada376-b4c8-4895-8007-9fe51d77a548;
 	- _eventsBaseID = -1;
 	- Classes = { IRPYRawContainer 
@@ -193,9 +193,9 @@ cStruct, DDS/tpQosPolicy, DDS/udQosPolicy, DDS/wdlQosPolicy, DDS/ddsDiagram, DDS
 			- _id = GUID 47ada376-b4c8-4895-8007-9fe51d77a548;
 			- _myState = 40960;
 			- _name = "TopLevel";
-			- _modifiedTimeWeak = 3.30.2016::18:39:37;
-			- weakCGTime = 3.30.2016::18:39:37;
-			- strongCGTime = 3.22.2016::8:29:2;
+			- _modifiedTimeWeak = 4.10.2016::11:33:10;
+			- weakCGTime = 4.10.2016::11:33:10;
+			- strongCGTime = 4.10.2016::9:17:57;
 			- _multiplicity = "";
 			- StateCharts = { IRPYRawContainer 
 				- size = 1;
@@ -204,16 +204,16 @@ cStruct, DDS/tpQosPolicy, DDS/udQosPolicy, DDS/wdlQosPolicy, DDS/ddsDiagram, DDS
 					- _id = GUID 366b4e03-1300-4cda-a456-4b8b4d0f0171;
 					- _myState = 8192;
 					- _name = "template_for_act";
-					- _modifiedTimeWeak = 3.30.2016::18:39:37;
+					- _modifiedTimeWeak = 4.9.2016::19:46:28;
 					- _lastID = 4;
-					- weakCGTime = 3.30.2016::18:39:37;
+					- weakCGTime = 4.9.2016::19:46:28;
 					- strongCGTime = 1.31.2016::17:20:59;
 					- _multiplicity = "";
 					- _itsStateChart = { IHandle 
 						- _m2Class = "";
 					}
 					- _classModifier = Unspecified;
-					- _defNumber = 3;
+					- _defNumber = 4;
 					- Transitions = { IRPYRawContainer 
 						- size = 2;
 						- value = 
@@ -287,7 +287,7 @@ cStruct, DDS/tpQosPolicy, DDS/udQosPolicy, DDS/wdlQosPolicy, DDS/ddsDiagram, DDS
 											- _id = GUID 715a7b7a-1415-4d0c-a068-7dd1c3afd014;
 										}
 									}
-									- _modifiedTimeWeak = 3.30.2016::18:35:0;
+									- _modifiedTimeWeak = 4.9.2016::19:46:20;
 									- _lastID = 2;
 									- _body = "<type any pre-conditions else delete from model>";
 									- Anchors = { IRPYRawContainer 
@@ -321,7 +321,7 @@ cStruct, DDS/tpQosPolicy, DDS/udQosPolicy, DDS/wdlQosPolicy, DDS/ddsDiagram, DDS
 											- _id = GUID 295c57d9-76e8-4c96-a1ce-4cd5d85b9fe6;
 										}
 									}
-									- _modifiedTimeWeak = 3.30.2016::18:34:49;
+									- _modifiedTimeWeak = 4.9.2016::19:46:28;
 									- _lastID = 2;
 									- _body = "<type any post-conditions else delete from model>";
 									- Anchors = { IRPYRawContainer 
@@ -340,7 +340,7 @@ cStruct, DDS/tpQosPolicy, DDS/udQosPolicy, DDS/wdlQosPolicy, DDS/ddsDiagram, DDS
 									}
 								}
 							}
-							- _modifiedTimeWeak = 3.30.2016::18:35:0;
+							- _modifiedTimeWeak = 4.9.2016::19:46:28;
 							- _parent = ;
 							- _defaultTrans = GUID 252e7520-b1a0-4977-aaeb-15ae6e4798bf;
 						}
@@ -348,7 +348,7 @@ cStruct, DDS/tpQosPolicy, DDS/udQosPolicy, DDS/wdlQosPolicy, DDS/ddsDiagram, DDS
 							- _id = GUID 85ff87c5-1b48-4af7-8b41-27def659a7d6;
 							- _name = "Trigger";
 							- _displayName = "<Type text-based Use Case Trigger as this Label>";
-							- _modifiedTimeWeak = 3.30.2016::18:34:21;
+							- _modifiedTimeWeak = 4.9.2016::19:46:4;
 							- _parent = GUID 694749c2-d207-4cad-870a-ab90070b7f86;
 							- _stateType = AcceptEventAction;
 							- _defaultTrans = ;
@@ -384,7 +384,7 @@ cStruct, DDS/tpQosPolicy, DDS/udQosPolicy, DDS/wdlQosPolicy, DDS/ddsDiagram, DDS
 							- _defaultTrans = ;
 						}
 					}
-					- _version = 3.30.2016::19:39:37;
+					- _version = 4.9.2016::20:46:14;
 					- _baseVersion = 1.2.1990::0:0:0;
 					- _diagram = GUID 0a690dfb-d082-48a8-918f-773aa75b20d7;
 					- Views = { IRPYRawContainer 
@@ -737,8 +737,8 @@ cStruct, DDS/tpQosPolicy, DDS/udQosPolicy, DDS/wdlQosPolicy, DDS/ddsDiagram, DDS
 								}
 							}
 							- _name = "activitydiagram_0";
-							- _modifiedTimeWeak = 3.30.2016::18:39:37;
-							- _lastModifiedTime = "3.30.2016::18:39:37";
+							- _modifiedTimeWeak = 4.9.2016::19:46:4;
+							- _lastModifiedTime = "4.9.2016::19:46:28";
 							- _graphicChart = { CGIStateChart 
 								- _id = GUID 510d5383-844f-482d-b927-6684f707df4a;
 								- m_type = 0;
@@ -834,7 +834,7 @@ cStruct, DDS/tpQosPolicy, DDS/udQosPolicy, DDS/wdlQosPolicy, DDS/ddsDiagram, DDS
 										- m_nOrientationCtrlPt = 8;
 									}
 									- m_drawBehavior = 4096;
-									- m_transform = 3.58796 0 0 7.67424 20 11 ;
+									- m_transform = 3.58796 0 0 7.59848 20 11 ;
 									- m_bIsPreferencesInitialized = 1;
 									- m_AdditionalLabel = { CGIText 
 										- m_str = "";
@@ -928,7 +928,7 @@ cStruct, DDS/tpQosPolicy, DDS/udQosPolicy, DDS/wdlQosPolicy, DDS/ddsDiagram, DDS
 										- m_nOrientationCtrlPt = 5;
 									}
 									- m_drawBehavior = 4110;
-									- m_transform = 0.559941 0 0 0.0490566 286 152 ;
+									- m_transform = 0.559942 0 0 0.0377358 286 152 ;
 									- m_bIsPreferencesInitialized = 0;
 									- m_AdditionalLabel = { CGIText 
 										- m_str = "";
@@ -1027,7 +1027,7 @@ cStruct, DDS/tpQosPolicy, DDS/udQosPolicy, DDS/wdlQosPolicy, DDS/ddsDiagram, DDS
 									- m_anglePoint2 = 0 0 ;
 									- m_line_style = 2;
 									- m_SourcePort = 481 113 ;
-									- m_TargetPort = 348 143 ;
+									- m_TargetPort = 348 133 ;
 									- m_pInheritsFrom = { IHandle 
 										- _m2Class = "";
 									}
@@ -1180,7 +1180,7 @@ cStruct, DDS/tpQosPolicy, DDS/udQosPolicy, DDS/wdlQosPolicy, DDS/ddsDiagram, DDS
 									- m_anglePoint1 = 0 0 ;
 									- m_anglePoint2 = 0 0 ;
 									- m_line_style = 2;
-									- m_SourcePort = 346 836 ;
+									- m_SourcePort = 346 848 ;
 									- m_TargetPort = 547 192 ;
 									- m_pInheritsFrom = { IHandle 
 										- _m2Class = "";
@@ -1565,7 +1565,7 @@ Tips:
 										- m_nOrientationCtrlPt = 5;
 									}
 									- m_drawBehavior = 4096;
-									- m_transform = 0.158671 0 0 0.895986 32 29.3122 ;
+									- m_transform = 0.158671 0 0 0.881387 32 29.356 ;
 									- m_bIsPreferencesInitialized = 1;
 									- m_AdditionalLabel = { CGIText 
 										- m_str = "";
@@ -5743,6 +5743,6 @@ Tips:
 			}
 		}
 	}
-	- _configurationRelatedTime = 3.29.2016::12:55:59;
+	- _configurationRelatedTime = 4.10.2016::21:23:2;
 }
 

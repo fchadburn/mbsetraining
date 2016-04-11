@@ -5,9 +5,38 @@ I-Logix-RPY-Archive version 8.11.0 * 9499822
 	}
 	- isLoadOnDemand = 0;
 	- myViewsWithID = { IRPYRawContainer 
-		- size = 0;
+		- size = 1;
+		- value = 
+		{ CGEMdiDiagramParams 
+			- _placement = { CCommon_WINDOWPLACEMENT 
+				- m_nLength = 44;
+				- m_nFlags = 2;
+				- m_showCmd = 3;
+				- m_ptMinPositionX = -1;
+				- m_ptMinPositionY = -1;
+				- m_ptMaxPositionX = -8;
+				- m_ptMaxPositionY = -31;
+				- m_nLeft = 78;
+				- m_nTop = 78;
+				- m_nRight = 1285;
+				- m_nBottom = 542;
+			}
+			- _wasOpenedOnCloseProject = 1;
+			- _theDiagram = { IHandle 
+				- _m2Class = "IUCDiagram";
+				- _filename = "UseCaseDiagramsPkg.sbs";
+				- _subsystem = "RequirementsAnalysisPkg::UseCaseDiagramsPkg";
+				- _class = "";
+				- _name = "UCD - ProjectName";
+				- _id = GUID 95229afd-9d92-45ca-857b-74295e0efd78;
+			}
+			- _UpLeft = 0 0 ;
+			- _DownRight = 1393 655 ;
+			- _instanceName = "";
+			- m_nDiagramIndex = 0;
+		}
 	}
-	- _fullName = "C:\\Rhapsody813\\Share\\Profiles\\SysMLHelper\\SysMLHelper";
+	- _fullName = "C:\\Users\\Admin1\\IBM\\Rational\\Rhapsody\\8.1.3\\Share\\Profiles\\SysMLHelper\\SysMLHelper";
 	- m_SearchScopeList = { IRPYRawContainer 
 		- size = 0;
 	}

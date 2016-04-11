@@ -1,0 +1,8 @@
+#001 31-MAR-2016: Added ListenForRhapsodyTriggers (F.J.Chadburn)
+#002 05-APR-2016: Improved robustness of copying .types file (F.J.Chadburn)
+#003 09-APR-2016: Added double-click UC to open ACT (F.J.Chadburn)
+#004 10-APR-2016: Re-factored projects into single workspace (F.J.Chadburn)
+#005 10-APR-2016: Support ProductName substitution in reqt text tag (F.J.Chadburn)
+----------------------------------------------------------------------------------
+RELEASE 1.1 (10-APR-2016)
+----------------------------------------------------------------------------------

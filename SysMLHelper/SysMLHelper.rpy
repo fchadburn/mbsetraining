@@ -28,19 +28,34 @@ I-Logix-RPY-Archive version 8.11.0 C++ 9499822
 		}
 	}
 	- _name = "SysMLHelper";
-	- Stereotypes = { IRPYRawContainer 
-		- size = 1;
-		- value = 
-		{ IHandle 
-			- _m2Class = "IStereotype";
-			- _filename = "RequirementsAnalysisProfile.sbs";
-			- _subsystem = "RequirementsAnalysisProfile";
-			- _class = "";
-			- _name = "SimpleMenu";
-			- _id = GUID 47f1a7be-3b10-4ec3-9b4b-45b40969ee9b;
-		}
+	- _modifiedTimeWeak = 4.10.2016::21:22:29;
+	- _description = { IDescription 
+		- _textRTF = "{\\rtf1\\ansi\\ansicpg1252\\deff0\\deflang2057{\\fonttbl{\\f0\\fnil Courier New;}{\\f1\\fnil\\fcharset0 Courier New;}{\\f2\\fnil\\fcharset0 Arial;}}
+{\\colortbl ;\\red63\\green95\\blue191;\\red127\\green127\\blue159;}
+\\viewkind4\\uc1\\pard\\cf1\\f0\\fs20 /**\\cf0\\par
+\\cf1  * Copyright (C) 2016  MBSE Training and Consulting Limited (www.executablembse.com)\\cf0\\par
+\\par
+\\cf1     Change history:\\cf0\\par
+\\cf1     #\\f1 XXX\\f0  \\f1 DD\\cf2\\f0 -\\f1 MMM\\f0 -\\f1 YYYY\\cf1\\f0 : \\f1 What changed\\f0  (\\f1 Who?\\f0 )\\cf0\\par
+\\cf1         \\cf0\\par
+\\cf1     This file is part of SysMLHelperPlugin.\\cf0\\par
+\\par
+\\cf1     SysMLHelperPlugin is free software: you can redistribute it and/or modify\\cf0\\par
+\\cf1     it under the terms of the GNU General Public License as published by\\cf0\\par
+\\cf1     the Free Software Foundation, either version 3 of the License, or\\cf0\\par
+\\cf1     (at your option) any later version.\\cf0\\par
+\\par
+\\cf1     SysMLHelperPlugin is distributed in the hope that it will be useful,\\cf0\\par
+\\cf1     but WITHOUT ANY WARRANTY; without even the implied warranty of\\cf0\\par
+\\cf1     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\\cf0\\par
+\\cf1     GNU General Public License for more details.\\cf0\\par
+\\par
+\\cf1     You should have received a copy of the GNU General Public License\\cf0\\par
+\\cf1     along with SysMLHelperPlugin.  If not, see <http://www.gnu.org/licenses/>.\\cf0\\par
+\\cf1 */\\cf0\\f2\\par
+}
+";
 	}
-	- _modifiedTimeWeak = 3.30.2016::18:45:4;
 	- _lastID = 8;
 	- _UserColors = { IRPYRawContainer 
 		- size = 16;
@@ -83,15 +98,11 @@ I-Logix-RPY-Archive version 8.11.0 C++ 9499822
 		}
 	}
 	- Subsystems = { IRPYRawContainer 
-		- size = 7;
+		- size = 6;
 		- value = 
 		{ IProfile 
 			- fileName = "SysMLHelperProfile";
 			- _id = GUID 1f16e485-bfb5-4a1d-b046-ef4230d5c187;
-		}
-		{ IProfile 
-			- fileName = "RequirementsAnalysisProfile";
-			- _id = GUID ee68d643-007f-404c-89e5-7c61c7008170;
 		}
 		{ IProfile 
 			- fileName = "GlobalPreferencesProfile";
@@ -107,13 +118,13 @@ I-Logix-RPY-Archive version 8.11.0 C++ 9499822
 			- fileName = "GatewayProjectFiles";
 			- _id = GUID a6ca3a64-92a1-4a2b-b824-1cdb9f5661f0;
 		}
-		{ IProfile 
-			- fileName = "FunctionalAnalysisProfile";
-			- _id = GUID a138619d-4c0d-42e8-a715-647195b23512;
-		}
 		{ ISubsystem 
 			- fileName = "RequirementsAnalysisPkg";
 			- _id = GUID a225e158-d38b-4900-b98e-97d73f017e2a;
+		}
+		{ IProfile 
+			- fileName = "RequirementsAnalysisProfile";
+			- _id = GUID ee68d643-007f-404c-89e5-7c61c7008170;
 		}
 	}
 	- Diagrams = { IRPYRawContainer 
