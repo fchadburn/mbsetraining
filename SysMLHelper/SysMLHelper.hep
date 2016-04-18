@@ -4,7 +4,7 @@ numberOfElements=2
 #REM: Definition of the plug-in
 name1=InvokeSysMLHelper
 JavaMainClass1=sysmlhelperplugin.SysMLHelperPlugin
-JavaClassPath1=$OMROOT\..\Share\Profiles\SysMLHelper\workspace\SysMLHelperPlugin\bin
+JavaClassPath1=$OMROOT\..\Share\Profiles\SysMLHelper\bin
 isPlugin1=1
 isVisible1=0
 DLLServerCompatible1=1

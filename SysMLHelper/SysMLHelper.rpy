@@ -28,34 +28,7 @@ I-Logix-RPY-Archive version 8.11.0 C++ 9499822
 		}
 	}
 	- _name = "SysMLHelper";
-	- _modifiedTimeWeak = 4.10.2016::21:22:29;
-	- _description = { IDescription 
-		- _textRTF = "{\\rtf1\\ansi\\ansicpg1252\\deff0\\deflang2057{\\fonttbl{\\f0\\fnil Courier New;}{\\f1\\fnil\\fcharset0 Courier New;}{\\f2\\fnil\\fcharset0 Arial;}}
-{\\colortbl ;\\red63\\green95\\blue191;\\red127\\green127\\blue159;}
-\\viewkind4\\uc1\\pard\\cf1\\f0\\fs20 /**\\cf0\\par
-\\cf1  * Copyright (C) 2016  MBSE Training and Consulting Limited (www.executablembse.com)\\cf0\\par
-\\par
-\\cf1     Change history:\\cf0\\par
-\\cf1     #\\f1 XXX\\f0  \\f1 DD\\cf2\\f0 -\\f1 MMM\\f0 -\\f1 YYYY\\cf1\\f0 : \\f1 What changed\\f0  (\\f1 Who?\\f0 )\\cf0\\par
-\\cf1         \\cf0\\par
-\\cf1     This file is part of SysMLHelperPlugin.\\cf0\\par
-\\par
-\\cf1     SysMLHelperPlugin is free software: you can redistribute it and/or modify\\cf0\\par
-\\cf1     it under the terms of the GNU General Public License as published by\\cf0\\par
-\\cf1     the Free Software Foundation, either version 3 of the License, or\\cf0\\par
-\\cf1     (at your option) any later version.\\cf0\\par
-\\par
-\\cf1     SysMLHelperPlugin is distributed in the hope that it will be useful,\\cf0\\par
-\\cf1     but WITHOUT ANY WARRANTY; without even the implied warranty of\\cf0\\par
-\\cf1     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\\cf0\\par
-\\cf1     GNU General Public License for more details.\\cf0\\par
-\\par
-\\cf1     You should have received a copy of the GNU General Public License\\cf0\\par
-\\cf1     along with SysMLHelperPlugin.  If not, see <http://www.gnu.org/licenses/>.\\cf0\\par
-\\cf1 */\\cf0\\f2\\par
-}
-";
-	}
+	- _modifiedTimeWeak = 3.31.2016::8:24:56;
 	- _lastID = 8;
 	- _UserColors = { IRPYRawContainer 
 		- size = 16;
@@ -98,7 +71,7 @@ I-Logix-RPY-Archive version 8.11.0 C++ 9499822
 		}
 	}
 	- Subsystems = { IRPYRawContainer 
-		- size = 6;
+		- size = 7;
 		- value = 
 		{ IProfile 
 			- fileName = "SysMLHelperProfile";
@@ -117,6 +90,10 @@ I-Logix-RPY-Archive version 8.11.0 C++ 9499822
 		{ ISubsystem 
 			- fileName = "GatewayProjectFiles";
 			- _id = GUID a6ca3a64-92a1-4a2b-b824-1cdb9f5661f0;
+		}
+		{ IProfile 
+			- fileName = "FunctionalAnalysisProfile";
+			- _id = GUID a138619d-4c0d-42e8-a715-647195b23512;
 		}
 		{ ISubsystem 
 			- fileName = "RequirementsAnalysisPkg";

@@ -4,7 +4,7 @@ numberOfElements=6
 #REM: Definition of the plug-in
 name1=InvokeRequirementsAnalysisHelper
 JavaMainClass1=requirementsanalysisplugin.RequirementsAnalysisPlugin
-JavaClassPath1=$OMROOT\..\Share\Profiles\SysMLHelper\workspace\SysMLHelperPlugin\bin
+JavaClassPath1=$OMROOT\..\Share\Profiles\SysMLHelper\bin
 isPlugin1=1
 isVisible1=0
 DLLServerCompatible1=1
