@@ -9,7 +9,7 @@ import java.util.List;
 import com.telelogic.rhapsody.core.*;
  
 public class ActionInfo {
- 
+  
 	private String oldName;
 	private String desiredName;
 	private String chosenName;

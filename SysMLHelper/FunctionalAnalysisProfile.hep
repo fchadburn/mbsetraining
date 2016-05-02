@@ -1,0 +1,66 @@
+[Helpers]
+numberOfElements=8
+
+#REM: Definition of the plug-in
+name1=InvokeFunctionalAnalysisHelper
+JavaMainClass1=functionalanalysisplugin.FunctionalAnalysisPlugin
+JavaClassPath1=$OMROOT\..\Share\Profiles\SysMLHelper\bin
+isPlugin1=1
+isVisible1=0
+DLLServerCompatible1=1
+
+#REM: Add pop-up menu for packages
+name2=MBSE Method: Functional Analysis\Populate package hierarchy for an analysis block
+isPluginCommand2=1
+command2=InvokeFunctionalAnalysisHelper
+applicableTo2=Package
+isVisible2=1
+DLLServerCompatible2=1
+
+#REM: Add pop-up menu for packages
+name3=MBSE Method: Functional Analysis\Add new actor part to the UsageDomain block
+isPluginCommand3=1
+command3=InvokeFunctionalAnalysisHelper
+applicableTo3=Block
+isVisible3=1
+DLLServerCompatible3=1
+
+#REM: Add pop-up menu for packages
+name4=MBSE Method: Functional Analysis\Create an incoming event sent by an actor
+isPluginCommand4=1
+command4=InvokeFunctionalAnalysisHelper
+applicableTo4=State,Transition,Comment,AcceptEventAction,SendAction,AcceptTimeEvent,Constraint,Precondition,Postcondition,ControlFlow,Requirement
+isVisible4=1
+DLLServerCompatible4=1
+
+#REM: Add pop-up menu for packages
+name5=MBSE Method: Functional Analysis\Create an outgoing event sent to an actor
+isPluginCommand5=1
+command5=InvokeFunctionalAnalysisHelper
+applicableTo5=State,Transition,Comment,AcceptEventAction,SendAction,AcceptTimeEvent,Constraint,Precondition,Postcondition,ControlFlow,Requirement
+isVisible5=1
+DLLServerCompatible5=1
+
+#REM: Add pop-up menu for packages
+name6=MBSE Method: Functional Analysis\Create an operation that the system does
+isPluginCommand6=1
+command6=InvokeFunctionalAnalysisHelper
+applicableTo6=State,Transition,Comment,AcceptEventAction,SendAction,AcceptTimeEvent,Constraint,Precondition,Postcondition,ControlFlow,Requirement
+isVisible6=1
+DLLServerCompatible6=1
+
+#REM: Add pop-up menu for packages
+name7=MBSE Method: Functional Analysis\Create new TestCase for «TestDriver»
+isPluginCommand7=1
+command7=InvokeFunctionalAnalysisHelper
+applicableTo7=Block
+isVisible7=1
+DLLServerCompatible7=1
+
+#REM: Add pop-up menu for packages
+name8=MBSE Method: Delete Event and related elements from Model
+isPluginCommand8=1
+command8=InvokeFunctionalAnalysisHelper
+applicableTo8=Event,Reception
+isVisible8=1
+DLLServerCompatible8=1

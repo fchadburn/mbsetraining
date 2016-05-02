@@ -11,7 +11,7 @@ import com.telelogic.rhapsody.core.IRPModelElement;
 public class UserInterfaceHelpers {
 
 	public static boolean askAQuestion(String question){
-		
+		 
 		JDialog.setDefaultLookAndFeelDecorated(true);
 		 
 		int answer = JOptionPane.showConfirmDialog(

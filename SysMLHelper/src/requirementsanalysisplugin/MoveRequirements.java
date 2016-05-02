@@ -1,5 +1,6 @@
 package requirementsanalysisplugin;
 
+import generalhelpers.GeneralHelpers;
 import generalhelpers.Logger;
 
 import java.util.ArrayList;
@@ -13,7 +14,7 @@ import javax.swing.JOptionPane;
 import com.telelogic.rhapsody.core.*;
  
 public class MoveRequirements {
-	
+	 
 	public static Set<IRPModelElement> buildSetOfUnclaimedRequirementsBasedOn(
 			List<IRPModelElement> theSelectedEls, String theGatewayStereotypeName) {
 		

@@ -1,6 +1,7 @@
 package requirementsanalysisplugin;
 
 import generalhelpers.Logger;
+import generalhelpers.PopulatePkg;
 import generalhelpers.UserInterfaceHelpers;
 
 import java.io.File;
@@ -13,8 +14,8 @@ import javax.swing.JOptionPane;
 
 import com.telelogic.rhapsody.core.*;
 
-public class PopulateRequirementsAnalysisPkg {
-	
+public class PopulateRequirementsAnalysisPkg extends PopulatePkg {
+	 
 	public static void displayGraphicalPropertiesFor(IRPGraphElement theGraphEl){
 		
 		@SuppressWarnings("unchecked")
@@ -157,14 +158,6 @@ public class PopulateRequirementsAnalysisPkg {
 		}
 	}
 	
-	static IRPPackage addRequirementsAnalysisPkg(IRPProject toTheProject){
-		
-		RequirementsAnalysisPlugin.getRhapsodyApp().addToModel("$OMROOT\\Profiles\\SysMLHelper\\SysMLHelper_rpy\\RequirementsAnalysisPkg.sbs", 1);	
-		IRPPackage thePackage = (IRPPackage) toTheProject.findElementsByFullName("RequirementsAnalysisPkg", "Package");
-				
-		return thePackage;
-	}
-	
 	static void populateRequirementsAnalysisPkg(IRPProject forProject) {
 		
 		addProfileIfNotPresent("SysML", forProject);		
@@ -173,7 +166,7 @@ public class PopulateRequirementsAnalysisPkg {
 		
 		forProject.changeTo("SysML");
 		
-		IRPModelElement theRequirementsAnalysisPkg = addRequirementsAnalysisPkg( forProject );
+		IRPModelElement theRequirementsAnalysisPkg = addPackageFromProfileRpyFolder(forProject, "RequirementsAnalysisPkg" );
 		
 		if (theRequirementsAnalysisPkg != null){
 			
@@ -216,81 +209,6 @@ public class PopulateRequirementsAnalysisPkg {
 		}
 	}
 
-	private static void applySimpleMenuStereotype(IRPProject toTheProject) {
-		
-		String theName = "RequirementsAnalysisProfile::SimpleMenu";
-		
-		IRPModelElement theEl = toTheProject.findElementsByFullName(theName, "Stereotype");
-		
-		if (theEl != null && theEl instanceof IRPStereotype){
-			IRPStereotype theStereotype = (IRPStereotype)theEl;
-			
-			toTheProject.setStereotype( theStereotype );
-			toTheProject.changeTo("SysML");
-			
-			Logger.writeLine(toTheProject, "was changed to " + theName);
-			Logger.writeLine("Remove the «SimpleMenu» stereotype to return the 'Add New' menu");
-
-		} else {
-			Logger.writeLine("Error in createRequirementsAnalysisPkg, unable to find stereotype called " + theName);
-		}	
-	}
-	
-	public static IRPProfile addProfileIfNotPresent(String theProfileName, IRPProject toTheProject){
-		
-		IRPProfile theProfile = (IRPProfile) toTheProject.findNestedElement(theProfileName, "Profile");
-		
-		if (theProfile==null){
-
-			IRPUnit theUnit = RequirementsAnalysisPlugin.getRhapsodyApp().addProfileToModel( theProfileName );
-			
-			if (theUnit != null){
-				
-				theProfile = (IRPProfile)theUnit;
-				Logger.writeLine("Added profile called " + theProfile.getFullPathName());
-				
-			} else {
-				Logger.writeLine("Error in addProfileIfNotPresent. No profile found with name " + theProfileName);
-			}
-			
-		} else {
-			Logger.writeLine(Logger.elementInfo(theProfile) + " is already present in the project");
-		}
-		
-		return theProfile;		
-	}
-	
-	public static void setProperty(IRPModelElement onTheEl, String withKey, String toValue){
-		
-		Logger.writeLine("Setting " + withKey + " property on " + Logger.elementInfo(onTheEl) + " to " + toValue);
-		onTheEl.setPropertyValue(withKey, toValue);
-	}
-	
-	
-	public static void deleteIfPresent(String theElementWithName, String andMetaClass, IRPModelElement nestedUnderEl){
-		
-		IRPModelElement theEl = nestedUnderEl.findNestedElementRecursive(theElementWithName, andMetaClass);
-		
-		if (theEl != null){
-			
-			IRPCollection theNestedEls = theEl.getNestedElementsRecursive();
-			
-			int count = theNestedEls.getCount();
-			
-			if (count > 1){
-				Logger.writeLine("Decided against deleting " + Logger.elementInfo( theEl ) + " as it has unexpected contents");
-			} else {
-				Logger.writeLine(theEl, "was deleted from " + Logger.elementInfo( nestedUnderEl ));
-				theEl.deleteFromProject();
-			}
-			
-		} else {
-			Logger.writeLine("Unable to delete " + andMetaClass + " with the name " 
-					+ theElementWithName  + " as it was not found underneath " + Logger.elementInfo( nestedUnderEl ) );
-		}
-	}	
-	
-
 }
 
 /**
@@ -299,6 +217,7 @@ public class PopulateRequirementsAnalysisPkg {
     Change history:
     #002 05-APR-2016: Improved robustness of copying .types file (F.J.Chadburn)
     #004 10-APR-2016: Re-factored projects into single workspace (F.J.Chadburn)
+    #006 02-MAY-2016: Add FunctionalAnalysisPkg helper support (F.J.Chadburn)
     
     This file is part of SysMLHelperPlugin.
 

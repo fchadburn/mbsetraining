@@ -1,0 +1,113 @@
+I-Logix-RPY-Archive version 8.11.0 C++ 9499822
+{ ISubsystem 
+	- _id = GUID f9b46480-d50d-44ea-badb-e0b5c851b7fc;
+	- _myState = 8192;
+	- _name = "FunctionalAnalysisPkg";
+	- Dependencies = { IRPYRawContainer 
+		- size = 1;
+		- value = 
+		{ IDependency 
+			- _id = GUID 7725c9c2-cc02-4ab9-a4c6-b74d6745f0b7;
+			- _myState = 2048;
+			- _name = "FunctionalAnalysisProfile";
+			- Stereotypes = { IRPYRawContainer 
+				- size = 1;
+				- value = 
+				{ IHandle 
+					- _m2Class = "IStereotype";
+					- _filename = "PredefinedTypes.sbs";
+					- _subsystem = "PredefinedTypes";
+					- _class = "";
+					- _name = "AppliedProfile";
+					- _id = GUID d2eca2c1-e5a5-4296-9453-29283c4ed8bc;
+				}
+			}
+			- _modifiedTimeWeak = 5.2.2016::10:11:7;
+			- _dependsOn = { INObjectHandle 
+				- _m2Class = "IProfile";
+				- _filename = "FunctionalAnalysisProfile.sbs";
+				- _subsystem = "";
+				- _class = "";
+				- _name = "FunctionalAnalysisProfile";
+				- _id = GUID a138619d-4c0d-42e8-a715-647195b23512;
+			}
+		}
+	}
+	- _modifiedTimeWeak = 5.2.2016::10:50:7;
+	- Tags = { IRPYRawContainer 
+		- size = 2;
+		- value = 
+		{ ITag 
+			- _id = GUID d568061a-8009-4ad3-a287-556b6676b750;
+			- _myState = 8192;
+			- _name = "packageUnderDev";
+			- _modifiedTimeWeak = 5.2.2016::10:48:47;
+			- myTypeOf = { IType 
+				- _id = GUID 2e055eeb-e4ad-4f9d-9e56-f310d3a40865;
+				- _myState = 8192;
+				- _modifiedTimeWeak = 1.2.1990::0:0:0;
+				- _declaration = "Package";
+				- _kind = Language;
+			}
+			- _isOrdered = 0;
+		}
+		{ ITag 
+			- _id = GUID abb07429-c03e-448b-858a-578d503983b6;
+			- _myState = 8192;
+			- _name = "traceabilityTypeToUseForFunctions";
+			- _modifiedTimeWeak = 5.2.2016::10:50:7;
+			- ValueSpecifications = { IRPYRawContainer 
+				- size = 1;
+				- value = 
+				{ ILiteralSpecification 
+					- _id = GUID d7acea88-767e-49cc-b8f5-2cfcf93b3495;
+					- _modifiedTimeWeak = 5.2.2016::10:50:7;
+					- _value = "satisfy";
+				}
+			}
+			- _typeOf = { IHandle 
+				- _m2Class = "IType";
+				- _filename = "PredefinedTypes.sbs";
+				- _subsystem = "PredefinedTypes";
+				- _class = "";
+				- _name = "RhpString";
+				- _id = GUID ae5e3720-4e3e-40f1-9346-9a8b4e501f35;
+			}
+			- _isOrdered = 0;
+		}
+	}
+	- _lastID = 2;
+	- Declaratives = { IRPYRawContainer 
+		- size = 1;
+		- value = 
+		{ ISubsystem 
+			- fileName = "BasePkg";
+			- _persistAs = "D:\\Rhapsody813Saves2\\SysMLHelperV1.5 (2016-03-06-2240)\\SysMLHelper\\SysMLHelper_rpy";
+			- _id = GUID c44ec7cb-7a75-45aa-92db-122629461c4b;
+			- _isReference = 1;
+		}
+	}
+	- weakCGTime = 5.2.2016::10:50:7;
+	- strongCGTime = 5.2.2016::10:11:7;
+	- _defaultComposite = GUID e1d8914f-8f41-4c60-82ca-74d684bda7f3;
+	- _eventsBaseID = -1;
+	- Classes = { IRPYRawContainer 
+		- size = 1;
+		- value = 
+		{ IClass 
+			- _id = GUID e1d8914f-8f41-4c60-82ca-74d684bda7f3;
+			- _myState = 40960;
+			- _name = "TopLevel";
+			- _modifiedTimeWeak = 5.2.2016::10:50:7;
+			- weakCGTime = 5.2.2016::10:50:7;
+			- strongCGTime = 5.2.2016::10:11:7;
+			- _multiplicity = "";
+			- _itsStateChart = { IHandle 
+				- _m2Class = "";
+			}
+			- _classModifier = Unspecified;
+		}
+	}
+	- _configurationRelatedTime = 1.2.1990::0:0:0;
+}
+

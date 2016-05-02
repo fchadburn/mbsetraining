@@ -94,8 +94,13 @@ I-Logix-RPY-Archive version 8.11.0 C++ 9499822
 					{ IPropertyMetaclass 
 						- _Name = "Profile";
 						- Properties = { IRPYRawContainer 
-							- size = 1;
+							- size = 2;
 							- value = 
+							{ IProperty 
+								- _Name = "AdditionalHelpersFiles";
+								- _Value = "$OMROOT/Profiles/SysMLHelper/FunctionalAnalysisProfile.hep";
+								- _Type = String;
+							}
 							{ IProperty 
 								- _Name = "GloballyApplied";
 								- _Value = "False";
@@ -310,54 +315,9 @@ I-Logix-RPY-Archive version 8.11.0 C++ 9499822
 		}
 	}
 	- _name = "FunctionalAnalysisProfile";
-	- _modifiedTimeWeak = 3.7.2016::12:11:35;
+	- _modifiedTimeWeak = 5.2.2016::13:28:22;
 	- Tags = { IRPYRawContainer 
-		- size = 2;
-		- value = 
-		{ ITag 
-			- _id = GUID d03ff6bd-1a96-41b5-8f3f-aa3987a29a75;
-			- _myState = 8192;
-			- _name = "packageUnderDev";
-			- _modifiedTimeWeak = 2.6.2016::21:27:44;
-			- myTypeOf = { IType 
-				- _id = GUID ca1c85a2-e100-4e29-93e4-464af3dd8376;
-				- _myState = 8192;
-				- _modifiedTimeWeak = 1.2.1990::0:0:0;
-				- _declaration = "Package";
-				- _kind = Language;
-			}
-			- _isOrdered = 0;
-		}
-		{ ITag 
-			- _id = GUID cc52a0f9-a504-446c-a230-e16c4ddddf64;
-			- _myState = 8192;
-			- _name = "stereotypeForFunctionTracing";
-			- _modifiedTimeWeak = 3.7.2016::12:11:35;
-			- ValueSpecifications = { IRPYRawContainer 
-				- size = 1;
-				- value = 
-				{ IInstanceValue 
-					- _id = GUID 094cea91-5ab0-444c-bd4b-cd1b69f9c67e;
-					- _modifiedTimeWeak = 1.2.1990::0:0:0;
-					- _value = { IHandle 
-						- _m2Class = "IStereotype";
-						- _filename = "$OMROOT\\Profiles\\SysML\\SysMLProfile_rpy\\SysML.sbs";
-						- _subsystem = "SysML::Requirements";
-						- _class = "";
-						- _name = "satisfy";
-						- _id = GUID 69acc50f-e21e-4b4a-a51e-863efe75ce18;
-					}
-				}
-			}
-			- myTypeOf = { IType 
-				- _id = GUID bee04308-7945-4114-8896-39029654f96b;
-				- _myState = 8192;
-				- _modifiedTimeWeak = 1.2.1990::0:0:0;
-				- _declaration = "Stereotype";
-				- _kind = Language;
-			}
-			- _isOrdered = 0;
-		}
+		- size = 0;
 	}
 	- _lastID = 11;
 	- Declaratives = { IRPYRawContainer 
@@ -562,8 +522,8 @@ I-Logix-RPY-Archive version 8.11.0 C++ 9499822
 			}
 		}
 	}
-	- weakCGTime = 3.7.2016::12:11:35;
-	- strongCGTime = 2.7.2016::9:10:58;
+	- weakCGTime = 5.2.2016::13:28:22;
+	- strongCGTime = 5.2.2016::11:27:7;
 	- _defaultComposite = GUID bd2a5ac5-0f4b-43af-a366-5b283c84c9b7;
 	- _eventsBaseID = -1;
 	- Classes = { IRPYRawContainer 
@@ -573,9 +533,9 @@ I-Logix-RPY-Archive version 8.11.0 C++ 9499822
 			- _id = GUID bd2a5ac5-0f4b-43af-a366-5b283c84c9b7;
 			- _myState = 40960;
 			- _name = "TopLevel";
-			- _modifiedTimeWeak = 2.7.2016::9:10:58;
-			- weakCGTime = 2.7.2016::9:10:58;
-			- strongCGTime = 2.7.2016::9:10:58;
+			- _modifiedTimeWeak = 5.2.2016::11:27:7;
+			- weakCGTime = 5.2.2016::11:27:7;
+			- strongCGTime = 5.2.2016::11:27:7;
 			- _multiplicity = "";
 			- _itsStateChart = { IHandle 
 				- _m2Class = "";

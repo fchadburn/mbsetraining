@@ -7,7 +7,7 @@ import java.util.List;
 import com.telelogic.rhapsody.core.*;
  
 public class RequirementsAnalysisPlugin extends RPUserPlugin {
- 
+  
 	protected static IRPApplication m_rhpApplication = null;
 	protected static IRPProject m_rhpProject = null;
 

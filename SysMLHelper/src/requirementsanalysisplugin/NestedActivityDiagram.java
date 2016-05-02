@@ -9,7 +9,7 @@ import com.telelogic.rhapsody.core.*;
 public class NestedActivityDiagram {
  
 	public static void createNestedActivityDiagramsFor(List<IRPModelElement> theElements){
-		
+		 
 		for (IRPModelElement theElement : theElements) {
 			
 			if (theElement instanceof IRPUseCase){

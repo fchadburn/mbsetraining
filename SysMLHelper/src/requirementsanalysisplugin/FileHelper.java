@@ -12,7 +12,7 @@ import java.nio.file.Paths;
 import com.telelogic.rhapsody.core.IRPProject;
 
 public class FileHelper {
-
+ 
 	public static File getFileWith(String theName, String inThePath){
 		
 		File theFileFound = null;

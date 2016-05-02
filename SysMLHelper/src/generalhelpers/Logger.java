@@ -5,7 +5,7 @@ import requirementsanalysisplugin.RequirementsAnalysisPlugin;
 import com.telelogic.rhapsody.core.*;
  
 public class Logger {
- 
+  
 	public static void writeLine(String withMsg){
 		 
 		RequirementsAnalysisPlugin.getRhapsodyApp().writeToOutputWindow("SysMLHelper", withMsg + "\n");

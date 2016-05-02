@@ -1,5 +1,5 @@
 [Helpers]
-numberOfElements=2
+numberOfElements=4
 
 #REM: Definition of the plug-in
 name1=InvokeSysMLHelper
@@ -16,3 +16,19 @@ command2=InvokeSysMLHelper
 applicableTo2=Project,SysML
 isVisible2=1
 DLLServerCompatible2=1
+
+#REM: Add pop-up menu for packages
+name3=MBSE Method: Functional Analysis\Create the FunctionalAnalysisPkg package structure
+isPluginCommand3=1
+command3=InvokeSysMLHelper
+applicableTo3=Project,SysML
+isVisible3=1
+DLLServerCompatible3=1
+
+#REM: Add pop-up menu for packages
+name4=MBSE Method: Design Synthesis\Create the DesignSynthesisPkg package structure
+isPluginCommand4=1
+command4=InvokeSysMLHelper
+applicableTo4=Project,SysML
+isVisible4=1
+DLLServerCompatible4=1

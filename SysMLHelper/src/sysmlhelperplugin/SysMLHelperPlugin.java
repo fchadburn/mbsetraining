@@ -6,6 +6,9 @@ import java.util.List;
 import requirementsanalysisplugin.PopulateRequirementsAnalysisPkg;
 
 import com.telelogic.rhapsody.core.*;
+
+import designsynthesisplugin.PopulateDesignSynthesisPkg;
+import functionalanalysisplugin.PopulateFunctionalAnalysisPkg;
 import generalhelpers.*; 
 
 public class SysMLHelperPlugin extends RPUserPlugin {
@@ -13,7 +16,7 @@ public class SysMLHelperPlugin extends RPUserPlugin {
 	static protected IRPApplication m_rhpApplication = null;
 	static protected IRPProject m_rhpProject = null;
 
-	String version = "1.1.2 (Dev)";
+	String version = "2.0.1 (Under Dev)";
 
 	public static void main(String [] args){
 		IRPModelElement theElement = SysMLHelperPlugin.getRhapsodyApp().getSelectedElement();
@@ -46,7 +49,7 @@ public class SysMLHelperPlugin extends RPUserPlugin {
 	}
 	
 	public static IRPProject getActiveProject(){
-		
+	 	
 		if (m_rhpProject==null){
 			m_rhpProject = getRhapsodyApp().activeProject();
 		}
@@ -74,6 +77,27 @@ public class SysMLHelperPlugin extends RPUserPlugin {
 
 					} catch (Exception e) {
 						Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking PopulateRequirementsAnalysisPkg.createRequirementsAnalysisPkg");
+					}
+				}
+			} else if (menuItem.equals("MBSE Method: Functional Analysis\\Create the FunctionalAnalysisPkg package structure")){
+
+				if (theSelectedEl instanceof IRPProject){
+					try { 
+						PopulateFunctionalAnalysisPkg.createFunctionalAnalysisPkg( (IRPProject) theSelectedEl ); 
+
+					} catch (Exception e) {
+						Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking PopulateFunctionalAnalysisPkg.createFunctionalAnalysisPkg");
+					}
+				}
+
+			} else if (menuItem.equals("MBSE Method: Design Synthesis\\Create the DesignSynthesisPkg package structure")){
+
+				if (theSelectedEl instanceof IRPProject){
+					try { 
+						PopulateDesignSynthesisPkg.createDesignSynthesisPkg( (IRPProject) theSelectedEl ); 
+
+					} catch (Exception e) {
+						Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking PopulateDesignSynthesisPkg.createDesignSynthesisPkg");
 					}
 				}
 			}	
@@ -184,6 +208,7 @@ public class SysMLHelperPlugin extends RPUserPlugin {
     Change history:
     #001 31-MAR-2016: Added ListenForRhapsodyTriggers (F.J.Chadburn)
     #004 10-APR-2016: Re-factored projects into single workspace (F.J.Chadburn)
+    #006 02-MAY-2016: Add FunctionalAnalysisPkg helper support (F.J.Chadburn)
     
     This file is part of SysMLHelperPlugin.
 

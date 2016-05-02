@@ -1,5 +1,6 @@
 package requirementsanalysisplugin;
 
+import generalhelpers.GeneralHelpers;
 import generalhelpers.Logger;
 
 import java.awt.BorderLayout;
@@ -19,7 +20,7 @@ import javax.swing.JTable;
 import com.telelogic.rhapsody.core.*;
  
 public class ActivityDiagramChecker extends JFrame{
-	
+ 	
 	private ActionList actionsInfos;
 	private JPanel thePanel;
     private JTable theTable;

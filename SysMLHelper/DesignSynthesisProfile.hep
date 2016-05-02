@@ -1,0 +1,26 @@
+[Helpers]
+numberOfElements=4
+
+#REM: Definition of the plug-in
+name1=InvokeDesignSynthesisHelper
+JavaMainClass1=designsynthesisplugin.DesignSynthesisPlugin
+JavaClassPath1=$OMROOT\..\Share\Profiles\SysMLHelper\bin
+isPlugin1=1
+isVisible1=0
+DLLServerCompatible1=1
+
+#REM: Add pop-up menu for packages
+name2=MBSE Method: Design Synthesis\Make attribute a «publish» flowport
+isPluginCommand2=1
+command2=InvokeDesignSynthesisHelper
+applicableTo2=Attribute
+isVisible2=1
+DLLServerCompatible2=1
+
+#REM: Add pop-up menu for packages
+name3=MBSE Method: Design Synthesis\Make attribute a «subscribe» flowport
+isPluginCommand3=1
+command3=InvokeDesignSynthesisHelper
+applicableTo3=Attribute
+isVisible3=1
+DLLServerCompatible3=1

@@ -1,5 +1,6 @@
 package requirementsanalysisplugin;
 
+import generalhelpers.GeneralHelpers;
 import generalhelpers.Logger;
 
 import java.util.ArrayList;
@@ -9,7 +10,7 @@ import java.util.List;
 import com.telelogic.rhapsody.core.*;
    
 public class RequirementsHelper {
-	
+ 	
 	private static List<IRPModelElement> getElementsThatFlowInto(IRPModelElement theElement, IRPDiagram onTheDiagram){
 		
 		List<IRPModelElement> theElementsFound = new ArrayList<IRPModelElement>();

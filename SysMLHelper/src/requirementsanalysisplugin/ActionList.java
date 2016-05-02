@@ -6,7 +6,7 @@ import java.util.List;
 import com.telelogic.rhapsody.core.*;
  
 public class ActionList extends ArrayList<ActionInfo> {
-
+ 
 	/**
 	 * 
 	 */

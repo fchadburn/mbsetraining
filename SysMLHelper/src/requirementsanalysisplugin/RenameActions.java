@@ -1,5 +1,6 @@
 package requirementsanalysisplugin;
 
+import generalhelpers.GeneralHelpers;
 import generalhelpers.Logger;
 
 import java.util.List;
@@ -10,7 +11,7 @@ import javax.swing.JOptionPane;
 import com.telelogic.rhapsody.core.*;
  
 public class RenameActions {
-
+ 
 	static public void performRenamesFor(List<IRPModelElement> theSelectedEls){
 		 
 		List<IRPActivityDiagram> theADs = GeneralHelpers.buildListOfActivityDiagramsFor(theSelectedEls);
