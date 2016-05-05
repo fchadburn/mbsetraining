@@ -29,8 +29,21 @@ I-Logix-RPY-Archive version 8.11.0 C++ 9499822
 			{ IPropertySubject 
 				- _Name = "Activity_diagram";
 				- Metaclasses = { IRPYRawContainer 
-					- size = 1;
+					- size = 2;
 					- value = 
+					{ IPropertyMetaclass 
+						- _Name = "CallOperation";
+						- Properties = { IRPYRawContainer 
+							- size = 1;
+							- value = 
+							{ IProperty 
+								- _Name = "ShowAction";
+								- _Value = "Description";
+								- _Type = Enum;
+								- _ExtraTypeInfo = "Action,Description,Label";
+							}
+						}
+					}
 					{ IPropertyMetaclass 
 						- _Name = "Requirement";
 						- Properties = { IRPYRawContainer 
@@ -315,13 +328,10 @@ I-Logix-RPY-Archive version 8.11.0 C++ 9499822
 		}
 	}
 	- _name = "FunctionalAnalysisProfile";
-	- _modifiedTimeWeak = 5.2.2016::13:28:22;
-	- Tags = { IRPYRawContainer 
-		- size = 0;
-	}
+	- _modifiedTimeWeak = 5.5.2016::12:6:24;
 	- _lastID = 11;
 	- Declaratives = { IRPYRawContainer 
-		- size = 7;
+		- size = 9;
 		- value = 
 		{ IStereotype 
 			- _id = GUID 95c8e146-8a56-46cd-ad46-884d54fb2dd3;
@@ -521,9 +531,29 @@ I-Logix-RPY-Archive version 8.11.0 C++ 9499822
 				- value = "Event"; "SequenceDiagram"; 
 			}
 		}
+		{ IStereotype 
+			- _id = GUID eceae9c2-3822-407c-8166-33fb3c564609;
+			- _myState = 8192;
+			- _name = "publish";
+			- _modifiedTimeWeak = 5.5.2016::7:25:50;
+			- _m2Classes = { IRPYRawContainer 
+				- size = 1;
+				- value = "Attribute"; 
+			}
+		}
+		{ IStereotype 
+			- _id = GUID a4223559-32c4-4e89-9465-cfd4ce717990;
+			- _myState = 8192;
+			- _name = "subscribe";
+			- _modifiedTimeWeak = 5.5.2016::7:25:51;
+			- _m2Classes = { IRPYRawContainer 
+				- size = 1;
+				- value = "Attribute"; 
+			}
+		}
 	}
-	- weakCGTime = 5.2.2016::13:28:22;
-	- strongCGTime = 5.2.2016::11:27:7;
+	- weakCGTime = 5.5.2016::12:6:24;
+	- strongCGTime = 5.5.2016::12:6:24;
 	- _defaultComposite = GUID bd2a5ac5-0f4b-43af-a366-5b283c84c9b7;
 	- _eventsBaseID = -1;
 	- Classes = { IRPYRawContainer 
@@ -533,8 +563,8 @@ I-Logix-RPY-Archive version 8.11.0 C++ 9499822
 			- _id = GUID bd2a5ac5-0f4b-43af-a366-5b283c84c9b7;
 			- _myState = 40960;
 			- _name = "TopLevel";
-			- _modifiedTimeWeak = 5.2.2016::11:27:7;
-			- weakCGTime = 5.2.2016::11:27:7;
+			- _modifiedTimeWeak = 5.5.2016::7:25:51;
+			- weakCGTime = 5.5.2016::7:25:51;
 			- strongCGTime = 5.2.2016::11:27:7;
 			- _multiplicity = "";
 			- _itsStateChart = { IHandle 
@@ -543,6 +573,6 @@ I-Logix-RPY-Archive version 8.11.0 C++ 9499822
 			- _classModifier = Unspecified;
 		}
 	}
-	- _configurationRelatedTime = 12.27.2015::15:49:20;
+	- _configurationRelatedTime = 5.5.2016::7:12:56;
 }
 
