@@ -1,5 +1,7 @@
 package functionalanalysisplugin;
 
+import generalhelpers.Logger;
+
 import com.telelogic.rhapsody.core.*;
 
 public class GR_Node {
@@ -89,6 +91,7 @@ public class GR_Node {
 		for (Object o:node.getAllGraphicalProperties().toList()) {
 			IRPGraphicalProperty gprp = (IRPGraphicalProperty) o;
 			System.out.println(gprp.getKey() + "::" + gprp.getValue());
+			Logger.writeLine(gprp.getKey() + "::" + gprp.getValue());
 		}
 	}
 }

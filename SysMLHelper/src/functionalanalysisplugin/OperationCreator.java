@@ -302,7 +302,7 @@ public class OperationCreator {
 		String theSourceInfo = GeneralHelpers.getActionTextFrom(selectedDiagramEl);			
 		Logger.writeLine("The sourceInfo is '" + theSourceInfo + "'");
 	
-		String theProposedName = toMethodName(theSourceInfo);
+		String theProposedName = GeneralHelpers.toMethodName(theSourceInfo);
 		Logger.writeLine("The theProposedName is '" + theProposedName + "'");
 		
 		JPanel panel = new JPanel();
@@ -323,7 +323,7 @@ public class OperationCreator {
 			
 				IRPClassifier theLogicalSystem = partUnderDev.getOtherClass();
 				
-				theOperation = theLogicalSystem.addOperation(theName);
+				theOperation = theLogicalSystem.addOperation(theName);				
 				TraceabilityHelper.addTraceabilityDependenciesTo(theOperation, tracedToReqts);			
 				
 			} else {
@@ -353,7 +353,7 @@ public class OperationCreator {
 			String theSourceInfo = GeneralHelpers.getActionTextFrom(selectedDiagramEl);			
 			Logger.writeLine("The sourceInfo is '" + theSourceInfo + "'");
 		
-			String theProposedName = toMethodName("reqInform" + theActor.getName() + theSourceInfo);
+			String theProposedName = GeneralHelpers.toMethodName("reqInform" + theActor.getName() + theSourceInfo);
 			Logger.writeLine("The theProposedName is '" + theProposedName + "'");
 			
 			JPanel panel = new JPanel();
@@ -445,7 +445,7 @@ public class OperationCreator {
 			String theSourceInfo = GeneralHelpers.getActionTextFrom(theModelElement);			
 			Logger.writeLine("The sourceInfo is '" + theSourceInfo + "'");
 		
-			String theProposedName = toMethodName("req"+ theActor.getName() + theSourceInfo);
+			String theProposedName = GeneralHelpers.toMethodName("req"+ theActor.getName() + theSourceInfo);
 			Logger.writeLine("The theProposedName is '" + theProposedName + "'");
 
 			JPanel panel = new JPanel();
@@ -487,7 +487,7 @@ public class OperationCreator {
 						
 						theEvent.addArgument( "value" );
 						
-						String proposedAttributeName = toMethodName("is " + theSourceInfo);
+						String proposedAttributeName = GeneralHelpers.toMethodName("is " + theSourceInfo);
 
 						JPanel attributePanel = new JPanel();
 						
@@ -689,42 +689,6 @@ public class OperationCreator {
 		return theActors;
 	}
 	
-	private static String toMethodName(String theInput) {
-		
-		StringBuilder nameBuilder = new StringBuilder(theInput.length());    
-
-		boolean capitalizeNextChar = false;
-
-		int n = 1;
-		final int max = 40;
-		
-		for (char c:theInput.toCharArray()) {
-			if (Character.isJavaIdentifierPart(c)){
-				if (capitalizeNextChar) {
-					nameBuilder.append(Character.toUpperCase(c));
-				} else {
-					if (n==1){
-						nameBuilder.append(Character.toLowerCase(c));
-					} else {
-						nameBuilder.append(c);
-					}
-
-				}
-				capitalizeNextChar = false;
-			} else if (Character.isSpaceChar(c)){
-				
-				if (n<max){
-					capitalizeNextChar = true;
-					continue;
-				} else {
-					break;
-				}
-			}
-			n++;
-		}
-		
-		return nameBuilder.toString();
-	}
 
 	public static IRPOperation createTestCaseFor( IRPClass theTestDriver ){
 		
@@ -794,6 +758,8 @@ public class OperationCreator {
 
     Change history:
     #006 02-MAY-2016: Add FunctionalAnalysisPkg helper support (F.J.Chadburn)
+    #007 05-MAY-2016: Move FileHelper into generalhelpers and remove duplicate class (F.J.Chadburn)
+    
     
     This file is part of SysMLHelperPlugin.
 
