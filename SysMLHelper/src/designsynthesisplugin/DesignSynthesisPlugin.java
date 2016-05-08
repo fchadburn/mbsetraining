@@ -11,7 +11,7 @@ public class DesignSynthesisPlugin extends RPUserPlugin {
 	protected static IRPApplication m_rhpApplication = null;
 	protected static IRPProject m_rhpProject = null;
 
-	String version = "2.0.1 (Under Dev)";
+	String version = "2.0.2 (Under Dev)";
 	
 	// plug-in is loaded
 	public void RhpPluginInit(final IRPApplication theRhapsodyApp) {
