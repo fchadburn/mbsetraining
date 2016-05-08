@@ -1,5 +1,6 @@
 package requirementsanalysisplugin;
 
+import generalhelpers.FileHelper;
 import generalhelpers.Logger;
 import generalhelpers.PopulatePkg;
 import generalhelpers.UserInterfaceHelpers;
@@ -218,6 +219,7 @@ public class PopulateRequirementsAnalysisPkg extends PopulatePkg {
     #002 05-APR-2016: Improved robustness of copying .types file (F.J.Chadburn)
     #004 10-APR-2016: Re-factored projects into single workspace (F.J.Chadburn)
     #006 02-MAY-2016: Add FunctionalAnalysisPkg helper support (F.J.Chadburn)
+    #007 05-MAY-2016: Move FileHelper into generalhelpers and remove duplicate class (F.J.Chadburn)
     
     This file is part of SysMLHelperPlugin.
 
