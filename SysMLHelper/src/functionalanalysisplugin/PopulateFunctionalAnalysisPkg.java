@@ -21,20 +21,6 @@ import com.telelogic.rhapsody.core.*;
 
 public class PopulateFunctionalAnalysisPkg extends PopulatePkg {
 
-	public static void main(String[] args) {
-	
-		IRPApplication theApplication = RhapsodyAppServer.getActiveRhapsodyApplication();
-	
-		IRPModelElement theEl = theApplication.getSelectedElement();
-		
-		if (theEl instanceof IRPProject){
-			IRPProject theProject = (IRPProject)theEl;	
-			createFunctionalAnalysisPkg( theProject );
-		}
-		
-		
-	}
-	
 	public static void createFunctionalAnalysisPkg(IRPProject forProject){
 		
 		final String rootPackageName = "FunctionalAnalysisPkg";
@@ -50,7 +36,7 @@ public class PopulateFunctionalAnalysisPkg extends PopulatePkg {
 		if (ok) {
 			
 		    JDialog.setDefaultLookAndFeelDecorated(true);
-		    /*
+		    
 		    int response = JOptionPane.showConfirmDialog(null, 
 		    		"This SysML-Toolkit helper is designed to set up a new Rhapsody project for executable MBSE. \n" +
 		    		"It creates a nested package structure for executable 'interaction-based functional analysis',  \n" +
@@ -58,8 +44,6 @@ public class PopulateFunctionalAnalysisPkg extends PopulatePkg {
 		    		"to appropriate values for the task using Rhapsody profile and property settings.\n\n" +
 		    		"Do you want to proceed?", "Confirm",
 		        JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-		    */
-		    int response = JOptionPane.YES_OPTION;
 		    
 		    if (response == JOptionPane.YES_OPTION) {
 		    	
@@ -85,7 +69,6 @@ public class PopulateFunctionalAnalysisPkg extends PopulatePkg {
 		forProject.changeTo("SysML");
 		
 		IRPPackage theFunctionalAnalysisPkg = addPackageFromProfileRpyFolder(forProject, "FunctionalAnalysisPkg");
-		//IRPPackage theBasePkg = addPackageFromProfileRpyFolder(forProject, "BasePkg");
 		
 		if (theFunctionalAnalysisPkg != null){
 		
@@ -138,7 +121,7 @@ public class PopulateFunctionalAnalysisPkg extends PopulatePkg {
 			theRequirementsAnalysisPkg.getNestedElementsByMetaClass("Actor", 1).toList();
 		
 		JDialog.setDefaultLookAndFeelDecorated(true);
-		/*
+		
 		String introText = "This SysML-Toolkit helper sets up a nested package hierarchy for the functional analysis\n" +
 				"of a block from the perspective of the actors in the system. The initial structure will be\n" +
 				"created based on the " + theActors.size() + " actor(s) identified in the RequirementsAnalysisPkg called: " +
@@ -152,8 +135,6 @@ public class PopulateFunctionalAnalysisPkg extends PopulatePkg {
 				 introText +
 				"\nDo you want to proceed?", "Confirm",
 		    JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-		*/
-		int response = JOptionPane.YES_OPTION;
 		
 		if (response == JOptionPane.YES_OPTION) {
 
@@ -534,6 +515,7 @@ public class PopulateFunctionalAnalysisPkg extends PopulatePkg {
 
     Change history:
     #006 02-MAY-2016: Add FunctionalAnalysisPkg helper support (F.J.Chadburn)
+    #008 05-MAY-2016: Fix the OMROOT problem with add profile functionality
     
     This file is part of SysMLHelperPlugin.
 

@@ -8,8 +8,10 @@ public class GR_Node {
 	
 	IRPGraphNode node;
 	int srcX,srcY;
-	int width;
-	int height;
+	private int width;
+	private int height;
+
+
 	// Corners:
 	int top_left_x,top_left_y;
 	int	top_right_x,top_right_y;
@@ -23,7 +25,7 @@ public class GR_Node {
 	
 	public GR_Node (IRPGraphNode g) {
 		node = g;
-		width = getIntProperty("Width");
+		setWidth(getIntProperty("Width"));
 		height = getIntProperty("Height");
 		getCoOrds();;
 		calculateMidPoints();
@@ -31,7 +33,7 @@ public class GR_Node {
 	}
 	
 	private void calculateMidPoints() {
-		midBotX = bot_left_x + (width /2);
+		midBotX = bot_left_x + (getWidth() /2);
 		midBotY = bot_left_y;
 		
 		midRightX = top_right_x;
@@ -77,7 +79,7 @@ public class GR_Node {
 	}
 	
 	public void debug() {
-		report("Width: ", width);
+		report("Width: ", getWidth());
 		report("Height: ", height);
 		System.out.println("Top Left Corner: " + top_left_x + "," + top_left_y);
 		System.out.println("Top Right Corner: " + top_right_x + "," + top_right_y);
@@ -93,5 +95,21 @@ public class GR_Node {
 			System.out.println(gprp.getKey() + "::" + gprp.getValue());
 			Logger.writeLine(gprp.getKey() + "::" + gprp.getValue());
 		}
+	}
+
+	public int getWidth() {
+		return width;
+	}
+
+	public void setWidth(int width) {
+		this.width = width;
+	}
+	
+	public int getHeight() {
+		return height;
+	}
+
+	public void setHeight(int height) {
+		this.height = height;
 	}
 }
