@@ -11,8 +11,14 @@ RELEASE 1.1 (10-APR-2016)
 RELEASE 2.0.1 (02-MAY-2016)
 ----------------------------------------------------------------------------------
 #007 05-MAY-2016: Move FileHelper into generalhelpers and remove duplicate class (F.J.Chadburn)
-#008 05-MAY-2016: Fix the OMROOT problem with add profile functionality
-#009 05-MAY-2016: Remove the DesignSythesisProfile and merge into the FunctionalAnalysisProfile
+#008 05-MAY-2016: Fix the OMROOT problem with add profile functionality (F.J.Chadburn)
+#009 05-MAY-2016: Remove the DesignSythesisProfile and merge into the FunctionalAnalysisProfile (F.J.Chadburn)
 ----------------------------------------------------------------------------------
 RELEASE 2.0.2 (08-MAY-2016)
+----------------------------------------------------------------------------------
+#010 08-MAY-2016: Remove white-space from actor names (F.J.Chadburn)
+#011 08-MAY-2016: Simplify version numbering mechanism (F.J.Chadburn)
+#012 08-MAY-2016: Fix Send event without value plus re-word check box titles (F.J.Chadburn)
+----------------------------------------------------------------------------------
+RELEASE 2.0.3 (08-MAY-2016)
 ----------------------------------------------------------------------------------
