@@ -13,3 +13,6 @@ RELEASE 2.0.1 (02-MAY-2016)
 #007 05-MAY-2016: Move FileHelper into generalhelpers and remove duplicate class (F.J.Chadburn)
 #008 05-MAY-2016: Fix the OMROOT problem with add profile functionality
 #009 05-MAY-2016: Remove the DesignSythesisProfile and merge into the FunctionalAnalysisProfile
+----------------------------------------------------------------------------------
+RELEASE 2.0.2 (08-MAY-2016)
+----------------------------------------------------------------------------------
