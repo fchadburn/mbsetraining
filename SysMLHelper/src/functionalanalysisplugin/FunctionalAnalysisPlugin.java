@@ -5,21 +5,21 @@ import generalhelpers.Logger;
 
 import java.util.List;
 
+import sysmlhelperplugin.SysMLHelperPlugin;
+
 import com.telelogic.rhapsody.core.*;
  
 public class FunctionalAnalysisPlugin extends RPUserPlugin {
   
 	protected static IRPApplication m_rhpApplication = null;
 	protected static IRPProject m_rhpProject = null;
-
-	String version = "2.0.2 (Under Dev)";
 	
 	// plug-in is loaded
 	public void RhpPluginInit(final IRPApplication theRhapsodyApp) {
 		
 		m_rhpApplication = theRhapsodyApp;
 		
-		String msg = "The FunctionalAnalysisPlugin V" + version + " was loaded successfully. New right-click 'MBSE Method' commands have been added.";		
+		String msg = "The FunctionalAnalysisPlugin V" + SysMLHelperPlugin.getVersion() + " was loaded successfully. New right-click 'MBSE Method' commands have been added.";		
 		Logger.writeLine(msg); 
 	}
 
@@ -166,6 +166,7 @@ public class FunctionalAnalysisPlugin extends RPUserPlugin {
 
     Change history:
     #006 02-MAY-2016: Add FunctionalAnalysisPkg helper support (F.J.Chadburn)
+    #011 08-MAY-2016: Simplify version numbering mechanism (F.J.Chadburn)
     
     This file is part of SysMLHelperPlugin.
 

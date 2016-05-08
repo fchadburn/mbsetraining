@@ -141,16 +141,13 @@ public class PopulateFunctionalAnalysisPkg extends PopulatePkg {
 			List<IRPModelElement> theExistingBlocks = 
 					GeneralHelpers.findElementsWithMetaClassAndStereotype("Class", "LogicalSystem", theRootPackage);
 
-
 			JPanel panel = new JPanel();
-			//panel.add(new JLabel("Create from an inherited behavior?"));
+
 			panel.setLayout((LayoutManager) new BoxLayout(panel, BoxLayout.PAGE_AXIS));
-			//panel.setLayout(new FlowLayout(FlowLayout.LEFT));
 
 			panel.add( new JLabel("What do you want to call the Block?") );
 
 			JTextField theBlockNameTextField = new JTextField("LogicalSystem");
-
 			panel.add( theBlockNameTextField );			
 
 			panel.add( new JLabel("Inherit from:") );	
@@ -168,7 +165,15 @@ public class PopulateFunctionalAnalysisPkg extends PopulatePkg {
 				JCheckBox theActorCheckBox = new JCheckBox("Create actor called:");
 				theActorCheckBox.setSelected(true);
 				panel.add( theActorCheckBox );
-				JTextField theActorNameTextField = new JTextField(theActor.getName());
+				
+				String theOriginalActorName = theActor.getName();
+				String theProposedActorName = GeneralHelpers.toLegalClassName( theOriginalActorName );
+				
+				if (!theProposedActorName.equals( theOriginalActorName )){
+					Logger.writeLine("Adjusted actor name '"+ theOriginalActorName + "' to legal name '" + theProposedActorName + "'" );
+				}
+				
+				JTextField theActorNameTextField = new JTextField( theProposedActorName );
 				panel.add( theActorNameTextField );		
 
 				panel.add(new JLabel("Inherit from:"));
@@ -516,6 +521,7 @@ public class PopulateFunctionalAnalysisPkg extends PopulatePkg {
     Change history:
     #006 02-MAY-2016: Add FunctionalAnalysisPkg helper support (F.J.Chadburn)
     #008 05-MAY-2016: Fix the OMROOT problem with add profile functionality
+    #010 08-MAY-2016: Remove white-space from actor names (F.J.Chadburn)
     
     This file is part of SysMLHelperPlugin.
 

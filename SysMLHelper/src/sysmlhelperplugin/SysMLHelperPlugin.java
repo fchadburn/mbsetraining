@@ -16,7 +16,7 @@ public class SysMLHelperPlugin extends RPUserPlugin {
 	static protected IRPApplication m_rhpApplication = null;
 	static protected IRPProject m_rhpProject = null;
 
-	String version = "2.0.2 (Under Dev)";
+	static protected String m_version = "2.0.3 (Under Dev)";
 
 	public static void main(String [] args){
 		IRPModelElement theElement = SysMLHelperPlugin.getRhapsodyApp().getSelectedElement();
@@ -31,7 +31,7 @@ public class SysMLHelperPlugin extends RPUserPlugin {
 		// keep the application interface for later use
 		m_rhpApplication = theRhapsodyApp;
 
-		String msg = "The SysMLHelperProfile plugin V" + version + " was loaded successfully. New right-click 'MBSE Method' commands have been added.";
+		String msg = "The SysMLHelperProfile plugin V" + getVersion() + " was loaded successfully. New right-click 'MBSE Method' commands have been added.";
 		Logger.writeLine(msg);
 		
 		// Added by F.J.Chadburn #001
@@ -56,6 +56,10 @@ public class SysMLHelperPlugin extends RPUserPlugin {
 		
 		return m_rhpProject;
 	} 
+	
+	public static String getVersion(){
+		return m_version;
+	}
 	
 	// called when the plug-in pop-up menu  is selected
 	public void OnMenuItemSelect(String menuItem) {
@@ -209,6 +213,7 @@ public class SysMLHelperPlugin extends RPUserPlugin {
     #001 31-MAR-2016: Added ListenForRhapsodyTriggers (F.J.Chadburn)
     #004 10-APR-2016: Re-factored projects into single workspace (F.J.Chadburn)
     #006 02-MAY-2016: Add FunctionalAnalysisPkg helper support (F.J.Chadburn)
+    #011 08-MAY-2016: Simplify version numbering mechanism (F.J.Chadburn)
     
     This file is part of SysMLHelperPlugin.
 

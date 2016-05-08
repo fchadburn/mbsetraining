@@ -4,21 +4,21 @@ import generalhelpers.Logger;
 
 import java.util.List;
 
+import sysmlhelperplugin.SysMLHelperPlugin;
+
 import com.telelogic.rhapsody.core.*;
  
 public class RequirementsAnalysisPlugin extends RPUserPlugin {
   
 	protected static IRPApplication m_rhpApplication = null;
 	protected static IRPProject m_rhpProject = null;
-
-	String version = "1.1 (Release)";
 	
 	// plug-in is loaded
 	public void RhpPluginInit(final IRPApplication theRhapsodyApp) {
 		
 		m_rhpApplication = theRhapsodyApp;
 		
-		String msg = "The RequirementsAnalysisPlugin V" + version + " was loaded successfully. New right-click 'MBSE Method' commands have been added.";		
+		String msg = "The RequirementsAnalysisPlugin V" + SysMLHelperPlugin.getVersion() + " was loaded successfully. New right-click 'MBSE Method' commands have been added.";		
 		Logger.writeLine(msg); 
 	}
 
@@ -170,6 +170,7 @@ public class RequirementsAnalysisPlugin extends RPUserPlugin {
 
     Change history:
     #004 10-APR-2016: Re-factored projects into single workspace (F.J.Chadburn)    
+    #011 08-MAY-2016: Simplify version numbering mechanism (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

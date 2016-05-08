@@ -26,6 +26,43 @@ public class GeneralHelpers {
 		Logger.writeLine("---------------------------"); 
 	}
 	
+	public static String toLegalClassName(String theInput) {
+		
+		StringBuilder nameBuilder = new StringBuilder(theInput.length());    
+
+		boolean capitalizeNextChar = true;
+
+		int n = 1;
+		final int max = 40;
+		
+		for (char c:theInput.toCharArray()) {
+			if (Character.isJavaIdentifierPart(c)){
+				if (capitalizeNextChar) {
+					nameBuilder.append(Character.toUpperCase(c));
+				} else {
+					if (n==1){
+						nameBuilder.append(Character.toLowerCase(c));
+					} else {
+						nameBuilder.append(c);
+					}
+
+				}
+				capitalizeNextChar = false;
+			} else if (Character.isSpaceChar(c)){
+				
+				if (n<max){
+					capitalizeNextChar = true;
+					continue;
+				} else {
+					break;
+				}
+			}
+			n++;
+		}
+		
+		return nameBuilder.toString();
+	}
+	
 	public static String toMethodName(String theInput) {
 		
 		StringBuilder nameBuilder = new StringBuilder(theInput.length());    
@@ -391,6 +428,7 @@ public class GeneralHelpers {
     #004 10-APR-2016: Re-factored projects into single workspace (F.J.Chadburn)
     #006 02-MAY-2016: Add FunctionalAnalysisPkg helper support (F.J.Chadburn)
     #007 05-MAY-2016: Move FileHelper into generalhelpers and remove duplicate class (F.J.Chadburn)
+    #010 08-MAY-2016: Remove white-space from actor names (F.J.Chadburn)
     
     This file is part of SysMLHelperPlugin.
 

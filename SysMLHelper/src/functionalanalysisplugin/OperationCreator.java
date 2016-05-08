@@ -25,6 +25,14 @@ public class OperationCreator {
     public enum OperationType {
         INCOMING_EVENT, OUTGOING_EVENT, SYSTEM_OPERATION} 
         
+    // test only
+    public static void main(String[] args) {
+	
+    	@SuppressWarnings("unchecked")
+		List<IRPGraphElement> theSelectedGraphEls = FunctionalAnalysisPlugin.getRhapsodyApp().getSelectedGraphElements().toList();
+    	createOperationTypesFor( theSelectedGraphEls, FunctionalAnalysisPlugin.getActiveProject(), OperationType.INCOMING_EVENT );	
+    }
+    
 	public static IRPInstance getPartUnderDev(IRPModelElement relatedToEl, IRPPackage inThePackage){
 		
 		IRPInstance partUnderDev = null;
@@ -156,7 +164,7 @@ public class OperationCreator {
 	}
 	
 	public static IRPModelElement createTestBenchSendFor(
-			IRPEvent theEvent, IRPActor onTheActor){
+			IRPEvent theEvent, IRPActor onTheActor, String withSendEventName){
 		
 		IRPEvent sendEvent = null;
 		
@@ -168,11 +176,10 @@ public class OperationCreator {
 			
 			if (theReadyState != null){
 				
-				String theSendEventName = "send_" + theEvent.getName().replaceFirst("req","");
-				Logger.writeLine("Creating event called " + theSendEventName 
+				Logger.writeLine("Creating event called " + withSendEventName 
 						+ " on actor called " + onTheActor.getName());
 				
-				sendEvent = (IRPEvent) theEvent.clone(theSendEventName, onTheActor.getOwner());
+				sendEvent = (IRPEvent) theEvent.clone(withSendEventName, onTheActor.getOwner());
 				
 				Logger.writeLine("The state called " + theReadyState.getFullPathName() + " is owned by " + theReadyState.getOwner().getFullPathName());
 				IRPTransition theTransition = theReadyState.addInternalTransition( sendEvent );
@@ -443,9 +450,12 @@ public class OperationCreator {
 		if (theActor != null){
 			
 			String theSourceInfo = GeneralHelpers.getActionTextFrom(theModelElement);			
-			Logger.writeLine("The sourceInfo is '" + theSourceInfo + "'");
-		
-			String theProposedName = GeneralHelpers.toMethodName("req"+ theActor.getName() + theSourceInfo);
+			Logger.writeLine("The action text is '" + theSourceInfo + "'");
+			
+			String theSourceMinusActor = theSourceInfo.replaceFirst( "^" + theActor.getName(), "" );
+			Logger.writeLine("The source minus actor is '" + theSourceInfo + "'");
+			
+			String theProposedName = GeneralHelpers.toMethodName("req"+ theActor.getName() + theSourceMinusActor);
 			Logger.writeLine("The theProposedName is '" + theProposedName + "'");
 
 			JPanel panel = new JPanel();
@@ -453,12 +463,12 @@ public class OperationCreator {
 			panel.setLayout((LayoutManager) new BoxLayout(panel, BoxLayout.Y_AXIS));
 			
 			JCheckBox checkAddSend = new JCheckBox(
-					"Add corresponding 'send' to Actor testbench");
+					"Add corresponding 'send' event to the actor testbench");
 			
 			checkAddSend.setSelected(true);
 			
 			JCheckBox checkAddValueAttribute = new JCheckBox(
-					"Add a value(int) Argument to the event(s)");
+					"This is a continuous (or true/false) signal so add a value argument");
 			
 			JTextField theTextField = new JTextField(theProposedName.length());
 			
@@ -483,10 +493,31 @@ public class OperationCreator {
 					IRPModelElement theReception = theLogicalSystem.addNewAggr("Reception", theEventName);
 					TraceabilityHelper.addTraceabilityDependenciesTo( theReception, tracedToReqts );					
 					
+				    if (checkAddSend.isSelected()) {
+				    	
+				    	// add value argument before cloning the event to create the test-bench send
+				    	if (checkAddValueAttribute.isSelected()){
+				    		theEvent.addArgument( "value" );
+				    	}
+				    	
+				    	String theSendEventName = "send_" + theEvent.getName().replaceFirst("req","");
+				    	
+				    	Logger.writeLine("Send event option was enabled, create event called " + theSendEventName);
+
+				    	IRPModelElement theTestbenchReception = 
+				    			createTestBenchSendFor( theEvent, (IRPActor) theActor, theSendEventName );
+				    	
+				    	theTestbenchReception.highLightElement();
+				    } else {
+				    	
+				    	Logger.writeLine("Send event option was not enabled, so skipping this");
+				    	theReception.highLightElement();
+				    }
+				    
 					if (checkAddValueAttribute.isSelected()){
 						
-						theEvent.addArgument( "value" );
-						
+						Logger.writeLine("Continuous signal option chose, so creating a corresponding attribute");
+												
 						String proposedAttributeName = GeneralHelpers.toMethodName("is " + theSourceInfo);
 
 						JPanel attributePanel = new JPanel();
@@ -497,15 +528,6 @@ public class OperationCreator {
 						theAttrTextField.setText(proposedAttributeName);
 						
 						attributePanel.add( theAttrTextField );				
-						
-					    if (checkAddSend.isSelected()) {
-					    	IRPModelElement theTestbenchReception = 
-					    			createTestBenchSendFor( theEvent, (IRPActor) theActor );
-					    	
-					    	theTestbenchReception.highLightElement();
-					    } else {
-					    	theReception.highLightElement();
-					    }
 					    
 						int addAttributeChoice = JOptionPane.showConfirmDialog(
 								null, attributePanel, "Do you want to add an Attribute for the value argument?", JOptionPane.YES_NO_OPTION);
@@ -759,7 +781,8 @@ public class OperationCreator {
     Change history:
     #006 02-MAY-2016: Add FunctionalAnalysisPkg helper support (F.J.Chadburn)
     #007 05-MAY-2016: Move FileHelper into generalhelpers and remove duplicate class (F.J.Chadburn)
-    
+    #010 08-MAY-2016: Remove white-space from actor names (F.J.Chadburn)
+    #012 08-MAY-2016: Fix Send event without value plus re-word check box titles (F.J.Chadburn)
     
     This file is part of SysMLHelperPlugin.
 
