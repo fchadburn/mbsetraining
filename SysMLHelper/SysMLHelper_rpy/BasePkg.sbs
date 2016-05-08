@@ -11,22 +11,22 @@ I-Logix-RPY-Archive version 8.11.0 C++ 9499822
 	- _id = GUID c44ec7cb-7a75-45aa-92db-122629461c4b;
 	- _myState = 8192;
 	- _name = "BasePkg";
-	- _modifiedTimeWeak = 5.2.2016::10:11:59;
+	- _modifiedTimeWeak = 5.5.2016::7:49:47;
 	- _lastID = 1;
-	- weakCGTime = 5.2.2016::10:11:59;
-	- strongCGTime = 5.2.2016::10:11:59;
-	- _defaultComposite = GUID 7812b714-4b6a-4405-a4c6-749cba5dcc30;
-	- _eventsBaseID = 20401;
+	- weakCGTime = 5.5.2016::7:49:47;
+	- strongCGTime = 5.5.2016::7:49:47;
+	- _defaultComposite = GUID eb43e66a-110b-44f0-938e-75438ce7f83a;
+	- _eventsBaseID = -1;
 	- Classes = { IRPYRawContainer 
 		- size = 4;
 		- value = 
 		{ IClass 
-			- _id = GUID 7812b714-4b6a-4405-a4c6-749cba5dcc30;
+			- _id = GUID eb43e66a-110b-44f0-938e-75438ce7f83a;
 			- _myState = 40960;
 			- _name = "TopLevel";
-			- _modifiedTimeWeak = 5.2.2016::10:11:59;
-			- weakCGTime = 5.2.2016::10:11:59;
-			- strongCGTime = 5.2.2016::10:11:59;
+			- _modifiedTimeWeak = 1.2.1990::0:0:0;
+			- weakCGTime = 1.2.1990::0:0:0;
+			- strongCGTime = 1.2.1990::0:0:0;
 			- _multiplicity = "";
 			- _itsStateChart = { IHandle 
 				- _m2Class = "";
@@ -49,10 +49,10 @@ I-Logix-RPY-Archive version 8.11.0 C++ 9499822
 					- _id = GUID f685432f-691e-4ff1-be70-4d09d19457e1;
 				}
 			}
-			- _modifiedTimeWeak = 5.2.2016::10:11:59;
+			- _modifiedTimeWeak = 5.5.2016::7:49:36;
 			- _lastID = 1;
-			- weakCGTime = 5.2.2016::10:11:59;
-			- strongCGTime = 5.2.2016::10:11:59;
+			- weakCGTime = 5.5.2016::7:49:36;
+			- strongCGTime = 5.5.2016::7:49:36;
 			- _multiplicity = "";
 			- StateCharts = { IRPYRawContainer 
 				- size = 1;
@@ -454,10 +454,10 @@ I-Logix-RPY-Archive version 8.11.0 C++ 9499822
 					- _id = GUID f685432f-691e-4ff1-be70-4d09d19457e1;
 				}
 			}
-			- _modifiedTimeWeak = 5.2.2016::10:11:59;
+			- _modifiedTimeWeak = 5.5.2016::7:49:36;
 			- _lastID = 3;
-			- weakCGTime = 5.2.2016::10:11:59;
-			- strongCGTime = 5.2.2016::10:11:59;
+			- weakCGTime = 5.5.2016::7:49:36;
+			- strongCGTime = 5.5.2016::7:49:36;
 			- Ports = { IRPYRawContainer 
 				- size = 1;
 				- value = 
@@ -1747,10 +1747,10 @@ I-Logix-RPY-Archive version 8.11.0 C++ 9499822
 					- _id = GUID f685432f-691e-4ff1-be70-4d09d19457e1;
 				}
 			}
-			- _modifiedTimeWeak = 5.2.2016::10:11:59;
+			- _modifiedTimeWeak = 5.5.2016::7:49:36;
 			- _lastID = 6;
-			- weakCGTime = 5.2.2016::10:11:59;
-			- strongCGTime = 5.2.2016::10:11:59;
+			- weakCGTime = 5.5.2016::7:49:36;
+			- strongCGTime = 5.5.2016::7:49:36;
 			- Operations = { IRPYRawContainer 
 				- size = 3;
 				- value = 
@@ -2253,7 +2253,7 @@ I-Logix-RPY-Archive version 8.11.0 C++ 9499822
 					- _id = GUID 8c262ab8-d5e1-45d1-bc5b-8a4ccd78870c;
 				}
 			}
-			- _modifiedTimeWeak = 5.2.2016::10:11:59;
+			- _modifiedTimeWeak = 5.5.2016::7:49:36;
 			- _virtual = 0;
 			- Args = { IRPYRawContainer 
 				- size = 0;
@@ -2275,7 +2275,7 @@ I-Logix-RPY-Archive version 8.11.0 C++ 9499822
 					- _id = GUID 8c262ab8-d5e1-45d1-bc5b-8a4ccd78870c;
 				}
 			}
-			- _modifiedTimeWeak = 5.2.2016::10:11:59;
+			- _modifiedTimeWeak = 5.5.2016::7:49:36;
 			- _virtual = 0;
 			- Args = { IRPYRawContainer 
 				- size = 0;
@@ -2289,10 +2289,10 @@ I-Logix-RPY-Archive version 8.11.0 C++ 9499822
 			- _id = GUID 58498b1e-5ea9-4d18-a77d-4f6e5441d8b6;
 			- _myState = 8192;
 			- _name = "ElapsedTime";
-			- _modifiedTimeWeak = 5.2.2016::10:11:59;
+			- _modifiedTimeWeak = 5.5.2016::7:49:36;
 			- _lastID = 5;
-			- weakCGTime = 5.2.2016::10:11:59;
-			- strongCGTime = 5.2.2016::10:11:59;
+			- weakCGTime = 5.5.2016::7:49:36;
+			- strongCGTime = 5.5.2016::7:49:36;
 			- Ports = { IRPYRawContainer 
 				- size = 1;
 				- value = 
@@ -3454,10 +3454,10 @@ setElapsedTime_s( elapsedTime_s+1 );";
 			- _id = GUID 32e525b6-d0c3-42e9-879e-86a17da484f8;
 			- _myState = 8192;
 			- _name = "Testbench";
-			- _modifiedTimeWeak = 5.2.2016::10:11:59;
+			- _modifiedTimeWeak = 5.5.2016::7:49:36;
 			- _lastID = 1;
-			- weakCGTime = 5.2.2016::10:11:59;
-			- strongCGTime = 5.2.2016::10:11:59;
+			- weakCGTime = 5.5.2016::7:49:36;
+			- strongCGTime = 5.5.2016::7:49:36;
 			- _multiplicity = "";
 			- StateCharts = { IRPYRawContainer 
 				- size = 1;
@@ -3844,6 +3844,6 @@ setElapsedTime_s( elapsedTime_s+1 );";
 			- _classModifier = Unspecified;
 		}
 	}
-	- _configurationRelatedTime = 1.2.1990::0:0:0;
+	- _configurationRelatedTime = 5.5.2016::7:49:36;
 }
 
