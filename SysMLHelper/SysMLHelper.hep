@@ -1,5 +1,5 @@
 [Helpers]
-numberOfElements=4
+numberOfElements=5
 
 #REM: Definition of the plug-in
 name1=InvokeSysMLHelper
@@ -9,7 +9,7 @@ isPlugin1=1
 isVisible1=0
 DLLServerCompatible1=1
 
-#REM: Add pop-up menu for packages
+#REM: Add pop-up menu
 name2=MBSE Method: Requirements Analysis\Create the RequirementsAnalysisPkg package structure
 isPluginCommand2=1
 command2=InvokeSysMLHelper
@@ -17,7 +17,7 @@ applicableTo2=Project,SysML
 isVisible2=1
 DLLServerCompatible2=1
 
-#REM: Add pop-up menu for packages
+#REM: Add pop-up menu
 name3=MBSE Method: Functional Analysis\Create the FunctionalAnalysisPkg package structure
 isPluginCommand3=1
 command3=InvokeSysMLHelper
@@ -25,10 +25,33 @@ applicableTo3=Project,SysML
 isVisible3=1
 DLLServerCompatible3=1
 
-#REM: Add pop-up menu for packages
+#REM: Add pop-up menu 
 name4=MBSE Method: Design Synthesis\Create the DesignSynthesisPkg package structure
 isPluginCommand4=1
 command4=InvokeSysMLHelper
 applicableTo4=Project,SysML
 isVisible4=1
 DLLServerCompatible4=1
+
+#REM : NOTE: Harmony Toolbox Entry runs outside Rhapsody to workaround API Defect wrt Plugins and Diagram Focus
+
+
+name5=SE-Toolkit\Modeling Toolbox
+
+command5=javaw
+
+isSynced5=0
+
+isVisible5=1
+
+applicableTo5=
+
+arguments5="-Djava.library.path="$OMROOT/JavaAPI" -classpath "$OMROOT/JavaAPI/rhapsody.jar$PathDelimiter$OMROOT/Profiles/HarmonySE/SE Toolkit/ModelingToolbox.jar$PathDelimiter$OMROOT/Profiles/HarmonySE/SE Toolkit/Common/CommonGUITools.jar$PathDelimiter$OMROOT/Profiles/HarmonySE/SE Toolkit/Common/CommonRhapsodyTools.jar$PathDelimiter$OMROOT/Profiles/HarmonySE/SE Toolkit/Common/miglayout-4.0.jar$PathDelimiter$OMROOT/Profiles/HarmonySE/SE Toolkit/Common/balloontip-1.2.1.jar" com.ibm.rhapsody.setoolkit.ModelingToolbox_Launcher"
+
+initialDir5=$JavaLocation/bin
+
+isMacro5=0
+
+applicableToProfile5=
+SysMLHelper
+Triggers5=
