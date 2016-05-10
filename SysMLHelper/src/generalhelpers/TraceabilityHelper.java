@@ -1,7 +1,9 @@
 package generalhelpers;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.telelogic.rhapsody.core.*;
 
@@ -23,6 +25,29 @@ public class TraceabilityHelper {
 			
 			if (theDependsOn != null && theDependsOn instanceof IRPRequirement){
 				theReqts.add( (IRPRequirement) theDependsOn );
+			}
+		}
+		
+		return theReqts;
+	}
+	
+	public static Set<IRPRequirement> getRequirementsThatTraceFromWithStereotypedRelation(
+			IRPModelElement theElement, String withDependencyStereotype){
+		
+		Set<IRPRequirement> theReqts = new HashSet<IRPRequirement>();
+		
+		@SuppressWarnings("unchecked")
+		List<IRPDependency> theExistingDeps = theElement.getDependencies().toList();
+		
+		for (IRPDependency theDependency : theExistingDeps) {
+			
+			IRPModelElement theDependsOn = theDependency.getDependsOn();
+			
+			if (theDependsOn != null && theDependsOn instanceof IRPRequirement){
+				
+				if (GeneralHelpers.hasStereotypeCalled("verify", theDependency)){
+					theReqts.add( (IRPRequirement) theDependsOn );
+				}	
 			}
 		}
 		
@@ -53,6 +78,7 @@ public class TraceabilityHelper {
 
     Change history:
     #006 02-MAY-2016: Add FunctionalAnalysisPkg helper support (F.J.Chadburn)
+    #013 10-MAY-2016: Add support for sequence diagram req't and verification relation population (F.J.Chadburn)
     
     This file is part of SysMLHelperPlugin.
 

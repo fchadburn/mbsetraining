@@ -124,7 +124,28 @@ public class FunctionalAnalysisPlugin extends RPUserPlugin {
 						Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking PopulateFunctionalAnalysisPkg.addActorPartTo");
 					}
 				}
+
+			} else if (menuItem.equals("MBSE Method: Functional Analysis\\Populate requirements for SD(s) based on messages")){
+
+				if (!theSelectedEls.isEmpty()){
+					try {
+						SequenceDiagramHelper.populateRequirementsForSequenceDiagramsBasedOn( theSelectedEls );
+
+					} catch (Exception e) {
+						Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking SequenceDiagramHelper.populateRequirementsForSequenceDiagramsBasedOn");
+					}
+				}
 				
+			} else if (menuItem.equals("MBSE Method: Functional Analysis\\Update Verification dependencies for SD(s) based on populated requirements")){
+
+				if (!theSelectedEls.isEmpty()){
+					try {
+						SequenceDiagramHelper.updateVerificationsForSequenceDiagramsBasedOn( theSelectedEls );
+
+					} catch (Exception e) {
+						Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking SequenceDiagramHelper.updateVerificationsForSequenceDiagramsBasedOn");
+					}
+				}				
 			} else if (menuItem.equals("MBSE Method: Delete Event and related elements from Model")){
 
 				try {
@@ -167,6 +188,7 @@ public class FunctionalAnalysisPlugin extends RPUserPlugin {
     Change history:
     #006 02-MAY-2016: Add FunctionalAnalysisPkg helper support (F.J.Chadburn)
     #011 08-MAY-2016: Simplify version numbering mechanism (F.J.Chadburn)
+    #013 10-MAY-2016: Add support for sequence diagram req't and verification relation population (F.J.Chadburn)
     
     This file is part of SysMLHelperPlugin.
 

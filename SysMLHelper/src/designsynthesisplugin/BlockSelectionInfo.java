@@ -5,11 +5,10 @@ import javax.swing.JCheckBox;
 import com.telelogic.rhapsody.core.IRPModelElement;
 
 public class BlockSelectionInfo {
- 
+
 	public BlockSelectionInfo(
 			JCheckBox theCheckBox, 
 			IRPModelElement theModelElement) {
-		
 		super();
 		this.theCheckBox = theCheckBox;
 		this.theModelElement = theModelElement;

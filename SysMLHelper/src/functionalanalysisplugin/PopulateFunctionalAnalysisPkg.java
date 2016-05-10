@@ -22,7 +22,7 @@ import com.telelogic.rhapsody.core.*;
 public class PopulateFunctionalAnalysisPkg extends PopulatePkg {
 
 	public static void createFunctionalAnalysisPkg(IRPProject forProject){
-		
+		 
 		final String rootPackageName = "FunctionalAnalysisPkg";
 		Boolean ok = true;
 		
@@ -78,7 +78,7 @@ public class PopulateFunctionalAnalysisPkg extends PopulatePkg {
 	    	setProperty( forProject, "Browser.Settings.ShowPredefinedPackage", "True" );
 	    	setProperty( forProject, "General.Model.AutoSaveInterval", "5" );
 	    	setProperty( forProject, "General.Model.HighlightElementsInActiveComponentScope", "True" );
-	    	setProperty( forProject, "General.Model.ShowModelTooltipInGE", "Simple" );
+	    	setProperty( forProject, "General.Model.ShowModelTooltipInGE", "Enhanced" );
 	    	setProperty( forProject, "General.Model.BackUps", "One" );
 	    	
 	    	createFunctionalBlockPackageHierarchy( theFunctionalAnalysisPkg );
@@ -258,9 +258,6 @@ public class PopulateFunctionalAnalysisPkg extends PopulatePkg {
 				// Add a sequence diagram
 				createSequenceDiagramFor(theUsageDomainBlock, "SD - " + theName);
 
-				// Add a component
-				addAComponentWith(theName, theBlockTestPackage, theUsageDomainBlock);
-
 				final String tagNameForPackageUnderDev = "packageUnderDev";
 				
 				// Set up the settings
@@ -289,6 +286,11 @@ public class PopulateFunctionalAnalysisPkg extends PopulatePkg {
 		    	addProfileIfNotPresentAndMakeItApplied("RequirementsAnalysisProfile", theWorkingPackage);
 
 				copyActivityDiagramsForEachUseCase(theRequirementsAnalysisPkg, theWorkingPackage);
+			
+				theProject.save();
+				
+				// Add a component
+				addAComponentWith(theName, theBlockTestPackage, theUsageDomainBlock);
 			}
 		}
 	}
@@ -439,14 +441,17 @@ public class PopulateFunctionalAnalysisPkg extends PopulatePkg {
 			IRPPackage theBlockTestPackage, IRPClass theUsageDomainBlock) {
 		
 		IRPComponent theComponent = (IRPComponent) theBlockTestPackage.addNewAggr("Component", theName + "_EXE");
+		theComponent.setPropertyValue("Activity.General.SimulationMode", "StateOriented");
+
 		IRPConfiguration theConfiguration = (IRPConfiguration) theComponent.findConfiguration("DefaultConfig");
 		theConfiguration.setName("Cygwin");
 		theConfiguration.addInitialInstance(theUsageDomainBlock);
-		theConfiguration.setAllElementsInInstrumentationScope(0);
-		theConfiguration.setScopeType("derived");
-		theConfiguration.getProject().setActiveConfiguration(theConfiguration);
+		theConfiguration.setScopeType("implicit");
+		theConfiguration.setPropertyValue("WebComponents.WebFramework.GenerateInstrumentationCode", "True");
 		
+		theConfiguration.getProject().setActiveConfiguration(theConfiguration);		
 	}
+	
 	
 	@SuppressWarnings("unchecked")
 	public static void copyActivityDiagramsForEachUseCase(
@@ -522,6 +527,7 @@ public class PopulateFunctionalAnalysisPkg extends PopulatePkg {
     #006 02-MAY-2016: Add FunctionalAnalysisPkg helper support (F.J.Chadburn)
     #008 05-MAY-2016: Fix the OMROOT problem with add profile functionality
     #010 08-MAY-2016: Remove white-space from actor names (F.J.Chadburn)
+    #014 10-MAY-2016: Fix Component/Configuration creation to include derived and web-enabled settings (F.J.Chadburn)
     
     This file is part of SysMLHelperPlugin.
 
