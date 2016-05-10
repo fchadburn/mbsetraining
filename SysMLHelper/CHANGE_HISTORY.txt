@@ -22,3 +22,9 @@ RELEASE 2.0.2 (08-MAY-2016)
 ----------------------------------------------------------------------------------
 RELEASE 2.0.3 (08-MAY-2016)
 ----------------------------------------------------------------------------------
+#013 10-MAY-2016: Add support for sequence diagram req't and verification relation population (F.J.Chadburn)
+#014 10-MAY-2016: Fix Component/Configuration creation to include derived and web-enabled settings (F.J.Chadburn)
+#015 10-MAY-2016: Add SE-Toolkit > Modeling Toolbox to SysMLHelper.hep file to make it available (F.J.Chadburn)
+----------------------------------------------------------------------------------
+RELEASE 2.0.4 (10-MAY-2016)
+----------------------------------------------------------------------------------
