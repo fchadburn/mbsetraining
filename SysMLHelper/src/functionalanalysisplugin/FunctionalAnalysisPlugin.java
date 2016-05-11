@@ -19,7 +19,7 @@ public class FunctionalAnalysisPlugin extends RPUserPlugin {
 		
 		m_rhpApplication = theRhapsodyApp;
 		
-		String msg = "The FunctionalAnalysisPlugin V" + SysMLHelperPlugin.getVersion() + " was loaded successfully. New right-click 'MBSE Method' commands have been added.";		
+		String msg = "The FunctionalAnalysisPlugin component of the SysMLHelperPlugin V" + SysMLHelperPlugin.getVersion() + " was loaded successfully. New right-click 'MBSE Method' commands have been added.";		
 		Logger.writeLine(msg); 
 	}
 
@@ -189,6 +189,7 @@ public class FunctionalAnalysisPlugin extends RPUserPlugin {
     #006 02-MAY-2016: Add FunctionalAnalysisPkg helper support (F.J.Chadburn)
     #011 08-MAY-2016: Simplify version numbering mechanism (F.J.Chadburn)
     #013 10-MAY-2016: Add support for sequence diagram req't and verification relation population (F.J.Chadburn)
+    #016 11-MAY-2016: Add GPL advisory to the Log window (F.J.Chadburn)
     
     This file is part of SysMLHelperPlugin.
 

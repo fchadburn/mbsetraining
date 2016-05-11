@@ -18,7 +18,7 @@ public class DesignSynthesisPlugin extends RPUserPlugin {
 		
 		m_rhpApplication = theRhapsodyApp;
 		
-		String msg = "The DesignSynthesisPlugin V" + SysMLHelperPlugin.getVersion() + " was loaded successfully. New right-click 'MBSE Method' commands have been added.";		
+		String msg = "The DesignSynthesisPlugin component of the SysMLHelperPlugin V" + SysMLHelperPlugin.getVersion() + " was loaded successfully. New right-click 'MBSE Method' commands have been added.";		
 		Logger.writeLine(msg); 
 	}
 
@@ -108,6 +108,7 @@ public class DesignSynthesisPlugin extends RPUserPlugin {
     Change history:
     #006 02-MAY-2016: Add FunctionalAnalysisPkg helper support (F.J.Chadburn)
     #011 08-MAY-2016: Simplify version numbering mechanism (F.J.Chadburn)
+    #016 11-MAY-2016: Add GPL advisory to the Log window (F.J.Chadburn)
     
     This file is part of SysMLHelperPlugin.
 

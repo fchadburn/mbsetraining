@@ -51,11 +51,10 @@ public class UserInterfaceHelpers {
 				options,
 				options[0]);
 		
-		int index = nameList.indexOf(selectedElementName);
-		
-		theEl = inList.get(index);
-		
-		Logger.writeLine(theEl, "was chosen");
+		if (selectedElementName != null){
+			int index = nameList.indexOf(selectedElementName);
+			theEl = inList.get(index);
+		}
 		
 		return theEl;
 	}
@@ -67,7 +66,8 @@ public class UserInterfaceHelpers {
     Change history:
     #003 09-APR-2016: Added double-click UC to open ACT (F.J.Chadburn)
     #004 10-APR-2016: Re-factored projects into single workspace (F.J.Chadburn)
-    
+    #017 11-MAY-2016: Double-click now works with both nested and hyper-linked diagrams (F.J.Chadburn)
+
     This file is part of SysMLHelperPlugin.
 
     SysMLHelperPlugin is free software: you can redistribute it and/or modify

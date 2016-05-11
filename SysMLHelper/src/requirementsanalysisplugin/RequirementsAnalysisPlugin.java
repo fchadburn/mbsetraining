@@ -18,7 +18,7 @@ public class RequirementsAnalysisPlugin extends RPUserPlugin {
 		
 		m_rhpApplication = theRhapsodyApp;
 		
-		String msg = "The RequirementsAnalysisPlugin V" + SysMLHelperPlugin.getVersion() + " was loaded successfully. New right-click 'MBSE Method' commands have been added.";		
+		String msg = "The RequirementsAnalysisPlugin component of the SysMLHelperPlugin V" + SysMLHelperPlugin.getVersion() + " was loaded successfully. New right-click 'MBSE Method' commands have been added.";		
 		Logger.writeLine(msg); 
 	}
 
@@ -171,6 +171,7 @@ public class RequirementsAnalysisPlugin extends RPUserPlugin {
     Change history:
     #004 10-APR-2016: Re-factored projects into single workspace (F.J.Chadburn)    
     #011 08-MAY-2016: Simplify version numbering mechanism (F.J.Chadburn)
+    #016 11-MAY-2016: Add GPL advisory to the Log window (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

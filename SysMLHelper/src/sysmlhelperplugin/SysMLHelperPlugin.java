@@ -16,22 +16,38 @@ public class SysMLHelperPlugin extends RPUserPlugin {
 	static protected IRPApplication m_rhpApplication = null;
 	static protected IRPProject m_rhpProject = null;
 
-	static protected String m_version = "2.0.4 (Under Dev)";
+	static protected String m_version = "2.0.5 (Under Dev)";
 
 	public static void main(String [] args){
 		IRPModelElement theElement = SysMLHelperPlugin.getRhapsodyApp().getSelectedElement();
 		
-		requirementsanalysisplugin.PopulateRequirementsAnalysisPkg.createRequirementsAnalysisPkg( (IRPProject) theElement ); 
-		
+		requirementsanalysisplugin.PopulateRequirementsAnalysisPkg.createRequirementsAnalysisPkg( (IRPProject) theElement ); 	
 	}
 	
+	final String legalNotice = 
+			"Copyright (C) 2015-2016  MBSE Training and Consulting Limited (www.executablembse.com)"
+			+ "\n"
+			+ "SysMLHelperPlugin is free software: you can redistribute it and/or modify "
+			+ "it under the terms of the GNU General Public License as published by "
+			+ "the Free Software Foundation, either version 3 of the License, or "
+			+ "(at your option) any later version."
+			+ "\n"
+			+ "SysMLHelperPlugin is distributed in the hope that it will be useful, "
+			+ "but WITHOUT ANY WARRANTY; without even the implied warranty of "
+			+ "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the "
+			+ "GNU General Public License for more details."
+			+ "You should have received a copy of the GNU General Public License "
+			+ "along with SysMLHelperPlugin. If not, see <http://www.gnu.org/licenses/>. "
+			+ "Source code is made available on https://github.com/fchadburn/mbsetraining";
+                                                                                                                                                                                      
 	// called when plug-in is loaded
 	public void RhpPluginInit(final IRPApplication theRhapsodyApp) {
 		 
 		// keep the application interface for later use
 		m_rhpApplication = theRhapsodyApp;
 
-		String msg = "The SysMLHelperProfile plugin V" + getVersion() + " was loaded successfully. New right-click 'MBSE Method' commands have been added.";
+		String msg = "The SysMLHelperProfile plugin V" + getVersion() + " was loaded successfully.\n" + legalNotice +
+				"\nNew right-click 'MBSE Method' commands have been added.";
 		Logger.writeLine(msg);
 		
 		// Added by F.J.Chadburn #001
@@ -103,6 +119,17 @@ public class SysMLHelperPlugin extends RPUserPlugin {
 					} catch (Exception e) {
 						Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking PopulateDesignSynthesisPkg.createDesignSynthesisPkg");
 					}
+				}
+			} else if (menuItem.equals("MBSE Method: General\\Quick hyperlink")){
+
+				try { 
+					IRPHyperLink theHyperLink = (IRPHyperLink) theSelectedEl.addNewAggr("HyperLink", "");
+					theHyperLink.setDisplayOption(HYPNameType.RP_HYP_NAMETEXT, "");
+					theHyperLink.highLightElement();
+					theHyperLink.openFeaturesDialog(0);
+
+				} catch (Exception e) {
+					Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking MBSE Method: General\\Quick hyperlink");
 				}
 			}	
 		}
@@ -214,6 +241,8 @@ public class SysMLHelperPlugin extends RPUserPlugin {
     #004 10-APR-2016: Re-factored projects into single workspace (F.J.Chadburn)
     #006 02-MAY-2016: Add FunctionalAnalysisPkg helper support (F.J.Chadburn)
     #011 08-MAY-2016: Simplify version numbering mechanism (F.J.Chadburn)
+    #016 11-MAY-2016: Add GPL advisory to the Log window (F.J.Chadburn)
+    #017 11-MAY-2016: Double-click now works with both nested and hyper-linked diagrams (F.J.Chadburn)
     
     This file is part of SysMLHelperPlugin.
 

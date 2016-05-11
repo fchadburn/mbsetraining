@@ -47,7 +47,21 @@ public class PopulateFunctionalAnalysisPkg extends PopulatePkg {
 		    
 		    if (response == JOptionPane.YES_OPTION) {
 		    	
-		    	browseAndAddByReferenceIfNotPresent("RequirementsAnalysisPkg", forProject);
+		    	IRPModelElement theRequirementsAnalysisPkg = forProject.findElementsByFullName("RequirementsAnalysisPkg", "Package");
+		    	
+		    	if (theRequirementsAnalysisPkg==null){
+		    		
+				    int confirm = JOptionPane.showConfirmDialog(null, 
+				    		"The project does not contain a root RequirementsAnalysisPkg. This package is used by the\n" +
+				    		"plugin to populate the Actors for functional analysis simulation processes.\n\n" +
+				    		"Do you want to add a RequirementsAnalysisPkg.sbs from another model by reference?", "Confirm",
+				        JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+				    
+				    if (confirm == JOptionPane.YES_OPTION){
+				    	browseAndAddByReferenceIfNotPresent("RequirementsAnalysisPkg", forProject);
+				    }
+		    	}
+		    	
 		    	populateFunctionalAnalysisPkg(forProject);
 		    	removeSimpleMenuStereotypeIfPresent(forProject);
 		    	
@@ -528,7 +542,8 @@ public class PopulateFunctionalAnalysisPkg extends PopulatePkg {
     #008 05-MAY-2016: Fix the OMROOT problem with add profile functionality
     #010 08-MAY-2016: Remove white-space from actor names (F.J.Chadburn)
     #014 10-MAY-2016: Fix Component/Configuration creation to include derived and web-enabled settings (F.J.Chadburn)
-    
+    #018 11-MAY-2016: Provide advisory before add by reference of an external RequirementsAnalysisPkg (F.J.Chadburn)
+
     This file is part of SysMLHelperPlugin.
 
     SysMLHelperPlugin is free software: you can redistribute it and/or modify
