@@ -21,6 +21,19 @@ import com.telelogic.rhapsody.core.*;
 
 public class PopulateFunctionalAnalysisPkg extends PopulatePkg {
 
+	public static void main(String[] args) {
+	
+		IRPApplication theApp = RhapsodyAppServer.getActiveRhapsodyApplication();
+		
+		IRPModelElement theSelectedEl = theApp.getSelectedElement();
+		
+		if (theSelectedEl instanceof IRPPackage){
+			IRPPackage thePackage = (IRPPackage) theSelectedEl;
+			createFunctionalBlockPackageHierarchy( thePackage );
+		}
+		
+	}
+	
 	public static void createFunctionalAnalysisPkg(IRPProject forProject){
 		 
 		final String rootPackageName = "FunctionalAnalysisPkg";
@@ -53,8 +66,13 @@ public class PopulateFunctionalAnalysisPkg extends PopulatePkg {
 		    		
 				    int confirm = JOptionPane.showConfirmDialog(null, 
 				    		"The project does not contain a root RequirementsAnalysisPkg. This package is used by the\n" +
-				    		"plugin to populate the Actors for functional analysis simulation processes.\n\n" +
-				    		"Do you want to add a RequirementsAnalysisPkg.sbs from another model by reference?", "Confirm",
+				    		"plugin to populate the Actors for functional analysis simulation purposes.\n\n" +
+				    		"Do you want to add a RequirementsAnalysisPkg.sbs from another model by reference?\n\n" + 
+				    		"NOTE:\n" +
+				    		"The recommendation is to create a folder that will contain both this project and its\n" +
+				    		"referenced projects to treat them as a consistent project set. If you haven't done this\n" +
+				    		"yet then consider cancelling and doing this first.\n\n",
+				    		"Confirm",
 				        JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 				    
 				    if (confirm == JOptionPane.YES_OPTION){
@@ -108,8 +126,12 @@ public class PopulateFunctionalAnalysisPkg extends PopulatePkg {
 			if (theRequirementsAnalysisPkg == null){
 				
 				JDialog.setDefaultLookAndFeelDecorated(true);
-				JOptionPane.showMessageDialog(null,  
-			    		"This operation only works if the project contains a RequirementsAnalysisPkg.");
+				
+				JOptionPane.showMessageDialog(
+						null,  
+			    		"Unable to do functional block creation as this only works if the project contains a RequirementsAnalysisPkg.",
+			    		"Information",
+			    		JOptionPane.INFORMATION_MESSAGE);
 			} else {
 				
 				createFunctionalAnalysisPkg(theRootPackage, theRequirementsAnalysisPkg);
@@ -124,6 +146,52 @@ public class PopulateFunctionalAnalysisPkg extends PopulatePkg {
 		    		"Warning",
 		    		JOptionPane.WARNING_MESSAGE);	    
 		}
+	}
+	
+	private static boolean isElementNameUnique(
+			String theProposedName, 
+			String ofMetaClass, 
+			IRPProject inProject){
+				
+		int count = 0;
+		
+		@SuppressWarnings("unchecked")
+		List<IRPModelElement> theExistingEls = 
+				inProject.getNestedElementsByMetaClass(ofMetaClass, 1).toList();
+		
+		for (IRPModelElement theExistingEl : theExistingEls) {
+			
+			if (theExistingEl.getName().equals(theProposedName)){
+				count++;
+				break;
+			}
+		}
+		
+		if (count > 1){
+			Logger.writeLine("Warning in isElementNameUnique, there are " + count + " elements called " + 
+					theProposedName + " of type " + ofMetaClass + " in the project. This may cause issues.");
+		}
+				
+		boolean isUnique = (count == 0);
+
+		return isUnique;
+	}
+	
+	private static String determineUniqueNameBasedOn(
+			String theProposedName,
+			String ofMetaClass,
+			IRPProject inProject){
+		
+		int count = 0;
+		
+		String theUniqueName = theProposedName;
+		
+		while (!isElementNameUnique(theUniqueName, ofMetaClass, inProject)){
+			count++;
+			theUniqueName = theProposedName + count;
+		}
+		
+		return theUniqueName;
 	}
 	
 	private static void createFunctionalAnalysisPkg(
@@ -158,10 +226,10 @@ public class PopulateFunctionalAnalysisPkg extends PopulatePkg {
 			JPanel panel = new JPanel();
 
 			panel.setLayout((LayoutManager) new BoxLayout(panel, BoxLayout.PAGE_AXIS));
-
 			panel.add( new JLabel("What do you want to call the Block?") );
 
-			JTextField theBlockNameTextField = new JTextField("LogicalSystem");
+			String theBlockName = determineUniqueNameBasedOn("LogicalSystem", "Class", theRootPackage.getProject());
+			JTextField theBlockNameTextField = new JTextField( theBlockName );
 			panel.add( theBlockNameTextField );			
 
 			panel.add( new JLabel("Inherit from:") );	
@@ -181,7 +249,11 @@ public class PopulateFunctionalAnalysisPkg extends PopulatePkg {
 				panel.add( theActorCheckBox );
 				
 				String theOriginalActorName = theActor.getName();
-				String theProposedActorName = GeneralHelpers.toLegalClassName( theOriginalActorName );
+				
+				String theProposedActorName = determineUniqueNameBasedOn( 
+						GeneralHelpers.toLegalClassName( theOriginalActorName ) + "_" + theBlockName, 
+						"Actor", 
+						theRootPackage.getProject());
 				
 				if (!theProposedActorName.equals( theOriginalActorName )){
 					Logger.writeLine("Adjusted actor name '"+ theOriginalActorName + "' to legal name '" + theProposedActorName + "'" );
@@ -520,13 +592,6 @@ public class PopulateFunctionalAnalysisPkg extends PopulatePkg {
 		
 		IRPGraphNode theNote = theNewFlowchart.addNewNodeByType("Note", 20, 44, 120, 70);
 		
-		@SuppressWarnings("unchecked")
-		List<IRPGraphicalProperty> theProperties = theNote.getAllGraphicalProperties().toList();
-		
-		for (IRPGraphicalProperty theGraphicalProperty : theProperties) {
-			Logger.writeLine(theGraphicalProperty.getKey() + ","+ theGraphicalProperty.getValue());
-		}
-		
 		theNote.setGraphicalProperty("Text", "This working copy of the use case steps can be used to generate the state machine.");
 		
 		theNewFlowchart.highLightElement();
@@ -543,6 +608,7 @@ public class PopulateFunctionalAnalysisPkg extends PopulatePkg {
     #010 08-MAY-2016: Remove white-space from actor names (F.J.Chadburn)
     #014 10-MAY-2016: Fix Component/Configuration creation to include derived and web-enabled settings (F.J.Chadburn)
     #018 11-MAY-2016: Provide advisory before add by reference of an external RequirementsAnalysisPkg (F.J.Chadburn)
+    #019 15-MAY-2016: Improvements to Functional Analysis Block default naming approach (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

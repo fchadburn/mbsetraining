@@ -666,8 +666,6 @@ public class OperationCreator {
 
 			Logger.writeLine(theTransition, "was added");	
 
-			GR_Node stNode = null;
-
 			IRPGraphElement theGraphEl = findGraphEl(theOwnerOfStatechart, "MonitoringConditions");
 
 			if (theGraphEl != null){
@@ -676,9 +674,19 @@ public class OperationCreator {
 						+ Logger.elementInfo(theGraphEl.getModelObject()) 
 						+ " is the diagram for the GraphEl");
 
-				stNode = new GR_Node((IRPGraphNode) theGraphEl);
+				IRPGraphNode theGraphNode = (IRPGraphNode)theGraphEl;
+				
+				GraphNodeInfo theNodeInfo = new GraphNodeInfo( theGraphNode );
 
-				IRPGraphEdge theEdge = theGraphElDiagram.addNewEdgeForElement(theTransition, stNode.node, stNode.midRightX, stNode.midRightY, stNode.node, stNode.midBotX, stNode.midBotY);
+				IRPGraphEdge theEdge = theGraphElDiagram.addNewEdgeForElement(
+						theTransition, 
+						theGraphNode, 
+						theNodeInfo.getTopRightX(), 
+						theNodeInfo.getMiddleY(), 
+						theGraphNode, 
+						theNodeInfo.getMiddleX(), 
+						theNodeInfo.getBottomLeftY());
+				
 				Logger.writeLine("Added edge to " + theEdge.getModelObject().getFullPathName());
 			} else {
 				Logger.writeLine("Error in addAnAttributeToMonitoringStateWith, unable to find the MonitoringConditions state");
@@ -783,7 +791,8 @@ public class OperationCreator {
     #007 05-MAY-2016: Move FileHelper into generalhelpers and remove duplicate class (F.J.Chadburn)
     #010 08-MAY-2016: Remove white-space from actor names (F.J.Chadburn)
     #012 08-MAY-2016: Fix Send event without value plus re-word check box titles (F.J.Chadburn)
-    
+    #019 15-MAY-2016: Improvements to Functional Analysis Block default naming approach (F.J.Chadburn)
+
     This file is part of SysMLHelperPlugin.
 
     SysMLHelperPlugin is free software: you can redistribute it and/or modify
