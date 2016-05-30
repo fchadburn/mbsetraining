@@ -3,6 +3,7 @@ package generalhelpers;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -189,8 +190,10 @@ public class GeneralHelpers {
 		} 	
 		
 		Object[] options = nameList.toArray();
-		
-		String selectedElementName = (String) JOptionPane.showInputDialog(
+	
+		 JDialog.setDefaultLookAndFeelDecorated(true);
+		 
+		 String selectedElementName = (String) JOptionPane.showInputDialog(
 				null,
 				messageToDisplay,
 				"Input",
@@ -419,6 +422,53 @@ public class GeneralHelpers {
 		
 		return theFilteredList;
 	}
+	
+	public static boolean isElementNameUnique(
+			String theProposedName, 
+			String ofMetaClass, 
+			IRPModelElement underneathTheEl,
+			int recursive){
+				
+		int count = 0;
+		
+		@SuppressWarnings("unchecked")
+		List<IRPModelElement> theExistingEls = 
+				underneathTheEl.getNestedElementsByMetaClass(ofMetaClass, recursive).toList();
+		
+		for (IRPModelElement theExistingEl : theExistingEls) {
+			
+			if (theExistingEl.getName().equals(theProposedName)){
+				count++;
+				break;
+			}
+		}
+		
+		if (count > 1){
+			Logger.writeLine("Warning in isElementNameUnique, there are " + count + " elements called " + 
+					theProposedName + " of type " + ofMetaClass + " in the project. This may cause issues.");
+		}
+				
+		boolean isUnique = (count == 0);
+
+		return isUnique;
+	}
+	
+	public static String determineUniqueNameBasedOn(
+			String theProposedName,
+			String ofMetaClass,
+			IRPModelElement underElement){
+		
+		int count = 0;
+		
+		String theUniqueName = theProposedName;
+		
+		while (!isElementNameUnique(theUniqueName, ofMetaClass, underElement, 1)){
+			count++;
+			theUniqueName = theProposedName + count;
+		}
+		
+		return theUniqueName;
+	}
 }
 
 /**
@@ -429,7 +479,8 @@ public class GeneralHelpers {
     #006 02-MAY-2016: Add FunctionalAnalysisPkg helper support (F.J.Chadburn)
     #007 05-MAY-2016: Move FileHelper into generalhelpers and remove duplicate class (F.J.Chadburn)
     #010 08-MAY-2016: Remove white-space from actor names (F.J.Chadburn)
-    
+    #022 30-MAY-2016: Improved handling and validation of event/operation creation by adding new forms (F.J.Chadburn) 
+
     This file is part of SysMLHelperPlugin.
 
     SysMLHelperPlugin is free software: you can redistribute it and/or modify

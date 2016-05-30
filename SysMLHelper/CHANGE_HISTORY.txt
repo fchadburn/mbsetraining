@@ -38,3 +38,11 @@ RELEASE 2.0.5 (11-MAY-2016)
 ----------------------------------------------------------------------------------
 RELEASE 2.0.6 (15-MAY-2016)
 ----------------------------------------------------------------------------------
+#020 30-MAY-2016: Fixed FunctionalAnalysisProfile.hep file so it has SD commands (F.J.Chadburn)
+#021 30-MAY-2016: Added Copyright/History statements to the hep files (F.J.Chadburn)
+#022 30-MAY-2016: Improved handling and validation of event/operation creation by adding new forms (F.J.Chadburn)
+#023 30-MAY-2016: Added form to support validation checks for analysis block hierarchy creation (F.J.Chadburn) 
+#024 30-MAY-2016: Check box to allow user to choose whether to add the check operation (F.J.Chadburn)
+----------------------------------------------------------------------------------
+RELEASE 2.0.7 (30-MAY-2016)
+----------------------------------------------------------------------------------

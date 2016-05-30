@@ -7,8 +7,6 @@ import java.util.Set;
 
 import com.telelogic.rhapsody.core.*;
 
-import functionalanalysisplugin.FunctionalAnalysisSettings;
-
 public class TraceabilityHelper {
 
 	public static List<IRPRequirement> getRequirementsThatTraceFrom(
@@ -53,24 +51,6 @@ public class TraceabilityHelper {
 		
 		return theReqts;
 	}
-	
-	public static void addTraceabilityDependenciesTo(
-			IRPModelElement theElement, List<IRPRequirement> theReqtsToAdd){
-	
-		IRPStereotype theDependencyStereotype = 
-				FunctionalAnalysisSettings.getStereotypeForFunctionTracing(theElement.getProject());
-		
-		if (theDependencyStereotype != null){
-			for (IRPRequirement theReqt : theReqtsToAdd) {
-				
-				IRPDependency theDep = theElement.addDependencyTo(theReqt);
-				theDep.setStereotype(theDependencyStereotype);		
-				Logger.writeLine("Added a " + theDependencyStereotype.getName() + " dependency to " + Logger.elementInfo( theElement ));
-			}
-		} else {
-			Logger.writeLine("Error in addTraceabilityDependenciesTo, unable to find stereotype to apply to dependencies");
-		}
-	}
 }
 
 /**
@@ -79,6 +59,7 @@ public class TraceabilityHelper {
     Change history:
     #006 02-MAY-2016: Add FunctionalAnalysisPkg helper support (F.J.Chadburn)
     #013 10-MAY-2016: Add support for sequence diagram req't and verification relation population (F.J.Chadburn)
+    #022 30-MAY-2016: Improved handling and validation of event/operation creation by adding new forms (F.J.Chadburn) 
     
     This file is part of SysMLHelperPlugin.
 

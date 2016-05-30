@@ -1,36 +1,65 @@
 package functionalanalysisplugin;
 
+import generalhelpers.GeneralHelpers;
+
 import javax.swing.JCheckBox;
 import javax.swing.JTextField;
 
-import com.telelogic.rhapsody.core.IRPModelElement;
+import com.telelogic.rhapsody.core.*;
 
 public class ClassifierMappingInfo {
 
 	public ClassifierMappingInfo(
 			RhapsodyComboBox theRhapsodyComboBox,
 			JCheckBox theActorCheckBox, 
-			JTextField theActorName) {
+			JTextField theActorName,
+			IRPActor theSourceActor) {
+		
 		super();
-		this.theRhapsodyComboBox = theRhapsodyComboBox;
-		this.theActorCheckBox = theActorCheckBox;
-		this.theActorName = theActorName;
+		this.m_InheritedFromComboBox = theRhapsodyComboBox;
+		this.m_ActorCheckBox = theActorCheckBox;
+		this.m_ActorNameTextField = theActorName;
+		this.m_SourceActor = theSourceActor;
 	}
 	
-	private RhapsodyComboBox theRhapsodyComboBox;
-	private JCheckBox theActorCheckBox;
-	private JTextField theActorName;
+	private RhapsodyComboBox m_InheritedFromComboBox;
+	private JCheckBox m_ActorCheckBox;
+	private JTextField m_ActorNameTextField;
+	private IRPActor m_SourceActor;
 	
+	public JTextField getTextField(){
+		return m_ActorNameTextField;
+	}
 	public boolean isSelected(){
-		return theActorCheckBox.isSelected();
+		return m_ActorCheckBox.isSelected();
 	}
 	
 	public String getName(){
-		return theActorName.getText();
+		return m_ActorNameTextField.getText();
 	}
 	
 	public IRPModelElement getInheritedFrom(){
-		return theRhapsodyComboBox.getSelectedRhapsodyItem();
+		return m_InheritedFromComboBox.getSelectedRhapsodyItem();
+	}
+	
+	public String getSourceActorName(){
+		return m_SourceActor.getName();
+	}
+	
+	public IRPActor getSourceActor(){
+		return m_SourceActor;
+	}
+	
+	public void updateToBestActorNamesBasedOn(String theBlockName){
+		
+		String theOriginalActorName = m_SourceActor.getName();
+		
+		String theProposedActorName = GeneralHelpers.determineUniqueNameBasedOn( 
+				GeneralHelpers.toLegalClassName( theOriginalActorName ) + "_" + theBlockName, 
+				"Actor", 
+				m_SourceActor.getProject());
+		
+		m_ActorNameTextField.setText( theProposedActorName );
 	}
 }
 
@@ -39,6 +68,7 @@ public class ClassifierMappingInfo {
 
     Change history:
     #006 02-MAY-2016: Add FunctionalAnalysisPkg helper support (F.J.Chadburn)
+    #023 30-MAY-2016: Added form to support validation checks for analysis block hierarchy creation (F.J.Chadburn) 
     
     This file is part of SysMLHelperPlugin.
 

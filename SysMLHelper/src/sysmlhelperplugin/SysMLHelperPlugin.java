@@ -4,19 +4,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 import requirementsanalysisplugin.PopulateRequirementsAnalysisPkg;
+import functionalanalysisplugin.PopulateFunctionalAnalysisPkg;
+import designsynthesisplugin.PopulateDesignSynthesisPkg;
+import generalhelpers.*; 
 
 import com.telelogic.rhapsody.core.*;
-
-import designsynthesisplugin.PopulateDesignSynthesisPkg;
-import functionalanalysisplugin.PopulateFunctionalAnalysisPkg;
-import generalhelpers.*; 
 
 public class SysMLHelperPlugin extends RPUserPlugin {
 
 	static protected IRPApplication m_rhpApplication = null;
 	static protected IRPProject m_rhpProject = null;
 
-	static protected String m_version = "2.0.6 (Under Dev)";
+	static protected String m_version = "2.0.7 (Under Dev)";
 
 	public static void main(String [] args){
 		IRPModelElement theElement = SysMLHelperPlugin.getRhapsodyApp().getSelectedElement();

@@ -1,6 +1,5 @@
 package functionalanalysisplugin;
 
-import functionalanalysisplugin.OperationCreator.OperationType;
 import generalhelpers.Logger;
 
 import java.util.List;
@@ -13,13 +12,15 @@ public class FunctionalAnalysisPlugin extends RPUserPlugin {
   
 	protected static IRPApplication m_rhpApplication = null;
 	protected static IRPProject m_rhpProject = null;
-	
+
 	// plug-in is loaded
 	public void RhpPluginInit(final IRPApplication theRhapsodyApp) {
 		
 		m_rhpApplication = theRhapsodyApp;
 		
-		String msg = "The FunctionalAnalysisPlugin component of the SysMLHelperPlugin V" + SysMLHelperPlugin.getVersion() + " was loaded successfully. New right-click 'MBSE Method' commands have been added.";		
+		String msg = "The FunctionalAnalysisPlugin component of the SysMLHelperPlugin V" + SysMLHelperPlugin.getVersion() 
+				+ " was loaded successfully. New right-click 'MBSE Method' commands have been added.";		
+		
 		Logger.writeLine(msg); 
 	}
 
@@ -40,7 +41,7 @@ public class FunctionalAnalysisPlugin extends RPUserPlugin {
 		
 		return m_rhpProject;
 	}
-	
+
 	
 	// called when the plug-in pop-up menu (if applicable) is selected
 	public void OnMenuItemSelect(String menuItem) {
@@ -50,6 +51,7 @@ public class FunctionalAnalysisPlugin extends RPUserPlugin {
 		
 		@SuppressWarnings("unchecked")
 		List<IRPGraphElement> theSelectedGraphEls = getRhapsodyApp().getSelectedGraphElements().toList();
+		
 		@SuppressWarnings("unchecked")
 		List<IRPModelElement> theSelectedEls = getRhapsodyApp().getListOfSelectedElements().toList();
 
@@ -73,10 +75,10 @@ public class FunctionalAnalysisPlugin extends RPUserPlugin {
 
 				if (!theSelectedGraphEls.isEmpty()){
 					try {
-						OperationCreator.createOperationTypesFor( theSelectedGraphEls, theActiveProject, OperationType.INCOMING_EVENT );				
+						OperationCreator.createIncomingEventsFor( theActiveProject, theSelectedGraphEls );
 
 					} catch (Exception e) {
-						Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking OperationCreator.createOperationTypesFor (INCOMING_EVENT)");
+						Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking OperationCreator.createIncomingEventsFor");
 					}
 				}
 
@@ -84,11 +86,10 @@ public class FunctionalAnalysisPlugin extends RPUserPlugin {
 
 				if (!theSelectedGraphEls.isEmpty()){
 					try {
-						OperationCreator.createOperationTypesFor( theSelectedGraphEls, theActiveProject, OperationType.SYSTEM_OPERATION );
-						
+						OperationCreator.createSystemOperationsFor( theActiveProject, theSelectedGraphEls );
 
 					} catch (Exception e) {
-						Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking OperationCreator.createOperationTypesFor (SYSTEM_OPERATION)");
+						Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking OperationCreator.createSystemOperationsFor");
 					}
 				}
 				
@@ -96,10 +97,10 @@ public class FunctionalAnalysisPlugin extends RPUserPlugin {
 
 				if (!theSelectedGraphEls.isEmpty()){
 					try {
-						OperationCreator.createOperationTypesFor( theSelectedGraphEls, theActiveProject, OperationType.OUTGOING_EVENT );
+						OperationCreator.createOutgoingEventsFor( theActiveProject, theSelectedGraphEls );
 						
 					} catch (Exception e) {
-						Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking OperationCreator.createOperationTypesFor (OUTGOING_EVENT)");
+						Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking OperationCreator.createOutgoingEventsFor");
 					}
 				}
 
@@ -163,6 +164,8 @@ public class FunctionalAnalysisPlugin extends RPUserPlugin {
 
 		Logger.writeLine("... completed");
 	}
+
+
 	
 	public boolean RhpPluginCleanup() {
 		m_rhpApplication = null;
@@ -190,6 +193,7 @@ public class FunctionalAnalysisPlugin extends RPUserPlugin {
     #011 08-MAY-2016: Simplify version numbering mechanism (F.J.Chadburn)
     #013 10-MAY-2016: Add support for sequence diagram req't and verification relation population (F.J.Chadburn)
     #016 11-MAY-2016: Add GPL advisory to the Log window (F.J.Chadburn)
+    #022 30-MAY-2016: Improved handling and validation of event/operation creation by adding new forms (F.J.Chadburn)
     
     This file is part of SysMLHelperPlugin.
 
