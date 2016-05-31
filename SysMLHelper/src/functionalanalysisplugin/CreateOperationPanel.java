@@ -61,7 +61,7 @@ public class CreateOperationPanel extends CreateTracedElementPanel {
 		
 		m_ChosenNameTextField = new JTextField( theProposedEventName.length() );
 		m_ChosenNameTextField.setText( theProposedEventName );
-		m_ChosenNameTextField.setMaximumSize( new Dimension( 300,20 ) );
+		m_ChosenNameTextField.setMinimumSize( new Dimension( 400,20 ) );
 		
 		thePanel.add( m_ChosenNameTextField );
 		

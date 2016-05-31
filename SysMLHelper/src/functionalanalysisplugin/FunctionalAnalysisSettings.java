@@ -1,12 +1,11 @@
 package functionalanalysisplugin;
 
+import java.util.List;
+
+import generalhelpers.GeneralHelpers;
 import generalhelpers.Logger;
 
-import com.telelogic.rhapsody.core.IRPModelElement;
-import com.telelogic.rhapsody.core.IRPPackage;
-import com.telelogic.rhapsody.core.IRPProject;
-import com.telelogic.rhapsody.core.IRPStereotype;
-import com.telelogic.rhapsody.core.IRPTag;
+import com.telelogic.rhapsody.core.*;
 
 public class FunctionalAnalysisSettings {
 	
@@ -36,6 +35,90 @@ public class FunctionalAnalysisSettings {
 		return thePackage;
 	}
 	
+	public static IRPPackage getWorkingPkgUnderDev(IRPProject inTheProject){
+		
+		IRPPackage theWorkingPkg = null;
+		
+		int count = 0;
+		IRPPackage thePackageUnderDev = getPackageUnderDev( inTheProject );
+		
+		if( thePackageUnderDev != null ){
+			
+			@SuppressWarnings("unchecked")
+			List<IRPPackage> theNestedPkgs = 
+					thePackageUnderDev.getNestedElementsByMetaClass("Package", 1).toList();
+			
+			for (IRPPackage theNestedPkg : theNestedPkgs) {
+				
+				List<IRPModelElement> theDependencies = 
+						GeneralHelpers.findElementsWithMetaClassAndStereotype(
+								"Dependency", "AppliedProfile", theNestedPkg);
+				
+				for (IRPModelElement theDependencyElement : theDependencies) {
+					
+					IRPDependency theDependency = (IRPDependency)theDependencyElement;
+					
+					IRPModelElement theDependsOn = theDependency.getDependsOn();
+					
+					if (theDependsOn.getName().equals("RequirementsAnalysisProfile")){
+						IRPModelElement theDependent = theDependency.getDependent();
+						theWorkingPkg = (IRPPackage) theDependent;
+						count++;
+					}
+				}
+			}
+		}
+		
+		if (count==0){
+			Logger.writeLine("Error in getWorkingPkgUnderDev, no working package was found");
+		} else if (count > 1){
+			Logger.writeLine("Error in getWorkingPkgUnderDev, " + count + " working packages were found when expecting one");
+		}
+		
+		return theWorkingPkg;
+	}
+	
+	public static IRPClass getBlockUnderDev(IRPProject inTheProject){
+		
+		IRPClass theBlock = null;
+		
+		IRPPackage thePackageUnderDev = getPackageUnderDev( inTheProject );
+		
+		if( thePackageUnderDev != null ){
+			IRPInstance partUnderDev = getPartUnderDev( inTheProject );
+			
+			theBlock = (IRPClass) partUnderDev.getOtherClass();
+		}
+
+		return theBlock;
+	}
+	
+	public static IRPInstance getPartUnderDev(IRPProject inTheProject){
+		
+		IRPInstance partUnderDev = null;
+		
+		IRPPackage thePackageUnderDev = getPackageUnderDev( inTheProject );
+		
+		if( thePackageUnderDev != null ){
+			
+			
+			List<IRPModelElement> theBlocks = 
+						GeneralHelpers.findElementsWithMetaClassAndStereotype(
+								"Part", "LogicalSystem", thePackageUnderDev );
+				
+			if (theBlocks.size()==1){
+					
+				partUnderDev = (IRPInstance) theBlocks.get(0);
+					
+				Logger.writeLine(partUnderDev, "Found");
+			} else {
+				Logger.writeLine("Error in getLogicalSystemBlock: Can't find LogicalSystem part");
+			}		
+		}
+
+		return partUnderDev;
+	}
+	
 	public static IRPStereotype getStereotypeForFunctionTracing(IRPProject inTheProject){
 		
 		IRPStereotype theStereotype = null;
@@ -61,6 +144,8 @@ public class FunctionalAnalysisSettings {
 
     Change history:
     #006 02-MAY-2016: Add FunctionalAnalysisPkg helper support (F.J.Chadburn)
+    #025 31-MAY-2016: Add new menu and dialog to add a new actor to package under development (F.J.Chadburn)
+    #026 31-MAY-2016: Add dialog to allow user to choose which Activity Diagrams to synch (F.J.Chadburn)
     
     This file is part of SysMLHelperPlugin.
 

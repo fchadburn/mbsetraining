@@ -2,7 +2,6 @@ package functionalanalysisplugin;
 
 import java.util.List;
 
-import generalhelpers.GeneralHelpers;
 import generalhelpers.PopulatePkg;
 
 import javax.swing.JDialog;
@@ -14,7 +13,7 @@ import generalhelpers.Logger;
 import com.telelogic.rhapsody.core.*;
 
 public class PopulateFunctionalAnalysisPkg extends PopulatePkg {
-	
+	 
 	public static void main(String[] args) {
 	
 		IRPApplication theApp = RhapsodyAppServer.getActiveRhapsodyApplication();
@@ -23,7 +22,7 @@ public class PopulateFunctionalAnalysisPkg extends PopulatePkg {
 		
 		if (theSelectedEl instanceof IRPPackage){
 			IRPPackage thePackage = (IRPPackage) theSelectedEl;
-			createFunctionalBlockPackageHierarchy( thePackage );
+			addNewActorToPackageUnderDevelopement( thePackage );
 		}
 	}
 	
@@ -174,7 +173,7 @@ public class PopulateFunctionalAnalysisPkg extends PopulatePkg {
 					
 					JFrame.setDefaultLookAndFeelDecorated( true );
 
-					JFrame frame = new JFrame("Populate package hierarchy for an analaysis block");
+					JFrame frame = new JFrame("Populate package hierarchy for an analysis block");
 					
 					frame.setDefaultCloseOperation( JFrame.DISPOSE_ON_CLOSE );
 
@@ -190,11 +189,68 @@ public class PopulateFunctionalAnalysisPkg extends PopulatePkg {
 			});
 		}
 	}
-
-	public static void addActorPartTo(IRPClass theUsageBlock){
+	
+	public static void addNewActorToPackageUnderDevelopement(IRPModelElement theSelectedEl){
 		
-		String theActorName = GeneralHelpers.promptUserForTextEntry("Enter name","Actor:","",12);
-		CreateFunctionalBlockPackagePanel.addActorPartTo(theUsageBlock, theActorName); 
+		final String rootPackageName = "FunctionalAnalysisPkg";
+		
+		final IRPModelElement theRootPackage = 
+				theSelectedEl.getProject().findElementsByFullName(rootPackageName, "Package");
+		
+		final IRPPackage thePackageUnderDev = 
+				FunctionalAnalysisSettings.getPackageUnderDev( theSelectedEl.getProject() );
+
+		final IRPClass theBlockUnderDev = 
+				FunctionalAnalysisSettings.getBlockUnderDev( theSelectedEl.getProject() );
+		
+		Logger.writeLine("Add new actor part to " + Logger.elementInfo( thePackageUnderDev ) + " was invoked");
+		
+		javax.swing.SwingUtilities.invokeLater(new Runnable() {
+
+			@Override
+			public void run() {
+				
+				JFrame.setDefaultLookAndFeelDecorated( true );
+
+				JFrame frame = new JFrame("Create new actor connected to " 
+						+ theBlockUnderDev.getUserDefinedMetaClass() + " called " + theBlockUnderDev.getName());
+				
+				frame.setDefaultCloseOperation( JFrame.DISPOSE_ON_CLOSE );
+
+				CreateNewActorPanel thePanel = 
+						new CreateNewActorPanel( theBlockUnderDev.getName(), (IRPPackage)theRootPackage);
+
+				frame.setContentPane( thePanel );
+				frame.pack();
+				frame.setLocationRelativeTo( null );
+				frame.setVisible( true );
+			}
+		});
+	}
+	
+	public static void copyActivityDiagrams(IRPProject forProject){
+		
+    	IRPModelElement theRequirementsAnalysisPkg = 
+    			forProject.findElementsByFullName("RequirementsAnalysisPkg", "Package");
+     	
+    	if (theRequirementsAnalysisPkg==null){
+    		
+			JDialog.setDefaultLookAndFeelDecorated(true);
+
+			JOptionPane.showMessageDialog(
+					null,  
+					"The project does not contain a root RequirementsAnalysisPkg. This package is used by the\n" +
+				    "plugin to populate the Activity Diagrams for functional analysis simulation purposes.\n\n",
+					"Warning",
+					JOptionPane.WARNING_MESSAGE);	
+    	} else {
+    		
+    		IRPPackage theWorkingPackage = FunctionalAnalysisSettings.getWorkingPkgUnderDev( forProject );
+    		
+    		CopyActivityDiagramsPanel.launchCopyActivityDiagramPanel(
+    				theRequirementsAnalysisPkg, 
+    				theWorkingPackage);
+    	}
 	}
 }
 
@@ -209,6 +265,8 @@ public class PopulateFunctionalAnalysisPkg extends PopulatePkg {
     #018 11-MAY-2016: Provide advisory before add by reference of an external RequirementsAnalysisPkg (F.J.Chadburn)
     #019 15-MAY-2016: Improvements to Functional Analysis Block default naming approach (F.J.Chadburn)
     #023 30-MAY-2016: Added form to support validation checks for analysis block hierarchy creation (F.J.Chadburn) 
+    #025 31-MAY-2016: Add new menu and dialog to add a new actor to package under development (F.J.Chadburn)
+    #027 31-MAY-2016: Add new menu to launch dialog to copy Activity Diagrams (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

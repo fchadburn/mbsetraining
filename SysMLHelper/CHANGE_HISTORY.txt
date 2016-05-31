@@ -46,3 +46,9 @@ RELEASE 2.0.6 (15-MAY-2016)
 ----------------------------------------------------------------------------------
 RELEASE 2.0.7 (30-MAY-2016)
 ----------------------------------------------------------------------------------
+#025 31-MAY-2016: Add new menu and dialog to add a new actor to package under development (F.J.Chadburn)
+#026 31-MAY-2016: Add dialog to allow user to choose which Activity Diagrams to synch (F.J.Chadburn)
+#027 31-MAY-2016: Add new menu to launch dialog to copy Activity Diagrams (F.J.Chadburn)
+----------------------------------------------------------------------------------
+RELEASE 2.0.8 (31-MAY-2016)
+----------------------------------------------------------------------------------

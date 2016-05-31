@@ -5,11 +5,8 @@ import generalhelpers.Logger;
 import generalhelpers.PopulatePkg;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.ComponentOrientation;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -19,25 +16,23 @@ import javax.swing.BorderFactory;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.ParallelGroup;
 import javax.swing.GroupLayout.SequentialGroup;
-import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import com.telelogic.rhapsody.core.*;
 
-public class CreateFunctionalBlockPackagePanel extends JPanel {
+public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPanel {
 
 	final private String theBlankName = "<Put Name Here>";
 	private IRPPackage m_RootPackage;
 	private IRPPackage m_RequirementsAnalysisPkg;
-	private List<ClassifierMappingInfo> m_ActorChoices;
+	private List<ActorMappingInfo> m_ActorChoices;
 	private RhapsodyComboBox m_BlockInheritanceChoice;
 	private JTextField m_BlockNameTextField;
 	
@@ -66,7 +61,7 @@ public class CreateFunctionalBlockPackagePanel extends JPanel {
 	
 	private void clearActorNamesIfNeeded(){
 		
-		for (ClassifierMappingInfo theInfo : m_ActorChoices) {	
+		for (ActorMappingInfo theInfo : m_ActorChoices) {	
 			JTextField theField = theInfo.getTextField();
 			theField.setVisible( theInfo.isSelected() );			
 		}		
@@ -74,7 +69,7 @@ public class CreateFunctionalBlockPackagePanel extends JPanel {
 	}
 	private void updateActorName(){
 		
-		for (ClassifierMappingInfo theInfo : m_ActorChoices) {
+		for (ActorMappingInfo theInfo : m_ActorChoices) {
 			theInfo.updateToBestActorNamesBasedOn( m_BlockNameTextField.getText() );			
 		}		
 	}
@@ -120,7 +115,7 @@ public class CreateFunctionalBlockPackagePanel extends JPanel {
 		return thePanel;
 	}
 	
-	private boolean checkValidity(boolean isMessageEnabled){
+	boolean checkValidity(boolean isMessageEnabled){
 		
 		boolean isValid = true;
 		String errorMsg = "";
@@ -148,7 +143,7 @@ public class CreateFunctionalBlockPackagePanel extends JPanel {
 			
 			} else {
 				
-				for (ClassifierMappingInfo actorChoice : m_ActorChoices) {
+				for (ActorMappingInfo actorChoice : m_ActorChoices) {
 					
 					String theChosenActorName = actorChoice.getName();
 					
@@ -185,20 +180,6 @@ public class CreateFunctionalBlockPackagePanel extends JPanel {
 		return isValid;
 	}
 	
-	private static boolean isLegalName(String theName){
-		
-		String regEx = "^(([a-zA-Z_][a-zA-Z0-9_]*)|(operator.+))$";
-		
-		boolean isLegal = theName.matches( regEx );
-		
-		if (!isLegal){
-			Logger.writeLine("Warning, detected that " + theName 
-					+ " is not a legal name as it does not conform to the regex=" + regEx);
-		}
-		
-		return isLegal;
-	}
-	
 	private JPanel createContent(String theBlockName){
 	
 	    JPanel thePanel = new JPanel();
@@ -216,7 +197,7 @@ public class CreateFunctionalBlockPackagePanel extends JPanel {
 		List<IRPModelElement> theExistingActors = 
 				m_RootPackage.getNestedElementsByMetaClass("Actor", 1).toList();
 		
-		m_ActorChoices = new ArrayList<ClassifierMappingInfo>();
+		m_ActorChoices = new ArrayList<ActorMappingInfo>();
 
 		SequentialGroup theHorizSequenceGroup = theGroupLayout.createSequentialGroup();
 		SequentialGroup theVerticalSequenceGroup = theGroupLayout.createSequentialGroup();
@@ -253,12 +234,13 @@ public class CreateFunctionalBlockPackagePanel extends JPanel {
 			RhapsodyComboBox theInheritedActorComboBox = new RhapsodyComboBox(theExistingActors, false);			
 			theInheritedActorComboBox.setPreferredSize(new Dimension(100, 20));
 			
-			ClassifierMappingInfo theMappingInfo = 
-					new ClassifierMappingInfo(
+			ActorMappingInfo theMappingInfo = 
+					new ActorMappingInfo(
 							theInheritedActorComboBox, 
 							theActorCheckBox, 
 							theActorNameTextField, 
-							(IRPActor)theActor );
+							(IRPActor)theActor,
+							theActor.getProject() );
 			
 			theMappingInfo.updateToBestActorNamesBasedOn( theBlockName );
 			
@@ -286,150 +268,10 @@ public class CreateFunctionalBlockPackagePanel extends JPanel {
 	    return thePanel;
 	}
 	
-	public JPanel createOKCancelPanel(){
-		
-		JPanel thePanel = new JPanel();
-		thePanel.setLayout( new FlowLayout() );
-		
-		JButton theOKButton = new JButton("OK");
-		theOKButton.setPreferredSize(new Dimension(75,25));
-		theOKButton.addActionListener( new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				
-				try {
-					Logger.writeLine("theOKButton.addActionListener");
-					
-					boolean isValid = checkValidity( true );
-					
-					if (isValid){
-						Logger.writeLine("Is valid to close");
-						performAction();
-						Window dialog = SwingUtilities.windowForComponent( (Component) e.getSource() );
-						dialog.dispose();
-					}
-												
-				} catch (Exception e2) {
-					Logger.writeLine("Unhandled exception in createOKCancelPanel->theOKButton.actionPerformed");
-				}
-			}
-		});
-		
-		JButton theCancelButton = new JButton("Cancel");
-		theCancelButton.setPreferredSize( new Dimension( 75,25 ) );	
-		theCancelButton.addActionListener( new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				
-				try {
-					Logger.writeLine("theCancelButton.addActionListener");
-					Window dialog = SwingUtilities.windowForComponent( (Component) e.getSource() );
-					dialog.dispose();
-												
-				} catch (Exception e2) {
-					Logger.writeLine("Unhandled exception in createOKCancelPanel->theCancelButton.actionPerformed");
-				}		
-			}	
-		});
-		
-		thePanel.setComponentOrientation( ComponentOrientation.LEFT_TO_RIGHT );
-		thePanel.add( theOKButton );
-		thePanel.add( theCancelButton );
-		
-		return thePanel;
-	}
-	
-	private static void addGeneralization(
-			IRPClassifier fromElement, 
-			String toBlockWithName, 
-			IRPPackage underneathTheRootPackage){
-		
-		IRPModelElement theBlock = 
-				underneathTheRootPackage.findNestedElementRecursive( toBlockWithName, "Block" );
-		
-		if (theBlock != null){
-			fromElement.addGeneralization( (IRPClassifier) theBlock );
-		} else {
-			Logger.writeLine("Error: Unable to find element with name " + toBlockWithName);
-		}
-	}
-	
-	private static IRPInstance addPartTo(
-			IRPClassifier theElement, 
-			IRPClassifier typedByElement){
-		
-		IRPInstance thePart = (IRPInstance) theElement.addNewAggr("Part", "its" + typedByElement.getName());
-		thePart.setOtherClass(typedByElement);
-		
-		return thePart;
-	}
-	
-	public static IRPInstance addActorPartTo(IRPClass theUsageBlock, String withNameForActor){
-		
-		IRPInstance theActorPart = null;
-		
-		// get the logical system part and block
-		@SuppressWarnings("unchecked")
-		List<IRPInstance> theParts = theUsageBlock.getNestedElementsByMetaClass("Part", 0).toList();
-		
-		IRPClassifier theLogicalSystemBlock = null;
-		IRPInstance theLogicalSystemPart = null;
-		
-		IRPClassifier theTesterBlock = null;
-		IRPInstance theTesterPart = null;
-		
-		for (IRPInstance thePart : theParts) {
-			
-			if (GeneralHelpers.hasStereotypeCalled("LogicalSystem", thePart)){
-				theLogicalSystemPart = thePart;
-				theLogicalSystemBlock = thePart.getOtherClass();
-				Logger.writeLine(theLogicalSystemPart, "is the LogicalSystem part");
-				Logger.writeLine(theLogicalSystemBlock, "is the LogicalSystem block");
-			}
-			if (GeneralHelpers.hasStereotypeCalled("TestDriver", thePart)){	
-				theTesterPart = thePart;
-				theTesterBlock = thePart.getOtherClass();
-				Logger.writeLine(theTesterPart, "is the Tester part");
-				Logger.writeLine(theTesterBlock, "is the Tester block");
-			}
-		}
-		
-		if (theLogicalSystemBlock != null && theTesterBlock != null){
-			IRPActor theTestActor = ((IRPPackage) theUsageBlock.getOwner()).addActor( withNameForActor );
-			
-			IRPActor theTestbench = (IRPActor) theTestActor.getProject().findNestedElementRecursive("Testbench", "Actor");
-			
-			if (theTestbench != null){
-				theTestActor.addGeneralization( theTestbench );
-			} else {
-				Logger.writeLine("Error: Unable to find Actor with name Testbench");
-			}
-			
-			// Make each of the actors a part of the UsageDomain block
-			theActorPart = addPartTo(theUsageBlock, theTestActor);
-			
-			// and connect actor to the LogicalSystem block
-	    	IRPPort theActorToSystemPort = (IRPPort) theTestActor.addNewAggr("Port", "pLogicalSystem");
-			IRPPort theSystemToActorPort = (IRPPort) theLogicalSystemBlock.addNewAggr("Port", "p" + theTestActor.getName());
-			IRPLink theLogicalSystemLink = (IRPLink) theUsageBlock.addLink(
-					theActorPart, theLogicalSystemPart, null, theActorToSystemPort, theSystemToActorPort);
-			theLogicalSystemLink.changeTo("connector");
-			
-			// and connect actor to the TestDriver block
-	    	IRPPort theActorToTesterPort = (IRPPort) theTestActor.addNewAggr("Port", "pTester");
-			IRPPort theTesterToActorPort = (IRPPort) theTesterBlock.addNewAggr("Port", "p" + theTestActor.getName());
-			IRPLink theTesterLink = (IRPLink) theUsageBlock.addLink(
-					theActorPart, theTesterPart, null, theActorToTesterPort, theTesterToActorPort);
-			theTesterLink.changeTo("connector");
-		}
-		
-		return theActorPart;
-	}
-	
-	private static void addAComponentWith(String theName,
-			IRPPackage theBlockTestPackage, IRPClass theUsageDomainBlock) {
+	private static void addAComponentWith(
+			String theName,
+			IRPPackage theBlockTestPackage, 
+			IRPClass theUsageDomainBlock) {
 		
 		IRPComponent theComponent = (IRPComponent) theBlockTestPackage.addNewAggr("Component", theName + "_EXE");
 		theComponent.setPropertyValue("Activity.General.SimulationMode", "StateOriented");
@@ -443,7 +285,9 @@ public class CreateFunctionalBlockPackagePanel extends JPanel {
 		theConfiguration.getProject().setActiveConfiguration(theConfiguration);		
 	}
 
-	private static void createSequenceDiagramFor(IRPClass theUsageDomainBlock, String withName){
+	private static void createSequenceDiagramFor(
+			IRPClass theUsageDomainBlock, 
+			String withName){
 		
 		IRPModelElement theOwner = theUsageDomainBlock.getOwner();
 		
@@ -497,8 +341,8 @@ public class CreateFunctionalBlockPackagePanel extends JPanel {
 			Logger.writeLine("Error in createSequenceDiagramFor: Expected owner to be a Package");
 		}
 	}
-	
-	private void performAction(){
+
+	void performAction(){
 		
 		if (checkValidity( false )){
 			String theName = m_BlockNameTextField.getText();
@@ -546,28 +390,8 @@ public class CreateFunctionalBlockPackagePanel extends JPanel {
 			IRPInstance theTestDriverPart = addPartTo(theUsageDomainBlock, theTesterBlock);
 			GeneralHelpers.applyExistingStereotype("TestDriver", theTestDriverPart);
 
-			for (ClassifierMappingInfo theInfo : m_ActorChoices) {
-
-				if (theInfo.isSelected()){
-
-					String theLegalActorName = theInfo.getName().replaceAll(" ", "");
-					IRPInstance theActorPart = addActorPartTo(theUsageDomainBlock, theLegalActorName);		
-
-					String theText = "Create actor called " + theInfo.getName();
-
-					IRPModelElement theInheritedFrom = theInfo.getInheritedFrom();
-
-					if (theInheritedFrom != null){
-						theText = theText + " inherited from " + theInheritedFrom.getName();
-						IRPClassifier theClassifier = theActorPart.getOtherClass();
-
-						theClassifier.addGeneralization( (IRPClassifier) theInheritedFrom );
-					}
-
-					Logger.writeLine(theText);
-				} else {
-					Logger.writeLine("Not selected");
-				}
+			for (ActorMappingInfo theInfo : m_ActorChoices) {
+				theInfo.performActorPartCreationIfSelectedTo( theUsageDomainBlock );
 			}
 
 			// Add a sequence diagram
@@ -601,74 +425,16 @@ public class CreateFunctionalBlockPackagePanel extends JPanel {
 	    	PopulatePkg.addProfileIfNotPresentAndMakeItApplied(
 	    			"RequirementsAnalysisProfile", theWorkingPackage);
 		
-			copyActivityDiagramsForEachUseCase(
-					m_RequirementsAnalysisPkg, theWorkingPackage);
-			
 			// Add a component
 			addAComponentWith(theName, theBlockTestPackage, theUsageDomainBlock);
+			
+			CopyActivityDiagramsPanel.launchCopyActivityDiagramPanel(
+					m_RequirementsAnalysisPkg, 
+					theWorkingPackage);
 			
 		} else {
 			Logger.writeLine("Error in CreateFunctionalBlockPackagePanel.performAction, checkValidity returned false");
 		}	
-	}
-	
-	@SuppressWarnings("unchecked")
-	private static void copyActivityDiagramsForEachUseCase(
-			IRPModelElement underneathTheEl, IRPModelElement toElement){
-		
-		List<IRPFlowchart> allTheFlowcharts = new ArrayList<IRPFlowchart>();
-		
-		List<IRPUseCase> theUseCases = underneathTheEl.getNestedElementsByMetaClass("UseCase", 1).toList();	
-		
-		for (IRPUseCase theUseCase : theUseCases) {
-			allTheFlowcharts.addAll( theUseCase.getNestedElementsByMetaClass("ActivityDiagram", 1).toList() );		
-		}
-		
-		if (!allTheFlowcharts.isEmpty()){
-				
-			String msgText = "Do you want to copy the following " + allTheFlowcharts.size() 
-					+ " activity diagrams \n "
-					+ "from the " + theUseCases.size() + " use cases\n"
-					+ "to " + Logger.elementInfo(toElement) + "?\n";
-
-			for (IRPFlowchart theFlowchart : allTheFlowcharts) {
-				msgText = msgText + theFlowchart.getName() + "\n";
-			}
-
-			int response = JOptionPane.showConfirmDialog(null, msgText, "Confirm",
-					JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-
-			if (response == JOptionPane.YES_OPTION) {
-				Logger.writeLine("User confirmed to create");
-
-				for (IRPFlowchart theFlowchart : allTheFlowcharts) {
-					cloneTheFlowchart(toElement, theFlowchart);
-				}		    	
-			}	
-		} else {
-			Logger.writeLine("No Activity Diagrams were found underneath the " + Logger.elementInfo(underneathTheEl));
-		}
-	}
-	
-	private static void cloneTheFlowchart(
-			IRPModelElement toElement,
-			IRPFlowchart theFlowchart) {
-		
-		Logger.writeLine("Cloned " + Logger.elementInfo(theFlowchart) + " to " + Logger.elementInfo(toElement));
-		
-		IRPFlowchart theNewFlowchart = (IRPFlowchart) theFlowchart.clone("Working - " + theFlowchart.getName(), toElement);
-		
-		IRPDependency theDependency = theNewFlowchart.addDependencyTo(theFlowchart);
-		theDependency.changeTo("Refinement");
-		
-		Logger.writeLine(theDependency, "was added");
-		
-		IRPGraphNode theNote = theNewFlowchart.addNewNodeByType("Note", 20, 44, 120, 70);
-		
-		theNote.setGraphicalProperty("Text", "This working copy of the use case steps can be used to generate the state machine.");
-		
-		theNewFlowchart.highLightElement();
-		theNewFlowchart.getFlowchartDiagram().openDiagram();
 	}
 }
 
@@ -677,6 +443,7 @@ public class CreateFunctionalBlockPackagePanel extends JPanel {
 
     Change history:
     #023 30-MAY-2016: Added form to support validation checks for analysis block hierarchy creation (F.J.Chadburn) 
+    #026 31-MAY-2016: Add dialog to allow user to choose which Activity Diagrams to synch (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

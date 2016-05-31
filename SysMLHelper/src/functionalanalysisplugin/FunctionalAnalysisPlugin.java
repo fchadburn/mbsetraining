@@ -115,16 +115,27 @@ public class FunctionalAnalysisPlugin extends RPUserPlugin {
 					}
 				} 
 
-			} else if (menuItem.equals("MBSE Method: Functional Analysis\\Add new actor part to the UsageDomain block")){
+			} else if (menuItem.equals("MBSE Method: Functional Analysis\\Add new actor to package under development")){
 
-				if (theSelectedEl instanceof IRPClass){
+				if (theSelectedEl instanceof IRPPackage){
 					try {
-						PopulateFunctionalAnalysisPkg.addActorPartTo( (IRPClass) theSelectedEl );
+						PopulateFunctionalAnalysisPkg.addNewActorToPackageUnderDevelopement( theSelectedEl ); 
 
 					} catch (Exception e) {
-						Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking PopulateFunctionalAnalysisPkg.addActorPartTo");
+						Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking PopulateFunctionalAnalysisPkg.addNewActorToPackageUnderDevelopement");
 					}
 				}
+				
+			} else if (menuItem.equals("MBSE Method: Functional Analysis\\Copy activity diagrams to package under development")){
+
+				if (theSelectedEl instanceof IRPPackage){
+					try {
+						PopulateFunctionalAnalysisPkg.copyActivityDiagrams( theActiveProject ); 
+
+					} catch (Exception e) {
+						Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking PopulateFunctionalAnalysisPkg.addNewActorToPackageUnderDevelopement");
+					}
+				}							
 
 			} else if (menuItem.equals("MBSE Method: Functional Analysis\\Populate requirements for SD(s) based on messages")){
 
@@ -155,8 +166,7 @@ public class FunctionalAnalysisPlugin extends RPUserPlugin {
 				} catch (Exception e) {
 					Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking EventDeletion.deleteEventAndRelatedElementsFor");
 				}
-
-
+				
 			} else {
 				Logger.writeLine(theSelectedEl, " was invoked with menuItem='" + menuItem + "'");
 			}
@@ -164,8 +174,6 @@ public class FunctionalAnalysisPlugin extends RPUserPlugin {
 
 		Logger.writeLine("... completed");
 	}
-
-
 	
 	public boolean RhpPluginCleanup() {
 		m_rhpApplication = null;
@@ -194,6 +202,8 @@ public class FunctionalAnalysisPlugin extends RPUserPlugin {
     #013 10-MAY-2016: Add support for sequence diagram req't and verification relation population (F.J.Chadburn)
     #016 11-MAY-2016: Add GPL advisory to the Log window (F.J.Chadburn)
     #022 30-MAY-2016: Improved handling and validation of event/operation creation by adding new forms (F.J.Chadburn)
+    #025 31-MAY-2016: Add new menu and dialog to add a new actor to package under development (F.J.Chadburn)
+    #027 31-MAY-2016: Add new menu to launch dialog to copy Activity Diagrams (F.J.Chadburn)
     
     This file is part of SysMLHelperPlugin.
 
