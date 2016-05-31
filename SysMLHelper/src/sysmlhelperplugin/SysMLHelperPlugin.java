@@ -15,7 +15,7 @@ public class SysMLHelperPlugin extends RPUserPlugin {
 	static protected IRPApplication m_rhpApplication = null;
 	static protected IRPProject m_rhpProject = null;
 
-	static protected String m_version = "2.0.7 (Under Dev)";
+	static protected String m_version = "2.0.8 (Under Dev)";
 
 	public static void main(String [] args){
 		IRPModelElement theElement = SysMLHelperPlugin.getRhapsodyApp().getSelectedElement();
