@@ -2,6 +2,7 @@ package functionalanalysisplugin;
 
 import generalhelpers.GeneralHelpers;
 import generalhelpers.Logger;
+import generalhelpers.UserInterfaceHelpers;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -10,9 +11,7 @@ import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JCheckBox;
-import javax.swing.JDialog;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
@@ -189,13 +188,22 @@ public class CreateOutgoingEventPanel extends CreateTracedElementPanel {
 		String errorMessage = null;
 		boolean isValid = true;
 		
-		if (!GeneralHelpers.isElementNameUnique(
-				m_ChosenNameTextField.getText(), 
+		String theChosenName = m_ChosenNameTextField.getText();
+		
+		boolean isLegalName = GeneralHelpers.isLegalName( theChosenName );
+		
+		if (!isLegalName){
+			
+			errorMessage += theChosenName + " is not legal as an identifier representing an executable event\n";				
+			isValid = false;
+			
+		} else if (!GeneralHelpers.isElementNameUnique(
+				theChosenName, 
 				"Event", 
 				m_PackageUnderDev.getProject(), 
 				1)){
 
-			errorMessage = "Unable to proceed as the event name '" + m_ChosenNameTextField.getText() + "' is not unique";
+			errorMessage = "Unable to proceed as the event name '" + theChosenName + "' is not unique";
 			isValid = false;
 		}		
 
@@ -203,7 +211,7 @@ public class CreateOutgoingEventPanel extends CreateTracedElementPanel {
 			
 			String theProposedName = determineBestInformNameFor(
 					m_TargetBlock, 
-					m_ChosenNameTextField.getText());
+					theChosenName );
 
 			if (!GeneralHelpers.isElementNameUnique(
 					theProposedName, 
@@ -222,13 +230,7 @@ public class CreateOutgoingEventPanel extends CreateTracedElementPanel {
 
 		if (isMessageEnabled && !isValid && errorMessage != null){
 
-			JDialog.setDefaultLookAndFeelDecorated(true);
-
-			JOptionPane.showMessageDialog(
-					null,  
-					errorMessage,
-					"Warning",
-					JOptionPane.WARNING_MESSAGE);	
+			UserInterfaceHelpers.showWarningDialog( errorMessage );
 		}
 		
 		return isValid;
@@ -276,16 +278,8 @@ public class CreateOutgoingEventPanel extends CreateTracedElementPanel {
 				if (m_SendOperationIsNeededCheckBox.isSelected()){
 					
 					IRPPort thePort = getPortForDestinationActor();
-					/*
-					@SuppressWarnings("unchecked")
-					List<IRPModelElement> thePorts = 
-							m_TargetBlock.getNestedElementsByMetaClass("Port", 0).toList();
 					
-					IRPModelElement thePort = 
-							GeneralHelpers.launchDialogToSelectElement(thePorts, "Select Port to send Event to", false);
-					*/
-					Logger.writeLine("Adding an inform Operation");
-					
+					Logger.writeLine("Adding an inform Operation");		
 
 					IRPOperation informOp = m_TargetBlock.addOperation( 
 							determineBestInformNameFor( m_TargetBlock, theEventName ) );
@@ -316,7 +310,9 @@ public class CreateOutgoingEventPanel extends CreateTracedElementPanel {
  * Copyright (C) 2016  MBSE Training and Consulting Limited (www.executablembse.com)
 
     Change history:
-    #022 30-MAY-2016: Improved handling and validation of event/operation creation by adding new forms (F.J.Chadburn) 
+    #022 30-MAY-2016: Improved handling and validation of event/operation creation by adding new forms (F.J.Chadburn)
+    #029 01-JUN-2016: Add Warning Dialog helper to UserInterfaceHelpers (F.J.Chadburn)
+    #030 01-JUN-2016: Improve legal name checking across helpers (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

@@ -4,8 +4,8 @@ import generalhelpers.Logger;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.GridLayout;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -18,9 +18,11 @@ import javax.swing.GroupLayout;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.GroupLayout.ParallelGroup;
 import javax.swing.GroupLayout.SequentialGroup;
+
 import com.telelogic.rhapsody.core.*;
 
 public class RequirementSelectionPanel extends JPanel {
@@ -89,14 +91,19 @@ public class RequirementSelectionPanel extends JPanel {
 		    
 			theReqtCheckBox.setSelected(true);
 						 
-			JTextArea theSpecification = new JTextArea( theReqt.getSpecification(), 1,1 );
+			JTextArea theSpecification = new JTextArea( theReqt.getSpecification() );
+			JScrollPane scrollPane = new JScrollPane(theSpecification);
+			
+			scrollPane.setPreferredSize( new Dimension( 500, 35 ) );
 
 		    theColumn1ParallelGroup.addComponent( theReqtCheckBox );   
-		    theColumn2ParallelGroup.addComponent( theSpecification );    
+		    theColumn2ParallelGroup.addComponent( scrollPane, 700, 700, 700 );    
     
-		    ParallelGroup theVertical1ParallelGroup = theGroupLayout.createParallelGroup( GroupLayout.Alignment.BASELINE);
+		    ParallelGroup theVertical1ParallelGroup = 
+		    		theGroupLayout.createParallelGroup( GroupLayout.Alignment.BASELINE );
+		    
 		    theVertical1ParallelGroup.addComponent( theReqtCheckBox );
-		    theVertical1ParallelGroup.addComponent( theSpecification );
+		    theVertical1ParallelGroup.addComponent( scrollPane );
 		    
 		    theVerticalSequenceGroup.addGroup( theVertical1ParallelGroup );		  
 		    
@@ -139,6 +146,7 @@ public class RequirementSelectionPanel extends JPanel {
 
     Change history:
     #022 30-MAY-2016: Improved handling and validation of event/operation creation by adding new forms (F.J.Chadburn)
+    #031 01-JUN-2016: Scroll pane added for readability of requirement text on panels (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

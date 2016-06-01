@@ -104,6 +104,17 @@ public class FunctionalAnalysisPlugin extends RPUserPlugin {
 					}
 				}
 
+			} else if (menuItem.equals("MBSE Method: Functional Analysis\\Create stand-alone attribute owned by the system")){
+
+				if (!theSelectedGraphEls.isEmpty()){
+					try {
+						CreateTracedAttributePanel.createSystemAttributeFor( theActiveProject, theSelectedGraphEls );
+						
+					} catch (Exception e) {
+						Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking CreateTracedAttributePanel.createSystemAttributeFor");
+					}
+				}
+				
 			} else if (menuItem.equals("MBSE Method: Functional Analysis\\Create new TestCase for «TestDriver»")){
 
 				if (theSelectedEl instanceof IRPClass){
@@ -204,6 +215,7 @@ public class FunctionalAnalysisPlugin extends RPUserPlugin {
     #022 30-MAY-2016: Improved handling and validation of event/operation creation by adding new forms (F.J.Chadburn)
     #025 31-MAY-2016: Add new menu and dialog to add a new actor to package under development (F.J.Chadburn)
     #027 31-MAY-2016: Add new menu to launch dialog to copy Activity Diagrams (F.J.Chadburn)
+    #028 01-JUN-2016: Add new menu to create a stand-alone attribute owned by the system (F.J.Chadburn)
     
     This file is part of SysMLHelperPlugin.
 

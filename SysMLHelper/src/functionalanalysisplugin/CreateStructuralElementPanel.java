@@ -112,19 +112,7 @@ public abstract class CreateStructuralElementPanel extends JPanel {
 		}
 	}
 	
-	protected static boolean isLegalName(String theName){
-		
-		String regEx = "^(([a-zA-Z_][a-zA-Z0-9_]*)|(operator.+))$";
-		
-		boolean isLegal = theName.matches( regEx );
-		
-		if (!isLegal){
-			Logger.writeLine("Warning, detected that " + theName 
-					+ " is not a legal name as it does not conform to the regex=" + regEx);
-		}
-		
-		return isLegal;
-	}
+
 }
 
 /**
@@ -133,7 +121,8 @@ public abstract class CreateStructuralElementPanel extends JPanel {
     Change history:
     #025 31-MAY-2016: Add new menu and dialog to add a new actor to package under development (F.J.Chadburn)
     #026 31-MAY-2016: Add dialog to allow user to choose which Activity Diagrams to synch (F.J.Chadburn)
-    
+    #030 01-JUN-2016: Improve legal name checking across helpers (F.J.Chadburn)
+
     This file is part of SysMLHelperPlugin.
 
     SysMLHelperPlugin is free software: you can redistribute it and/or modify

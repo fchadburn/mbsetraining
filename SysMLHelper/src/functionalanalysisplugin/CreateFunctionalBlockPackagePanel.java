@@ -3,6 +3,7 @@ package functionalanalysisplugin;
 import generalhelpers.GeneralHelpers;
 import generalhelpers.Logger;
 import generalhelpers.PopulatePkg;
+import generalhelpers.UserInterfaceHelpers;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -17,9 +18,7 @@ import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.ParallelGroup;
 import javax.swing.GroupLayout.SequentialGroup;
 import javax.swing.JCheckBox;
-import javax.swing.JDialog;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
@@ -128,7 +127,7 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
 			isValid = false;
 			
 		} else {
-			boolean isLegalBlockName = isLegalName( theChosenBlockName );
+			boolean isLegalBlockName = GeneralHelpers.isLegalName( theChosenBlockName );
 			
 			if (!isLegalBlockName){
 				
@@ -149,7 +148,7 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
 					
 					if (actorChoice.isSelected()){
 						
-						boolean isLegalActorName = isLegalName( theChosenActorName );
+						boolean isLegalActorName = GeneralHelpers.isLegalName( theChosenActorName );
 						
 						if (!isLegalActorName){
 							errorMsg += theChosenActorName + "is not legal as an identifier representing an executable actor\n";
@@ -165,16 +164,9 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
 			}
 		}
 		
-		
 		if (isMessageEnabled && !isValid && errorMsg != null){
-
-			JDialog.setDefaultLookAndFeelDecorated(true);
-
-			JOptionPane.showMessageDialog(
-					null,  
-					errorMsg,
-					"Warning",
-					JOptionPane.WARNING_MESSAGE);	
+			
+			UserInterfaceHelpers.showWarningDialog( errorMsg );
 		}
 		
 		return isValid;
@@ -444,6 +436,8 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
     Change history:
     #023 30-MAY-2016: Added form to support validation checks for analysis block hierarchy creation (F.J.Chadburn) 
     #026 31-MAY-2016: Add dialog to allow user to choose which Activity Diagrams to synch (F.J.Chadburn)
+    #029 01-JUN-2016: Add Warning Dialog helper to UserInterfaceHelpers (F.J.Chadburn)
+    #030 01-JUN-2016: Improve legal name checking across helpers (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

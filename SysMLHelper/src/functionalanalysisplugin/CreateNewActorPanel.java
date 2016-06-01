@@ -2,6 +2,8 @@ package functionalanalysisplugin;
 
 import generalhelpers.GeneralHelpers;
 import generalhelpers.Logger;
+import generalhelpers.UserInterfaceHelpers;
+
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.util.List;
@@ -9,11 +11,10 @@ import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JCheckBox;
-import javax.swing.JDialog;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+
 import com.telelogic.rhapsody.core.*;
 
 public class CreateNewActorPanel extends CreateStructuralElementPanel {
@@ -93,7 +94,7 @@ public class CreateNewActorPanel extends CreateStructuralElementPanel {
 			isValid = false;
 			
 		} else {
-			boolean isLegalBlockName = isLegalName( theChosenName );
+			boolean isLegalBlockName = GeneralHelpers.isLegalName( theChosenName );
 			
 			if (!isLegalBlockName){
 				
@@ -112,13 +113,7 @@ public class CreateNewActorPanel extends CreateStructuralElementPanel {
 		
 		if (isMessageEnabled && !isValid && errorMsg != null){
 
-			JDialog.setDefaultLookAndFeelDecorated(true);
-
-			JOptionPane.showMessageDialog(
-					null,  
-					errorMsg,
-					"Warning",
-					JOptionPane.WARNING_MESSAGE);	
+			UserInterfaceHelpers.showWarningDialog( errorMsg );
 		}
 		
 		return isValid;
@@ -147,6 +142,8 @@ public class CreateNewActorPanel extends CreateStructuralElementPanel {
 
     Change history:
     #025 31-MAY-2016: Add new menu and dialog to add a new actor to package under development (F.J.Chadburn)
+    #029 01-JUN-2016: Add Warning Dialog helper to UserInterfaceHelpers (F.J.Chadburn)
+    #030 01-JUN-2016: Improve legal name checking across helpers (F.J.Chadburn)
     
     This file is part of SysMLHelperPlugin.
 

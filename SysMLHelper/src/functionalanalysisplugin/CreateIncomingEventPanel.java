@@ -2,6 +2,7 @@ package functionalanalysisplugin;
 
 import generalhelpers.GeneralHelpers;
 import generalhelpers.Logger;
+import generalhelpers.UserInterfaceHelpers;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -14,9 +15,7 @@ import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JCheckBox;
-import javax.swing.JDialog;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
@@ -487,67 +486,67 @@ public class CreateIncomingEventPanel extends CreateTracedElementPanel {
 		String errorMessage = null;
 		boolean isValid = true;
 		
-		if (!GeneralHelpers.isElementNameUnique(
-				m_ChosenNameTextField.getText(), 
+		String theChosenName = m_ChosenNameTextField.getText();
+		String theAttributeName = m_AttributeNameTextField.getText();
+		
+		boolean isLegalName = GeneralHelpers.isLegalName( theChosenName );
+		
+		if (!isLegalName){
+			
+			errorMessage = theChosenName + " is not legal as an identifier representing an executable event\n";				
+			isValid = false;
+			
+		} else if (!GeneralHelpers.isElementNameUnique(
+				theChosenName, 
 				"Event", 
 				m_PackageUnderDev.getProject(), 
 				1)){
 
-			errorMessage = "Unable to proceed as the event name '" + m_ChosenNameTextField.getText() + "' is not unique";
+			errorMessage = "Unable to proceed as the event name '" + theChosenName + "' is not unique";
 			isValid = false;
-		}		
-
-		if (m_AttributeCheckBox.isSelected()){
 			
-			String theAttributeName = m_AttributeNameTextField.getText();
+		} else if (m_AttributeCheckBox.isSelected()){
 			
 			Logger.writeLine("An attribute is needed, chosen name was " + theAttributeName);
+			
+			boolean isLegalAttributeName = GeneralHelpers.isLegalName( theAttributeName );
+			
+			if (!isLegalAttributeName){
+				
+				errorMessage = theChosenName + " is not legal as an identifier representing an executable attribute\n";				
+				isValid = false;
 
-			if (!GeneralHelpers.isElementNameUnique(
+			} else if (!GeneralHelpers.isElementNameUnique(
 					theAttributeName, 
 					"Attribute", 
 					m_TargetBlock, 
 					0)){
 
-				if (errorMessage != null){
-					errorMessage += "\nand the attribute name  '" + theAttributeName + "' is not unique";
-				} else {
-					errorMessage = "Unable to proceed as the attribute name '" + theAttributeName + "' is not unique";
-				}
+				errorMessage = "Unable to proceed as the attribute name '" + theAttributeName + "' is not unique";
 				isValid = false;
 			}
-			
-			if (m_CheckOperationCheckBox.isSelected()){
 				
-				String theCheckOpName = determineBestCheckOperationNameFor( m_TargetBlock, theAttributeName );
-				
-				Logger.writeLine("A check ooperation is needed, chosen name was " + theCheckOpName);
+		} else if (m_CheckOperationCheckBox.isSelected()){
 
-				if (!GeneralHelpers.isElementNameUnique(
-						theCheckOpName, 
-						"Operation", 
-						m_TargetBlock, 
-						0)){
+			String theCheckOpName = determineBestCheckOperationNameFor( m_TargetBlock, theAttributeName );
 
-					if (errorMessage != null){
-						errorMessage += "\nand the check operation name  '" + theCheckOpName + "' is not unique";
-					} else {
-						errorMessage = "Unable to proceed as the check operation name '" + theCheckOpName + "' is not unique";
-					}
-					isValid = false;
-				}
+			Logger.writeLine("A check operation is needed, chosen name was " + theCheckOpName);
+
+			if (!GeneralHelpers.isElementNameUnique(
+					theCheckOpName, 
+					"Operation", 
+					m_TargetBlock, 
+					0)){
+
+				errorMessage = "Unable to proceed as the check operation name '" + theCheckOpName + "' is not unique";
+				isValid = false;
 			}
 		}
+		
 
 		if (isMessageEnabled && !isValid && errorMessage != null){
 
-			JDialog.setDefaultLookAndFeelDecorated(true);
-
-			JOptionPane.showMessageDialog(
-					null,  
-					errorMessage,
-					"Warning",
-					JOptionPane.WARNING_MESSAGE);	
+			UserInterfaceHelpers.showWarningDialog( errorMessage );
 		}
 		
 		return isValid;
@@ -626,6 +625,8 @@ public class CreateIncomingEventPanel extends CreateTracedElementPanel {
     Change history:
     #022 30-MAY-2016: Improved handling and validation of event/operation creation by adding new forms (F.J.Chadburn)
     #024 30-MAY-2016: Check box to allow user to choose whether to add the check operation (F.J.Chadburn) 
+    #029 01-JUN-2016: Add Warning Dialog helper to UserInterfaceHelpers (F.J.Chadburn)
+    #030 01-JUN-2016: Improve legal name checking across helpers (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

@@ -2,14 +2,12 @@ package functionalanalysisplugin;
 
 import generalhelpers.GeneralHelpers;
 import generalhelpers.Logger;
+import generalhelpers.UserInterfaceHelpers;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.JDialog;
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-
 import com.telelogic.rhapsody.core.*;
 
 public class OperationCreator {
@@ -22,7 +20,7 @@ public class OperationCreator {
     	
     	for (IRPGraphElement irpGraphElement : theSelectedGraphEls) {
     		IRPPackage forPackageUnderDev = FunctionalAnalysisSettings.getPackageUnderDev( FunctionalAnalysisPlugin.getActiveProject() );
-			createOutgoingEventFor( irpGraphElement, forPackageUnderDev);
+			createSystemOperationFor( irpGraphElement, forPackageUnderDev);
 		}
     }
     
@@ -328,15 +326,8 @@ public class OperationCreator {
 			}		
 			
 		} else {
-			Logger.writeLine("Warning: This operation only works if you right-click a «TestDriver» block");
-			
-		    JDialog.setDefaultLookAndFeelDecorated(true);
-		    
-		    JOptionPane.showMessageDialog(
-		    		null,  
-		    		"This operation only works if you right-click a «TestDriver» block",
-		    		"Warning",
-		    		JOptionPane.WARNING_MESSAGE);		    
+			UserInterfaceHelpers.showWarningDialog(
+					"This operation only works if you right-click a «TestDriver» block");	    
 		}
 		
 		return theOp;
@@ -353,6 +344,7 @@ public class OperationCreator {
     #012 08-MAY-2016: Fix Send event without value plus re-word check box titles (F.J.Chadburn)
     #019 15-MAY-2016: Improvements to Functional Analysis Block default naming approach (F.J.Chadburn)
     #022 30-MAY-2016: Improved handling and validation of event/operation creation by adding new forms (F.J.Chadburn)
+    #029 01-JUN-2016: Add Warning Dialog helper to UserInterfaceHelpers (F.J.Chadburn)
     
     This file is part of SysMLHelperPlugin.
 
