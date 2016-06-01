@@ -27,6 +27,20 @@ public class GeneralHelpers {
 		Logger.writeLine("---------------------------"); 
 	}
 	
+	public static boolean isLegalName(String theName){
+		
+		String regEx = "^(([a-zA-Z_][a-zA-Z0-9_]*)|(operator.+))$";
+		
+		boolean isLegal = theName.matches( regEx );
+		
+		if (!isLegal){
+			Logger.writeLine("Warning, detected that " + theName 
+					+ " is not a legal name as it does not conform to the regex=" + regEx);
+		}
+		
+		return isLegal;
+	}
+	
 	public static String toLegalClassName(String theInput) {
 		
 		StringBuilder nameBuilder = new StringBuilder(theInput.length());    
@@ -480,6 +494,7 @@ public class GeneralHelpers {
     #007 05-MAY-2016: Move FileHelper into generalhelpers and remove duplicate class (F.J.Chadburn)
     #010 08-MAY-2016: Remove white-space from actor names (F.J.Chadburn)
     #022 30-MAY-2016: Improved handling and validation of event/operation creation by adding new forms (F.J.Chadburn) 
+    #030 01-JUN-2016: Improve legal name checking across helpers (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

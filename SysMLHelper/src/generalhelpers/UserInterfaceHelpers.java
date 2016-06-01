@@ -23,6 +23,19 @@ public class UserInterfaceHelpers {
 		return (answer == JOptionPane.YES_OPTION);
 	}
 	
+	public static void showWarningDialog(String theMsg){
+		
+		Logger.writeLine("Warning: " + theMsg);
+		
+	    JDialog.setDefaultLookAndFeelDecorated(true);
+	    
+	    JOptionPane.showMessageDialog(
+	    		null,  
+	    		theMsg,
+	    		"Warning",
+	    		JOptionPane.WARNING_MESSAGE);	
+	}
+	
 	public static IRPModelElement launchDialogToSelectElement(
 			List<IRPModelElement> inList, String messageToDisplay, Boolean isFullPathRequested){
 		
@@ -67,6 +80,7 @@ public class UserInterfaceHelpers {
     #003 09-APR-2016: Added double-click UC to open ACT (F.J.Chadburn)
     #004 10-APR-2016: Re-factored projects into single workspace (F.J.Chadburn)
     #017 11-MAY-2016: Double-click now works with both nested and hyper-linked diagrams (F.J.Chadburn)
+    #029 01-JUN-2016: Add Warning Dialog helper to UserInterfaceHelpers (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 
