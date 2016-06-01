@@ -52,3 +52,10 @@ RELEASE 2.0.7 (30-MAY-2016)
 ----------------------------------------------------------------------------------
 RELEASE 2.0.8 (31-MAY-2016)
 ----------------------------------------------------------------------------------
+#028 01-JUN-2016: Add new menu to create a stand-alone attribute owned by the system (F.J.Chadburn)
+#029 01-JUN-2016: Add Warning Dialog helper to UserInterfaceHelpers (F.J.Chadburn)
+#030 01-JUN-2016: Improve legal name checking across helpers (F.J.Chadburn)
+#031 01-JUN-2016: Scroll pane added for readability of requirement text on panels (F.J.Chadburn)
+----------------------------------------------------------------------------------
+RELEASE 2.0.9 (01-JUN-2016)
+----------------------------------------------------------------------------------
