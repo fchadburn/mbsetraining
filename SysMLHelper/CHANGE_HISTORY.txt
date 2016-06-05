@@ -59,3 +59,9 @@ RELEASE 2.0.8 (31-MAY-2016)
 ----------------------------------------------------------------------------------
 RELEASE 2.0.9 (01-JUN-2016)
 ----------------------------------------------------------------------------------
+#032 05-JUN-2016: Populate call operation/event actions on diagram check-box added (F.J.Chadburn)
+#033 05-JUN-2016: Add support for creation of operations and events from raw requirement selection (F.J.Chadburn)
+#034 05-JUN-2016: Re-factored design to move static constructors into appropriate panel class (F.J.Chadburn)
+----------------------------------------------------------------------------------
+RELEASE 2.0.10 (05-JUN-2016)
+----------------------------------------------------------------------------------
