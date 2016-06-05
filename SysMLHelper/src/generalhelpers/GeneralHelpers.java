@@ -1,7 +1,9 @@
 package generalhelpers;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -423,18 +425,53 @@ public class GeneralHelpers {
 		return theADs;
 	}
 	
-	public static List<IRPModelElement> findElementsIn(List<IRPModelElement> theList, String withMetaClass){
+	public static Set<IRPModelElement> findModelElementsIn(
+			List<IRPGraphElement> theGraphElementList, String withMetaClass){
+		
+		Set<IRPModelElement> theFilteredSet = new HashSet<IRPModelElement>();
+		
+		for (IRPGraphElement theGraphEl : theGraphElementList) {
+			
+			IRPModelElement theEl = theGraphEl.getModelObject();
+
+			if (theEl != null && theEl.getMetaClass().equals( withMetaClass )){
+				theFilteredSet.add( theEl );
+			}
+		}
+		
+		return theFilteredSet;
+	}
+	
+	public static List<IRPModelElement> findElementsIn(
+			List<IRPModelElement> theModelElementList, String withMetaClass){
 		
 		List<IRPModelElement> theFilteredList = new ArrayList<IRPModelElement>();
 		
-		for (IRPModelElement theEl : theList) {
-			Logger.writeLine(theEl, "is in list");
-			if (theEl.getMetaClass().equals(withMetaClass)){
+		for (IRPModelElement theEl : theModelElementList) {
+
+			if (theEl.getMetaClass().equals( withMetaClass )){
 				theFilteredList.add( theEl );
 			}
 		}
 		
 		return theFilteredList;
+	}
+	
+	public static boolean doUnderlyingModelElementsIn(
+			List<IRPGraphElement> theGraphElementList, 
+            String haveTheMetaClass){
+		
+		boolean result = true;
+		
+		for (IRPGraphElement theGraphEl : theGraphElementList) {
+			IRPModelElement theEl = theGraphEl.getModelObject();
+
+			if (theEl != null && !theEl.getMetaClass().equals( haveTheMetaClass )){
+				result = false;
+			}
+		}
+		
+		return result;
 	}
 	
 	public static boolean isElementNameUnique(
@@ -495,6 +532,7 @@ public class GeneralHelpers {
     #010 08-MAY-2016: Remove white-space from actor names (F.J.Chadburn)
     #022 30-MAY-2016: Improved handling and validation of event/operation creation by adding new forms (F.J.Chadburn) 
     #030 01-JUN-2016: Improve legal name checking across helpers (F.J.Chadburn)
+    #033 05-JUN-2016: Add support for creation of operations and events from raw requirement selection (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

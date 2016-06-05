@@ -1,6 +1,5 @@
 package generalhelpers;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -9,10 +8,10 @@ import com.telelogic.rhapsody.core.*;
 
 public class TraceabilityHelper {
 
-	public static List<IRPRequirement> getRequirementsThatTraceFrom(
-			IRPModelElement theElement){
+	public static Set<IRPRequirement> getRequirementsThatTraceFrom(
+			IRPModelElement theElement, boolean withWarning){
 		
-		List<IRPRequirement> theReqts = new ArrayList<IRPRequirement>();
+		Set<IRPRequirement> theReqts = new HashSet<IRPRequirement>();
 		
 		@SuppressWarnings("unchecked")
 		List<IRPDependency> theExistingDeps = theElement.getDependencies().toList();
@@ -22,7 +21,18 @@ public class TraceabilityHelper {
 			IRPModelElement theDependsOn = theDependency.getDependsOn();
 			
 			if (theDependsOn != null && theDependsOn instanceof IRPRequirement){
-				theReqts.add( (IRPRequirement) theDependsOn );
+				
+				IRPRequirement theReqt = (IRPRequirement)theDependsOn; 
+				
+				if (!theReqts.contains( theReqt )){
+					
+					theReqts.add( (IRPRequirement) theDependsOn );
+					
+				} else if (withWarning){
+					
+					Logger.writeLine( "Duplicate dependency to " + Logger.elementInfo( theDependsOn ) + 
+							" was found on " + Logger.elementInfo( theElement ));
+				} 			
 			}
 		}
 		
@@ -60,7 +70,8 @@ public class TraceabilityHelper {
     #006 02-MAY-2016: Add FunctionalAnalysisPkg helper support (F.J.Chadburn)
     #013 10-MAY-2016: Add support for sequence diagram req't and verification relation population (F.J.Chadburn)
     #022 30-MAY-2016: Improved handling and validation of event/operation creation by adding new forms (F.J.Chadburn) 
-    
+    #033 05-JUN-2016: Add support for creation of operations and events from raw requirement selection (F.J.Chadburn)
+
     This file is part of SysMLHelperPlugin.
 
     SysMLHelperPlugin is free software: you can redistribute it and/or modify
