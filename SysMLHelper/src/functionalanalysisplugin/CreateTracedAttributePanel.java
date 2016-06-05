@@ -7,6 +7,7 @@ import generalhelpers.UserInterfaceHelpers;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.util.List;
+import java.util.Set;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -25,12 +26,46 @@ public class CreateTracedAttributePanel extends CreateTracedElementPanel {
 	private static final long serialVersionUID = 1L;
 	
 	protected JTextField m_InitialValueTextField = null;
-    
+ 
+	public static void createSystemAttributesFor(
+			IRPProject theActiveProject,
+			List<IRPGraphElement> theSelectedGraphEls) {
+		
+		Set<IRPModelElement> theMatchingEls = 
+				GeneralHelpers.findModelElementsIn( theSelectedGraphEls, "Requirement" );
+		
+		// cast to IRPRequirement
+		@SuppressWarnings("unchecked")
+		Set<IRPRequirement> theSelectedReqts = (Set<IRPRequirement>)(Set<?>) theMatchingEls;
+		
+		if (GeneralHelpers.doUnderlyingModelElementsIn( theSelectedGraphEls, "Requirement" )){
+			
+			// only requirements are selected hence assume only a single operation is needed
+			createSystemAttributeFor( 
+					theSelectedGraphEls.get(0), theSelectedReqts, theActiveProject );
+		} else {
+			
+			// launch a dialog for each selected element that is not a requirement
+			for (IRPGraphElement theGraphEl : theSelectedGraphEls) {
+				
+				IRPModelElement theModelObject = theGraphEl.getModelObject();
+				
+				if (theModelObject != null && !(theModelObject instanceof IRPRequirement)){
+					
+					// only launch a dialog for non requirement elements
+					createSystemAttributeFor( 
+							theGraphEl, theSelectedReqts, theActiveProject );
+				}		
+			}
+		}
+	}
+	
 	public CreateTracedAttributePanel(
 			IRPGraphElement forSourceGraphElement, 
+			final Set<IRPRequirement> withReqtsAlsoAdded,
 			IRPClassifier onTargetBlock) {
 		
-		super(forSourceGraphElement, onTargetBlock);
+		super(forSourceGraphElement, withReqtsAlsoAdded, onTargetBlock);
 		
 		IRPModelElement theModelObject = m_SourceGraphElement.getModelObject();
 		
@@ -56,7 +91,7 @@ public class CreateTracedAttributePanel extends CreateTracedElementPanel {
 		JPanel thePageStartPanel = new JPanel();
 		thePageStartPanel.setLayout( new BoxLayout( thePageStartPanel, BoxLayout.X_AXIS ) );
 		
-		JPanel theNamePanel = createChosenNamePanel( theProposedName );
+		JPanel theNamePanel = createChosenNamePanelWith( "Create an attribute called:  ", theProposedName );
 		theNamePanel.setAlignmentX(LEFT_ALIGNMENT);
 		thePageStartPanel.add( theNamePanel );
 		thePageStartPanel.add( theInitialValuePanel );
@@ -66,7 +101,7 @@ public class CreateTracedAttributePanel extends CreateTracedElementPanel {
 		add( createOKCancelPanel(), BorderLayout.PAGE_END );
 	}
 	
-	public JPanel createInitialValuePanel(){
+	private JPanel createInitialValuePanel(){
 		
 		JLabel theLabel =  new JLabel(" with the initial value:  ");
 		
@@ -83,65 +118,37 @@ public class CreateTracedAttributePanel extends CreateTracedElementPanel {
 		return thePanel;
 	}
 
-	public JPanel createChosenNamePanel(
-			String theProposedEventName ){
-		
-		JLabel theLabel =  new JLabel("Create an attribute called:  ");
-		
-		m_ChosenNameTextField = new JTextField( theProposedEventName.length() );
-		m_ChosenNameTextField.setText( theProposedEventName );
-		m_ChosenNameTextField.setPreferredSize( new Dimension( 300,20 ) );
-		m_ChosenNameTextField.setMaximumSize( new Dimension( 300,20 ) );
+	private static void createSystemAttributeFor(
+			final IRPGraphElement selectedDiagramEl, 
+			final Set<IRPRequirement> withReqtsAlsoAdded,
+			final IRPProject inProject){
 
-		JPanel thePanel = new JPanel();
-		thePanel.setLayout( new BoxLayout(thePanel, BoxLayout.X_AXIS ) );
-		
-		thePanel.add( theLabel );
-		thePanel.add( m_ChosenNameTextField );
-		
-		return thePanel;
-	}
+		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 
-	public static void createSystemAttributeFor(
-			final IRPProject forProject,
-			List<IRPGraphElement> theSelectedGraphEls ){
-		
-		int numberOfSelectedEls = theSelectedGraphEls.size();
-		
-		if( numberOfSelectedEls==1 ){
-			
-			final IRPGraphElement selectedDiagramEl = theSelectedGraphEls.get(0);
-			
-			javax.swing.SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				IRPClassifier theLogicalSystemBlock = FunctionalAnalysisSettings.getBlockUnderDev( inProject );
 
-				@Override
-				public void run() {
-					IRPClassifier theLogicalSystemBlock = FunctionalAnalysisSettings.getBlockUnderDev( forProject );
-					
-					JFrame.setDefaultLookAndFeelDecorated( true );
-					
-					JFrame frame = new JFrame(
-							"Create an attribute on " + theLogicalSystemBlock.getUserDefinedMetaClass() 
-							+ " called " + theLogicalSystemBlock.getName());
-					
-					frame.setDefaultCloseOperation( JFrame.DISPOSE_ON_CLOSE );
-					
-					CreateTracedAttributePanel thePanel = new CreateTracedAttributePanel(
-							selectedDiagramEl, 
-							theLogicalSystemBlock);
+				JFrame.setDefaultLookAndFeelDecorated( true );
 
-					frame.setContentPane( thePanel );
-					frame.pack();
-					frame.setLocationRelativeTo( null );
-					frame.setVisible( true );
-				}
-			});
+				JFrame frame = new JFrame(
+						"Create an attribute on " + theLogicalSystemBlock.getUserDefinedMetaClass() 
+						+ " called " + theLogicalSystemBlock.getName());
+
+				frame.setDefaultCloseOperation( JFrame.DISPOSE_ON_CLOSE );
+
+				CreateTracedAttributePanel thePanel = new CreateTracedAttributePanel(
+						selectedDiagramEl, 
+						withReqtsAlsoAdded,
+						theLogicalSystemBlock);
+
+				frame.setContentPane( thePanel );
+				frame.pack();
+				frame.setLocationRelativeTo( null );
+				frame.setVisible( true );
+			}
+		});
 			
-		} else if ( numberOfSelectedEls > 1 ){
-			
-			UserInterfaceHelpers.showWarningDialog(
-					"This operation only works if you select a single graphical element");	
-		}
 	}
 	
 	@Override
@@ -219,7 +226,9 @@ public class CreateTracedAttributePanel extends CreateTracedElementPanel {
 
     Change history:
     #028 01-JUN-2016: Add new menu to create a stand-alone attribute owned by the system (F.J.Chadburn)
-    
+    #033 05-JUN-2016: Add support for creation of operations and events from raw requirement selection (F.J.Chadburn)
+    #034 05-JUN-2016: Re-factored design to move static constructors into appropriate panel class (F.J.Chadburn)
+
     This file is part of SysMLHelperPlugin.
 
     SysMLHelperPlugin is free software: you can redistribute it and/or modify

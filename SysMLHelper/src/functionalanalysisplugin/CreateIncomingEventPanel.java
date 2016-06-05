@@ -10,16 +10,20 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JCheckBox;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+
+import requirementsanalysisplugin.RequirementsAnalysisPlugin;
 
 import com.telelogic.rhapsody.core.*;
 
@@ -30,6 +34,7 @@ public class CreateIncomingEventPanel extends CreateTracedElementPanel {
 	 */
 	private static final long serialVersionUID = 1L;
 
+	private JCheckBox m_EventActionIsNeededCheckBox;
 	private JCheckBox m_CreateSendEvent;
 	private JCheckBox m_AttributeCheckBox;
 	private JCheckBox m_CheckOperationCheckBox;
@@ -39,14 +44,48 @@ public class CreateIncomingEventPanel extends CreateTracedElementPanel {
 	
 	private IRPPackage m_PackageUnderDev;
 	private IRPActor m_SourceActor;
+
+	public static void createIncomingEventsFor(
+			IRPProject theActiveProject,
+			List<IRPGraphElement> theSelectedGraphEls) {
+		
+		Set<IRPModelElement> theMatchingEls = 
+				GeneralHelpers.findModelElementsIn( theSelectedGraphEls, "Requirement" );
+		
+		// cast to IRPRequirement
+		@SuppressWarnings("unchecked")
+		Set<IRPRequirement> theSelectedReqts = (Set<IRPRequirement>)(Set<?>) theMatchingEls;
+		
+		if (GeneralHelpers.doUnderlyingModelElementsIn( theSelectedGraphEls, "Requirement" )){
+			
+			// only requirements are selected hence assume only a single operation is needed
+			createIncomingEventFor( 
+					theSelectedGraphEls.get(0), theSelectedReqts, theActiveProject );
+		} else {
+			
+			// launch a dialog for each selected element that is not a requirement
+			for (IRPGraphElement theGraphEl : theSelectedGraphEls) {
+				
+				IRPModelElement theModelObject = theGraphEl.getModelObject();
+				
+				if (theModelObject != null && !(theModelObject instanceof IRPRequirement)){
+					
+					// only launch a dialog for non requirement elements
+					createIncomingEventFor(
+							theGraphEl, theSelectedReqts, theActiveProject );
+				}		
+			}
+		}
+	}
 	
 	public CreateIncomingEventPanel(
 			IRPGraphElement forSourceGraphElement, 
 			IRPClassifier onTargetBlock,
+			Set<IRPRequirement> withReqtsAlsoAdded,
 			IRPActor theSourceActor, 
-			IRPPackage thePackageUnderDev) {
+			IRPPackage thePackageUnderDev ){
 		
-		super( forSourceGraphElement, onTargetBlock );
+		super( forSourceGraphElement, withReqtsAlsoAdded, onTargetBlock );
 		
 		m_SourceActor = theSourceActor;
 		m_PackageUnderDev = thePackageUnderDev;
@@ -62,7 +101,15 @@ public class CreateIncomingEventPanel extends CreateTracedElementPanel {
 		setLayout( new BorderLayout(10,10) );
 		setBorder( BorderFactory.createEmptyBorder( 10, 10, 10, 10 ) );
 		
-		add( createEventNamingPanel( theProposedName ), BorderLayout.PAGE_START );
+		m_EventActionIsNeededCheckBox = new JCheckBox("Populate on diagram?");
+		m_EventActionIsNeededCheckBox.setSelected(false);
+		
+		JPanel thePageStartPanel = new JPanel();
+		thePageStartPanel.setLayout( new BoxLayout( thePageStartPanel, BoxLayout.X_AXIS ) );
+		thePageStartPanel.add( createChosenNamePanelWith( "Create an event called:  ", theProposedName ) );
+		thePageStartPanel.add( m_EventActionIsNeededCheckBox );
+				
+		add( thePageStartPanel, BorderLayout.PAGE_START );
 		
 		JPanel theCenterPanel = new JPanel();
 		theCenterPanel.setLayout( new BoxLayout( theCenterPanel, BoxLayout.Y_AXIS ) );
@@ -105,10 +152,76 @@ public class CreateIncomingEventPanel extends CreateTracedElementPanel {
 		
 		add( theCenterPanel, BorderLayout.WEST );
 		add( createOKCancelPanel(), BorderLayout.PAGE_END );
+
+		m_ChosenNameTextField.getDocument().addDocumentListener(
+				new DocumentListener() {
+
+					@Override
+					public void changedUpdate(DocumentEvent arg0) {
+						updateNames();					
+					}
+
+					@Override
+					public void insertUpdate(DocumentEvent arg0) {
+						updateNames();
+					}
+
+					@Override
+					public void removeUpdate(DocumentEvent arg0) {
+						updateNames();
+					}	
+				});
 		
 		updateNames();
 	}
 
+	private static void createIncomingEventFor(
+			final IRPGraphElement theSourceGraphElement, 
+			final Set<IRPRequirement> withReqtsAlsoAdded,
+			final IRPProject inProject){
+		
+		final IRPInstance partUnderDev = FunctionalAnalysisSettings.getPartUnderDev( inProject );
+		final IRPPackage forPackageUnderDev = FunctionalAnalysisSettings.getPackageUnderDev( inProject );
+		
+		final IRPModelElement theActor = 
+				GeneralHelpers.launchDialogToSelectElement(
+						getActorsRelatedTo( partUnderDev ), "Select Actor", true);
+		
+		if (theActor != null && theActor instanceof IRPActor){
+
+			final IRPClassifier theLogicalSystem = partUnderDev.getOtherClass();
+			
+			javax.swing.SwingUtilities.invokeLater(new Runnable() {
+
+				@Override
+				public void run() {
+					
+					JFrame.setDefaultLookAndFeelDecorated( true );
+					
+					JFrame frame = new JFrame( "Create an incoming event from " + Logger.elementInfo( theActor ));
+					
+					frame.setDefaultCloseOperation( JFrame.DISPOSE_ON_CLOSE );
+
+					CreateIncomingEventPanel thePanel = 
+							new CreateIncomingEventPanel(
+									theSourceGraphElement, 
+									theLogicalSystem, 
+									withReqtsAlsoAdded,
+									(IRPActor)theActor, 
+									forPackageUnderDev );
+
+					frame.setContentPane( thePanel );
+					
+					frame.pack();
+					frame.setLocationRelativeTo( null );
+					frame.setVisible( true );
+				}
+			});
+		} else {
+			Logger.writeLine("No actor was selected");
+		}
+	}
+	
 	private String determineBestEventName(
 			IRPClassifier onTargetBlock,
 			final String theSourceText) {
@@ -159,7 +272,7 @@ public class CreateIncomingEventPanel extends CreateTracedElementPanel {
 				"Add a '" + determineBestCheckOperationNameFor( m_TargetBlock, m_AttributeNameTextField.getText() ) 
 				+ "' operation to the block that returns the attribute value");
 	}
-	
+	/*
 	private JPanel createEventNamingPanel( 
 			String theProposedEventName ){
 	
@@ -194,7 +307,7 @@ public class CreateIncomingEventPanel extends CreateTracedElementPanel {
 		thePanel.add( m_ChosenNameTextField );
 	
 		return thePanel;
-	}
+	}*/
 	
 	private JPanel createAttributeNamePanel(
 			String theProposedName ){
@@ -613,9 +726,46 @@ public class CreateIncomingEventPanel extends CreateTracedElementPanel {
 			
 			bleedColorToElementsRelatedTo( m_SourceGraphElement );
 			
+			if( m_EventActionIsNeededCheckBox.isSelected() ){
+				populateReceiveEventActionOnDiagram( theEvent );
+			}
+			
+			theEvent.highLightElement();
+			
 		} else {
 			Logger.writeLine("Error in CreateIncomingEventPanel.performAction, checkValidity returned false");
 		}	
+	}
+	
+	private void populateReceiveEventActionOnDiagram(
+			IRPEvent theEvent) {
+		
+		if (m_SourceGraphElement instanceof IRPGraphNode){
+			GraphNodeInfo theNodeInfo = new GraphNodeInfo( (IRPGraphNode) m_SourceGraphElement );
+			
+			int x = theNodeInfo.getTopLeftX() + 20;
+			int y = theNodeInfo.getTopLeftY() + 20;
+			
+			IRPDiagram theDiagram = m_SourceGraphElement.getDiagram();
+							
+			if (theDiagram instanceof IRPActivityDiagram){
+				
+				IRPActivityDiagram theAD = (IRPActivityDiagram)theDiagram;
+				
+				IRPFlowchart theFlowchart = theAD.getFlowchart();
+				
+				IRPAcceptEventAction theAcceptEvent = 
+						(IRPAcceptEventAction) theFlowchart.addNewAggr(
+								"AcceptEventAction", theEvent.getName() );
+				
+				theAcceptEvent.setEvent( theEvent );			
+				theFlowchart.addNewNodeForElement( theAcceptEvent, x, y, 300, 40 );
+				
+				RequirementsAnalysisPlugin.getRhapsodyApp().highLightElement( theAcceptEvent );
+			} else {
+				Logger.writeLine("Error in CreateOperationPanel.performAction, expected an IRPActivityDiagram");
+			}
+		}
 	}
 }
 
@@ -627,6 +777,9 @@ public class CreateIncomingEventPanel extends CreateTracedElementPanel {
     #024 30-MAY-2016: Check box to allow user to choose whether to add the check operation (F.J.Chadburn) 
     #029 01-JUN-2016: Add Warning Dialog helper to UserInterfaceHelpers (F.J.Chadburn)
     #030 01-JUN-2016: Improve legal name checking across helpers (F.J.Chadburn)
+    #032 05-JUN-2016: Populate call operation/event actions on diagram check-box added (F.J.Chadburn)
+    #033 05-JUN-2016: Add support for creation of operations and events from raw requirement selection (F.J.Chadburn)
+    #034 05-JUN-2016: Re-factored design to move static constructors into appropriate panel class (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

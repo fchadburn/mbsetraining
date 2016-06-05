@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -35,7 +36,7 @@ public class RequirementSelectionPanel extends JPanel {
 	private Map<IRPRequirement, JCheckBox> m_CheckBoxMap = new HashMap<IRPRequirement, JCheckBox>();
 
 	public RequirementSelectionPanel(
-			List<IRPRequirement> theReqts) {
+			Set<IRPRequirement> theReqts) {
 		
 		super();
 
@@ -66,7 +67,7 @@ public class RequirementSelectionPanel extends JPanel {
 		add( theBox );
 	}
 	
-	private JPanel createContent(List<IRPRequirement> theReqts){
+	private JPanel createContent(Set<IRPRequirement> theReqts){
 		
 	    JPanel thePanel = new JPanel();
 	    
@@ -147,6 +148,7 @@ public class RequirementSelectionPanel extends JPanel {
     Change history:
     #022 30-MAY-2016: Improved handling and validation of event/operation creation by adding new forms (F.J.Chadburn)
     #031 01-JUN-2016: Scroll pane added for readability of requirement text on panels (F.J.Chadburn)
+    #033 05-JUN-2016: Add support for creation of operations and events from raw requirement selection (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

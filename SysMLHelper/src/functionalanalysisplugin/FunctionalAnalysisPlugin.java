@@ -75,7 +75,7 @@ public class FunctionalAnalysisPlugin extends RPUserPlugin {
 
 				if (!theSelectedGraphEls.isEmpty()){
 					try {
-						OperationCreator.createIncomingEventsFor( theActiveProject, theSelectedGraphEls );
+						CreateIncomingEventPanel.createIncomingEventsFor( theActiveProject, theSelectedGraphEls );
 
 					} catch (Exception e) {
 						Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking OperationCreator.createIncomingEventsFor");
@@ -86,7 +86,7 @@ public class FunctionalAnalysisPlugin extends RPUserPlugin {
 
 				if (!theSelectedGraphEls.isEmpty()){
 					try {
-						OperationCreator.createSystemOperationsFor( theActiveProject, theSelectedGraphEls );
+						CreateOperationPanel.createSystemOperationsFor( theActiveProject, theSelectedGraphEls );
 
 					} catch (Exception e) {
 						Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking OperationCreator.createSystemOperationsFor");
@@ -97,7 +97,7 @@ public class FunctionalAnalysisPlugin extends RPUserPlugin {
 
 				if (!theSelectedGraphEls.isEmpty()){
 					try {
-						OperationCreator.createOutgoingEventsFor( theActiveProject, theSelectedGraphEls );
+						CreateOutgoingEventPanel.createOutgoingEventsFor( theActiveProject, theSelectedGraphEls );
 						
 					} catch (Exception e) {
 						Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking OperationCreator.createOutgoingEventsFor");
@@ -108,7 +108,7 @@ public class FunctionalAnalysisPlugin extends RPUserPlugin {
 
 				if (!theSelectedGraphEls.isEmpty()){
 					try {
-						CreateTracedAttributePanel.createSystemAttributeFor( theActiveProject, theSelectedGraphEls );
+						CreateTracedAttributePanel.createSystemAttributesFor( theActiveProject, theSelectedGraphEls );
 						
 					} catch (Exception e) {
 						Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking CreateTracedAttributePanel.createSystemAttributeFor");
@@ -216,6 +216,7 @@ public class FunctionalAnalysisPlugin extends RPUserPlugin {
     #025 31-MAY-2016: Add new menu and dialog to add a new actor to package under development (F.J.Chadburn)
     #027 31-MAY-2016: Add new menu to launch dialog to copy Activity Diagrams (F.J.Chadburn)
     #028 01-JUN-2016: Add new menu to create a stand-alone attribute owned by the system (F.J.Chadburn)
+    #034 05-JUN-2016: Re-factored design to move static constructors into appropriate panel class (F.J.Chadburn)
     
     This file is part of SysMLHelperPlugin.
 

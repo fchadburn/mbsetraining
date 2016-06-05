@@ -79,7 +79,8 @@ public class SequenceDiagramHelper {
 						int x = top_left_x + 100;
 						int xinc = 300;
 						
-						List<IRPRequirement> theReqtsThatTraceFrom = TraceabilityHelper.getRequirementsThatTraceFrom( theInterfaceItem );
+						Set<IRPRequirement> theReqtsThatTraceFrom = 
+								TraceabilityHelper.getRequirementsThatTraceFrom( theInterfaceItem, true );
 						
 						for (IRPRequirement theReqt : theReqtsThatTraceFrom) {
 							
@@ -246,7 +247,9 @@ public class SequenceDiagramHelper {
 
     Change history:
     #013 10-MAY-2016: (new) Add support for sequence diagram req't and verification relation population (F.J.Chadburn)
-    
+    #032 05-JUN-2016: Populate call operation/event actions on diagram check-box added (F.J.Chadburn)
+    #033 05-JUN-2016: Add support for creation of operations and events from raw requirement selection (F.J.Chadburn)
+
     This file is part of SysMLHelperPlugin.
 
     SysMLHelperPlugin is free software: you can redistribute it and/or modify

@@ -10,12 +10,18 @@ import java.awt.FlowLayout;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
+
+import requirementsanalysisplugin.RequirementsAnalysisPlugin;
 
 import com.telelogic.rhapsody.core.*;
 
@@ -32,6 +38,7 @@ public abstract class CreateTracedElementPanel extends JPanel {
 	
 	public CreateTracedElementPanel(
 			IRPGraphElement forSourceGraphElement, 
+			Set<IRPRequirement> withReqtsAlsoAdded,
 			IRPClassifier onTargetBlock) {
 		
 		super();
@@ -41,9 +48,32 @@ public abstract class CreateTracedElementPanel extends JPanel {
 		
 		IRPModelElement theModelObject = m_SourceGraphElement.getModelObject();
 		
-		List<IRPRequirement> tracedToReqts = TraceabilityHelper.getRequirementsThatTraceFrom( theModelObject );
+		Set<IRPRequirement> tracedToReqts = TraceabilityHelper.getRequirementsThatTraceFrom( theModelObject, true );
+		
+		tracedToReqts.addAll( withReqtsAlsoAdded );
 		
 		m_RequirementsPanel = new RequirementSelectionPanel( tracedToReqts );
+	}
+	
+	public JPanel createChosenNamePanelWith(
+			String theLabelText,
+			String andInitialChosenName ){
+		
+		JPanel thePanel = new JPanel();
+		thePanel.setLayout( new BoxLayout(thePanel, BoxLayout.X_AXIS ) );	
+		
+		JLabel theLabel =  new JLabel( theLabelText );//"Create an operation called:  ");
+		thePanel.add( theLabel );
+		
+		m_ChosenNameTextField = new JTextField();
+		m_ChosenNameTextField.setText( andInitialChosenName );
+		m_ChosenNameTextField.setMinimumSize( new Dimension( 350,20 ) );
+		m_ChosenNameTextField.setPreferredSize( new Dimension( 350,20 ) );
+		m_ChosenNameTextField.setMaximumSize( new Dimension( 350,20 ) );
+		
+		thePanel.add( m_ChosenNameTextField );
+		
+		return thePanel;
 	}
 	
 	// implementation specific provided by parent
@@ -105,7 +135,8 @@ public abstract class CreateTracedElementPanel extends JPanel {
 		return thePanel;
 	}
 	
-	protected static void bleedColorToElementsRelatedTo( IRPGraphElement theGraphEl ){
+	protected static void bleedColorToElementsRelatedTo( 
+			IRPGraphElement theGraphEl ){
 		
 		String theColorSetting = "255,0,0";
 		IRPDiagram theDiagram = theGraphEl.getDiagram();
@@ -132,7 +163,9 @@ public abstract class CreateTracedElementPanel extends JPanel {
 	}
 
 	private static void bleedColorToGraphElsRelatedTo(
-			IRPModelElement theEl, String theColorSetting, IRPDiagram onDiagram){
+			IRPModelElement theEl, 
+			String theColorSetting, 
+			IRPDiagram onDiagram){
 
 		@SuppressWarnings("unchecked")
 		List<IRPGraphElement> theGraphElsRelatedToElement = 
@@ -151,7 +184,8 @@ public abstract class CreateTracedElementPanel extends JPanel {
 	}
 	
 	protected static void addTraceabilityDependenciesTo(
-			IRPModelElement theElement, List<IRPRequirement> theReqtsToAdd){
+			IRPModelElement theElement, 
+			List<IRPRequirement> theReqtsToAdd){
 	
 		IRPStereotype theDependencyStereotype = 
 				FunctionalAnalysisSettings.getStereotypeForFunctionTracing(theElement.getProject());
@@ -167,6 +201,59 @@ public abstract class CreateTracedElementPanel extends JPanel {
 			Logger.writeLine("Error in addTraceabilityDependenciesTo, unable to find stereotype to apply to dependencies");
 		}
 	}
+	
+	protected static List<IRPModelElement> getActorsRelatedTo(
+			IRPInstance theLogicalSystemPart){
+		
+		List<IRPModelElement> theActors = new ArrayList<IRPModelElement>();
+		
+		// get the logical system part and block
+		@SuppressWarnings("unchecked")
+		List<IRPInstance> theParts = 
+				theLogicalSystemPart.getOwner().getNestedElementsByMetaClass("Part", 0).toList();
+		
+		for (IRPInstance thePart : theParts) {
+			
+			IRPClassifier theOtherClass = thePart.getOtherClass();
+			
+			if (theOtherClass instanceof IRPActor){
+				theActors.add((IRPActor) theOtherClass);
+			}
+		}
+		
+		return theActors;
+	}
+	
+	protected void populateCallOperationActionOnDiagram(
+			IRPOperation theOperation) {
+		
+		if (m_SourceGraphElement instanceof IRPGraphNode){
+			GraphNodeInfo theNodeInfo = new GraphNodeInfo( (IRPGraphNode) m_SourceGraphElement );
+			
+			int x = theNodeInfo.getTopLeftX() + 20;
+			int y = theNodeInfo.getTopLeftY() + 20;
+			
+			IRPDiagram theDiagram = m_SourceGraphElement.getDiagram();
+							
+			if (theDiagram instanceof IRPActivityDiagram){
+				
+				IRPActivityDiagram theAD = (IRPActivityDiagram)theDiagram;
+				
+				IRPFlowchart theFlowchart = theAD.getFlowchart();
+				
+				IRPCallOperation theCallOp = 
+						(IRPCallOperation) theFlowchart.addNewAggr(
+								"CallOperation", theOperation.getName() );
+				
+				theCallOp.setOperation(theOperation);
+				theFlowchart.addNewNodeForElement(theCallOp, x, y, 300, 40);
+				
+				RequirementsAnalysisPlugin.getRhapsodyApp().highLightElement( theCallOp );
+			} else {
+				Logger.writeLine("Error in CreateOperationPanel.performAction, expected an IRPActivityDiagram");
+			}
+		}
+	}
 }
 
 /**
@@ -174,6 +261,9 @@ public abstract class CreateTracedElementPanel extends JPanel {
 
     Change history:
     #022 30-MAY-2016: Improved handling and validation of event/operation creation by adding new forms (F.J.Chadburn) 
+    #032 05-JUN-2016: Populate call operation/event actions on diagram check-box added (F.J.Chadburn)
+    #033 05-JUN-2016: Add support for creation of operations and events from raw requirement selection (F.J.Chadburn)
+    #034 05-JUN-2016: Re-factored design to move static constructors into appropriate panel class (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 
