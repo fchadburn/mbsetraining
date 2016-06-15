@@ -14,11 +14,15 @@ import com.telelogic.rhapsody.core.*;
 
 public class SysMLHelperTriggers extends RPApplicationListener {
 
+	IRPApplication theApp = null;
+	
 	public SysMLHelperTriggers(IRPApplication app) {
 		Logger.writeLine("SysMLHelperPlugin is Loaded - Listening for Events\n"); 
+		theApp = app;
 	}
 
-	public boolean afterAddElement(IRPModelElement modelElement) {
+	public boolean afterAddElement(
+			IRPModelElement modelElement) {
 		
 		boolean doDefault = false;
 
@@ -41,12 +45,14 @@ public class SysMLHelperTriggers extends RPApplicationListener {
 					modelElement.changeTo("Derive Requirement");
 				}			
 			}
-		}
+		} 
 
 		return doDefault;
 	}
 	
-	public static IRPStereotype getStereotypeAppliedTo(IRPModelElement theElement, String thatMatchesRegEx){
+	public static IRPStereotype getStereotypeAppliedTo(
+			IRPModelElement theElement, 
+			String thatMatchesRegEx){
 		
 		IRPStereotype foundStereotype = null;
 		
@@ -84,89 +90,48 @@ public class SysMLHelperTriggers extends RPApplicationListener {
 		boolean theReturn = false;
 		
 		try {	
-			Set<IRPDiagram> allDiagrams = new HashSet<IRPDiagram>();
+			List<IRPModelElement> optionsList = null;
 			
-			Set<IRPDiagram> theHyperLinkedDiagrams = getHyperLinkDiagramsFor(pModelElement);	
-			allDiagrams.addAll(theHyperLinkedDiagrams);
+			if (pModelElement instanceof IRPCallOperation) {
 			
-			Set<IRPDiagram> theNestedDiagrams = getNestedDiagramsFor(pModelElement);
-			allDiagrams.addAll(theNestedDiagrams);
+				IRPCallOperation theCallOp = (IRPCallOperation)pModelElement;
+				
+				IRPInterfaceItem theInterfaceItem = theCallOp.getOperation();
 			
-			List<IRPModelElement> optionsList = new ArrayList<IRPModelElement>();
-			optionsList.addAll( allDiagrams );
+				if (theInterfaceItem instanceof IRPOperation){
+					
+					IRPOperation theOp = (IRPOperation)theInterfaceItem;
+					
+					optionsList = getDiagramsFor( theOp );
+				}
+			}
+			
+			if (optionsList == null){
+				optionsList = getDiagramsFor(pModelElement);
+			}
 			
 			int numberOfDiagrams = optionsList.size();
 			
-			if (numberOfDiagrams==0){
+			if (numberOfDiagrams > 0){
 				
-				if (pModelElement instanceof IRPUseCase){
+				openNestedDiagramDialogFor( optionsList, pModelElement);
 				
-					boolean theAnswer = UserInterfaceHelpers.askAQuestion(
-							"This use case has no nested Activity Diagram. Do you want to create one?");
-						
-					if (theAnswer==true){
-						Logger.writeLine("User chose to create a new activity diagram");
-						NestedActivityDiagram.createNestedActivityDiagram( (IRPUseCase)pModelElement );
-					}
-						
-					theReturn = true; // don't launch the Features  window	
-					
-				} else {
-					theReturn = false; // do default, i.e. open the features dialog
-				}	
+			} else if (pModelElement instanceof IRPUseCase){
 				
-			} else if (numberOfDiagrams==1){
-				
-				IRPDiagram theDiagramToOpen = (IRPDiagram) optionsList.get(0);
-				
-				if (theDiagramToOpen != null){
+				boolean theAnswer = UserInterfaceHelpers.askAQuestion(
+						"This use case has no nested Activity Diagram. Do you want to create one?");
 
-					String theType = theDiagramToOpen.getUserDefinedMetaClass();
-					String theName = theDiagramToOpen.getName();
-					
-					if (theDiagramToOpen instanceof IRPFlowchart){
-					
-						theDiagramToOpen = (IRPDiagram) theDiagramToOpen.getOwner();
-
-						
-					} else if (theDiagramToOpen instanceof IRPActivityDiagram){
-						
-						theType = theDiagramToOpen.getOwner().getUserDefinedMetaClass();
-						theName = theDiagramToOpen.getOwner().getName();	
-					}
-					
-					boolean theAnswer = UserInterfaceHelpers.askAQuestion(
-						"The " + pModelElement.getUserDefinedMetaClass() + " called '" +
-						pModelElement.getName() + "' has an associated " + theType + " called '" + theName + "'.\n" +
-						"Do you want to open it?");
-					
-					if (theAnswer==true){
-						
-						theDiagramToOpen.openDiagram();	
-						theReturn = true; // don't launch the Features  window
-						
-					} else {
-						theReturn = false; // open the features dialog
-					}
+				if (theAnswer==true){
+					Logger.writeLine("User chose to create a new activity diagram");
+					NestedActivityDiagram.createNestedActivityDiagram( (IRPUseCase)pModelElement );
 				}
-				
-			} else if (numberOfDiagrams>1){
-				
-				IRPModelElement theSelection = UserInterfaceHelpers.launchDialogToSelectElement(
-						optionsList, 
-						"The " + pModelElement.getUserDefinedMetaClass() + " called '" +
-						pModelElement.getName() + "' has " + numberOfDiagrams + " associated diagrams.\n" +
-						"Which one do you want to open?",
-						true);
-				
-				if (theSelection != null && theSelection instanceof IRPDiagram){
 
-					IRPDiagram theDiagramToOpen = (IRPDiagram) theSelection;
-					theDiagramToOpen.openDiagram();
-					theReturn = true; // don't launch the Features  window
-				}
-			}
+				theReturn = true; // don't launch the Features  window									
 
+			} else {
+				theReturn = false; // do default, i.e. open the features dialog
+			}	
+			
 		} catch (Exception e) {
 			Logger.writeLine("Unhandled exception in onDoubleClick()");			
 		}
@@ -174,7 +139,8 @@ public class SysMLHelperTriggers extends RPApplicationListener {
 		return theReturn;
 	}
 
-	private static Set<IRPDiagram> getHyperLinkDiagramsFor(IRPModelElement theElement){
+	private static Set<IRPDiagram> getHyperLinkDiagramsFor(
+			IRPModelElement theElement){
 		
 		Set<IRPDiagram> theDiagrams = new HashSet<IRPDiagram>();
 		
@@ -204,7 +170,8 @@ public class SysMLHelperTriggers extends RPApplicationListener {
 		return theDiagrams;
 	}
 	
-	private static Set<IRPDiagram> getNestedDiagramsFor(IRPModelElement pModelElement) {
+	private static Set<IRPDiagram> getNestedDiagramsFor(
+			IRPModelElement pModelElement) {
 		
 		Set<IRPDiagram> theDiagrams = new HashSet<IRPDiagram>();
 
@@ -246,6 +213,90 @@ public class SysMLHelperTriggers extends RPApplicationListener {
 		return false;
 	}
 	
+	private boolean openNestedDiagramDialogFor(
+			List<IRPModelElement> theListOfDiagrams, 
+			IRPModelElement relatedToModelEl) {
+		
+		boolean theReturn = false;
+		
+		try {		
+			int numberOfDiagrams = theListOfDiagrams.size();
+			
+			if( numberOfDiagrams==1 ){
+				
+				IRPDiagram theDiagramToOpen = (IRPDiagram) theListOfDiagrams.get(0);
+				
+				if (theDiagramToOpen != null){
+
+					String theType = theDiagramToOpen.getUserDefinedMetaClass();
+					String theName = theDiagramToOpen.getName();
+					
+					if (theDiagramToOpen instanceof IRPFlowchart){
+					
+						theDiagramToOpen = (IRPDiagram) theDiagramToOpen.getOwner();
+
+						
+					} else if (theDiagramToOpen instanceof IRPActivityDiagram){
+						
+						theType = theDiagramToOpen.getOwner().getUserDefinedMetaClass();
+						theName = theDiagramToOpen.getOwner().getName();	
+					}
+					
+					boolean theAnswer = UserInterfaceHelpers.askAQuestion(
+						"The " + relatedToModelEl.getUserDefinedMetaClass() + " called '" +
+								relatedToModelEl.getName() + "' has an associated " + theType + " called '" + theName + "'.\n" +
+						"Do you want to open it?");
+					
+					if (theAnswer==true){
+						
+						theDiagramToOpen.openDiagram();	
+						theReturn = true; // don't launch the Features  window
+						
+					} else {
+						theReturn = false; // open the features dialog
+					}
+				}
+				
+			} else if ( numberOfDiagrams>1 ){
+				
+				IRPModelElement theSelection = UserInterfaceHelpers.launchDialogToSelectElement(
+						theListOfDiagrams, 
+						"The " + relatedToModelEl.getUserDefinedMetaClass() + " called '" +
+								relatedToModelEl.getName() + "' has " + numberOfDiagrams + " associated diagrams.\n" +
+						"Which one do you want to open?",
+						true);
+				
+				if (theSelection != null && theSelection instanceof IRPDiagram){
+
+					IRPDiagram theDiagramToOpen = (IRPDiagram) theSelection;
+					theDiagramToOpen.openDiagram();
+					theReturn = true; // don't launch the Features  window
+				}
+			}
+
+		} catch (Exception e) {
+			Logger.writeLine("Unhandled exception in onDoubleClick()");			
+		}
+		
+		return theReturn;
+	}
+	
+	private List<IRPModelElement> getDiagramsFor(
+			IRPModelElement theModelEl){
+	
+		Set<IRPDiagram> allDiagrams = new HashSet<IRPDiagram>();
+		
+		Set<IRPDiagram> theHyperLinkedDiagrams = getHyperLinkDiagramsFor(theModelEl);	
+		allDiagrams.addAll(theHyperLinkedDiagrams);
+		
+		Set<IRPDiagram> theNestedDiagrams = getNestedDiagramsFor(theModelEl);
+		allDiagrams.addAll(theNestedDiagrams);
+		
+		List<IRPModelElement> optionsList = new ArrayList<IRPModelElement>();
+		optionsList.addAll( allDiagrams );
+		
+		return optionsList;
+	}	
 }
 
 /**
@@ -256,6 +307,7 @@ public class SysMLHelperTriggers extends RPApplicationListener {
     #003 09-APR-2016: Added double-click UC to open ACT (F.J.Chadburn)
     #004 10-APR-2016: Re-factored projects into single workspace (F.J.Chadburn)
     #017 11-MAY-2016: Double-click now works with both nested and hyper-linked diagrams (F.J.Chadburn)
+    #035 15-JUN-2016: Re-factored SysMLHelperTriggers to make a little more extensible (F.J.Chadburn)
     
     This file is part of SysMLHelperPlugin.
 

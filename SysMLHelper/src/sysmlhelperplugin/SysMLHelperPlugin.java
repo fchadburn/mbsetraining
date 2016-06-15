@@ -15,13 +15,7 @@ public class SysMLHelperPlugin extends RPUserPlugin {
 	static protected IRPApplication m_rhpApplication = null;
 	static protected IRPProject m_rhpProject = null;
 
-	static protected String m_version = "2.0.10 (Under Dev)";
-
-	public static void main(String [] args){
-		IRPModelElement theElement = SysMLHelperPlugin.getRhapsodyApp().getSelectedElement();
-		
-		requirementsanalysisplugin.PopulateRequirementsAnalysisPkg.createRequirementsAnalysisPkg( (IRPProject) theElement ); 	
-	}
+	static protected String m_version = "2.0.11 (Under Dev)";
 	
 	final String legalNotice = 
 			"Copyright (C) 2015-2016  MBSE Training and Consulting Limited (www.executablembse.com)"
@@ -119,7 +113,7 @@ public class SysMLHelperPlugin extends RPUserPlugin {
 						Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking PopulateDesignSynthesisPkg.createDesignSynthesisPkg");
 					}
 				}
-			} else if (menuItem.equals("MBSE Method: General\\Quick hyperlink")){
+			} else if (menuItem.equals("MBSE Method: General Utilities\\Quick hyperlink")){
 
 				try { 
 					IRPHyperLink theHyperLink = (IRPHyperLink) theSelectedEl.addNewAggr("HyperLink", "");
@@ -130,9 +124,18 @@ public class SysMLHelperPlugin extends RPUserPlugin {
 				} catch (Exception e) {
 					Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking MBSE Method: General\\Quick hyperlink");
 				}
-			}	
-		}
+			} else if (menuItem.equals("MBSE Method: Requirements Analysis\\Setup Gateway project based on rqtf template")){
 
+				if (theSelectedEl instanceof IRPProject){
+					try { 
+						CreateGatewayProjectPanel.launchThePanel( (IRPProject)theSelectedEl, theSelectedEl.getName() );
+
+					} catch (Exception e) {
+						Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking MBSE Method: General\\Quick hyperlink");
+					}					
+				}
+			}					
+		}
 
 		Logger.writeLine("... completed");
 	}
@@ -242,7 +245,8 @@ public class SysMLHelperPlugin extends RPUserPlugin {
     #011 08-MAY-2016: Simplify version numbering mechanism (F.J.Chadburn)
     #016 11-MAY-2016: Add GPL advisory to the Log window (F.J.Chadburn)
     #017 11-MAY-2016: Double-click now works with both nested and hyper-linked diagrams (F.J.Chadburn)
-    
+    #035 15-JUN-2016: New panel to configure requirements package naming and gateway set-up (F.J.Chadburn)
+        
     This file is part of SysMLHelperPlugin.
 
     SysMLHelperPlugin is free software: you can redistribute it and/or modify
