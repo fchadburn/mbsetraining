@@ -1,5 +1,6 @@
 package functionalanalysisplugin;
 
+import generalhelpers.CreateStructuralElementPanel;
 import generalhelpers.GeneralHelpers;
 import generalhelpers.Logger;
 
@@ -16,6 +17,7 @@ import javax.swing.Box;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+
 import com.telelogic.rhapsody.core.*;
 
 public class CopyActivityDiagramsPanel extends CreateStructuralElementPanel {
@@ -88,11 +90,13 @@ public class CopyActivityDiagramsPanel extends CreateStructuralElementPanel {
 
 	
 	@Override
+	protected
 	boolean checkValidity(boolean isMessageEnabled) {
 		return true;
 	}
 
 	@Override
+	protected
 	void performAction() {
 		
 		if (checkValidity( false )){
@@ -169,6 +173,7 @@ public class CopyActivityDiagramsPanel extends CreateStructuralElementPanel {
     Change history:
     #026 31-MAY-2016: Add dialog to allow user to choose which Activity Diagrams to synch (F.J.Chadburn)
     #027 31-MAY-2016: Add new menu to launch dialog to copy Activity Diagrams (F.J.Chadburn)
+    #035 15-JUN-2016: New panel to configure requirements package naming and gateway set-up (F.J.Chadburn)
     
     This file is part of SysMLHelperPlugin.
 

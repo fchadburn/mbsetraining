@@ -1,5 +1,6 @@
 package functionalanalysisplugin;
 
+import generalhelpers.CreateStructuralElementPanel;
 import generalhelpers.GeneralHelpers;
 import generalhelpers.Logger;
 import generalhelpers.UserInterfaceHelpers;
@@ -82,7 +83,9 @@ public class CreateNewActorPanel extends CreateStructuralElementPanel {
 	}
 	
 	@Override
-	boolean checkValidity(boolean isMessageEnabled) {
+	protected boolean checkValidity(
+			boolean isMessageEnabled) {
+		
 		boolean isValid = true;
 		String errorMsg = "";
 		
@@ -110,7 +113,6 @@ public class CreateNewActorPanel extends CreateStructuralElementPanel {
 			}
 		}
 		
-		
 		if (isMessageEnabled && !isValid && errorMsg != null){
 
 			UserInterfaceHelpers.showWarningDialog( errorMsg );
@@ -120,7 +122,8 @@ public class CreateNewActorPanel extends CreateStructuralElementPanel {
 	}
 
 	@Override
-	void performAction() {
+	protected void performAction() {
+		
 		if (checkValidity( false )){
 			
 			IRPInstance partUnderDev = FunctionalAnalysisSettings.getPartUnderDev( m_RootPackage.getProject() );
@@ -144,6 +147,7 @@ public class CreateNewActorPanel extends CreateStructuralElementPanel {
     #025 31-MAY-2016: Add new menu and dialog to add a new actor to package under development (F.J.Chadburn)
     #029 01-JUN-2016: Add Warning Dialog helper to UserInterfaceHelpers (F.J.Chadburn)
     #030 01-JUN-2016: Improve legal name checking across helpers (F.J.Chadburn)
+    #035 15-JUN-2016: New panel to configure requirements package naming and gateway set-up (F.J.Chadburn)
     
     This file is part of SysMLHelperPlugin.
 

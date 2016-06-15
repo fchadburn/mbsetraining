@@ -1,8 +1,9 @@
 package functionalanalysisplugin;
 
+import generalhelpers.CreateGatewayProjectPanel;
+import generalhelpers.CreateStructuralElementPanel;
 import generalhelpers.GeneralHelpers;
 import generalhelpers.Logger;
-import generalhelpers.PopulatePkg;
 import generalhelpers.UserInterfaceHelpers;
 
 import java.awt.BorderLayout;
@@ -114,7 +115,9 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
 		return thePanel;
 	}
 	
-	boolean checkValidity(boolean isMessageEnabled){
+	@Override
+	protected boolean checkValidity(
+			boolean isMessageEnabled){
 		
 		boolean isValid = true;
 		String errorMsg = "";
@@ -334,12 +337,12 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
 		}
 	}
 
-	void performAction(){
+	@Override
+	protected void performAction(){
 		
 		if (checkValidity( false )){
 			String theName = m_BlockNameTextField.getText();
 			
-
 			IRPPackage theBlockPackage = m_RootPackage.addNestedPackage( theName + "Pkg" );  
 			
 			IRPClass theLogicalSystemBlock = theBlockPackage.addClass( theName );
@@ -413,17 +416,24 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
 			
 			// Create nested package for housing the ADs
 			IRPPackage theWorkingPackage = theBlockPackage.addNestedPackage(theName + "Working" + "Pkg");
-			
-	    	PopulatePkg.addProfileIfNotPresentAndMakeItApplied(
-	    			"RequirementsAnalysisProfile", theWorkingPackage);
 		
 			// Add a component
 			addAComponentWith(theName, theBlockTestPackage, theUsageDomainBlock);
+
+			IRPPackage theReqtsPackage = theBlockPackage.addNestedPackage("Requirements" + "Pkg");
+			theReqtsPackage.highLightElement();
+			
+			// Create a requirements diagram
+			IRPObjectModelDiagram theRD = theReqtsPackage.addObjectModelDiagram("RD - " + theUsageDomainBlock.getName());
+			theRD.changeTo("Requirements Diagram");
+			
+			CreateGatewayProjectPanel.launchThePanel( 
+					theProject, 
+					"FunctionalAnalysisPkg" );
 			
 			CopyActivityDiagramsPanel.launchCopyActivityDiagramPanel(
 					m_RequirementsAnalysisPkg, 
 					theWorkingPackage);
-			
 		} else {
 			Logger.writeLine("Error in CreateFunctionalBlockPackagePanel.performAction, checkValidity returned false");
 		}	
@@ -438,7 +448,8 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
     #026 31-MAY-2016: Add dialog to allow user to choose which Activity Diagrams to synch (F.J.Chadburn)
     #029 01-JUN-2016: Add Warning Dialog helper to UserInterfaceHelpers (F.J.Chadburn)
     #030 01-JUN-2016: Improve legal name checking across helpers (F.J.Chadburn)
-
+    #035 15-JUN-2016: New panel to configure requirements package naming and gateway set-up (F.J.Chadburn)
+    
     This file is part of SysMLHelperPlugin.
 
     SysMLHelperPlugin is free software: you can redistribute it and/or modify
