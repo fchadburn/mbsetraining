@@ -28,7 +28,7 @@ I-Logix-RPY-Archive version 8.11.0 C++ 9499822
 		}
 	}
 	- _name = "SysMLHelper";
-	- _modifiedTimeWeak = 5.2.2016::13:33:48;
+	- _modifiedTimeWeak = 6.12.2016::8:58:34;
 	- _lastID = 11;
 	- _UserColors = { IRPYRawContainer 
 		- size = 16;
@@ -71,7 +71,7 @@ I-Logix-RPY-Archive version 8.11.0 C++ 9499822
 		}
 	}
 	- Subsystems = { IRPYRawContainer 
-		- size = 10;
+		- size = 9;
 		- value = 
 		{ IProfile 
 			- fileName = "SysMLHelperProfile";
@@ -110,10 +110,6 @@ I-Logix-RPY-Archive version 8.11.0 C++ 9499822
 		{ ISubsystem 
 			- fileName = "DesignSynthesisPkg";
 			- _id = GUID ef01473f-f4ad-4b16-90a4-a42254559db4;
-		}
-		{ IProfile 
-			- fileName = "DesignSynthesisProfile";
-			- _id = GUID 24145045-e21b-458f-918f-f540e266b3ae;
 		}
 	}
 	- Diagrams = { IRPYRawContainer 
