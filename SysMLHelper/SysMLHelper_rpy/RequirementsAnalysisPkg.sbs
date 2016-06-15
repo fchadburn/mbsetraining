@@ -58,7 +58,7 @@ I-Logix-RPY-Archive version 8.11.0 C++ 9499822
 			}
 		}
 	}
-	- _modifiedTimeWeak = 4.9.2016::19:46:59;
+	- _modifiedTimeWeak = 6.15.2016::18:21:0;
 	- Tags = { IRPYRawContainer 
 		- size = 3;
 		- value = 
@@ -114,14 +114,14 @@ I-Logix-RPY-Archive version 8.11.0 C++ 9499822
 			- _id = GUID 2dfde3ab-5a9f-49f9-a2f0-e578f457aa4e;
 			- _myState = 8192;
 			- _name = "createRequirementTextForPrefixing";
-			- _modifiedTimeWeak = 4.9.2016::19:46:59;
+			- _modifiedTimeWeak = 6.15.2016::18:21:0;
 			- ValueSpecifications = { IRPYRawContainer 
 				- size = 1;
 				- value = 
 				{ ILiteralSpecification 
-					- _id = GUID bf3fff5c-8415-4316-badb-e9cf0a4e2ddc;
-					- _modifiedTimeWeak = 4.9.2016::19:46:59;
-					- _value = "The ProjectName shall ";
+					- _id = GUID a4308812-7940-4503-9fb9-49a50b397522;
+					- _modifiedTimeWeak = 6.15.2016::18:21:0;
+					- _value = "The feature shall allow the ";
 				}
 			}
 			- _typeOf = { IHandle 
@@ -148,7 +148,7 @@ I-Logix-RPY-Archive version 8.11.0 C++ 9499822
 			- _id = GUID 3c0801dd-4e35-4dc6-9467-38e2e272f19c;
 		}
 	}
-	- weakCGTime = 4.9.2016::19:46:59;
+	- weakCGTime = 6.15.2016::18:21:0;
 	- strongCGTime = 3.31.2016::12:7:51;
 	- _defaultComposite = GUID 33122e50-b01a-434c-ae29-f0a9c54785a9;
 	- _eventsBaseID = -1;
@@ -159,8 +159,8 @@ I-Logix-RPY-Archive version 8.11.0 C++ 9499822
 			- _id = GUID 33122e50-b01a-434c-ae29-f0a9c54785a9;
 			- _myState = 40960;
 			- _name = "TopLevel";
-			- _modifiedTimeWeak = 4.7.2016::14:36:49;
-			- weakCGTime = 4.7.2016::14:36:49;
+			- _modifiedTimeWeak = 4.9.2016::19:46:59;
+			- weakCGTime = 4.9.2016::19:46:59;
 			- strongCGTime = 3.31.2016::12:7:51;
 			- _multiplicity = "";
 			- _itsStateChart = { IHandle 
