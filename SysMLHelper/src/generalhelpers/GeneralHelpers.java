@@ -15,6 +15,17 @@ import com.telelogic.rhapsody.core.*;
  
 public class GeneralHelpers {
  
+	public static void main(String[] args) {
+		IRPApplication theRhpApp = RhapsodyAppServer.getActiveRhapsodyApplication();
+		
+		@SuppressWarnings("unchecked")
+		List<IRPGraphElement> theGraphEls = theRhpApp.getSelectedGraphElements().toList();
+		
+		for (IRPGraphElement theGraphEl : theGraphEls) {
+			dumpGraphicalPropertiesFor(theGraphEl);
+		}
+	}
+	
 	// for test only
 	public static void dumpGraphicalPropertiesFor(IRPGraphElement theGraphEl){
 	 
@@ -281,11 +292,37 @@ public class GeneralHelpers {
 	}
 	
 	public static IRPModelElement findElementWithMetaClassAndName(
-			String theMetaClass, String andName, IRPModelElement underneathTheEl){
-		
-		int count = 0;
+			String theMetaClass, 
+			String andName, 
+			IRPModelElement underneathTheEl){
 		
 		IRPModelElement theElement = null;
+		
+		List <IRPModelElement> theMatches = findElementsWithMetaClassAndName(
+				theMetaClass, andName, underneathTheEl);
+
+		if (theMatches.size()== 1){
+		
+			theElement = theMatches.get(0);
+		
+		} else if (theMatches.size()>1){
+			
+			Logger.writeLine("Warning in findElementWithMetaClassAndName(" + theMetaClass + "," + 
+					andName + ","+Logger.elementInfo(underneathTheEl)+"), " + theMatches.size() + 
+					" elements were found when I was expecting only one");
+			
+			theElement = theMatches.get(0);
+		}
+		
+		return theElement;
+	}
+	
+	public static List<IRPModelElement> findElementsWithMetaClassAndName(
+			String theMetaClass, 
+			String andName, 
+			IRPModelElement underneathTheEl){
+		
+		List<IRPModelElement> theElements = new ArrayList<IRPModelElement>();
 		
 		@SuppressWarnings("unchecked")
 		List <IRPModelElement> theCandidates = 
@@ -293,18 +330,15 @@ public class GeneralHelpers {
 		
 		for (IRPModelElement theCandidate : theCandidates) {
 			if (theCandidate.getName().equals( andName )){
-				theElement = theCandidate;
-				count++;
+				theElements.add( theCandidate );
 			}
 		}
 		
-		if (count==0){
-			Logger.writeLine("Warning in findElementWithMetaClassAndName(" + theMetaClass + "," + andName + ","+Logger.elementInfo(underneathTheEl)+"), no elements were found");
-		} else if (count>1){
-			Logger.writeLine("Warning in findElementWithMetaClassAndName(" + theMetaClass + "," + andName + ","+Logger.elementInfo(underneathTheEl)+"), " + count + " elements were found when I was expecting only one");
-		}
+		if (theElements.isEmpty()){
+			Logger.writeLine("Warning in findElementsWithMetaClassAndName(" + theMetaClass + "," + andName + ","+Logger.elementInfo(underneathTheEl)+"), no elements were found");
+		} 
 		
-		return theElement;
+		return theElements;
 	}
 	
 	public static List<IRPModelElement> findElementsWithMetaClassAndStereotype(
@@ -533,6 +567,7 @@ public class GeneralHelpers {
     #022 30-MAY-2016: Improved handling and validation of event/operation creation by adding new forms (F.J.Chadburn) 
     #030 01-JUN-2016: Improve legal name checking across helpers (F.J.Chadburn)
     #033 05-JUN-2016: Add support for creation of operations and events from raw requirement selection (F.J.Chadburn)
+    #035 15-JUN-2016: New panel to configure requirements package naming and gateway set-up (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 
