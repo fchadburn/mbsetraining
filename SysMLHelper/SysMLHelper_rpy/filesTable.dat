@@ -1,10 +1,10 @@
 I-Logix-RPY-Archive version 8.11.0 * 9499822
 
 - filesTable = { IRPYRawContainer 
-	- size = 14;
+	- size = 13;
 	- value = "SysMLHelper.rpy" ""
+	"SysMLHelper_rpy\\BasePkg.sbs" "FunctionalAnalysisPkg::BasePkg"
 	"SysMLHelper_rpy\\DesignSynthesisPkg.sbs" "DesignSynthesisPkg"
-	"SysMLHelper_rpy\\DesignSynthesisProfile.sbs" "DesignSynthesisProfile"
 	"SysMLHelper_rpy\\FunctionalAnalysisPkg.sbs" "FunctionalAnalysisPkg"
 	"SysMLHelper_rpy\\FunctionalAnalysisProfile.sbs" "FunctionalAnalysisProfile"
 	"SysMLHelper_rpy\\GatewayProjectFiles.sbs" "GatewayProjectFiles"
@@ -14,7 +14,6 @@ I-Logix-RPY-Archive version 8.11.0 * 9499822
 	"SysMLHelper_rpy\\RequirementsAnalysisProfile.sbs" "RequirementsAnalysisProfile"
 	"SysMLHelper_rpy\\RequirementsPkg.sbs" "RequirementsAnalysisPkg::RequirementsPkg"
 	"SysMLHelper_rpy\\SysMLHelperProfile.sbs" "SysMLHelperProfile"
-	"SysMLHelper_rpy\\UsageRequirementsPkg.sbs" "RequirementsAnalysisPkg::RequirementsPkg::UsageRequirementsPkg"
 	"SysMLHelper_rpy\\UseCaseDiagramsPkg.sbs" "RequirementsAnalysisPkg::UseCaseDiagramsPkg"
 	
 }
