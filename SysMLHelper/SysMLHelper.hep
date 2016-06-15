@@ -1,5 +1,5 @@
 [Helpers]
-numberOfElements=6
+numberOfElements=7
 
 #REM: Definition of the plug-in
 name1=InvokeSysMLHelper
@@ -33,30 +33,39 @@ applicableTo4=Project,SysML
 isVisible4=1
 DLLServerCompatible4=1
 
-#REM : NOTE: Harmony Toolbox Entry runs outside Rhapsody to workaround API Defect wrt Plugins and Diagram Focus
-name5=SE-Toolkit\Modeling Toolbox
-command5=javaw
-isSynced5=0
+#REM: Add pop-up menu 
+name5=MBSE Method: General Utilities\Quick hyperlink
+isPluginCommand5=1
+command5=InvokeSysMLHelper
+applicableTo5=State,Block,Instance,UseCase
 isVisible5=1
-applicableTo5=
-arguments5="-Djava.library.path="$OMROOT/JavaAPI" -classpath "$OMROOT/JavaAPI/rhapsody.jar$PathDelimiter$OMROOT/Profiles/HarmonySE/SE Toolkit/ModelingToolbox.jar$PathDelimiter$OMROOT/Profiles/HarmonySE/SE Toolkit/Common/CommonGUITools.jar$PathDelimiter$OMROOT/Profiles/HarmonySE/SE Toolkit/Common/CommonRhapsodyTools.jar$PathDelimiter$OMROOT/Profiles/HarmonySE/SE Toolkit/Common/miglayout-4.0.jar$PathDelimiter$OMROOT/Profiles/HarmonySE/SE Toolkit/Common/balloontip-1.2.1.jar" com.ibm.rhapsody.setoolkit.ModelingToolbox_Launcher"
-initialDir5=$JavaLocation/bin
-isMacro5=0
-applicableToProfile5=SysMLHelper
-Triggers5=
+DLLServerCompatible5=1
 
 #REM: Add pop-up menu 
-name6=MBSE Method: General\Quick hyperlink
+name6=MBSE Method: Requirements Analysis\Setup Gateway project based on rqtf template
 isPluginCommand6=1
 command6=InvokeSysMLHelper
-applicableTo6=State,Block,Instance,UseCase
+applicableTo6=Project,SysML
 isVisible6=1
 DLLServerCompatible6=1
+
+#REM : NOTE: Harmony Toolbox Entry runs outside Rhapsody to workaround API Defect wrt Plugins and Diagram Focus
+name7=SE-Toolkit\Modeling Toolbox
+command7=javaw
+isSynced7=0
+isVisible7=1
+applicableTo7=
+arguments7="-Djava.library.path="$OMROOT/JavaAPI" -classpath "$OMROOT/JavaAPI/rhapsody.jar$PathDelimiter$OMROOT/Profiles/HarmonySE/SE Toolkit/ModelingToolbox.jar$PathDelimiter$OMROOT/Profiles/HarmonySE/SE Toolkit/Common/CommonGUITools.jar$PathDelimiter$OMROOT/Profiles/HarmonySE/SE Toolkit/Common/CommonRhapsodyTools.jar$PathDelimiter$OMROOT/Profiles/HarmonySE/SE Toolkit/Common/miglayout-4.0.jar$PathDelimiter$OMROOT/Profiles/HarmonySE/SE Toolkit/Common/balloontip-1.2.1.jar" com.ibm.rhapsody.setoolkit.ModelingToolbox_Launcher"
+initialDir7=$JavaLocation/bin
+isMacro7=0
+applicableToProfile7=
+Triggers7=
 
 #REM Copyright (C) 2016  MBSE Training and Consulting Limited (www.executablembse.com)
 #REM
 #REM Change history:
 #REM #021 30-MAY-2016: Added Copyright/History statements to the hep files (F.J.Chadburn)
+#REM #035 15-JUN-2016: New panel to configure requirements package naming and gateway set-up (F.J.Chadburn)
 #REM
 #REM This file is part of SysMLHelperPlugin.
 #REM
