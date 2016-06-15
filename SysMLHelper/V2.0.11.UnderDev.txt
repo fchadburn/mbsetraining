@@ -1,0 +1,13 @@
+#035 15-JUN-2016: New panel to configure requirements package naming and gateway set-up (F.J.Chadburn)
+#036 15-JUN-2016: Re-factored SysMLHelperTriggers to make a little more extensible (F.J.Chadburn)
+#037 15-JUN-2016: Added "allow the " text to the default requirement pretext string (F.J.Chadburn)
+
+TODO:
+#XXX DD-MTH-YEAR: Avoid port proliferation in inheritance tree for actors/system (F.J.Chadburn)
+#XXX DD-MTH-YEAR: Allow rippling updates (F.J.Chadburn)
+#XXX DD-MTH-YEAR: Populate test case script from a sequence diagram (F.J.Chadburn)
+#XXX DD-MTH-YEAR: Improve singleton support for IRPApplication/IRPProject across project (F.J.Chadburn)
+#XXX DD-MTH-YEAR: Improve warning/working when multiple Rhapsody instances are open (F.J.Chadburn)
+#XXX DD-MTH-YEAR: Add Start link/End link dialog (F.J.Chadburn)
+#XXX DD-MTH-YEAR: Finish off the populate send event functionality (F.J.Chadburn)
+#XXX DD-MTH-YEAR: Extend populate event/ops to work on diagrams other than activity (F.J.Chadburn)
