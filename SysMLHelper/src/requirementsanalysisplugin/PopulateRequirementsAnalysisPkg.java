@@ -1,13 +1,10 @@
 package requirementsanalysisplugin;
 
-import generalhelpers.FileHelper;
+import generalhelpers.CreateGatewayProjectPanel;
 import generalhelpers.Logger;
 import generalhelpers.PopulatePkg;
 import generalhelpers.UserInterfaceHelpers;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.List;
 
 import javax.swing.JDialog;
@@ -27,93 +24,6 @@ public class PopulateRequirementsAnalysisPkg extends PopulatePkg {
 			String theValue = theGraphicalProperty.getValue();
 			
 			Logger.writeLine(thePropertyname + "=" + theValue);
-		}
-	}
-	
-	public static void copyGatewayFilesIfPresent(IRPProject forProject){
-		
-		String theProfileName = "SysMLHelperProfile";
-		
-		Logger.writeLine("Invoking copyGatewayFilesIfPresent");
-		
-		IRPProfile theProfile = (IRPProfile) forProject.findElementsByFullName(theProfileName, "Profile");
-				
-		if (theProfile != null){
-			Logger.writeLine(theProfile, "was found");
-			
-			// #002 05-APR-2016: Improved robustness of copying .types file (F.J.Chadburn)
-			IRPApplication myApp = RhapsodyAppServer.getActiveRhapsodyApplication();
-			String pathToSearch = myApp.getOMROOT() + "\\Profiles\\SysMLHelper\\SysMLHelper_rpy";
-			
-			Logger.writeLine("Looking in " + pathToSearch + " for a SysMLHelper.types file");
-			
-			File theTypesFile = FileHelper.getFileWith("SysMLHelper.types", pathToSearch);
-			
-			if (theTypesFile != null){
-				FileHelper.copyTheFile(forProject, theTypesFile, forProject.getName() + ".types");
-				
-			    String rpyName = forProject.getName() + ".rpy";
-			    
-			    String fullPath = 
-			    		forProject.getCurrentDirectory() + File.separator +
-			    		forProject.getName()+"_rpy" + File.separator +
-			    		forProject.getName() + ".rqtf";
-
-			    try {
-					File theRqtfFile = new File( fullPath );
-					FileWriter fileWriter = new FileWriter( theRqtfFile );
-					fileWriter.write("[Files]" + System.lineSeparator());
-					fileWriter.write("Names=UML Model,UsageRequirementsPkg" + System.lineSeparator());
-					fileWriter.write("RepositoryTool=Boost" + System.lineSeparator());
-					fileWriter.write(System.lineSeparator());
-					fileWriter.write("[UML Model]" + System.lineSeparator());
-					fileWriter.write("Cover1=UML Model" + System.lineSeparator());
-					fileWriter.write("Cover1Position=2200@1700" + System.lineSeparator());
-					fileWriter.write("GraphicPosition=2200@2200" + System.lineSeparator());
-					fileWriter.write("Variable1Name=addImages" + System.lineSeparator());
-					fileWriter.write("Variable1Value=0" + System.lineSeparator());
-					fileWriter.write("Variable2Name=addHLReqsDeleted" + System.lineSeparator());
-					fileWriter.write("Variable2Value=0" + System.lineSeparator());
-					fileWriter.write("Variable3Name=tagValueToDescription" + System.lineSeparator());
-					fileWriter.write("Variable3Value=0" + System.lineSeparator());
-					fileWriter.write("Variable4Name=notImportedRequirementsDocuments" + System.lineSeparator());
-					fileWriter.write("Variable4Value=" + System.lineSeparator());
-					fileWriter.write("Variable5Name=requirementsPackage" + System.lineSeparator());
-					fileWriter.write("Variable5Value=" + forProject.getName() + "/Packages/RequirementsAnalysisPkg/Packages/RequirementsPkg¥UsageRequirementsPkg" + System.lineSeparator());
-					fileWriter.write("Variable6Name=requirementDescription" + System.lineSeparator());
-					fileWriter.write("Variable6Value=0" + System.lineSeparator());
-					fileWriter.write("Variable7Name=addHLReqsModified" + System.lineSeparator());
-					fileWriter.write("Variable7Value=0" + System.lineSeparator());
-					fileWriter.write("Variable8Name=addHLReqsLocally" + System.lineSeparator());
-					fileWriter.write("Variable8Value=0" + System.lineSeparator());
-					fileWriter.write("Variable9Name=preserveHierarchy" + System.lineSeparator());
-					fileWriter.write("Variable9Value=0" + System.lineSeparator());
-					fileWriter.write("Variable10Name=lg" + System.lineSeparator());
-					fileWriter.write("Variable10Value=C++" + System.lineSeparator());
-					fileWriter.write("Variable11Name=createDependency" + System.lineSeparator());
-					fileWriter.write("Variable11Value=0" + System.lineSeparator());
-					fileWriter.write("Variable12Name=addHLRichText" + System.lineSeparator());
-					fileWriter.write("Variable12Value=0" + System.lineSeparator());
-					fileWriter.write("Type=Rhapsody SysML" + System.lineSeparator());
-					fileWriter.write("Path=..\\" + rpyName + System.lineSeparator());
-					fileWriter.write("AbsolutePath=" + forProject.getCurrentDirectory() + "\\" + rpyName + System.lineSeparator());
-					fileWriter.write(System.lineSeparator());
-					fileWriter.write("[UsageRequirementsPkg]" + System.lineSeparator());
-					fileWriter.write("Cover1=UML Model" + System.lineSeparator());
-					fileWriter.write("Cover1Position=2660@1950" + System.lineSeparator());
-					fileWriter.write("GraphicPosition=3120@1700" + System.lineSeparator());
-					fileWriter.write("Type=Usage Requirements" + System.lineSeparator());
-					fileWriter.write("Path=" + System.lineSeparator());
-					fileWriter.write("AbsolutePath=" + System.lineSeparator());
-					fileWriter.flush();
-					fileWriter.close();
-					
-				} catch (IOException e) {
-					e.printStackTrace();
-				}		     
-			}    
-		} else {
-			Logger.writeLine("Error, unable to find Profile called " + theProfileName);
 		}
 	}
 	
@@ -153,13 +63,15 @@ public class PopulateRequirementsAnalysisPkg extends PopulatePkg {
 					applySimpleMenuStereotype(forProject);
 				}
 				
+				CreateGatewayProjectPanel.launchThePanel( forProject, rootPackageName );
+				
 		    } else {
 		    	Logger.writeLine("Cancelled by user");
 		    }
 		}
 	}
 	
-	static void populateRequirementsAnalysisPkg(IRPProject forProject) {
+	static IRPPackage populateRequirementsAnalysisPkg(IRPProject forProject) {
 		
 		addProfileIfNotPresent("SysML", forProject);		
 		addProfileIfNotPresent("GlobalPreferencesProfile", forProject);
@@ -167,7 +79,7 @@ public class PopulateRequirementsAnalysisPkg extends PopulatePkg {
 		
 		forProject.changeTo("SysML");
 		
-		IRPModelElement theRequirementsAnalysisPkg = addPackageFromProfileRpyFolder(forProject, "RequirementsAnalysisPkg" );
+		IRPPackage theRequirementsAnalysisPkg = addPackageFromProfileRpyFolder(forProject, "RequirementsAnalysisPkg" );
 		
 		if (theRequirementsAnalysisPkg != null){
 			
@@ -182,8 +94,6 @@ public class PopulateRequirementsAnalysisPkg extends PopulatePkg {
 			setProperty( forProject, "General.Model.ShowModelTooltipInGE", "Enhanced" );			
 			setProperty( forProject, "General.Model.BackUps", "One" );
 			setProperty (forProject, "General.Model.RenameUnusedFiles", "True");
-			
-			copyGatewayFilesIfPresent( forProject );
 			
 			forProject.save();
 			
@@ -208,8 +118,9 @@ public class PopulateRequirementsAnalysisPkg extends PopulatePkg {
 		} else {
 			Logger.writeLine("Error in createRequirementsAnalysisPkg, unable to add RequirementsAnalysisPkg package");
 		}
+		
+		return theRequirementsAnalysisPkg;
 	}
-
 }
 
 /**
@@ -220,6 +131,7 @@ public class PopulateRequirementsAnalysisPkg extends PopulatePkg {
     #004 10-APR-2016: Re-factored projects into single workspace (F.J.Chadburn)
     #006 02-MAY-2016: Add FunctionalAnalysisPkg helper support (F.J.Chadburn)
     #007 05-MAY-2016: Move FileHelper into generalhelpers and remove duplicate class (F.J.Chadburn)
+    #035 15-JUN-2016: New panel to configure requirements package naming and gateway set-up (F.J.Chadburn)
     
     This file is part of SysMLHelperPlugin.
 
