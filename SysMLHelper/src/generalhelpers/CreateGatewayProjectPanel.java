@@ -27,7 +27,7 @@ public class CreateGatewayProjectPanel extends CreateStructuralElementPanel {
 
 	private static IRPProject m_Project;
 	private GatewayTypesParser m_TypesFile;
-	private GatewayProjectParser m_ProjectFile;
+	private GatewayProjectParser m_ChosenProjectFile;
 	private List<GatewayDocumentPanel> m_GatewayDocumentPanel = new ArrayList<GatewayDocumentPanel>();
 	
 	// test only
@@ -121,7 +121,7 @@ public class CreateGatewayProjectPanel extends CreateStructuralElementPanel {
 		m_Project = forSelectablePackages.get(0).getProject();
 		
 		m_TypesFile = new GatewayTypesParser( andTypesFile );
-		m_ProjectFile = new GatewayProjectParser( usingRqtfTemplate );
+		m_ChosenProjectFile = new GatewayProjectParser( usingRqtfTemplate );
 
 		setLayout( new BorderLayout(10,10) );
 		setBorder( BorderFactory.createEmptyBorder( 10, 10, 10, 10 ) );
@@ -141,7 +141,7 @@ public class CreateGatewayProjectPanel extends CreateStructuralElementPanel {
 		thePanel.setLayout( new BoxLayout(thePanel, BoxLayout.Y_AXIS ) );	
 		thePanel.setAlignmentX(CENTER_ALIGNMENT);
 		
-		List<GatewayDoc> theDocs = m_ProjectFile.getGatewayDocs();
+		List<GatewayDoc> theDocs = m_ChosenProjectFile.getGatewayDocs();
 		
 		for (GatewayDoc gatewayDoc : theDocs) {
 			try {
@@ -355,17 +355,18 @@ public class CreateGatewayProjectPanel extends CreateStructuralElementPanel {
 		for (GatewayDocumentPanel gatewayDocumentPanel : m_GatewayDocumentPanel) {
 			
     		String theNewName = gatewayDocumentPanel.getReqtsPkgName();	
-			GatewayDoc theGatewayDoc = m_ProjectFile.getGatewayDocWith( theNewName );
+			GatewayDoc theGatewayDoc = m_ChosenProjectFile.getGatewayDocWith( theNewName );
     		    		
     		theGatewayDoc.setValueFor("Type", gatewayDocumentPanel.getAnalysisTypeName());
       	    theGatewayDoc.setValueFor("Path", gatewayDocumentPanel.getPathName());
 		}
 				
-		GatewayDoc theUMLModelDoc = m_ProjectFile.getGatewayDocWith("UML Model");
+		GatewayDoc theUMLModelDoc = m_ChosenProjectFile.getGatewayDocWith("UML Model");
 		
 		// change the requirementsPackage variable in the UML Model document
 		String theReqtsPkgValue = buildRequirementsPackageValueFor();
 		theUMLModelDoc.setVariableXValue( "requirementsPackage", theReqtsPkgValue );
+		theUMLModelDoc.setVariableXValue( "previousReqsPackage", theReqtsPkgValue );
 		
 		String theUMLModelPath = "..\\" + m_Project.getName() + ".rpy";
 		theUMLModelDoc.setValueFor( "Path", theUMLModelPath );
@@ -403,7 +404,7 @@ public class CreateGatewayProjectPanel extends CreateStructuralElementPanel {
 	
 	private void updateFilesDocBasedOnNameChanges() {
 		
-		GatewayDoc theFilesDoc = m_ProjectFile.getGatewayDocWith("Files");
+		GatewayDoc theFilesDoc = m_ChosenProjectFile.getGatewayDocWith("Files");
 		
 		String theOriginalNamesValue = theFilesDoc.getValueFor("Names");
 		String theUpdatedNamesValue = theOriginalNamesValue;
@@ -418,16 +419,21 @@ public class CreateGatewayProjectPanel extends CreateStructuralElementPanel {
     			Logger.writeLine("Detected that user changed the name from " + 
     					theOriginalName + " to " + theNewName);
     			
-    			GatewayDoc theDoc = m_ProjectFile.getGatewayDocWith( theOriginalName );
+    			GatewayDoc theDoc = m_ChosenProjectFile.getGatewayDocWith( theOriginalName );
     			theDoc.setDocumentName( theNewName );
     			
-    			theUpdatedNamesValue = theOriginalNamesValue.replaceAll(theOriginalName, theNewName);
+    			theUpdatedNamesValue = theUpdatedNamesValue.replaceAll(theOriginalName, theNewName);
+    			
+    			// Change all the covers links
+    			for (GatewayDoc theGatewayDoc : m_ChosenProjectFile.getGatewayDocs()) {		
+    				theGatewayDoc.renameStringInAllValues( theOriginalName, theNewName );
+    			}
     		}
 		}
 		
-		if (!theUpdatedNamesValue.equals(theOriginalNamesValue)){
-			Logger.writeLine("Updated names value from " + theOriginalNamesValue + " to " + theUpdatedNamesValue);
-			theFilesDoc.setValueFor("Names", theUpdatedNamesValue);
+		if( !theUpdatedNamesValue.equals( theOriginalNamesValue ) ){
+			Logger.writeLine( "Updated names value from " + theOriginalNamesValue + " to " + theUpdatedNamesValue );
+			theFilesDoc.setValueFor( "Names", theUpdatedNamesValue );
 		}
 	}
 
@@ -442,7 +448,7 @@ public class CreateGatewayProjectPanel extends CreateStructuralElementPanel {
 			
 			printWriter = new PrintWriter ( theFileName );
 			
-			List<GatewayDoc> theGatewayDocs = m_ProjectFile.getGatewayDocs();
+			List<GatewayDoc> theGatewayDocs = m_ChosenProjectFile.getGatewayDocs();
 			
 			for (GatewayDoc gatewayDoc : theGatewayDocs) {
 				
@@ -519,6 +525,7 @@ public class CreateGatewayProjectPanel extends CreateStructuralElementPanel {
 
     Change history:
     #035 15-JUN-2016: New panel to configure requirements package naming and gateway set-up (F.J.Chadburn)
+    #039 17-JUN-2016: Minor fixes and improvements to robustness of Gateway project setup (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

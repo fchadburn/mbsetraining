@@ -67,6 +67,27 @@ public class GatewayDoc {
         return theValue;
 	}
 	
+	public void renameStringInAllValues(
+			String replaceThisString, String withThisString ){
+
+        Iterator<Entry<String, String>> theIterator =  m_SettingsMap.entrySet().iterator();
+        
+        while( theIterator.hasNext() ) {
+        	
+           Entry<String, String> theEntry = theIterator.next();
+           
+           String theFullKey = theEntry.getKey();
+           String theFullValue = theEntry.getValue();
+           
+           String newValue = theFullValue.replaceAll( replaceThisString, withThisString );
+           
+           if( !theFullValue.equals( newValue ) ){
+        	   Logger.writeLine("Updating value for " + theFullKey + " from '" + theFullValue + "' to '" + newValue + "'");
+        	   setValueFor( theFullKey, newValue );
+           }
+        }
+	}
+	
 	public void setVariableXValue(
 			String forVariableXName, String toNewValue){
 		
@@ -127,6 +148,7 @@ public class GatewayDoc {
 
     Change history:
     #035 15-JUN-2016: New panel to configure requirements package naming and gateway set-up (F.J.Chadburn)
+    #039 17-JUN-2016: Minor fixes and improvements to robustness of Gateway project setup (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

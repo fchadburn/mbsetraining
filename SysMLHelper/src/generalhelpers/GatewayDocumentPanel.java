@@ -81,20 +81,20 @@ public class GatewayDocumentPanel extends JPanel {
 	}
 
 	public String getOriginalName(){
-		return m_OriginalName;
+		return m_OriginalName.trim();
 	}
 	
 	public String getOriginalAnalysisType(){
-		return m_OriginalAnalysisType;
+		return m_OriginalAnalysisType.trim();
 	}
 	
 	public String getOriginalPath(){
-		return m_OriginalPath;
+		return m_OriginalPath.trim();
 	}
 	
 	public String getReqtsPkgName(){
 		
-		return m_ChosenNameTextField.getText();
+		return m_ChosenNameTextField.getText().trim();
 	}
 	
 	public IRPPackage getRootPackage(){
@@ -122,7 +122,7 @@ public class GatewayDocumentPanel extends JPanel {
 	
 	public String getPathName(){
 		
-		String thePath = m_Path.getText();
+		String thePath = m_Path.getText().trim();
 		return thePath;
 	} 
 }
@@ -132,6 +132,7 @@ public class GatewayDocumentPanel extends JPanel {
 
     Change history:
     #035 15-JUN-2016: New panel to configure requirements package naming and gateway set-up (F.J.Chadburn)
+    #039 17-JUN-2016: Minor fixes and improvements to robustness of Gateway project setup (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 
