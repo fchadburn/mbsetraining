@@ -21,8 +21,6 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
-import requirementsanalysisplugin.RequirementsAnalysisPlugin;
-
 import com.telelogic.rhapsody.core.*;
 
 public abstract class CreateTracedElementPanel extends JPanel {
@@ -138,25 +136,29 @@ public abstract class CreateTracedElementPanel extends JPanel {
 	protected static void bleedColorToElementsRelatedTo( 
 			IRPGraphElement theGraphEl ){
 		
-		String theColorSetting = "255,0,0";
-		IRPDiagram theDiagram = theGraphEl.getDiagram();
-		IRPModelElement theEl = theGraphEl.getModelObject();
-		
-		if (theEl != null){
+		// only bleed on activity diagrams		
+		if (theGraphEl.getDiagram() instanceof IRPActivityDiagram){
 			
-			Logger.writeLine("Setting color to red for " + theEl.getName());
-			theGraphEl.setGraphicalProperty("ForegroundColor", theColorSetting);
+			String theColorSetting = "255,0,0";
+			IRPDiagram theDiagram = theGraphEl.getDiagram();
+			IRPModelElement theEl = theGraphEl.getModelObject();
 			
-			@SuppressWarnings("unchecked")
-			List<IRPDependency> theExistingDeps = theEl.getDependencies().toList();
-			
-			for (IRPDependency theDependency : theExistingDeps) {
+			if (theEl != null){
 				
-				IRPModelElement theDependsOn = theDependency.getDependsOn();
+				Logger.writeLine("Setting color to red for " + theEl.getName());
+				theGraphEl.setGraphicalProperty("ForegroundColor", theColorSetting);
 				
-				if (theDependsOn != null && theDependsOn instanceof IRPRequirement){					
-					bleedColorToGraphElsRelatedTo( theDependsOn, theColorSetting, theDiagram );
-					bleedColorToGraphElsRelatedTo( theDependency, theColorSetting, theDiagram );
+				@SuppressWarnings("unchecked")
+				List<IRPDependency> theExistingDeps = theEl.getDependencies().toList();
+				
+				for (IRPDependency theDependency : theExistingDeps) {
+					
+					IRPModelElement theDependsOn = theDependency.getDependsOn();
+					
+					if (theDependsOn != null && theDependsOn instanceof IRPRequirement){					
+						bleedColorToGraphElsRelatedTo( theDependsOn, theColorSetting, theDiagram );
+						bleedColorToGraphElsRelatedTo( theDependency, theColorSetting, theDiagram );
+					}
 				}
 			}
 		}
@@ -227,6 +229,8 @@ public abstract class CreateTracedElementPanel extends JPanel {
 	protected void populateCallOperationActionOnDiagram(
 			IRPOperation theOperation) {
 		
+		IRPApplication theRhpApp = FunctionalAnalysisPlugin.getRhapsodyApp();
+		
 		if (m_SourceGraphElement instanceof IRPGraphNode){
 			GraphNodeInfo theNodeInfo = new GraphNodeInfo( (IRPGraphNode) m_SourceGraphElement );
 			
@@ -248,7 +252,22 @@ public abstract class CreateTracedElementPanel extends JPanel {
 				theCallOp.setOperation(theOperation);
 				theFlowchart.addNewNodeForElement(theCallOp, x, y, 300, 40);
 				
-				RequirementsAnalysisPlugin.getRhapsodyApp().highLightElement( theCallOp );
+				theRhpApp.highLightElement( theCallOp );
+				
+			} else if (theDiagram instanceof IRPObjectModelDiagram){				
+				
+				IRPObjectModelDiagram theOMD = (IRPObjectModelDiagram)theDiagram;
+				
+				IRPGraphNode theEventNode = theOMD.addNewNodeForElement( theOperation, x + 50, y + 50, 300, 40 );	
+				
+				IRPCollection theGraphElsToDraw = theRhpApp.createNewCollection();
+				theGraphElsToDraw.addGraphicalItem( m_SourceGraphElement );
+				theGraphElsToDraw.addGraphicalItem( theEventNode );
+				
+				theOMD.completeRelations( theGraphElsToDraw, 1 );
+				
+				theRhpApp.highLightElement( theOperation );
+			
 			} else {
 				Logger.writeLine("Error in CreateOperationPanel.performAction, expected an IRPActivityDiagram");
 			}
@@ -264,6 +283,7 @@ public abstract class CreateTracedElementPanel extends JPanel {
     #032 05-JUN-2016: Populate call operation/event actions on diagram check-box added (F.J.Chadburn)
     #033 05-JUN-2016: Add support for creation of operations and events from raw requirement selection (F.J.Chadburn)
     #034 05-JUN-2016: Re-factored design to move static constructors into appropriate panel class (F.J.Chadburn)
+    #040 17-JUN-2016: Extend populate event/ops to work on OMD, i.e., REQ diagrams (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

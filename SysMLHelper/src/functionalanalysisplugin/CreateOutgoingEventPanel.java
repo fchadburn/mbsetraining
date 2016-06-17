@@ -264,6 +264,61 @@ public class CreateOutgoingEventPanel extends CreateTracedElementPanel {
 		
 		return theProposedName;
 	}
+
+	private void populateSendActionOnDiagram(
+			IRPEvent theEvent) {
+		
+		IRPApplication theRhpApp = FunctionalAnalysisPlugin.getRhapsodyApp();
+		
+		if (m_SourceGraphElement instanceof IRPGraphNode){
+			GraphNodeInfo theNodeInfo = new GraphNodeInfo( (IRPGraphNode) m_SourceGraphElement );
+			
+			int x = theNodeInfo.getTopLeftX() + 20;
+			int y = theNodeInfo.getTopLeftY() + 20;
+			
+			IRPDiagram theDiagram = m_SourceGraphElement.getDiagram();
+							
+			if (theDiagram instanceof IRPActivityDiagram){
+				
+				IRPActivityDiagram theAD = (IRPActivityDiagram)theDiagram;
+				
+				IRPFlowchart theFlowchart = theAD.getFlowchart();
+				
+				IRPState theState = 
+						(IRPState) theFlowchart.addNewAggr(
+								"State", theEvent.getName() );
+				
+				theState.setStateType("EventState");
+			
+				if( theState != null ){
+					
+					IRPSendAction theSendAction = theState.getSendAction();
+					theSendAction.setEvent(theEvent);
+				}
+		
+				theFlowchart.addNewNodeForElement( theState, x, y, 300, 40 );
+				
+				theRhpApp.highLightElement( theState );
+			
+			} else if (theDiagram instanceof IRPObjectModelDiagram){				
+				
+				IRPObjectModelDiagram theOMD = (IRPObjectModelDiagram)theDiagram;
+				
+				IRPGraphNode theEventNode = theOMD.addNewNodeForElement(theEvent, x + 50, y + 50, 300, 40);	
+				
+				IRPCollection theGraphElsToDraw = theRhpApp.createNewCollection();
+				theGraphElsToDraw.addGraphicalItem( m_SourceGraphElement );
+				theGraphElsToDraw.addGraphicalItem( theEventNode );
+				
+				theOMD.completeRelations( theGraphElsToDraw, 1 );
+				
+				theRhpApp.highLightElement( theEvent );
+			
+			} else {
+				Logger.writeLine("Error in CreateOperationPanel.performAction, expected an IRPActivityDiagram");
+			}
+		}
+	}
 	
 	@Override
 	boolean checkValidity(
@@ -369,7 +424,7 @@ public class CreateOutgoingEventPanel extends CreateTracedElementPanel {
 					}			
 					
 					if( m_ActionOnDiagramIsNeededCheckBox.isSelected() ){
-						populateCallOperationActionOnDiagram( informOp );
+						populateSendActionOnDiagram( theEvent );
 					}
 				}	
 				
@@ -392,6 +447,8 @@ public class CreateOutgoingEventPanel extends CreateTracedElementPanel {
     #032 05-JUN-2016: Populate call operation/event actions on diagram check-box added (F.J.Chadburn)
     #033 05-JUN-2016: Add support for creation of operations and events from raw requirement selection (F.J.Chadburn)
     #034 05-JUN-2016: Re-factored design to move static constructors into appropriate panel class (F.J.Chadburn)
+    #038 17-JUN-2016: Populate diagram now populates a SendAction in case of send events (F.J.Chadburn)
+    #040 17-JUN-2016: Extend populate event/ops to work on OMD, i.e., REQ diagrams (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

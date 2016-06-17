@@ -426,6 +426,7 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
 			// Create a requirements diagram
 			IRPObjectModelDiagram theRD = theReqtsPackage.addObjectModelDiagram("RD - " + theUsageDomainBlock.getName());
 			theRD.changeTo("Requirements Diagram");
+			theRD.highLightElement();
 			
 			CreateGatewayProjectPanel.launchThePanel( 
 					theProject, 
@@ -449,6 +450,7 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
     #029 01-JUN-2016: Add Warning Dialog helper to UserInterfaceHelpers (F.J.Chadburn)
     #030 01-JUN-2016: Improve legal name checking across helpers (F.J.Chadburn)
     #035 15-JUN-2016: New panel to configure requirements package naming and gateway set-up (F.J.Chadburn)
+    #039 17-JUN-2016: Minor fixes and improvements to robustness of Gateway project setup (F.J.Chadburn)
     
     This file is part of SysMLHelperPlugin.
 
