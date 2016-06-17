@@ -71,3 +71,9 @@ RELEASE 2.0.10 (05-JUN-2016)
 ----------------------------------------------------------------------------------
 RELEASE 2.0.11 (15-JUN-2016)
 ----------------------------------------------------------------------------------
+#038 17-JUN-2016: Populate diagram now populates a SendAction in case of send events (F.J.Chadburn)
+#039 17-JUN-2016: Minor fixes and improvements to robustness of Gateway project setup (F.J.Chadburn)
+#040 17-JUN-2016: Extend populate event/ops to work on OMD, i.e., REQ diagrams (F.J.Chadburn)
+----------------------------------------------------------------------------------
+RELEASE 2.0.12 (17-JUN-2016)
+----------------------------------------------------------------------------------
