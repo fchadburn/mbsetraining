@@ -2,7 +2,9 @@ package requirementsanalysisplugin;
 
 import generalhelpers.Logger;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import sysmlhelperplugin.SysMLHelperPlugin;
 
@@ -139,6 +141,23 @@ public class RequirementsAnalysisPlugin extends RPUserPlugin {
 					Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking RenameActions.performRenamesFor");
 				}
 
+			} else if (menuItem.equals("MBSE Method: Requirements Analysis\\Derive downstream requirement")){
+				try {
+					if (theSelectedEl instanceof IRPRequirement){
+						
+						Set<IRPRequirement> theReqts = new HashSet<IRPRequirement>();
+						
+						theReqts.add( (IRPRequirement)theSelectedEl );
+						
+						CreateDerivedRequirementPanel.launchThePanel( 
+								theSelectedGraphEls.get(0), theReqts, getActiveProject() );
+					}
+					
+				} catch (Exception e) {
+					Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking CreateDerivedRequirementPanel.launchThePanel");
+				}
+				
+
 			} else {
 				Logger.writeLine(theSelectedEl, " was invoked with menuItem='" + menuItem + "'");
 			}
@@ -172,6 +191,7 @@ public class RequirementsAnalysisPlugin extends RPUserPlugin {
     #004 10-APR-2016: Re-factored projects into single workspace (F.J.Chadburn)    
     #011 08-MAY-2016: Simplify version numbering mechanism (F.J.Chadburn)
     #016 11-MAY-2016: Add GPL advisory to the Log window (F.J.Chadburn)
+    #041 29-JUN-2016: Derive downstream requirement menu added for reqts on diagrams (F.J.Chadburn) 
 
     This file is part of SysMLHelperPlugin.
 

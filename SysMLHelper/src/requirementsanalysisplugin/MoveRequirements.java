@@ -3,7 +3,6 @@ package requirementsanalysisplugin;
 import generalhelpers.GeneralHelpers;
 import generalhelpers.Logger;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -16,8 +15,8 @@ import com.telelogic.rhapsody.core.*;
 public class MoveRequirements {
 	 
 	public static Set<IRPModelElement> buildSetOfUnclaimedRequirementsBasedOn(
-			List<IRPModelElement> theSelectedEls, String theGatewayStereotypeName) {
-		
+			List<IRPModelElement> theSelectedEls, 
+			String theGatewayStereotypeName) {
 		
 		Set<IRPModelElement> theUnclaimedReqts = new HashSet<IRPModelElement>();
 		
@@ -30,16 +29,14 @@ public class MoveRequirements {
 			}
 			
 			List<IRPModelElement> theReqtsToAdd = 
-					findModelElementsWithoutStereotypeNestedUnder( 
+					GeneralHelpers.findModelElementsWithoutStereotypeNestedUnder( 
 							theElementToSearchUnder, "Requirement", theGatewayStereotypeName );
 			
-			theUnclaimedReqts.addAll( theReqtsToAdd );
-		
+			theUnclaimedReqts.addAll( theReqtsToAdd );	
 		}
 
 		return theUnclaimedReqts;
 	}
-	
 	
 	public static void moveUnclaimedRequirementsReadyForGatewaySync(
 			List<IRPModelElement> theSelectedEls, IRPProject theProject){
@@ -63,7 +60,7 @@ public class MoveRequirements {
 			
 			List<IRPModelElement> thePackages;
 			
-			thePackages = findModelElementsNestedUnder( theProject, "Package", theGatewayStereotypeName);
+			thePackages = GeneralHelpers.findModelElementsNestedUnder( theProject, "Package", theGatewayStereotypeName);
 			
 			Object[] options = new Object[thePackages.size()];
 			
@@ -103,7 +100,8 @@ public class MoveRequirements {
 					
 					IRPModelElement thePackage = theProject.findElementsByFullName(theChoice.toString(), "Package");
 					
-					IRPStereotype theStereotypeToApply = getStereotypeAppliedTo(thePackage, theGatewayStereotypeName);
+					IRPStereotype theStereotypeToApply = 
+							GeneralHelpers.getStereotypeAppliedTo( thePackage, theGatewayStereotypeName );
 					
 					int dialogResult = JOptionPane.showConfirmDialog (
 							null, "Would you like to move the " + theUnclaimedReqts.size() + " unclaimed requirements into the Package \n" 
@@ -132,7 +130,7 @@ public class MoveRequirements {
 								count++;
 								theReqt.highLightElement();
 								
-								applyStereotypeToDeriveReqtDependenciesOriginatingFrom( theReqt, theStereotypeToApply );
+								GeneralHelpers.applyStereotypeToDeriveReqtDependenciesOriginatingFrom( theReqt, theStereotypeToApply );
 							}
 						}
 						
@@ -145,115 +143,6 @@ public class MoveRequirements {
 			}
 		}
 	}
-
-	private static void applyStereotypeToDeriveReqtDependenciesOriginatingFrom( IRPModelElement theReqt, IRPStereotype theStereotypeToApply ) {
-		
-		Logger.writeLine(theReqt, "has been moved");
-		
-		@SuppressWarnings("unchecked")
-		List<IRPDependency> theDependencies = theReqt.getDependencies().toList();
-		
-		for (IRPDependency theDependency : theDependencies) {
-			
-			Logger.writeLine(theDependency,"was found");
-			
-			IRPStereotype theExistingGatewayStereotype = GeneralHelpers.getStereotypeAppliedTo(theDependency, "from.*");
-			
-			//Logger.writeLine(theExistingGatewayStereotype, "is the existing gateway stereotype");
-			
-			if (theExistingGatewayStereotype == null && GeneralHelpers.hasStereotypeCalled("deriveReqt", theDependency)){
-							
-				Logger.writeLine("Applying " + Logger.elementInfo(theStereotypeToApply) + " to " + Logger.elementInfo(theDependency));
-				theDependency.setStereotype(theStereotypeToApply);
-				theDependency.changeTo("Derive Requirement");
-			}
-		}
-	}
-	public static IRPStereotype getStereotypeAppliedTo(IRPModelElement theElement, String thatMatchesRegEx){
-		
-		IRPStereotype foundStereotype = null;
-		
-		@SuppressWarnings("unchecked")
-		List<IRPStereotype> theStereotypes = theElement.getStereotypes().toList();
-		
-		int count=0;
-		
-		for (IRPStereotype theStereotype : theStereotypes) {
-			
-			count++;
-			
-			String theName = theStereotype.getName();
-			
-			if (theName.matches(thatMatchesRegEx)){
-				foundStereotype = theStereotype;
-				
-				if (count > 1){
-					Logger.writeLine("Error in getStereotypeAppliedTo related to " + Logger.elementInfo(theElement) + " count=" + count);
-				}
-			}		
-		}
-		
-		return foundStereotype;
-	}
-	
-	public static boolean checkIsNestedUnderAProfile(IRPModelElement theElementToCheck){
-		
-		boolean isUnderAProfile = false;
-		
-		IRPModelElement theOwner = theElementToCheck.getOwner();
-		
-		if (theOwner!=null){
-			
-			if (theOwner instanceof IRPProfile){
-				isUnderAProfile = true;
-			} else {
-				isUnderAProfile = checkIsNestedUnderAProfile( theOwner );
-			}
-		}
-		
-		return isUnderAProfile;
-	}
-	
-	public static List<IRPModelElement> findModelElementsNestedUnder(IRPModelElement rootEl, String ofMetaClass, String withStereotypeMatchingRegEx){
-		
-		@SuppressWarnings("unchecked")
-		List<IRPModelElement> theCandidateEls = rootEl.getNestedElementsByMetaClass(ofMetaClass, 1).toList();
-		List<IRPModelElement> theFound = new ArrayList<IRPModelElement>();
-		
-		for (IRPModelElement theEl : theCandidateEls) {
-			
-			IRPStereotype theStereotype = getStereotypeAppliedTo(theEl, withStereotypeMatchingRegEx);
-			
-			if (theStereotype!=null){
-				// don't add if element is under the profile.
-				if (!checkIsNestedUnderAProfile(theEl)){
-					theFound.add(theEl);
-				}
-			}			
-		}
-		
-		
-		return theFound;
-	}
-
-	public static List<IRPModelElement> findModelElementsWithoutStereotypeNestedUnder(IRPModelElement rootEl, String ofMetaClass, String withStereotypeMatchingRegEx){
-		
-		@SuppressWarnings("unchecked")
-		List<IRPModelElement> theCandidateEls = rootEl.getNestedElementsByMetaClass(ofMetaClass, 1).toList();
-		List<IRPModelElement> theFound = new ArrayList<IRPModelElement>();
-		
-		for (IRPModelElement theEl : theCandidateEls) {
-			
-			IRPStereotype theStereotype = getStereotypeAppliedTo(theEl, withStereotypeMatchingRegEx);
-			
-			if (theStereotype==null){
-				theFound.add(theEl);
-			}			
-		}
-		
-		
-		return theFound;
-	}
 }
 
 /**
@@ -261,6 +150,7 @@ public class MoveRequirements {
 
     Change history:
     #004 10-APR-2016: Re-factored projects into single workspace (F.J.Chadburn)
+    #041 29-JUN-2016: Derive downstream requirement menu added for reqts on diagrams (F.J.Chadburn)
         
     This file is part of SysMLHelperPlugin.
 
