@@ -507,6 +507,88 @@ public class GeneralHelpers {
 		
 		return result;
 	}
+
+	public static List<IRPModelElement> findModelElementsNestedUnder(IRPModelElement rootEl, String ofMetaClass, String withStereotypeMatchingRegEx){
+		
+		@SuppressWarnings("unchecked")
+		List<IRPModelElement> theCandidateEls = rootEl.getNestedElementsByMetaClass(ofMetaClass, 1).toList();
+		List<IRPModelElement> theFound = new ArrayList<IRPModelElement>();
+		
+		for (IRPModelElement theEl : theCandidateEls) {
+			
+			IRPStereotype theStereotype = getStereotypeAppliedTo(theEl, withStereotypeMatchingRegEx);
+			
+			if (theStereotype!=null){
+				// don't add if element is under the profile.
+				if (!checkIsNestedUnderAProfile(theEl)){
+					theFound.add(theEl);
+				}
+			}			
+		}
+		
+		
+		return theFound;
+	}
+
+	public static List<IRPModelElement> findModelElementsWithoutStereotypeNestedUnder(IRPModelElement rootEl, String ofMetaClass, String withStereotypeMatchingRegEx){
+		
+		@SuppressWarnings("unchecked")
+		List<IRPModelElement> theCandidateEls = rootEl.getNestedElementsByMetaClass(ofMetaClass, 1).toList();
+		List<IRPModelElement> theFound = new ArrayList<IRPModelElement>();
+		
+		for (IRPModelElement theEl : theCandidateEls) {
+			
+			IRPStereotype theStereotype = getStereotypeAppliedTo(theEl, withStereotypeMatchingRegEx);
+			
+			if (theStereotype==null){
+				theFound.add(theEl);
+			}			
+		}
+		
+		
+		return theFound;
+	}
+	
+	public static void applyStereotypeToDeriveReqtDependenciesOriginatingFrom( 
+			IRPModelElement theReqt, 
+			IRPStereotype theStereotypeToApply ) {
+		
+		@SuppressWarnings("unchecked")
+		List<IRPDependency> theDependencies = theReqt.getDependencies().toList();
+		
+		for (IRPDependency theDependency : theDependencies) {
+						
+			IRPStereotype theExistingGatewayStereotype = 
+					GeneralHelpers.getStereotypeAppliedTo( theDependency, "from.*" );
+			
+			if (theExistingGatewayStereotype == null && 
+					GeneralHelpers.hasStereotypeCalled("deriveReqt", theDependency)){
+							
+				Logger.writeLine("Applying " + Logger.elementInfo(theStereotypeToApply) + " to " + Logger.elementInfo(theDependency));
+				theDependency.setStereotype(theStereotypeToApply);
+				theDependency.changeTo("Derive Requirement");
+			}
+		}
+	}
+	
+	public static boolean checkIsNestedUnderAProfile(
+			IRPModelElement theElementToCheck){
+		
+		boolean isUnderAProfile = false;
+		
+		IRPModelElement theOwner = theElementToCheck.getOwner();
+		
+		if (theOwner!=null){
+			
+			if (theOwner instanceof IRPProfile){
+				isUnderAProfile = true;
+			} else {
+				isUnderAProfile = checkIsNestedUnderAProfile( theOwner );
+			}
+		}
+		
+		return isUnderAProfile;
+	}
 	
 	public static boolean isElementNameUnique(
 			String theProposedName, 
@@ -568,6 +650,7 @@ public class GeneralHelpers {
     #030 01-JUN-2016: Improve legal name checking across helpers (F.J.Chadburn)
     #033 05-JUN-2016: Add support for creation of operations and events from raw requirement selection (F.J.Chadburn)
     #035 15-JUN-2016: New panel to configure requirements package naming and gateway set-up (F.J.Chadburn)
+    #041 29-JUN-2016: Derive downstream requirement menu added for reqts on diagrams (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 
