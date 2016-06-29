@@ -39,8 +39,7 @@ public class CreateOperationPanel extends CreateTracedElementPanel {
 		if (GeneralHelpers.doUnderlyingModelElementsIn( theSelectedGraphEls, "Requirement" )){
 			
 			// only requirements are selected hence assume only a single operation is needed
-			createSystemOperationFor( 
-					theSelectedGraphEls.get(0), theSelectedReqts, theActiveProject );
+			launchThePanel(	theSelectedGraphEls.get(0), theSelectedReqts, theActiveProject );
 		} else {
 			
 			// launch a dialog for each selected element that is not a requirement
@@ -51,8 +50,7 @@ public class CreateOperationPanel extends CreateTracedElementPanel {
 				if (theModelObject != null && !(theModelObject instanceof IRPRequirement)){
 					
 					// only launch a dialog for non requirement elements
-					createSystemOperationFor(
-							theGraphEl, theSelectedReqts, theActiveProject );
+					launchThePanel(	theGraphEl, theSelectedReqts, theActiveProject );
 				}		
 			}
 		}
@@ -99,7 +97,7 @@ public class CreateOperationPanel extends CreateTracedElementPanel {
 		add( createOKCancelPanel(), BorderLayout.PAGE_END );
 	}
 	
-	private static void createSystemOperationFor(
+	private static void launchThePanel(
 			final IRPGraphElement selectedDiagramEl, 
 			final Set<IRPRequirement> withReqtsAlsoAdded,
 			final IRPProject inProject){
@@ -181,6 +179,7 @@ public class CreateOperationPanel extends CreateTracedElementPanel {
     #032 05-JUN-2016: Populate call operation/event actions on diagram check-box added (F.J.Chadburn)
     #033 05-JUN-2016: Add support for creation of operations and events from raw requirement selection (F.J.Chadburn)
     #034 05-JUN-2016: Re-factored design to move static constructors into appropriate panel class (F.J.Chadburn)
+    #042 29-JUN-2016: launchThePanel renaming to improve Panel class design consistency (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

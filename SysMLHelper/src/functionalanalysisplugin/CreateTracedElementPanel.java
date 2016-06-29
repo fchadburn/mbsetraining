@@ -50,7 +50,13 @@ public abstract class CreateTracedElementPanel extends JPanel {
 		
 		tracedToReqts.addAll( withReqtsAlsoAdded );
 		
-		m_RequirementsPanel = new RequirementSelectionPanel( tracedToReqts );
+		if (tracedToReqts.isEmpty()){
+			m_RequirementsPanel = new RequirementSelectionPanel( 
+					tracedToReqts, "There are no requirements to establish «satisfy» dependencies to" );
+		} else {
+			m_RequirementsPanel = new RequirementSelectionPanel( 
+					tracedToReqts, "With «satisfy» dependencies to:" );
+		}
 	}
 	
 	public JPanel createChosenNamePanelWith(
@@ -269,7 +275,7 @@ public abstract class CreateTracedElementPanel extends JPanel {
 				theRhpApp.highLightElement( theOperation );
 			
 			} else {
-				Logger.writeLine("Error in CreateOperationPanel.performAction, expected an IRPActivityDiagram");
+				Logger.writeLine("Error in populateCallOperationActionOnDiagram, expected an IRPActivityDiagram");
 			}
 		}
 	}
@@ -284,6 +290,7 @@ public abstract class CreateTracedElementPanel extends JPanel {
     #033 05-JUN-2016: Add support for creation of operations and events from raw requirement selection (F.J.Chadburn)
     #034 05-JUN-2016: Re-factored design to move static constructors into appropriate panel class (F.J.Chadburn)
     #040 17-JUN-2016: Extend populate event/ops to work on OMD, i.e., REQ diagrams (F.J.Chadburn)
+    #041 29-JUN-2016: Derive downstream requirement menu added for reqts on diagrams (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

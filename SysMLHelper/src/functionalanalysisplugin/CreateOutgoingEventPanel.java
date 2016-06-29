@@ -48,8 +48,7 @@ public class CreateOutgoingEventPanel extends CreateTracedElementPanel {
 		if (GeneralHelpers.doUnderlyingModelElementsIn( theSelectedGraphEls, "Requirement" )){
 			
 			// only requirements are selected hence assume only a single operation is needed
-			createOutgoingEventFor( 
-					theSelectedGraphEls.get(0), theSelectedReqts, theActiveProject );
+			launchThePanel(	theSelectedGraphEls.get(0), theSelectedReqts, theActiveProject );
 		} else {
 			
 			// launch a dialog for each selected element that is not a requirement
@@ -60,8 +59,7 @@ public class CreateOutgoingEventPanel extends CreateTracedElementPanel {
 				if (theModelObject != null && !(theModelObject instanceof IRPRequirement)){
 					
 					// only launch a dialog for non requirement elements
-					createOutgoingEventFor(
-							theGraphEl, theSelectedReqts, theActiveProject );
+					launchThePanel(	theGraphEl, theSelectedReqts, theActiveProject );
 				}		
 			}
 		}
@@ -168,7 +166,7 @@ public class CreateOutgoingEventPanel extends CreateTracedElementPanel {
 		add( createOKCancelPanel(), BorderLayout.PAGE_END );
 	}
 
-	private static void createOutgoingEventFor(
+	private static void launchThePanel(
 			final IRPGraphElement theSourceGraphElement, 
 			final Set<IRPRequirement> withReqtsAlsoAdded,
 			final IRPProject inProject){
@@ -449,6 +447,7 @@ public class CreateOutgoingEventPanel extends CreateTracedElementPanel {
     #034 05-JUN-2016: Re-factored design to move static constructors into appropriate panel class (F.J.Chadburn)
     #038 17-JUN-2016: Populate diagram now populates a SendAction in case of send events (F.J.Chadburn)
     #040 17-JUN-2016: Extend populate event/ops to work on OMD, i.e., REQ diagrams (F.J.Chadburn)
+    #042 29-JUN-2016: launchThePanel renaming to improve Panel class design consistency (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

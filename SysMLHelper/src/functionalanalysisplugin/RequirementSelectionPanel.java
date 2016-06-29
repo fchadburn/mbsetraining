@@ -36,7 +36,8 @@ public class RequirementSelectionPanel extends JPanel {
 	private Map<IRPRequirement, JCheckBox> m_CheckBoxMap = new HashMap<IRPRequirement, JCheckBox>();
 
 	public RequirementSelectionPanel(
-			Set<IRPRequirement> theReqts) {
+			Set<IRPRequirement> theReqts, 
+			String theLabelText ){
 		
 		super();
 
@@ -49,16 +50,9 @@ public class RequirementSelectionPanel extends JPanel {
 
 		theBox.setBorder( BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-		if (theReqts.isEmpty()){
-			JLabel theLabel = new JLabel("There are no requirements to establish «satisfy» dependencies to");
-			theLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
-			theBox.add( theLabel );
-		} else {
-			JLabel theLabel = new JLabel("With «satisfy» dependencies to:");
-			theLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
-			theBox.add( theLabel );
-		}
-
+		JLabel theLabel = new JLabel(theLabelText);
+		theLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+		theBox.add( theLabel );
 
 		JPanel theReqtsTable = createContent( theReqts );
 		theReqtsTable.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -138,7 +132,6 @@ public class RequirementSelectionPanel extends JPanel {
 		}
 		
 		return theFilteredReqts;
-		
 	}
 }
 
@@ -149,6 +142,7 @@ public class RequirementSelectionPanel extends JPanel {
     #022 30-MAY-2016: Improved handling and validation of event/operation creation by adding new forms (F.J.Chadburn)
     #031 01-JUN-2016: Scroll pane added for readability of requirement text on panels (F.J.Chadburn)
     #033 05-JUN-2016: Add support for creation of operations and events from raw requirement selection (F.J.Chadburn)
+    #041 29-JUN-2016: Derive downstream requirement menu added for reqts on diagrams (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

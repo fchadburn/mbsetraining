@@ -57,7 +57,7 @@ public class CreateIncomingEventPanel extends CreateTracedElementPanel {
 		if (GeneralHelpers.doUnderlyingModelElementsIn( theSelectedGraphEls, "Requirement" )){
 			
 			// only requirements are selected hence assume only a single operation is needed
-			createIncomingEventFor( 
+			launchThePanel( 
 					theSelectedGraphEls.get(0), theSelectedReqts, theActiveProject );
 		} else {
 			
@@ -69,7 +69,7 @@ public class CreateIncomingEventPanel extends CreateTracedElementPanel {
 				if (theModelObject != null && !(theModelObject instanceof IRPRequirement)){
 					
 					// only launch a dialog for non requirement elements
-					createIncomingEventFor(
+					launchThePanel(
 							theGraphEl, theSelectedReqts, theActiveProject );
 				}		
 			}
@@ -173,7 +173,7 @@ public class CreateIncomingEventPanel extends CreateTracedElementPanel {
 		updateNames();
 	}
 
-	private static void createIncomingEventFor(
+	private static void launchThePanel(
 			final IRPGraphElement theSourceGraphElement, 
 			final Set<IRPRequirement> withReqtsAlsoAdded,
 			final IRPProject inProject){
@@ -796,6 +796,7 @@ public class CreateIncomingEventPanel extends CreateTracedElementPanel {
     #033 05-JUN-2016: Add support for creation of operations and events from raw requirement selection (F.J.Chadburn)
     #034 05-JUN-2016: Re-factored design to move static constructors into appropriate panel class (F.J.Chadburn)
     #040 17-JUN-2016: Extend populate event/ops to work on OMD, i.e., REQ diagrams (F.J.Chadburn)
+    #042 29-JUN-2016: launchThePanel renaming to improve Panel class design consistency (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

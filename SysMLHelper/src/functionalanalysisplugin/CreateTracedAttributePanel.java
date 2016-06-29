@@ -41,8 +41,7 @@ public class CreateTracedAttributePanel extends CreateTracedElementPanel {
 		if (GeneralHelpers.doUnderlyingModelElementsIn( theSelectedGraphEls, "Requirement" )){
 			
 			// only requirements are selected hence assume only a single operation is needed
-			createSystemAttributeFor( 
-					theSelectedGraphEls.get(0), theSelectedReqts, theActiveProject );
+			launchThePanel(	theSelectedGraphEls.get(0), theSelectedReqts, theActiveProject );
 		} else {
 			
 			// launch a dialog for each selected element that is not a requirement
@@ -53,8 +52,7 @@ public class CreateTracedAttributePanel extends CreateTracedElementPanel {
 				if (theModelObject != null && !(theModelObject instanceof IRPRequirement)){
 					
 					// only launch a dialog for non requirement elements
-					createSystemAttributeFor( 
-							theGraphEl, theSelectedReqts, theActiveProject );
+					launchThePanel(	theGraphEl, theSelectedReqts, theActiveProject );
 				}		
 			}
 		}
@@ -118,7 +116,7 @@ public class CreateTracedAttributePanel extends CreateTracedElementPanel {
 		return thePanel;
 	}
 
-	private static void createSystemAttributeFor(
+	private static void launchThePanel(
 			final IRPGraphElement selectedDiagramEl, 
 			final Set<IRPRequirement> withReqtsAlsoAdded,
 			final IRPProject inProject){
@@ -228,6 +226,7 @@ public class CreateTracedAttributePanel extends CreateTracedElementPanel {
     #028 01-JUN-2016: Add new menu to create a stand-alone attribute owned by the system (F.J.Chadburn)
     #033 05-JUN-2016: Add support for creation of operations and events from raw requirement selection (F.J.Chadburn)
     #034 05-JUN-2016: Re-factored design to move static constructors into appropriate panel class (F.J.Chadburn)
+    #042 29-JUN-2016: launchThePanel renaming to improve Panel class design consistency (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 
