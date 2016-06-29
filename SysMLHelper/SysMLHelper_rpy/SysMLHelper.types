@@ -1,4 +1,3 @@
-
 [Types]
 Names=Usage Requirements
 
@@ -25,8 +24,7 @@ Section1Name=Object
 Section1Tree=<Object number="$i"><Attribute value="$l" name="Object Heading"></Attribute><Picture>$g</Picture></Object>
 Requirement1Name=Requirement
 Requirement1Value1Key=WizardPartial
-Requirement1Value1Value=Object Type
-Requirement1Tree=<Object id="$i"><Picture>$g</Picture><Text>$t</Text><Attribute name="Object Type" value="Requirement"></Attribute></Object>
+Requirement1Value1Value=Requirement
+Requirement1Tree=<Object id="$i"><Picture>$g</Picture><Text>$t</Text><Attribute name="Requirement" value="True"></Attribute></Object>
 TextFormat=1
 Type=xml
-
