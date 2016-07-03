@@ -3,6 +3,7 @@ package requirementsanalysisplugin;
 import generalhelpers.GeneralHelpers;
 import generalhelpers.Logger;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -58,9 +59,10 @@ public class MoveRequirements {
 			
 		} else {
 			
-			List<IRPModelElement> thePackages;
-			
-			thePackages = GeneralHelpers.findModelElementsNestedUnder( theProject, "Package", theGatewayStereotypeName);
+			List<IRPModelElement> thePackages = 
+					new ArrayList<IRPModelElement>(
+							GeneralHelpers.findModelElementsNestedUnder(
+									theProject, "Package", theGatewayStereotypeName) );
 			
 			Object[] options = new Object[thePackages.size()];
 			
@@ -150,7 +152,7 @@ public class MoveRequirements {
 
     Change history:
     #004 10-APR-2016: Re-factored projects into single workspace (F.J.Chadburn)
-    #041 29-JUN-2016: Derive downstream requirement menu added for reqts on diagrams (F.J.Chadburn)
+    #043 03-JUL-2016: Add Derive downstream reqt for CallOps, InterfaceItems and Event Actions (F.J.Chadburn)
         
     This file is part of SysMLHelperPlugin.
 
