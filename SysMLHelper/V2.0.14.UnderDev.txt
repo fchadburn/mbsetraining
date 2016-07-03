@@ -1,0 +1,14 @@
+#043 03-JUL-2016: Add Derive downstream reqt for CallOps, InterfaceItems and Event Actions (F.J.Chadburn)
+#044 03-JUL-2016: Minor re-factoring/code corrections (F.J.Chadburn)
+#045 03-JUL-2016: Fix CopyActivityDiagramsPanel capability (F.J.Chadburn)
+
+TODO:
+#XXX DD-MTH-YEAR: Avoid port proliferation in inheritance tree for actors/system (F.J.Chadburn)
+#XXX DD-MTH-YEAR: Allow rippling updates (F.J.Chadburn)
+#XXX DD-MTH-YEAR: Populate test case script from a sequence diagram (F.J.Chadburn)
+#XXX DD-MTH-YEAR: Improve singleton support for IRPApplication/IRPProject across project (F.J.Chadburn)
+#XXX DD-MTH-YEAR: Improve warning/working when multiple Rhapsody instances are open (F.J.Chadburn)
+#XXX DD-MTH-YEAR: Add Start link/End link dialog (F.J.Chadburn)
+#XXX DD-MTH-YEAR: Event+Action text improved for creating new requirements (F.J.Chadburn) 
+#XXX DD-MTH-YEAR: Fix exception when you do create new requirement on proper event/send
+#XXX DD-MTH-YEAR: Make requirement creation menus diagram safe

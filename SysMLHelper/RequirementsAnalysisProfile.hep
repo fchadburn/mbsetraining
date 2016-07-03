@@ -53,7 +53,7 @@ DLLServerCompatible6=1
 name7=MBSE Method: Requirements Analysis\Derive downstream requirement
 isPluginCommand7=1
 command7=InvokeRequirementsAnalysisHelper
-applicableTo7=Requirement
+applicableTo7=Requirement,CallOperation,AcceptEventAction,State,Operation,Event
 isVisible7=1
 DLLServerCompatible7=1
 
@@ -62,6 +62,7 @@ DLLServerCompatible7=1
 #REM Change history:
 #REM #021 30-MAY-2016: Added Copyright/History statements to the hep files (F.J.Chadburn)
 #REM #041 29-JUN-2016: Derive downstream requirement menu added for reqts on diagrams (F.J.Chadburn)
+#REM #043 03-JUL-2016: Add Derive new requirement to CallOperations and Event Actions (F.J.Chadburn)
 #REM
 #REM This file is part of SysMLHelperPlugin.
 #REM
