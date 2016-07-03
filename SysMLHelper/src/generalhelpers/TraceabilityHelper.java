@@ -8,6 +8,44 @@ import com.telelogic.rhapsody.core.*;
 
 public class TraceabilityHelper {
 
+	public static IRPDependency addStereotypedDependencyIfOneDoesntExist(
+			IRPModelElement fromElement, 
+			IRPModelElement toElement,
+			String stereotypeName){
+		
+		IRPDependency theDependency = null;
+		
+		List<IRPModelElement> existingDeps = 
+				GeneralHelpers.findElementsWithMetaClassAndStereotype(
+						"Dependency", stereotypeName, fromElement );
+		
+		int isExistingFoundCount = 0;
+		
+		for (IRPModelElement theExistingDep : existingDeps) {
+			
+			IRPDependency theDep = (IRPDependency)theExistingDep;
+			IRPModelElement theDependsOn = theDep.getDependsOn();
+			
+			if( theDependsOn.equals( toElement )){
+				isExistingFoundCount++;
+			}
+		}
+		
+		if( isExistingFoundCount==0 ){
+			IRPDependency theDeriveDependency = 
+					fromElement.addDependencyTo( toElement );
+			
+			theDeriveDependency.addStereotype( stereotypeName, "Dependency" );
+			
+			Logger.writeLine( "Added a «" + stereotypeName + "» dependency to " + Logger.elementInfo(fromElement) );
+		} else {
+			Logger.writeLine( "Skipped adding a «" + stereotypeName + "» dependency to " + Logger.elementInfo(fromElement) + 
+					" as " + isExistingFoundCount + " already exists" );
+		}
+		
+		return theDependency;
+	}
+	
 	public static Set<IRPRequirement> getRequirementsThatTraceFrom(
 			IRPModelElement theElement, boolean withWarning){
 		
@@ -39,7 +77,7 @@ public class TraceabilityHelper {
 		return theReqts;
 	}
 	
-	public static Set<IRPRequirement> getRequirementsThatTraceFromWithStereotypedRelation(
+	public static Set<IRPRequirement> getRequirementsThatTraceFromWithStereotype(
 			IRPModelElement theElement, String withDependencyStereotype){
 		
 		Set<IRPRequirement> theReqts = new HashSet<IRPRequirement>();
@@ -53,7 +91,7 @@ public class TraceabilityHelper {
 			
 			if (theDependsOn != null && theDependsOn instanceof IRPRequirement){
 				
-				if (GeneralHelpers.hasStereotypeCalled("verify", theDependency)){
+				if (GeneralHelpers.hasStereotypeCalled( withDependencyStereotype, theDependency) ){
 					theReqts.add( (IRPRequirement) theDependsOn );
 				}	
 			}
@@ -71,6 +109,8 @@ public class TraceabilityHelper {
     #013 10-MAY-2016: Add support for sequence diagram req't and verification relation population (F.J.Chadburn)
     #022 30-MAY-2016: Improved handling and validation of event/operation creation by adding new forms (F.J.Chadburn) 
     #033 05-JUN-2016: Add support for creation of operations and events from raw requirement selection (F.J.Chadburn)
+    #043 03-JUL-2016: Add Derive downstream reqt for CallOps, InterfaceItems and Event Actions (F.J.Chadburn)
+    #044 03-JUL-2016: Minor re-factoring/code corrections (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

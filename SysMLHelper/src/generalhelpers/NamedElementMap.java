@@ -44,6 +44,19 @@ public class NamedElementMap {
 		IRPModelElement theEl = m_ModelElements.get( index );
 		return theEl;
 	}
+	
+	public void addList( List<IRPModelElement> theList ){
+		
+		for (IRPModelElement theModelEl : theList) {
+			
+			if (!m_ModelElements.contains(theModelEl)){
+				
+				m_ModelElements.add( theModelEl );
+				m_FullNames.add( theModelEl.getFullPathName() );
+				m_ShortNames.add( theModelEl.getName() );
+			}
+		}
+	}
 }
 
 /**
@@ -51,6 +64,7 @@ public class NamedElementMap {
 
     Change history:
     #035 15-JUN-2016: New panel to configure requirements package naming and gateway set-up (F.J.Chadburn)
+    #043 03-JUL-2016: Add Derive new requirement to CallOperations and Event Actions (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

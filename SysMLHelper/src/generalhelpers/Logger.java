@@ -24,7 +24,7 @@ public class Logger {
 	
 	public static String elementInfo(IRPModelElement forTheEl){
 		
-		String theInfo = "";
+		String theInfo = "Error (Null Element)";
 		
 		if (forTheEl != null){
 			theInfo = forTheEl.getMetaClass() + " called " + forTheEl.getName();
@@ -39,6 +39,7 @@ public class Logger {
 
     Change history:
     #004 10-APR-2016: Re-factored projects into single workspace (F.J.Chadburn)
+    #044 03-JUL-2016: Minor re-factoring/code corrections (F.J.Chadburn)
         
     This file is part of SysMLHelperPlugin.
 

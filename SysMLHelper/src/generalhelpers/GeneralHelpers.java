@@ -2,9 +2,9 @@ package generalhelpers;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
-
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -508,24 +508,27 @@ public class GeneralHelpers {
 		return result;
 	}
 
-	public static List<IRPModelElement> findModelElementsNestedUnder(IRPModelElement rootEl, String ofMetaClass, String withStereotypeMatchingRegEx){
+	public static Set<IRPModelElement> findModelElementsNestedUnder(
+			IRPModelElement rootEl, 
+			String ofMetaClass, 
+			String withStereotypeMatchingRegEx){
 		
 		@SuppressWarnings("unchecked")
 		List<IRPModelElement> theCandidateEls = rootEl.getNestedElementsByMetaClass(ofMetaClass, 1).toList();
-		List<IRPModelElement> theFound = new ArrayList<IRPModelElement>();
+		
+		Set<IRPModelElement> theFound = new LinkedHashSet<IRPModelElement>();
 		
 		for (IRPModelElement theEl : theCandidateEls) {
 			
-			IRPStereotype theStereotype = getStereotypeAppliedTo(theEl, withStereotypeMatchingRegEx);
+			IRPStereotype theStereotype = getStereotypeAppliedTo( theEl, withStereotypeMatchingRegEx );
 			
-			if (theStereotype!=null){
+			if( theStereotype != null ){
 				// don't add if element is under the profile.
-				if (!checkIsNestedUnderAProfile(theEl)){
-					theFound.add(theEl);
+				if (!checkIsNestedUnderAProfile( theEl )){
+					theFound.add( theEl );
 				}
 			}			
 		}
-		
 		
 		return theFound;
 	}
@@ -651,6 +654,7 @@ public class GeneralHelpers {
     #033 05-JUN-2016: Add support for creation of operations and events from raw requirement selection (F.J.Chadburn)
     #035 15-JUN-2016: New panel to configure requirements package naming and gateway set-up (F.J.Chadburn)
     #041 29-JUN-2016: Derive downstream requirement menu added for reqts on diagrams (F.J.Chadburn)
+    #044 03-JUL-2016: Minor re-factoring/code corrections (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 
