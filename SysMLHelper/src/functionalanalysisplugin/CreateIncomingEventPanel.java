@@ -267,45 +267,9 @@ public class CreateIncomingEventPanel extends CreateTracedElementPanel {
 				+ "' event to the actor");
 		
 		m_CheckOperationCheckBox.setText(
-				"Add a '" + determineBestCheckOperationNameFor( m_TargetBlock, m_AttributeNameTextField.getText() ) 
+				"Add a '" + determineBestCheckOperationNameFor( (IRPClassifier)m_TargetOwningElement, m_AttributeNameTextField.getText() ) 
 				+ "' operation to the block that returns the attribute value");
 	}
-	/*
-	private JPanel createEventNamingPanel( 
-			String theProposedEventName ){
-	
-		JPanel thePanel = new JPanel();
-		thePanel.setLayout( new BoxLayout(thePanel, BoxLayout.X_AXIS ) );	
-		
-		JLabel theLabel =  new JLabel("Create an event called:  ");
-		thePanel.add( theLabel );
-		
-		m_ChosenNameTextField = new JTextField( theProposedEventName );
-		m_ChosenNameTextField.setMaximumSize( new Dimension( 300,20 ) );
-		
-		m_ChosenNameTextField.getDocument().addDocumentListener(
-				new DocumentListener() {
-
-					@Override
-					public void changedUpdate(DocumentEvent arg0) {
-						updateNames();					
-					}
-
-					@Override
-					public void insertUpdate(DocumentEvent arg0) {
-						updateNames();
-					}
-
-					@Override
-					public void removeUpdate(DocumentEvent arg0) {
-						updateNames();
-					}	
-				});
-		
-		thePanel.add( m_ChosenNameTextField );
-	
-		return thePanel;
-	}*/
 	
 	private JPanel createAttributeNamePanel(
 			String theProposedName ){
@@ -365,7 +329,9 @@ public class CreateIncomingEventPanel extends CreateTracedElementPanel {
 				
 				sendEvent = (IRPEvent) theEvent.clone(withSendEventName, onTheActor.getOwner());
 				
-				Logger.writeLine("The state called " + theReadyState.getFullPathName() + " is owned by " + theReadyState.getOwner().getFullPathName());
+				Logger.writeLine("The state called " + theReadyState.getFullPathName() + 
+						" is owned by " + theReadyState.getOwner().getFullPathName());
+				
 				IRPTransition theTransition = theReadyState.addInternalTransition( sendEvent );
 				
 				String actionText = "OPORT(pLogicalSystem)->GEN(" + theEvent.getName() + "(";
@@ -455,7 +421,7 @@ public class CreateIncomingEventPanel extends CreateTracedElementPanel {
 			IRPClassifier theClassifier = (IRPClassifier)theOwner;
 			String theAttributeName = theAttribute.getName();
 			
-			theOperation = theClassifier.addOperation( determineBestCheckOperationNameFor(m_TargetBlock, theAttributeName) );
+			theOperation = theClassifier.addOperation( determineBestCheckOperationNameFor((IRPClassifier) m_TargetOwningElement, theAttributeName) );
 			
 			theOperation.setBody("OM_RETURN( " + theAttributeName + " );");
 			
@@ -591,7 +557,7 @@ public class CreateIncomingEventPanel extends CreateTracedElementPanel {
 	}
 
 	@Override
-	boolean checkValidity(
+	protected boolean checkValidity(
 			boolean isMessageEnabled) {
 
 		String errorMessage = null;
@@ -630,7 +596,7 @@ public class CreateIncomingEventPanel extends CreateTracedElementPanel {
 			} else if (!GeneralHelpers.isElementNameUnique(
 					theAttributeName, 
 					"Attribute", 
-					m_TargetBlock, 
+					m_TargetOwningElement, 
 					0)){
 
 				errorMessage = "Unable to proceed as the attribute name '" + theAttributeName + "' is not unique";
@@ -639,14 +605,15 @@ public class CreateIncomingEventPanel extends CreateTracedElementPanel {
 				
 		} else if (m_CheckOperationCheckBox.isSelected()){
 
-			String theCheckOpName = determineBestCheckOperationNameFor( m_TargetBlock, theAttributeName );
+			String theCheckOpName = determineBestCheckOperationNameFor(
+					(IRPClassifier) m_TargetOwningElement, theAttributeName );
 
 			Logger.writeLine("A check operation is needed, chosen name was " + theCheckOpName);
 
 			if (!GeneralHelpers.isElementNameUnique(
 					theCheckOpName, 
 					"Operation", 
-					m_TargetBlock, 
+					m_TargetOwningElement, 
 					0)){
 
 				errorMessage = "Unable to proceed as the check operation name '" + theCheckOpName + "' is not unique";
@@ -670,7 +637,7 @@ public class CreateIncomingEventPanel extends CreateTracedElementPanel {
 	}
 	
 	@Override
-	void performAction() {
+	protected void performAction() {
 		
 		// do silent check first
 		if (checkValidity( false )){
@@ -686,7 +653,7 @@ public class CreateIncomingEventPanel extends CreateTracedElementPanel {
 
 			addTraceabilityDependenciesTo( theEvent, selectedReqtsList );
 
-			IRPModelElement theReception = m_TargetBlock.addNewAggr( "Reception", m_ChosenNameTextField.getText() );
+			IRPModelElement theReception = m_TargetOwningElement.addNewAggr( "Reception", m_ChosenNameTextField.getText() );
 			addTraceabilityDependenciesTo( theReception, selectedReqtsList );		
 
 			if ( m_CreateSendEvent.isSelected() ) {
@@ -707,7 +674,10 @@ public class CreateIncomingEventPanel extends CreateTracedElementPanel {
 
 			if ( m_AttributeCheckBox.isSelected() ){
 				
-				IRPAttribute theAttribute = m_TargetBlock.addAttribute( m_AttributeNameTextField.getText() );
+				IRPAttribute theAttribute = 
+						((IRPClassifier) m_TargetOwningElement).addAttribute(
+								m_AttributeNameTextField.getText() );
+				
 				theAttribute.setDefaultValue("0");
 				addTraceabilityDependenciesTo( theAttribute, selectedReqtsList );
 				theAttribute.highLightElement();
@@ -719,7 +689,8 @@ public class CreateIncomingEventPanel extends CreateTracedElementPanel {
 					theCheckOp.highLightElement();
 				}
 
-				addAnAttributeToMonitoringStateWith(theAttribute, theEvent.getName(), m_TargetBlock );
+				addAnAttributeToMonitoringStateWith(
+						theAttribute, theEvent.getName(), (IRPClassifier)m_TargetOwningElement );
 			}	
 			
 			bleedColorToElementsRelatedTo( m_SourceGraphElement );
@@ -797,6 +768,8 @@ public class CreateIncomingEventPanel extends CreateTracedElementPanel {
     #034 05-JUN-2016: Re-factored design to move static constructors into appropriate panel class (F.J.Chadburn)
     #040 17-JUN-2016: Extend populate event/ops to work on OMD, i.e., REQ diagrams (F.J.Chadburn)
     #042 29-JUN-2016: launchThePanel renaming to improve Panel class design consistency (F.J.Chadburn)
+    #043 03-JUL-2016: Add Derive downstream reqt for CallOps, InterfaceItems and Event Actions (F.J.Chadburn)
+    #044 03-JUL-2016: Minor re-factoring/code corrections (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

@@ -245,11 +245,16 @@ public class PopulateFunctionalAnalysisPkg extends PopulatePkg {
 					JOptionPane.WARNING_MESSAGE);	
     	} else {
     		
-    		IRPPackage theWorkingPackage = FunctionalAnalysisSettings.getWorkingPkgUnderDev( forProject );
+    		IRPPackage theWorkingPackage = 
+    				FunctionalAnalysisSettings.getWorkingPkgUnderDev( forProject );
     		
-    		CopyActivityDiagramsPanel.launchCopyActivityDiagramPanel(
-    				theRequirementsAnalysisPkg, 
-    				theWorkingPackage);
+    		if (theWorkingPackage != null){
+        		CopyActivityDiagramsPanel.launchThePanel(
+        				theRequirementsAnalysisPkg, 
+        				theWorkingPackage);    			
+    		} else {
+    			Logger.writeLine("Error in copyActivityDiagrams, no working package was found");
+    		}
     	}
 	}
 }
@@ -267,6 +272,7 @@ public class PopulateFunctionalAnalysisPkg extends PopulatePkg {
     #023 30-MAY-2016: Added form to support validation checks for analysis block hierarchy creation (F.J.Chadburn) 
     #025 31-MAY-2016: Add new menu and dialog to add a new actor to package under development (F.J.Chadburn)
     #027 31-MAY-2016: Add new menu to launch dialog to copy Activity Diagrams (F.J.Chadburn)
+    #045 03-JUL-2016: Fix CopyActivityDiagramsPanel capability (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

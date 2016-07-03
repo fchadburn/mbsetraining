@@ -416,7 +416,13 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
 			
 			// Create nested package for housing the ADs
 			IRPPackage theWorkingPackage = theBlockPackage.addNestedPackage(theName + "Working" + "Pkg");
+			
+			// This dependency is also used to locate the working package
+			IRPDependency theRAProfileDependency = 
+					theWorkingPackage.addDependency("RequirementsAnalysisProfile", "Profile");
 		
+			theRAProfileDependency.addStereotype("AppliedProfile", "Dependency");
+			
 			// Add a component
 			addAComponentWith(theName, theBlockTestPackage, theUsageDomainBlock);
 
@@ -432,7 +438,7 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
 					theProject, 
 					"FunctionalAnalysisPkg" );
 			
-			CopyActivityDiagramsPanel.launchCopyActivityDiagramPanel(
+			CopyActivityDiagramsPanel.launchThePanel(
 					m_RequirementsAnalysisPkg, 
 					theWorkingPackage);
 		} else {
@@ -451,6 +457,8 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
     #030 01-JUN-2016: Improve legal name checking across helpers (F.J.Chadburn)
     #035 15-JUN-2016: New panel to configure requirements package naming and gateway set-up (F.J.Chadburn)
     #039 17-JUN-2016: Minor fixes and improvements to robustness of Gateway project setup (F.J.Chadburn)
+    #044 03-JUL-2016: Minor re-factoring/code corrections (F.J.Chadburn)
+    #045 03-JUL-2016: Fix CopyActivityDiagramsPanel capability (F.J.Chadburn)
     
     This file is part of SysMLHelperPlugin.
 

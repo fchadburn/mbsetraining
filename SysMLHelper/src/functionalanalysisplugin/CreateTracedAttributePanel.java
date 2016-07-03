@@ -150,7 +150,7 @@ public class CreateTracedAttributePanel extends CreateTracedElementPanel {
 	}
 	
 	@Override
-	boolean checkValidity(
+	protected boolean checkValidity(
 			boolean isMessageEnabled) {
 		
 		String errorMessage = "";
@@ -166,7 +166,7 @@ public class CreateTracedAttributePanel extends CreateTracedElementPanel {
 			isValid = false;
 			
 		} else if (!GeneralHelpers.isElementNameUnique(
-				m_ChosenNameTextField.getText(), "Attribute", m_TargetBlock, 1)){
+				m_ChosenNameTextField.getText(), "Attribute", m_TargetOwningElement, 1)){
 
 			errorMessage = "Unable to proceed as the name '" + m_ChosenNameTextField.getText() + "' is not unique";
 			isValid = false;
@@ -200,12 +200,15 @@ public class CreateTracedAttributePanel extends CreateTracedElementPanel {
 	}
 
 	@Override
-	void performAction() {
+	protected void performAction() {
 		
 		// do silent check first
 		if (checkValidity( false )){
 			
-			IRPAttribute theAttribute = m_TargetBlock.addAttribute( m_ChosenNameTextField.getText() );				
+			IRPAttribute theAttribute =
+					((IRPClassifier)m_TargetOwningElement).addAttribute(
+							m_ChosenNameTextField.getText() );				
+			
 			theAttribute.highLightElement();
 			theAttribute.setDefaultValue( m_InitialValueTextField.getText() );
 			
@@ -227,6 +230,7 @@ public class CreateTracedAttributePanel extends CreateTracedElementPanel {
     #033 05-JUN-2016: Add support for creation of operations and events from raw requirement selection (F.J.Chadburn)
     #034 05-JUN-2016: Re-factored design to move static constructors into appropriate panel class (F.J.Chadburn)
     #042 29-JUN-2016: launchThePanel renaming to improve Panel class design consistency (F.J.Chadburn)
+    #043 03-JUL-2016: Add Derive new requirement to CallOperations and Event Actions (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

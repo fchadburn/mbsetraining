@@ -56,6 +56,38 @@ public class CreateOperationPanel extends CreateTracedElementPanel {
 		}
 	}
 	
+	private static void launchThePanel(
+			final IRPGraphElement selectedDiagramEl, 
+			final Set<IRPRequirement> withReqtsAlsoAdded,
+			final IRPProject inProject){
+	
+		javax.swing.SwingUtilities.invokeLater(new Runnable() {
+
+			@Override
+			public void run() {
+				IRPClassifier theLogicalSystemBlock = FunctionalAnalysisSettings.getBlockUnderDev( inProject );
+				
+				JFrame.setDefaultLookAndFeelDecorated( true );
+				
+				JFrame frame = new JFrame(
+						"Create an operation on " + theLogicalSystemBlock.getUserDefinedMetaClass() 
+						+ " called " + theLogicalSystemBlock.getName());
+				
+				frame.setDefaultCloseOperation( JFrame.DISPOSE_ON_CLOSE );
+				
+				CreateOperationPanel thePanel = new CreateOperationPanel(
+						selectedDiagramEl,
+						withReqtsAlsoAdded,
+						theLogicalSystemBlock);
+
+				frame.setContentPane( thePanel );
+				frame.pack();
+				frame.setLocationRelativeTo( null );
+				frame.setVisible( true );
+			}
+		});
+	}
+	
 	public CreateOperationPanel(
 			IRPGraphElement forSourceGraphElement, 
 			Set<IRPRequirement> withReqtsAlsoAdded,
@@ -97,47 +129,15 @@ public class CreateOperationPanel extends CreateTracedElementPanel {
 		add( createOKCancelPanel(), BorderLayout.PAGE_END );
 	}
 	
-	private static void launchThePanel(
-			final IRPGraphElement selectedDiagramEl, 
-			final Set<IRPRequirement> withReqtsAlsoAdded,
-			final IRPProject inProject){
-	
-		javax.swing.SwingUtilities.invokeLater(new Runnable() {
-
-			@Override
-			public void run() {
-				IRPClassifier theLogicalSystemBlock = FunctionalAnalysisSettings.getBlockUnderDev( inProject );
-				
-				JFrame.setDefaultLookAndFeelDecorated( true );
-				
-				JFrame frame = new JFrame(
-						"Create an operation on " + theLogicalSystemBlock.getUserDefinedMetaClass() 
-						+ " called " + theLogicalSystemBlock.getName());
-				
-				frame.setDefaultCloseOperation( JFrame.DISPOSE_ON_CLOSE );
-				
-				CreateOperationPanel thePanel = new CreateOperationPanel(
-						selectedDiagramEl,
-						withReqtsAlsoAdded,
-						theLogicalSystemBlock);
-
-				frame.setContentPane( thePanel );
-				frame.pack();
-				frame.setLocationRelativeTo( null );
-				frame.setVisible( true );
-			}
-		});
-	}
-	
 	@Override
-	boolean checkValidity(
+	protected boolean checkValidity(
 			boolean isMessageEnabled){
 		
 		String errorMessage = null;
 		boolean isValid = true;
 		
 		if (!GeneralHelpers.isElementNameUnique(
-				m_ChosenNameTextField.getText(), "Operation", m_TargetBlock, 1)){
+				m_ChosenNameTextField.getText(), "Operation", m_TargetOwningElement, 1)){
 
 			errorMessage = "Unable to proceed as the name '" + m_ChosenNameTextField.getText() + "' is not unique";
 			isValid = false;
@@ -152,11 +152,14 @@ public class CreateOperationPanel extends CreateTracedElementPanel {
 	}
 
 	@Override
-	void performAction() {
+	protected void performAction() {
 		// do silent check first
 		if (checkValidity( false )){
 			
-			IRPOperation theOperation = m_TargetBlock.addOperation( m_ChosenNameTextField.getText() );				
+			IRPOperation theOperation = 
+					((IRPClassifier)m_TargetOwningElement).addOperation(
+							m_ChosenNameTextField.getText() );	
+			
 			theOperation.highLightElement();
 			addTraceabilityDependenciesTo( theOperation, m_RequirementsPanel.getSelectedRequirementsList() );
 			bleedColorToElementsRelatedTo( m_SourceGraphElement );
@@ -180,6 +183,7 @@ public class CreateOperationPanel extends CreateTracedElementPanel {
     #033 05-JUN-2016: Add support for creation of operations and events from raw requirement selection (F.J.Chadburn)
     #034 05-JUN-2016: Re-factored design to move static constructors into appropriate panel class (F.J.Chadburn)
     #042 29-JUN-2016: launchThePanel renaming to improve Panel class design consistency (F.J.Chadburn)
+    #043 03-JUL-2016: Add Derive downstream reqt for CallOps, InterfaceItems and Event Actions (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

@@ -247,7 +247,8 @@ public class CreateOutgoingEventPanel extends CreateTracedElementPanel {
 	
 	private void updateNames(){
 		m_SendOperationIsNeededCheckBox.setText(
-				"Add an '" + determineBestInformNameFor( m_TargetBlock, m_ChosenNameTextField.getText() ) 
+				"Add an '" + determineBestInformNameFor(
+						(IRPClassifier)m_TargetOwningElement, m_ChosenNameTextField.getText() ) 
 				+ "' operation that sends the event");
 	}
 
@@ -319,7 +320,7 @@ public class CreateOutgoingEventPanel extends CreateTracedElementPanel {
 	}
 	
 	@Override
-	boolean checkValidity(
+	protected boolean checkValidity(
 			boolean isMessageEnabled) {
 
 		String errorMessage = null;
@@ -347,13 +348,13 @@ public class CreateOutgoingEventPanel extends CreateTracedElementPanel {
 		if (m_SendOperationIsNeededCheckBox.isSelected()){
 			
 			String theProposedName = determineBestInformNameFor(
-					m_TargetBlock, 
+					(IRPClassifier)m_TargetOwningElement, 
 					theChosenName );
 
 			if (!GeneralHelpers.isElementNameUnique(
 					theProposedName, 
 					"Operation", 
-					m_TargetBlock, 
+					m_TargetOwningElement, 
 					0)){
 
 				if (errorMessage != null){
@@ -374,7 +375,7 @@ public class CreateOutgoingEventPanel extends CreateTracedElementPanel {
 	}
 	
 	@Override
-	void performAction() {
+	protected void performAction() {
 		
 		// do silent check first
 		if (checkValidity( false )){
@@ -406,8 +407,10 @@ public class CreateOutgoingEventPanel extends CreateTracedElementPanel {
 					
 					Logger.writeLine("Adding an inform Operation");		
 
-					IRPOperation informOp = m_TargetBlock.addOperation( 
-							determineBestInformNameFor( m_TargetBlock, theEventName ) );
+					IRPOperation informOp =
+							((IRPClassifier)m_TargetOwningElement).addOperation(
+									determineBestInformNameFor(
+											(IRPClassifier)m_TargetOwningElement, theEventName ) );
 					
 					informOp.highLightElement();
 					
@@ -448,6 +451,7 @@ public class CreateOutgoingEventPanel extends CreateTracedElementPanel {
     #038 17-JUN-2016: Populate diagram now populates a SendAction in case of send events (F.J.Chadburn)
     #040 17-JUN-2016: Extend populate event/ops to work on OMD, i.e., REQ diagrams (F.J.Chadburn)
     #042 29-JUN-2016: launchThePanel renaming to improve Panel class design consistency (F.J.Chadburn)
+    #043 03-JUL-2016: Add Derive downstream reqt for CallOps, InterfaceItems and Event Actions (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

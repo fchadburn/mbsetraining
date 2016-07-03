@@ -31,6 +31,32 @@ public class CopyActivityDiagramsPanel extends CreateStructuralElementPanel {
 	private IRPModelElement m_ToElement = null;
 	private IRPModelElement m_UnderneathTheEl = null;
 
+	public static void launchThePanel(
+			final IRPModelElement underneathTheEl, 
+			final IRPModelElement toElement){
+		
+		javax.swing.SwingUtilities.invokeLater(new Runnable() {
+
+			@Override
+			public void run() {
+				
+				JFrame.setDefaultLookAndFeelDecorated( true );
+
+				JFrame frame = new JFrame("Copy Activity Diagams to " + Logger.elementInfo( toElement ));
+				
+				frame.setDefaultCloseOperation( JFrame.DISPOSE_ON_CLOSE );
+
+				CopyActivityDiagramsPanel thePanel = 
+						new CopyActivityDiagramsPanel( underneathTheEl, toElement );
+
+				frame.setContentPane( thePanel );
+				frame.pack();
+				frame.setLocationRelativeTo( null );
+				frame.setVisible( true );
+			}
+		});
+	}
+	
 	@SuppressWarnings("unchecked")
 	public CopyActivityDiagramsPanel(
 			IRPModelElement underneathTheEl, 
@@ -90,42 +116,49 @@ public class CopyActivityDiagramsPanel extends CreateStructuralElementPanel {
 
 	
 	@Override
-	protected
-	boolean checkValidity(boolean isMessageEnabled) {
+	protected boolean checkValidity(boolean isMessageEnabled) {
 		return true;
 	}
 
 	@Override
-	protected
-	void performAction() {
+	protected void performAction() {
 		
-		if (checkValidity( false )){
-			
-			for (Entry<IRPFlowchart, JCheckBox> entry : m_CheckBoxMap.entrySet()){
+		try {
+			if (checkValidity( false )){
 				
-				JCheckBox theCheckBox = entry.getValue();		
-			    IRPFlowchart theFlowchart = entry.getKey();
-			    
-			    if (theCheckBox.isSelected()){
-			    	cloneTheFlowchart( m_ToElement, theFlowchart );
-			    }
-			}				
-		} else {
-			Logger.writeLine("Error in CreateNewActorPanel.performAction, checkValidity returned false");
-		}	
+				for (Entry<IRPFlowchart, JCheckBox> entry : m_CheckBoxMap.entrySet()){
+					
+					JCheckBox theCheckBox = entry.getValue();		
+				    IRPFlowchart theFlowchart = entry.getKey();
+				    
+				    Logger.writeLine(theFlowchart, "was selected");
+				    if (theCheckBox.isSelected()){
+				    	cloneTheFlowchart( m_ToElement, theFlowchart );
+				    }
+				}				
+			} else {
+				Logger.writeLine("Error in CreateNewActorPanel.performAction, checkValidity returned false");
+			}	
+		} catch (Exception e) {
+			Logger.writeLine("Error in CopyActivityDiagramsPanel.performAction, unhandled exception was detected");
+		}
+
 	}
 	
 	private void cloneTheFlowchart(
-			IRPModelElement toElement,
+			IRPModelElement toNewOwner,
 			IRPFlowchart theFlowchart) {
-			
+		
+		Logger.writeLine("cloneTheFlowchart was invoked with toNewOwner=" + 
+				Logger.elementInfo(toNewOwner) + " and theFlowchart=" + Logger.elementInfo(theFlowchart));
+		
 		String theUniqueName = GeneralHelpers.determineUniqueNameBasedOn(
-				"Working - " + theFlowchart.getName(), "ActivityDiagram", toElement);
+				"Working - " + theFlowchart.getName(), "ActivityDiagram", toNewOwner);
 		
 		Logger.writeLine("Cloned " + Logger.elementInfo(theFlowchart) + " to " + 
-				Logger.elementInfo(toElement) + " with unique name " + theUniqueName);
+				Logger.elementInfo(toNewOwner) + " with unique name " + theUniqueName);
 		
-		IRPFlowchart theNewFlowchart = (IRPFlowchart) theFlowchart.clone(theUniqueName, toElement);
+		IRPFlowchart theNewFlowchart = (IRPFlowchart) theFlowchart.clone(theUniqueName, toNewOwner);
 		
 		IRPDependency theDependency = theNewFlowchart.addDependencyTo(theFlowchart);
 		theDependency.changeTo("Refinement");
@@ -139,32 +172,6 @@ public class CopyActivityDiagramsPanel extends CreateStructuralElementPanel {
 		theNewFlowchart.highLightElement();
 		theNewFlowchart.getFlowchartDiagram().openDiagram();
 	}
-	
-	public static void launchCopyActivityDiagramPanel(
-			final IRPModelElement underneathTheEl, 
-			final IRPModelElement toElement){
-		
-		javax.swing.SwingUtilities.invokeLater(new Runnable() {
-
-			@Override
-			public void run() {
-				
-				JFrame.setDefaultLookAndFeelDecorated( true );
-
-				JFrame frame = new JFrame("Copy Activity Diagams to " + Logger.elementInfo( toElement ));
-				
-				frame.setDefaultCloseOperation( JFrame.DISPOSE_ON_CLOSE );
-
-				CopyActivityDiagramsPanel thePanel = 
-						new CopyActivityDiagramsPanel( underneathTheEl, toElement );
-
-				frame.setContentPane( thePanel );
-				frame.pack();
-				frame.setLocationRelativeTo( null );
-				frame.setVisible( true );
-			}
-		});
-	}
 }
 
 /**
@@ -174,6 +181,7 @@ public class CopyActivityDiagramsPanel extends CreateStructuralElementPanel {
     #026 31-MAY-2016: Add dialog to allow user to choose which Activity Diagrams to synch (F.J.Chadburn)
     #027 31-MAY-2016: Add new menu to launch dialog to copy Activity Diagrams (F.J.Chadburn)
     #035 15-JUN-2016: New panel to configure requirements package naming and gateway set-up (F.J.Chadburn)
+    #045 03-JUL-2016: Fix CopyActivityDiagramsPanel capability (F.J.Chadburn)
     
     This file is part of SysMLHelperPlugin.
 

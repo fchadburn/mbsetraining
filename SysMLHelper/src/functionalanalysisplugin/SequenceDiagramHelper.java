@@ -173,8 +173,8 @@ public class SequenceDiagramHelper {
 		Set<IRPRequirement> theReqtsOnDiagram = buildSetOfRequirementsAlreadyOn(theDiagram);
 		
 		Set<IRPRequirement> theReqtsWithVerificationRelationsToDiagram = 
-				TraceabilityHelper.getRequirementsThatTraceFromWithStereotypedRelation(
-						theDiagram, "Verification");
+				TraceabilityHelper.getRequirementsThatTraceFromWithStereotype(
+						theDiagram, "verify");
 		
 		Set<IRPRequirement> theRequirementsToRemove= new HashSet<IRPRequirement>( theReqtsWithVerificationRelationsToDiagram );
 		theRequirementsToRemove.removeAll( theReqtsOnDiagram );
@@ -249,6 +249,7 @@ public class SequenceDiagramHelper {
     #013 10-MAY-2016: (new) Add support for sequence diagram req't and verification relation population (F.J.Chadburn)
     #032 05-JUN-2016: Populate call operation/event actions on diagram check-box added (F.J.Chadburn)
     #033 05-JUN-2016: Add support for creation of operations and events from raw requirement selection (F.J.Chadburn)
+    #044 03-JUL-2016: Minor re-factoring/code corrections (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

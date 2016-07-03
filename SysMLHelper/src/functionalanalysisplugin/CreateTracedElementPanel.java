@@ -30,18 +30,18 @@ public abstract class CreateTracedElementPanel extends JPanel {
 	 */
 	private static final long serialVersionUID = 1L;
 	protected RequirementSelectionPanel m_RequirementsPanel = null;
-	protected IRPClassifier m_TargetBlock = null;
+	protected IRPModelElement m_TargetOwningElement = null;
 	protected JTextField m_ChosenNameTextField = null;
 	protected IRPGraphElement m_SourceGraphElement = null;
 	
 	public CreateTracedElementPanel(
 			IRPGraphElement forSourceGraphElement, 
 			Set<IRPRequirement> withReqtsAlsoAdded,
-			IRPClassifier onTargetBlock) {
+			IRPClassifier onTargetClassifier) {
 		
 		super();
 
-		m_TargetBlock = onTargetBlock;		
+		m_TargetOwningElement = onTargetClassifier;		
 		m_SourceGraphElement = forSourceGraphElement;
 		
 		IRPModelElement theModelObject = m_SourceGraphElement.getModelObject();
@@ -81,10 +81,10 @@ public abstract class CreateTracedElementPanel extends JPanel {
 	}
 	
 	// implementation specific provided by parent
-	abstract boolean checkValidity(boolean isMessageEnabled);
+	protected abstract boolean checkValidity(boolean isMessageEnabled);
 	
 	// implementation specific provided by parent
-	abstract void performAction();
+	protected abstract void performAction();
 		
 	public JPanel createOKCancelPanel(){
 		
@@ -291,6 +291,7 @@ public abstract class CreateTracedElementPanel extends JPanel {
     #034 05-JUN-2016: Re-factored design to move static constructors into appropriate panel class (F.J.Chadburn)
     #040 17-JUN-2016: Extend populate event/ops to work on OMD, i.e., REQ diagrams (F.J.Chadburn)
     #041 29-JUN-2016: Derive downstream requirement menu added for reqts on diagrams (F.J.Chadburn)
+    #043 03-JUL-2016: Add Derive downstream reqt for CallOps, InterfaceItems and Event Actions (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 
