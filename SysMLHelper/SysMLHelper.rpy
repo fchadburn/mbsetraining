@@ -28,7 +28,19 @@ I-Logix-RPY-Archive version 8.11.0 C++ 9499822
 		}
 	}
 	- _name = "SysMLHelper";
-	- _modifiedTimeWeak = 6.12.2016::8:58:34;
+	- Stereotypes = { IRPYRawContainer 
+		- size = 1;
+		- value = 
+		{ IHandle 
+			- _m2Class = "IStereotype";
+			- _filename = "$OMROOT\\Profiles\\SysML\\SysMLProfile_rpy\\SysML.sbs";
+			- _subsystem = "SysML";
+			- _class = "";
+			- _name = "SysML";
+			- _id = GUID 052b8171-a32b-4f45-a829-5585f79f9deb;
+		}
+	}
+	- _modifiedTimeWeak = 7.6.2016::6:49:42;
 	- _lastID = 11;
 	- _UserColors = { IRPYRawContainer 
 		- size = 16;
