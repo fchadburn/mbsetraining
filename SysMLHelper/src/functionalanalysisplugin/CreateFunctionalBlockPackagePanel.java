@@ -19,7 +19,10 @@ import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.ParallelGroup;
 import javax.swing.GroupLayout.SequentialGroup;
 import javax.swing.JCheckBox;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
@@ -40,7 +43,57 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
+	public static void launchThePanel(
+			final IRPPackage theRootPackage,
+			final IRPPackage theRequirementsAnalysisPkg) {
+		
+		@SuppressWarnings("unchecked")
+		List<IRPModelElement> theActors = 
+			theRequirementsAnalysisPkg.getNestedElementsByMetaClass("Actor", 1).toList();
+		
+		JDialog.setDefaultLookAndFeelDecorated(true);
+		
+		String introText = "This SysML-Toolkit helper sets up a nested package hierarchy for the functional analysis\n" +
+				"of a block from the perspective of the actors in the system. The initial structure will be\n" +
+				"created based on the " + theActors.size() + " actor(s) identified in the RequirementsAnalysisPkg called: " +
+				"\n";
+		
+		for (IRPModelElement theActor : theActors) {
+			introText = "\t" + introText + theActor.getName() + "\n";
+		}
+		
+		int response = JOptionPane.showConfirmDialog(null, 
+				 introText +
+				"\nDo you want to proceed?", "Confirm",
+		    JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+		
+		if (response == JOptionPane.YES_OPTION) {
+			
+			javax.swing.SwingUtilities.invokeLater(new Runnable() {
+
+				@Override
+				public void run() {
+					
+					JFrame.setDefaultLookAndFeelDecorated( true );
+
+					JFrame frame = new JFrame("Populate package hierarchy for an analysis block");
+					
+					frame.setDefaultCloseOperation( JFrame.DISPOSE_ON_CLOSE );
+
+					CreateFunctionalBlockPackagePanel thePanel = 
+							new CreateFunctionalBlockPackagePanel(
+									theRootPackage, theRequirementsAnalysisPkg);
+
+					frame.setContentPane( thePanel );
+					frame.pack();
+					frame.setLocationRelativeTo( null );
+					frame.setVisible( true );
+				}
+			});
+		}
+	}
+
 	CreateFunctionalBlockPackagePanel(
 			IRPPackage theRootPackage,
 			IRPPackage theRequirementsAnalysisPkg){
@@ -425,18 +478,10 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
 			
 			// Add a component
 			addAComponentWith(theName, theBlockTestPackage, theUsageDomainBlock);
-
-			IRPPackage theReqtsPackage = theBlockPackage.addNestedPackage("Requirements" + "Pkg");
-			theReqtsPackage.highLightElement();
-			
-			// Create a requirements diagram
-			IRPObjectModelDiagram theRD = theReqtsPackage.addObjectModelDiagram("RD - " + theUsageDomainBlock.getName());
-			theRD.changeTo("Requirements Diagram");
-			theRD.highLightElement();
 			
 			CreateGatewayProjectPanel.launchThePanel( 
 					theProject, 
-					"FunctionalAnalysisPkg" );
+					"^FunctionalAnalysisPkg.rqtf$" );
 			
 			CopyActivityDiagramsPanel.launchThePanel(
 					m_RequirementsAnalysisPkg, 
@@ -459,6 +504,7 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
     #039 17-JUN-2016: Minor fixes and improvements to robustness of Gateway project setup (F.J.Chadburn)
     #044 03-JUL-2016: Minor re-factoring/code corrections (F.J.Chadburn)
     #045 03-JUL-2016: Fix CopyActivityDiagramsPanel capability (F.J.Chadburn)
+    #048 06-JUL-2016: RequirementsPkg now created in FunctionalAnalysisPkg.sbs rather than nested deeper (F.J.Chadburn)
     
     This file is part of SysMLHelperPlugin.
 

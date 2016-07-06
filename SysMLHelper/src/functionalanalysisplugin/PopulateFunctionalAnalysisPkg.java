@@ -1,7 +1,6 @@
 package functionalanalysisplugin;
 
-import java.util.List;
-
+import generalhelpers.GeneralHelpers;
 import generalhelpers.PopulatePkg;
 
 import javax.swing.JDialog;
@@ -63,12 +62,14 @@ public class PopulateFunctionalAnalysisPkg extends PopulatePkg {
 				    		"NOTE:\n" +
 				    		"The recommendation is to create a folder that will contain both this project and its\n" +
 				    		"referenced projects to treat them as a consistent project set. If you haven't done this\n" +
-				    		"yet then consider cancelling and doing this first.\n\n",
+				    		"yet then consider cancelling and doing this first.\n\n" + 
+				    		"The unit will be added by relative path, hence locating the models in a common root folder\n" +
+				    		"is recommended to enable sharing across file systems as a consistent set of projects.\n\n",
 				    		"Confirm",
 				        JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 				    
 				    if (confirm == JOptionPane.YES_OPTION){
-				    	browseAndAddByReferenceIfNotPresent("RequirementsAnalysisPkg", forProject);
+				    	browseAndAddByReferenceIfNotPresent("RequirementsAnalysisPkg", forProject, true);
 				    }
 		    	}
 		    	
@@ -82,7 +83,7 @@ public class PopulateFunctionalAnalysisPkg extends PopulatePkg {
 		    }
 		}
 	}
-	
+		
 	static void populateFunctionalAnalysisPkg(IRPProject forProject) {
 		
 		addProfileIfNotPresent("SysML", forProject);		
@@ -126,7 +127,8 @@ public class PopulateFunctionalAnalysisPkg extends PopulatePkg {
 			    		JOptionPane.INFORMATION_MESSAGE);
 			} else {
 				
-				createFunctionalAnalysisPkg(theRootPackage, theRequirementsAnalysisPkg);
+				CreateFunctionalBlockPackagePanel.launchThePanel(
+						theRootPackage, theRequirementsAnalysisPkg);
 			}
 		    
 		} else {
@@ -140,55 +142,6 @@ public class PopulateFunctionalAnalysisPkg extends PopulatePkg {
 		}
 	}
 	
-	private static void createFunctionalAnalysisPkg(
-			final IRPPackage theRootPackage,
-			final IRPPackage theRequirementsAnalysisPkg) {
-		
-		@SuppressWarnings("unchecked")
-		List<IRPModelElement> theActors = 
-			theRequirementsAnalysisPkg.getNestedElementsByMetaClass("Actor", 1).toList();
-		
-		JDialog.setDefaultLookAndFeelDecorated(true);
-		
-		String introText = "This SysML-Toolkit helper sets up a nested package hierarchy for the functional analysis\n" +
-				"of a block from the perspective of the actors in the system. The initial structure will be\n" +
-				"created based on the " + theActors.size() + " actor(s) identified in the RequirementsAnalysisPkg called: " +
-				"\n";
-		
-		for (IRPModelElement theActor : theActors) {
-			introText = "\t" + introText + theActor.getName() + "\n";
-		}
-		
-		int response = JOptionPane.showConfirmDialog(null, 
-				 introText +
-				"\nDo you want to proceed?", "Confirm",
-		    JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-		
-		if (response == JOptionPane.YES_OPTION) {
-			
-			javax.swing.SwingUtilities.invokeLater(new Runnable() {
-
-				@Override
-				public void run() {
-					
-					JFrame.setDefaultLookAndFeelDecorated( true );
-
-					JFrame frame = new JFrame("Populate package hierarchy for an analysis block");
-					
-					frame.setDefaultCloseOperation( JFrame.DISPOSE_ON_CLOSE );
-
-					CreateFunctionalBlockPackagePanel thePanel = 
-							new CreateFunctionalBlockPackagePanel(
-									theRootPackage, theRequirementsAnalysisPkg);
-
-					frame.setContentPane( thePanel );
-					frame.pack();
-					frame.setLocationRelativeTo( null );
-					frame.setVisible( true );
-				}
-			});
-		}
-	}
 	
 	public static void addNewActorToPackageUnderDevelopement(IRPModelElement theSelectedEl){
 		
@@ -257,6 +210,37 @@ public class PopulateFunctionalAnalysisPkg extends PopulatePkg {
     		}
     	}
 	}
+	
+	public static void switchToMoreDetailedAD(
+			IRPActivityDiagram theDiagram) {
+		
+		final String theStereotypeName = "MoreDetailedAD";
+		
+		if( GeneralHelpers.hasStereotypeCalled( theStereotypeName, theDiagram ) ){
+			
+			Logger.writeLine( "Doing nothing as diagram already has the stereotype «" + theStereotypeName + "» applied." );
+		
+		} else {
+			
+			theDiagram.addStereotype( theStereotypeName, "ActivityDiagramGE" );
+			
+			//theDiagram.getProject().save();
+			
+			if (theDiagram.isOpen()==1){
+				theDiagram.closeDiagram();
+				theDiagram.highLightElement();
+				//theDiagram.openDiagram();
+			}
+			
+			Logger.writeLine( "Applied stereotype «" + theStereotypeName + "» to " + 
+					Logger.elementInfo( theDiagram ) + " to add additional tools to the toolbar" );
+			
+			setProperty( theDiagram.getFlowchart(), "Activity_diagram.AcceptEventAction.ShowNotation", "Event" );
+			setProperty( theDiagram.getFlowchart(), "Activity_diagram.SendAction.ShowNotation", "Event" );
+			
+		}
+	}
+
 }
 
 /**
@@ -273,6 +257,7 @@ public class PopulateFunctionalAnalysisPkg extends PopulatePkg {
     #025 31-MAY-2016: Add new menu and dialog to add a new actor to package under development (F.J.Chadburn)
     #027 31-MAY-2016: Add new menu to launch dialog to copy Activity Diagrams (F.J.Chadburn)
     #045 03-JUL-2016: Fix CopyActivityDiagramsPanel capability (F.J.Chadburn)
+    #047 06-JUL-2016: Tweaked properties and added options to switch to MoreDetailedAD automatically (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

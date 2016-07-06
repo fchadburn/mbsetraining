@@ -80,8 +80,6 @@ public class RequirementSelectionPanel extends JPanel {
 
 		for (IRPRequirement theReqt : theReqts) {
 			
-			Logger.writeLine("Creating requirement '"+ theReqt.getName() + "'");
-			
 		    JCheckBox theReqtCheckBox = new JCheckBox( theReqt.getName()) ;
 		    
 			theReqtCheckBox.setSelected(true);
@@ -143,6 +141,7 @@ public class RequirementSelectionPanel extends JPanel {
     #031 01-JUN-2016: Scroll pane added for readability of requirement text on panels (F.J.Chadburn)
     #033 05-JUN-2016: Add support for creation of operations and events from raw requirement selection (F.J.Chadburn)
     #041 29-JUN-2016: Derive downstream requirement menu added for reqts on diagrams (F.J.Chadburn)
+    #051 06-JUL-2016: Re-factored the GW panel to allow it to incrementally add to previous setup (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

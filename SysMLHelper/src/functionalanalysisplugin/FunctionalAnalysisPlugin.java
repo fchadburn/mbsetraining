@@ -114,7 +114,18 @@ public class FunctionalAnalysisPlugin extends RPUserPlugin {
 						Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking CreateTracedAttributePanel.createSystemAttributeFor");
 					}
 				}
+
+			} else if (menuItem.equals("MBSE Method: Functional Analysis\\Derive downstream requirement")){
 				
+				if (!theSelectedGraphEls.isEmpty()){
+					try {
+						CreateDerivedRequirementPanel.deriveDownstreamRequirement( theSelectedGraphEls );
+
+					} catch (Exception e) {
+						Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking CreateDerivedRequirementPanel.launchThePanel");
+					}
+				}
+
 			} else if (menuItem.equals("MBSE Method: Functional Analysis\\Create new TestCase for «TestDriver»")){
 
 				if (theSelectedEl instanceof IRPClass){
@@ -177,7 +188,19 @@ public class FunctionalAnalysisPlugin extends RPUserPlugin {
 				} catch (Exception e) {
 					Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking EventDeletion.deleteEventAndRelatedElementsFor");
 				}
-				
+
+			} else if (menuItem.equals("MBSE Method: Functional Analysis\\Switch menus to «MoreDetailedAD»")){
+
+				try {
+					if( theSelectedEl instanceof IRPActivityDiagram ){
+						
+						PopulateFunctionalAnalysisPkg.switchToMoreDetailedAD( 
+								(IRPActivityDiagram)theSelectedEl );
+					}
+					
+				} catch (Exception e) {
+					Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking MBSE Method: Functional Analysis\\Switch menus to «MoreDetailedAD»");
+				}
 			} else {
 				Logger.writeLine(theSelectedEl, " was invoked with menuItem='" + menuItem + "'");
 			}
@@ -217,6 +240,7 @@ public class FunctionalAnalysisPlugin extends RPUserPlugin {
     #027 31-MAY-2016: Add new menu to launch dialog to copy Activity Diagrams (F.J.Chadburn)
     #028 01-JUN-2016: Add new menu to create a stand-alone attribute owned by the system (F.J.Chadburn)
     #034 05-JUN-2016: Re-factored design to move static constructors into appropriate panel class (F.J.Chadburn)
+    #047 06-JUL-2016: Tweaked properties and added options to switch to MoreDetailedAD automatically (F.J.Chadburn)
     
     This file is part of SysMLHelperPlugin.
 

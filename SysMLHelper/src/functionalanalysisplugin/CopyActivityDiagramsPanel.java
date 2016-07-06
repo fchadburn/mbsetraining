@@ -30,6 +30,7 @@ public class CopyActivityDiagramsPanel extends CreateStructuralElementPanel {
 	private Map<IRPFlowchart, JCheckBox> m_CheckBoxMap = new HashMap<IRPFlowchart, JCheckBox>();
 	private IRPModelElement m_ToElement = null;
 	private IRPModelElement m_UnderneathTheEl = null;
+	private JCheckBox m_ApplyMoreDetailedADCheckBox;
 
 	public static void launchThePanel(
 			final IRPModelElement underneathTheEl, 
@@ -66,6 +67,10 @@ public class CopyActivityDiagramsPanel extends CreateStructuralElementPanel {
 
 		m_UnderneathTheEl = underneathTheEl;
 		m_ToElement = toElement;
+		
+		m_ApplyMoreDetailedADCheckBox = 
+				new JCheckBox(
+						"Switch toolbars and formatting to more detailed AD ready for conversion?");
 		
 		List<IRPFlowchart> allTheFlowcharts = new ArrayList<IRPFlowchart>();
 		
@@ -108,12 +113,14 @@ public class CopyActivityDiagramsPanel extends CreateStructuralElementPanel {
 	    
 		setLayout( new BorderLayout() );
 		
-		add( theBox, BorderLayout.PAGE_START);
-		add( createOKCancelPanel(), BorderLayout.PAGE_END );
+		add( theBox, BorderLayout.PAGE_START );
 		
-		add( theBox );
+		if( !allTheFlowcharts.isEmpty() ){
+			add( m_ApplyMoreDetailedADCheckBox, BorderLayout.WEST );			
+		}
+		
+		add( createOKCancelPanel(), BorderLayout.PAGE_END );
 	}
-
 	
 	@Override
 	protected boolean checkValidity(boolean isMessageEnabled) {
@@ -149,9 +156,6 @@ public class CopyActivityDiagramsPanel extends CreateStructuralElementPanel {
 			IRPModelElement toNewOwner,
 			IRPFlowchart theFlowchart) {
 		
-		Logger.writeLine("cloneTheFlowchart was invoked with toNewOwner=" + 
-				Logger.elementInfo(toNewOwner) + " and theFlowchart=" + Logger.elementInfo(theFlowchart));
-		
 		String theUniqueName = GeneralHelpers.determineUniqueNameBasedOn(
 				"Working - " + theFlowchart.getName(), "ActivityDiagram", toNewOwner);
 		
@@ -167,7 +171,20 @@ public class CopyActivityDiagramsPanel extends CreateStructuralElementPanel {
 		
 		IRPGraphNode theNote = theNewFlowchart.addNewNodeByType("Note", 20, 44, 120, 70);
 		
-		theNote.setGraphicalProperty("Text", "This working copy of the use case steps can be used to generate the state machine.");
+		theNote.setGraphicalProperty(
+				"Text", 
+				"This working copy of the use case steps can be used to generate operations, events & attributes \n(e.g. for state-machine/iteraction model).");
+		
+		theNote.setGraphicalProperty(
+				"BackgroundColor",
+				"255,0,0" ); // red
+
+		if( m_ApplyMoreDetailedADCheckBox.isSelected() ){			
+			PopulateFunctionalAnalysisPkg.switchToMoreDetailedAD( theNewFlowchart.getFlowchartDiagram() );
+
+		} else {
+			Logger.writeLine("User chose not to apply the detailed AD settings to the cloned AD");
+		}
 		
 		theNewFlowchart.highLightElement();
 		theNewFlowchart.getFlowchartDiagram().openDiagram();
@@ -182,6 +199,7 @@ public class CopyActivityDiagramsPanel extends CreateStructuralElementPanel {
     #027 31-MAY-2016: Add new menu to launch dialog to copy Activity Diagrams (F.J.Chadburn)
     #035 15-JUN-2016: New panel to configure requirements package naming and gateway set-up (F.J.Chadburn)
     #045 03-JUL-2016: Fix CopyActivityDiagramsPanel capability (F.J.Chadburn)
+    #047 06-JUL-2016: Tweaked properties and added options to switch to MoreDetailedAD automatically (F.J.Chadburn)
     
     This file is part of SysMLHelperPlugin.
 
