@@ -15,7 +15,7 @@ public class SysMLHelperPlugin extends RPUserPlugin {
 	static protected IRPApplication m_rhpApplication = null;
 	static protected IRPProject m_rhpProject = null;
 
-	static protected String m_version = "2.0.14 (Under Dev)";
+	static protected String m_version = "2.0.15 (Under Dev)";
 	
 	final String legalNotice = 
 			"Copyright (C) 2015-2016  MBSE Training and Consulting Limited (www.executablembse.com)"
@@ -124,14 +124,14 @@ public class SysMLHelperPlugin extends RPUserPlugin {
 				} catch (Exception e) {
 					Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking MBSE Method: General\\Quick hyperlink");
 				}
-			} else if (menuItem.equals("MBSE Method: Requirements Analysis\\Setup Gateway project based on rqtf template")){
+			} else if (menuItem.equals("MBSE Method: General Utilities\\Setup Gateway project based on rqtf template")){
 
 				if (theSelectedEl instanceof IRPProject){
 					try { 
-						CreateGatewayProjectPanel.launchThePanel( (IRPProject)theSelectedEl, theSelectedEl.getName() );
+						CreateGatewayProjectPanel.launchThePanel( (IRPProject)theSelectedEl, ".*.rqtf$" );
 
 					} catch (Exception e) {
-						Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking MBSE Method: General\\Quick hyperlink");
+						Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking CreateGatewayProjectPanel.launchThePanel");
 					}					
 				}
 			}					
@@ -246,6 +246,7 @@ public class SysMLHelperPlugin extends RPUserPlugin {
     #016 11-MAY-2016: Add GPL advisory to the Log window (F.J.Chadburn)
     #017 11-MAY-2016: Double-click now works with both nested and hyper-linked diagrams (F.J.Chadburn)
     #035 15-JUN-2016: New panel to configure requirements package naming and gateway set-up (F.J.Chadburn)
+    #050 06-JUL-2016: Setup Gateway project based on rqtf template option now under General Utilities menu (F.J.Chadburn)
         
     This file is part of SysMLHelperPlugin.
 
