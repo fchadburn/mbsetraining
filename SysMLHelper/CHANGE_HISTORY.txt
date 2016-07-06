@@ -88,3 +88,13 @@ RELEASE 2.0.13 (29-JUN-2016)
 ----------------------------------------------------------------------------------
 RELEASE 2.0.14 (03-JUL-2016)
 ----------------------------------------------------------------------------------
+#046 06-JUL-2016: Fix external RequirementsAnalysisPkg reference to be created with relative path (F.J.Chadburn)
+#047 06-JUL-2016: Tweaked properties and added options to switch to MoreDetailedAD automatically (F.J.Chadburn)
+#048 06-JUL-2016: RequirementsPkg now created in FunctionalAnalysisPkg.sbs rather than nested deeper (F.J.Chadburn)
+#049 06-JUL-2016: Derive new requirement now under Functional Analysis not Requirements Analysis menu (F.J.Chadburn)
+#050 06-JUL-2016: Setup Gateway project based on rqtf template option now under General Utilities menu (F.J.Chadburn)
+#051 06-JUL-2016: Re-factored the GW panel to allow it to incrementally add to previous setup (F.J.Chadburn)
+#052 06-JUL-2016: DesignSynthesisPkg creation menus now hidden until more complete (F.J.Chadburn)
+----------------------------------------------------------------------------------
+RELEASE 2.0.15 (06-JUL-2016)
+----------------------------------------------------------------------------------
