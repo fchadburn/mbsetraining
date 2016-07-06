@@ -3,6 +3,7 @@ package requirementsanalysisplugin;
 import generalhelpers.Logger;
 
 import java.util.List;
+
 import sysmlhelperplugin.SysMLHelperPlugin;
 
 import com.telelogic.rhapsody.core.*;
@@ -138,15 +139,6 @@ public class RequirementsAnalysisPlugin extends RPUserPlugin {
 					Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking RenameActions.performRenamesFor");
 				}
 
-			} else if (menuItem.equals("MBSE Method: Requirements Analysis\\Derive downstream requirement")){
-				try {
-					CreateDerivedRequirementPanel.deriveDownstreamRequirement( theSelectedGraphEls );
-					
-				} catch (Exception e) {
-					Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking CreateDerivedRequirementPanel.launchThePanel");
-				}
-				
-
 			} else {
 				Logger.writeLine(theSelectedEl, " was invoked with menuItem='" + menuItem + "'");
 			}
@@ -182,6 +174,7 @@ public class RequirementsAnalysisPlugin extends RPUserPlugin {
     #016 11-MAY-2016: Add GPL advisory to the Log window (F.J.Chadburn)
     #041 29-JUN-2016: Derive downstream requirement menu added for reqts on diagrams (F.J.Chadburn) 
     #043 03-JUL-2016: Add Derive downstream reqt for CallOps, InterfaceItems and Event Actions (F.J.Chadburn)
+    #049 06-JUL-2016: Derive new requirement now under Functional Analysis not Requirements Analysis menu (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

@@ -63,7 +63,7 @@ public class PopulateRequirementsAnalysisPkg extends PopulatePkg {
 					applySimpleMenuStereotype(forProject);
 				}
 				
-				CreateGatewayProjectPanel.launchThePanel( forProject, rootPackageName );
+				CreateGatewayProjectPanel.launchThePanel( forProject, "^RequirementsAnalysisPkg.rqtf$" );
 				
 		    } else {
 		    	Logger.writeLine("Cancelled by user");
@@ -132,6 +132,7 @@ public class PopulateRequirementsAnalysisPkg extends PopulatePkg {
     #006 02-MAY-2016: Add FunctionalAnalysisPkg helper support (F.J.Chadburn)
     #007 05-MAY-2016: Move FileHelper into generalhelpers and remove duplicate class (F.J.Chadburn)
     #035 15-JUN-2016: New panel to configure requirements package naming and gateway set-up (F.J.Chadburn)
+    #051 06-JUL-2016: Re-factored the GW panel to allow it to incrementally add to previous setup (F.J.Chadburn)
     
     This file is part of SysMLHelperPlugin.
 
