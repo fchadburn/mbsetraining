@@ -4,9 +4,10 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -26,8 +27,8 @@ public class CreateGatewayProjectPanel extends CreateStructuralElementPanel {
 	private static final long serialVersionUID = 1L;
 
 	private static IRPProject m_Project;
-	private GatewayTypesParser m_TypesFile;
-	private GatewayProjectParser m_ChosenProjectFile;
+	private GatewayFileParser m_ChosenTypesFile;
+	private GatewayFileParser m_ChosenProjectFile;
 	private List<GatewayDocumentPanel> m_GatewayDocumentPanel = new ArrayList<GatewayDocumentPanel>();
 	
 	// test only
@@ -39,89 +40,146 @@ public class CreateGatewayProjectPanel extends CreateStructuralElementPanel {
 		
 		if (theSelectedEl instanceof IRPProject){
 			try { 
-				CreateGatewayProjectPanel.launchThePanel( (IRPProject)theSelectedEl, theSelectedEl.getName() );
+				CreateGatewayProjectPanel.launchThePanel( (IRPProject)theSelectedEl, ".*.rqtf$" );
 
 			} catch (Exception e) {
 				Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking MBSE Method: General\\Quick hyperlink");
 			}					
 		}
 	}
+	
 	public static void launchThePanel(
 			final IRPProject forTheProject,
-			final String basedOnExecutionContext ){
+			final String lookingForRqtfTemplatesThatMatchRegEx ){
 	
 		String theReqtsPkgExpectedName = "RequirementsPkg";
 		
 		final List<IRPModelElement> theRequirementsPkgs = 
 				GeneralHelpers.findElementsWithMetaClassAndName(
-						"Package", theReqtsPkgExpectedName, forTheProject);
+						"Package", theReqtsPkgExpectedName, forTheProject );
 		
-		if (theRequirementsPkgs != null && !theRequirementsPkgs.isEmpty()){
-			
-			File theCandidateRqtfFile = null;
-			
-			if (basedOnExecutionContext.equals( forTheProject.getName())){
+		String theSysMLHelperProfilePath =
+				RhapsodyAppServer.getActiveRhapsodyApplication().getOMROOT() + 
+				"\\Profiles\\SysMLHelper\\SysMLHelper_rpy";
+		
+		if( theRequirementsPkgs != null && !theRequirementsPkgs.isEmpty() ){
 				
-				// Allow user to select
-				theCandidateRqtfFile = getRqtfFile( forTheProject, ".*.rqtf$" );
+			File theChosenRqtfFile = getFile(
+					lookingForRqtfTemplatesThatMatchRegEx,
+					theSysMLHelperProfilePath,
+					"Which Gateway project template do you want to use?" );
 				
-			} else {
-				// Look for specific rqtf file (there will be one or zero)
-				theCandidateRqtfFile = getRqtfFile( forTheProject, basedOnExecutionContext + ".rqtf$" );
-			}
+			if( theChosenRqtfFile != null ){
 				
-			if (theCandidateRqtfFile != null){
+				String theCandidateTypesFileName = 
+						theChosenRqtfFile.getName().substring(
+								0, theChosenRqtfFile.getName().length()-5 ) + ".types";
 				
-				String theRqtfFileName = theCandidateRqtfFile.getName();
-				String theCorrespondingTypesFileName = theRqtfFileName.substring(0, theRqtfFileName.length()-5) + ".types";
+				Logger.writeLine( "The corresponding types file is " + theCandidateTypesFileName );
 				
-				Logger.writeLine("The corresponding types file is " + theCorrespondingTypesFileName);
-				
-				List<File> theTypesFiles = getFilesInSysMLHelperRpyFolder( 
-						theCorrespondingTypesFileName, forTheProject);
-				
-				final File theTypesFile = theTypesFiles.get( 0 );
-				
-				final File theChosenRqtfTemplate = theCandidateRqtfFile;
-				
-				javax.swing.SwingUtilities.invokeLater(new Runnable() {
+				final File theChosenTypesFile = getFile(
+						theCandidateTypesFileName, 
+						theSysMLHelperProfilePath,
+						"Which Gateway Types template do you want to use?" );
 
-					@Override
-					public void run() {				
-						JFrame.setDefaultLookAndFeelDecorated( true );
-						
-						JFrame frame = new JFrame(
-								"Setup the Rhapsody Gateway for the project?");
-						
-						frame.setDefaultCloseOperation( JFrame.DISPOSE_ON_CLOSE );
-						
-						CreateGatewayProjectPanel thePanel = 
-								new CreateGatewayProjectPanel( 
-										theRequirementsPkgs, 
-										theChosenRqtfTemplate,
-										theTypesFile);
+				if( theChosenTypesFile != null ){
+					
+					final GatewayFileParser theTemplateProjectFile = new GatewayFileParser( theChosenRqtfFile );
+					final GatewayFileParser theTemplateTypesFile = new GatewayFileParser( theChosenTypesFile );
 
-						frame.setContentPane( thePanel );
-						frame.pack();
-						frame.setLocationRelativeTo( null );
-						frame.setVisible( true );
+					final File theExistingRqtfFile = getFile(
+							"^" + forTheProject.getName() + ".rqtf$",
+							forTheProject.getCurrentDirectory() + "\\" + forTheProject.getName() + "_rpy",
+							"Which existing Types file do you want to use?");
+					
+					// if project has an existing types file then we need to consider how to merge in its contents
+					if( theExistingRqtfFile != null ){
+						
+						final GatewayFileParser theExistingProjectFile = 
+								new GatewayFileParser( theExistingRqtfFile );
+						
+						updateTheRqtfFile(
+								theTemplateProjectFile,
+								theExistingProjectFile);
+					
+					} else { // no existing rqtf file
+						
+						// check to see if model references external packages 
+						for( IRPModelElement theReqtsPkg : theRequirementsPkgs ) {
+							
+							IRPPackage thePkg = (IRPPackage)theReqtsPkg;
+							
+							if( thePkg.isReferenceUnit()==1 ){
+								
+								Logger.writeLine("Detected that " + Logger.elementInfo( thePkg ) + " is added by reference");
+								
+								IRPUnit theUnit = thePkg.getSaveUnit();
+								
+								String theReferencedDir = theUnit.getCurrentDirectory();
+								
+								String theProjectName = extractProjectNameFrom( theReferencedDir );
+								
+								final File theReferencedRqtfFile = getFile(
+										theProjectName + ".rqtf$",
+										theReferencedDir,
+										"Which Gateway project template in the referenced project do you want to use?" );
+	
+								final GatewayFileParser theExistingProjectFile = 
+										new GatewayFileParser( theReferencedRqtfFile );
+								
+								updateTheRqtfFile(
+										theTemplateProjectFile,
+										theExistingProjectFile);
+							}
+						}
 					}
-				});
-			}
+					
+					javax.swing.SwingUtilities.invokeLater(new Runnable() {
+
+						@Override
+						public void run() {				
+							JFrame.setDefaultLookAndFeelDecorated( true );
+							
+							JFrame frame = new JFrame(
+									"Setup the Rhapsody Gateway for the project?");
+							
+							frame.setDefaultCloseOperation( JFrame.DISPOSE_ON_CLOSE );
+							
+							CreateGatewayProjectPanel thePanel = 
+									new CreateGatewayProjectPanel( 
+											theRequirementsPkgs, 
+											theTemplateProjectFile,
+											theTemplateTypesFile );
+
+							frame.setContentPane( thePanel );
+							frame.pack();
+							frame.setLocationRelativeTo( null );
+							frame.setVisible( true );
+						}
+					});
+				} else {
+					
+					Logger.writeLine("Error in CreateGatewayProjectPanel.launchThePanel, no types file matching '" + 
+							theCandidateTypesFileName + "' was found in " + theSysMLHelperProfilePath);
+
+				}
+
+			} // no rqtf file candidate was found
+		} else {
+			Logger.writeLine("Error in CreateGatewayProjectPanel.launchThePanel, unable to proceed as no packages called " + theReqtsPkgExpectedName + " were found in the project");
 		}
 	}
-	
+
 	CreateGatewayProjectPanel(
 			List<IRPModelElement> forSelectablePackages,
-			File usingRqtfTemplate,
-			File andTypesFile ){
+			GatewayFileParser usingGatewayProject,
+			GatewayFileParser andGatewayTypes ){
 		
 		super();
 
 		m_Project = forSelectablePackages.get(0).getProject();
-		
-		m_TypesFile = new GatewayTypesParser( andTypesFile );
-		m_ChosenProjectFile = new GatewayProjectParser( usingRqtfTemplate );
+		m_ChosenProjectFile = usingGatewayProject;
+		m_ChosenTypesFile = andGatewayTypes;
 
 		setLayout( new BorderLayout(10,10) );
 		setBorder( BorderFactory.createEmptyBorder( 10, 10, 10, 10 ) );
@@ -141,24 +199,60 @@ public class CreateGatewayProjectPanel extends CreateStructuralElementPanel {
 		thePanel.setLayout( new BoxLayout(thePanel, BoxLayout.Y_AXIS ) );	
 		thePanel.setAlignmentX(CENTER_ALIGNMENT);
 		
-		List<GatewayDoc> theDocs = m_ChosenProjectFile.getGatewayDocs();
+		List<GatewayFileSection> theDocs = m_ChosenProjectFile.getAllTheFileSections();
 		
-		for (GatewayDoc gatewayDoc : theDocs) {
+		GatewayFileSection theTypesDoc = m_ChosenTypesFile.getFileSectionWith("Types");
+		String theTypesNames = theTypesDoc.getValueFor("Names");
+		String[] theAnalysisTypes = theTypesNames.split(",");
+		
+		String theRhapsodyTypeRegEx = ".*Rhapsody.*";
+		
+		GatewayFileSection theRhapsodySection = m_ChosenProjectFile.getFileSectionWith( "UML Model" );
+		
+		String theReqtsPackageValue = null;
+		
+		if( theRhapsodySection != null ){
+			
+			theReqtsPackageValue = theRhapsodySection.getVariableXValue("requirementsPackage");
+			
+			if( theReqtsPackageValue != null ){
+				Logger.writeLine("Found that requirementsPackage=" + theReqtsPackageValue );
+			}
+		} else {
+			Logger.writeLine( "Error in createWestCentrePanel, no section was found that matches the regex=" + theRhapsodyTypeRegEx );
+		}
+		
+		for (GatewayFileSection gatewayDoc : theDocs) {
 			try {
 				
-				String theDocName = gatewayDoc.getDocumentName();
+				String theDocName = gatewayDoc.getSectionName();
+				
+				Logger.writeLine("Found gatewayDoc=" + theDocName + ", isImmutable=" + gatewayDoc.isImmutable());
 				
 				// ignore Files and Rhapsody docs
 				if (!theDocName.equals("Files") && 
 						!gatewayDoc.getValueFor("Type").contains("Rhapsody")){
+				
+					IRPModelElement theSelectedPkg = extractPreselectedPackageFor(
+							gatewayDoc.getSectionName(), m_Project, theReqtsPackageValue );
+					
+					if( theSelectedPkg == null ){
+						Logger.writeLine("Error in CreateGatewayProjectPanel.createWestCentrePanel, extractPreselectedPackageFor returned null for selected package for " + gatewayDoc.getSectionName() );
+						
+					} else if ( !forSelectablePackages.contains( theSelectedPkg ) ){
+						Logger.writeLine("Error in CreateGatewayProjectPanel.createWestCentrePanel, " + Logger.elementInfo( theSelectedPkg ) + " was not found in the selectable list");
+						theSelectedPkg = forSelectablePackages.get(0);						
+					}
 					
 					GatewayDocumentPanel theGatewayDocumentPanel = 
 							new GatewayDocumentPanel(
 									theDocName, 
-									m_TypesFile.getAnalysisTypes(), 
+									theAnalysisTypes, 
 									gatewayDoc.getValueFor("Type"),
 									gatewayDoc.getValueFor("Path"), 
 									forSelectablePackages,
+									theSelectedPkg,
+									gatewayDoc.isImmutable(),
 									m_Project );
 					
 					m_GatewayDocumentPanel.add( theGatewayDocumentPanel );
@@ -189,19 +283,84 @@ public class CreateGatewayProjectPanel extends CreateStructuralElementPanel {
 		return thePanel;
 	}
 	
-	private static File getRqtfFile(
-			final IRPProject forTheProject,
-			final String matchingTheRegEx ) {
+	private static void updateTheRqtfFile(
+			final GatewayFileParser theProjectFileToUpdate,
+			final GatewayFileParser theExistingProjectFile) {
 		
-		List<File> theFiles = getFilesInSysMLHelperRpyFolder(matchingTheRegEx, forTheProject);
+		List<GatewayFileSection> existingGatewayDocs = theExistingProjectFile.getAllTheFileSections();
+		
+		for (GatewayFileSection existingGatewayDoc : existingGatewayDocs) {
+			
+			String gatewayDocType = existingGatewayDoc.getValueFor( "Type" );
+			
+			if( gatewayDocType != null && !gatewayDocType.contains( "Rhapsody" ) ){
+				
+				Logger.writeLine("===========================");
+				
+				Logger.writeLine("The existing project has a gatewayDoc called " + existingGatewayDoc.getSectionName() + 
+						" with Type=" + gatewayDocType );
+				
+				GatewayFileSection theTemplateDoc = theProjectFileToUpdate.getFileSectionWithType( gatewayDocType );
+				
+				if (theTemplateDoc != null ){
+					Logger.writeLine("A match was found between template doc called " + theTemplateDoc.getSectionName() +
+								" and the existing doc called " + existingGatewayDoc.getSectionName());
+					
+					theProjectFileToUpdate.renameFileSection( theTemplateDoc.getSectionName(), existingGatewayDoc.getSectionName() );
+					theTemplateDoc.setIsImmutable( true );
+					theProjectFileToUpdate.replaceGatewayDoc( gatewayDocType, existingGatewayDoc );
+				}							
+			}		
+		}
+	}
+
+	IRPModelElement extractPreselectedPackageFor(
+			String theGatewayDocName,
+			IRPProject inTheProject,
+			String basedOnString ){
+		
+		IRPModelElement theEl = null;
+		
+		String[] split = basedOnString.replaceAll("Packages/","").split("¥");
+		
+		String thePath = null;
+		
+		for( int i = split.length-1; i>=0; i-- ) {
+			if( split[i].equals( theGatewayDocName ) ){
+				thePath = split[i-1].replaceFirst("^\\w+/", "").replace("/", "::");
+				break;
+			}
+		}
+		
+		if( thePath != null ){
+
+			theEl = inTheProject.findElementsByFullName( thePath, "Package" );
+			
+			if( theEl != null ){
+				Logger.writeLine( "Successfully found the specified " + theEl.getFullPathName() + " import package in the project");
+			} else {
+				Logger.writeLine( "Warning in extractPreselectedPackageFor, " + thePath + " was not found" );
+			}
+		}
+		
+		return theEl;	
+	}
+	
+	private static File getFile(
+			final String matchingTheRegEx,
+			final String inPathToSearch,
+			final String withChoiceOfFileMsg ) {
+			
+		Logger.writeLine("Looking in " + inPathToSearch + " for a file names matching '" + matchingTheRegEx +"'");
+			
+		List<File> theFiles = getFilesMatching( matchingTheRegEx, inPathToSearch );
 		
 		int fileCount = theFiles.size();
 		
 		File theCandidateRqtfFile = null;
 		
 		if (fileCount==0){
-			Logger.writeLine("Skipping Gateway dialog creation as no rqtf template matching " + matchingTheRegEx + 
-					" was found in the <Share>/Profiles/SysMLHelper/SysMLHelper_rpy folder");
+			Logger.writeLine("No file matching " + matchingTheRegEx + " was found in the " + inPathToSearch + " folder");
 			
 		} else if (fileCount==1){
 			
@@ -216,7 +375,7 @@ public class CreateGatewayProjectPanel extends CreateStructuralElementPanel {
 			
 			Object selectedElement = JOptionPane.showInputDialog(
 					null,
-					"Which Gateway project template do you want to use?",
+					withChoiceOfFileMsg,
 					"Input",
 					JOptionPane.QUESTION_MESSAGE,
 					null,
@@ -226,52 +385,17 @@ public class CreateGatewayProjectPanel extends CreateStructuralElementPanel {
 			if (selectedElement != null){
 			
 				theCandidateRqtfFile = (File)selectedElement;
-				Logger.writeLine("The chosen rqtf template is " + theCandidateRqtfFile.getAbsolutePath());
+				Logger.writeLine("The chosen file was " + theCandidateRqtfFile.getAbsolutePath());
 			}
 		}
 		
 		return theCandidateRqtfFile;
 	}
 	
-	private static List<File> getFilesInSysMLHelperRpyFolder(
-			String matchingRegEx,
-			IRPProject forTheProject){
-		
-		Logger.writeLine("invoked getFilesInSysMLHelperRpyFolder with matchingRegEx=" + matchingRegEx);
-		
-		List<File> theFiles = null;
-		
-		String theProfileName = "SysMLHelperProfile";
-		
-		IRPProfile theProfile = 
-				(IRPProfile) forTheProject.findElementsByFullName(
-						theProfileName, "Profile");
-				
-		if (theProfile != null){
-			Logger.writeLine(theProfile, "was found");
-			
-			// #002 05-APR-2016: Improved robustness of copying .types file (F.J.Chadburn)
-			IRPApplication myApp = RhapsodyAppServer.getActiveRhapsodyApplication();
-			String pathToSearch = myApp.getOMROOT() + "\\Profiles\\SysMLHelper\\SysMLHelper_rpy";
-			
-			Logger.writeLine("Looking in " + pathToSearch + " for a file names matching '" + matchingRegEx +"'");
-			
-			theFiles = getFilesMatching(matchingRegEx, pathToSearch);
-			
-		} else {
-			Logger.writeLine(
-					"Error in getGatewayTypesFile, unable to find profile called " + 
-					theProfileName + " in the project");
-		}
-		
-		return theFiles;
-	}
-	
 	private static List<File> getFilesMatching(
 			String theRegEx, 
-			String inThePath){
+			String inThePath ){
 		
-		Logger.writeLine("getFilesWith invoked for " + theRegEx + " in the path=" + inThePath);
 		List<File> theFiles = new ArrayList<File>();
 		
 		File theDirectory = new File( inThePath );
@@ -280,8 +404,6 @@ public class CreateGatewayProjectPanel extends CreateStructuralElementPanel {
 	    
 	    if( theCandidateFiles != null ){
 	        for (File theCandidateFile : theCandidateFiles){
-	        	
-	        	Logger.writeLine("Looking at candidate=" + theCandidateFile.getName());
 	        	
 	        	if (theCandidateFile.isFile() && 
 	        			theCandidateFile.getName().matches( theRegEx )){
@@ -295,6 +417,28 @@ public class CreateGatewayProjectPanel extends CreateStructuralElementPanel {
 	    return theFiles;
 	}
 
+	public static String extractProjectNameFrom( 
+			String theUnitPath ){
+		
+		String theProjectName = null;
+		
+		String theRegEx = ".*[/\\\\](.*)_rpy.*"; 
+		
+		Pattern thePattern = Pattern.compile( theRegEx );
+		
+		Matcher theMatcher = thePattern.matcher( theUnitPath );
+		
+		if( theMatcher.find() ){
+			theProjectName = theMatcher.group( 1 );
+		}
+		
+		if (theProjectName==null){
+			Logger.writeLine( "Error in extractProjectNameFrom, project name could not be extracted in theUnitPath=" + theUnitPath );
+		}
+		
+		return theProjectName;
+	}
+	
 	private void createDesignatedReqtPackagesInTheModel() {
 		
 		for (GatewayDocumentPanel gatewayDocumentPanel : m_GatewayDocumentPanel) {
@@ -306,22 +450,25 @@ public class CreateGatewayProjectPanel extends CreateStructuralElementPanel {
 			
 			if (theRootPkg.isReadOnly()==1){
 				
-				Logger.writeLine("Skipping creation of " + thePkgName + 
-						" as unable to write to " + Logger.elementInfo(theRootPkg) );
+				Logger.writeLine( "Skipping creation of " + thePkgName + 
+						" as unable to write to " + Logger.elementInfo( theRootPkg ) );
 			} else {
 				
-				IRPModelElement existingPkg = GeneralHelpers.findElementWithMetaClassAndName("Package", thePkgName, m_Project);
+				IRPModelElement existingPkg = 
+						GeneralHelpers.findElementWithMetaClassAndName(
+								"Package", thePkgName, m_Project);
 				
 				if (existingPkg != null){
 					
-					Logger.writeLine("Skipping creation of " + thePkgName + 
+					Logger.writeLine( "Skipping creation of " + thePkgName + 
 							" as package already exists with the name " + thePkgName );
 					
 				} else {	
-					Logger.writeLine("Create package called '" + thePkgName + " with the type of analysis '" + 
-							gatewayDocumentPanel.getAnalysisTypeName() + "' in the root package called '"+ Logger.elementInfo(theRootPkg)+"'");
+					Logger.writeLine( "Create package called '" + thePkgName + " with the type of analysis '" + 
+							gatewayDocumentPanel.getAnalysisTypeName() + "' in the root " + 
+							Logger.elementInfo( theRootPkg ) );
 				
-					IRPPackage theReqtsDocPkg = (IRPPackage) theRootPkg.addNewAggr("Package", thePkgName);
+					IRPPackage theReqtsDocPkg = (IRPPackage) theRootPkg.addNewAggr( "Package", thePkgName );
 					theReqtsDocPkg.highLightElement();
 					
 					IRPModelElement theFoundStereotype = 
@@ -330,18 +477,18 @@ public class CreateGatewayProjectPanel extends CreateStructuralElementPanel {
 					IRPStereotype theFromStereotype = null;
 					
 					if (theFoundStereotype == null){
-						theFromStereotype = theReqtsDocPkg.addStereotype(theStereotypeName, "Package");
+						theFromStereotype = theReqtsDocPkg.addStereotype( theStereotypeName, "Package" );
 						
-						theFromStereotype.addMetaClass("Dependency");
-						theFromStereotype.addMetaClass("HyperLink");
-						theFromStereotype.addMetaClass("Requirement");
-						theFromStereotype.addMetaClass("Type");
+						theFromStereotype.addMetaClass( "Dependency" );
+						theFromStereotype.addMetaClass( "HyperLink" );
+						theFromStereotype.addMetaClass( "Requirement" );
+						theFromStereotype.addMetaClass( "Type" );
 						
 						theFromStereotype.setOwner( theReqtsDocPkg );
 						theFromStereotype.highLightElement();
 
 					} else {
-						theFromStereotype = theReqtsDocPkg.addStereotype(theStereotypeName, "Package");
+						theFromStereotype = theReqtsDocPkg.addStereotype( theStereotypeName, "Package" );
 					}
 				}
 			}
@@ -350,18 +497,30 @@ public class CreateGatewayProjectPanel extends CreateStructuralElementPanel {
 	
 	private void updateGatewayDocInfoBasedOnUserSelections() {
 		
-		updateFilesDocBasedOnNameChanges();
-				
 		for (GatewayDocumentPanel gatewayDocumentPanel : m_GatewayDocumentPanel) {
 			
+    		String theOriginalName = gatewayDocumentPanel.getOriginalName();
     		String theNewName = gatewayDocumentPanel.getReqtsPkgName();	
-			GatewayDoc theGatewayDoc = m_ChosenProjectFile.getGatewayDocWith( theNewName );
+    		
+    		if (!theOriginalName.equals( theNewName )){
+    			
+    			Logger.writeLine("Detected that user changed the name from " + 
+    					theOriginalName + " to " + theNewName);
+    			
+    			m_ChosenProjectFile.renameFileSection( theOriginalName, theNewName );
+    		}
+		}
+				
+		for( GatewayDocumentPanel gatewayDocumentPanel : m_GatewayDocumentPanel ) {
+			
+    		String theNewName = gatewayDocumentPanel.getReqtsPkgName();	
+			GatewayFileSection theGatewayDoc = m_ChosenProjectFile.getFileSectionWith( theNewName );
     		    		
     		theGatewayDoc.setValueFor("Type", gatewayDocumentPanel.getAnalysisTypeName());
       	    theGatewayDoc.setValueFor("Path", gatewayDocumentPanel.getPathName());
 		}
 				
-		GatewayDoc theUMLModelDoc = m_ChosenProjectFile.getGatewayDocWith("UML Model");
+		GatewayFileSection theUMLModelDoc = m_ChosenProjectFile.getFileSectionWith("UML Model");
 		
 		// change the requirementsPackage variable in the UML Model document
 		String theReqtsPkgValue = buildRequirementsPackageValueFor();
@@ -402,73 +561,6 @@ public class CreateGatewayProjectPanel extends CreateStructuralElementPanel {
 		return sb.toString();
 	}
 	
-	private void updateFilesDocBasedOnNameChanges() {
-		
-		GatewayDoc theFilesDoc = m_ChosenProjectFile.getGatewayDocWith("Files");
-		
-		String theOriginalNamesValue = theFilesDoc.getValueFor("Names");
-		String theUpdatedNamesValue = theOriginalNamesValue;
-		
-		for (GatewayDocumentPanel gatewayDocumentPanel : m_GatewayDocumentPanel) {
-			
-    		String theOriginalName = gatewayDocumentPanel.getOriginalName();
-    		String theNewName = gatewayDocumentPanel.getReqtsPkgName();	
-    		
-    		if (!theOriginalName.equals( theNewName )){
-    			
-    			Logger.writeLine("Detected that user changed the name from " + 
-    					theOriginalName + " to " + theNewName);
-    			
-    			GatewayDoc theDoc = m_ChosenProjectFile.getGatewayDocWith( theOriginalName );
-    			theDoc.setDocumentName( theNewName );
-    			
-    			theUpdatedNamesValue = theUpdatedNamesValue.replaceAll(theOriginalName, theNewName);
-    			
-    			// Change all the covers links
-    			for (GatewayDoc theGatewayDoc : m_ChosenProjectFile.getGatewayDocs()) {		
-    				theGatewayDoc.renameStringInAllValues( theOriginalName, theNewName );
-    			}
-    		}
-		}
-		
-		if( !theUpdatedNamesValue.equals( theOriginalNamesValue ) ){
-			Logger.writeLine( "Updated names value from " + theOriginalNamesValue + " to " + theUpdatedNamesValue );
-			theFilesDoc.setValueFor( "Names", theUpdatedNamesValue );
-		}
-	}
-
-	private void writeTheNewRqtfFile() {
-		try {
-			String theFileName = m_Project.getCurrentDirectory() + "/" + 
-					m_Project.getName() + "_rpy" + "/" + m_Project.getName() + ".rqtf";
-			
-			Logger.writeLine("Building file called " + theFileName);
-			
-			PrintWriter printWriter;
-			
-			printWriter = new PrintWriter ( theFileName );
-			
-			List<GatewayDoc> theGatewayDocs = m_ChosenProjectFile.getGatewayDocs();
-			
-			for (GatewayDoc gatewayDoc : theGatewayDocs) {
-				
-				List<String> theDocContents = gatewayDoc.getRqtfLinesForDocument();
-				
-				for (String theDocLine : theDocContents) {	
-			        
-					printWriter.println ( theDocLine );
-					Logger.writeLine("Output:" + theDocLine );
-				}
-			}
-			
-			printWriter.close();
-			
-		} catch (FileNotFoundException e) {
-			
-			Logger.writeLine("Error in writeTheNewRqtfFile, unhandled FileNotFoundException detected");
-		}
-	}
-	
 	@Override
 	protected boolean checkValidity(boolean isMessageEnabled) {
 		
@@ -506,26 +598,30 @@ public class CreateGatewayProjectPanel extends CreateStructuralElementPanel {
 	protected void performAction() {
 		
 		// do silent check first
-		if (checkValidity( false )){
-			
-			FileHelper.copyTheFile(m_Project, m_TypesFile.getFile(), m_Project.getName() + ".types");
+		if( checkValidity( false ) ){
+
 			updateGatewayDocInfoBasedOnUserSelections();
-			writeTheNewRqtfFile();
+			
+			String theProjectPath = m_Project.getCurrentDirectory() + "/" + m_Project.getName() + "_rpy" + "/";
+			
+			m_ChosenProjectFile.writeRqtfFileTo( theProjectPath + m_Project.getName() + ".rqtf" );
+			m_ChosenTypesFile.writeRqtfFileTo( theProjectPath + m_Project.getName() + ".types" );
+
 			createDesignatedReqtPackagesInTheModel();
 		
 		} else {
 			Logger.writeLine("Error in CreateGatewayProjectPanel.performAction, checkValidity returned false");
 		}	
 	}
-
 }
 
 /**
  * Copyright (C) 2016  MBSE Training and Consulting Limited (www.executablembse.com)
 
     Change history:
-    #035 15-JUN-2016: New panel to configure requirements package naming and gateway set-up (F.J.Chadburn)
+    #035 5-JUN-2016: New panel to configure requirements package naming and gateway set-up (F.J.Chadburn)
     #039 17-JUN-2016: Minor fixes and improvements to robustness of Gateway project setup (F.J.Chadburn)
+    #051 06-JUL-2016: Re-factored the GW panel to allow it to incrementally add to previous setup (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

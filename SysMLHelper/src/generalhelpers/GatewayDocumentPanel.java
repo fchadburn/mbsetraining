@@ -36,6 +36,8 @@ public class GatewayDocumentPanel extends JPanel {
 			String theSelectedAnalysisType,
 			String thePath,
 			List<IRPModelElement> thePackagesToImportInto,
+			IRPModelElement theDefaultPackage,
+			boolean isImmutable,
 			IRPProject theProject) throws FileNotFoundException {
 		
 		super();
@@ -47,17 +49,23 @@ public class GatewayDocumentPanel extends JPanel {
 		m_ChosenNameTextField = new JTextField( theOriginalName );
 		m_ChosenNameTextField.setMinimumSize( new Dimension( 200, 20 ) );
 		m_ChosenNameTextField.setPreferredSize( new Dimension( 200, 20 ) );
+		m_ChosenNameTextField.setEnabled( !isImmutable );
 		
 		m_AnalysisTypeComboBox = new JComboBox<String>( theAnalysisTypeNames );
 		m_AnalysisTypeComboBox.setSelectedItem( theSelectedAnalysisType );
+		m_AnalysisTypeComboBox.setEnabled( !isImmutable );
 		
 		m_NamedElementMap = new NamedElementMap( thePackagesToImportInto );
 		
 		m_RequirementsPkgComboBox = new JComboBox<Object>( m_NamedElementMap.getFullNames() );
 		
+		m_RequirementsPkgComboBox.setSelectedItem( theDefaultPackage.getFullPathName()  );
+		m_RequirementsPkgComboBox.setEnabled( !isImmutable );
+		
  		m_Path = new JTextField( thePath );
 		m_Path.setMinimumSize( new Dimension(200, 20 ) );
 		m_Path.setPreferredSize( new Dimension( 200, 20 ) );
+		m_Path.setEnabled( !isImmutable );
 
 		JPanel line1 = new JPanel();
 		line1.setLayout( new BoxLayout( line1, BoxLayout.X_AXIS )  );
@@ -133,6 +141,7 @@ public class GatewayDocumentPanel extends JPanel {
     Change history:
     #035 15-JUN-2016: New panel to configure requirements package naming and gateway set-up (F.J.Chadburn)
     #039 17-JUN-2016: Minor fixes and improvements to robustness of Gateway project setup (F.J.Chadburn)
+    #051 06-JUL-2016: Re-factored the GW panel to allow it to incrementally add to previous setup (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

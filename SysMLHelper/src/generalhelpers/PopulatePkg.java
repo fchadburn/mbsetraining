@@ -1,7 +1,6 @@
 package generalhelpers;
 
 import java.io.File;
-
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -78,23 +77,58 @@ public class PopulatePkg {
 		}
 	}	
 	
-	public static void browseAndAddByReferenceIfNotPresent(String thePackageName, IRPProject inProject){
+	public static void browseAndAddByReferenceIfNotPresent(
+			String thePackageName, 
+			IRPProject inProject, 
+			boolean relative ){
 		
-    	IRPModelElement theExistingPkg = inProject.findElementsByFullName(thePackageName, "Package");
+    	IRPModelElement theExistingPkg = inProject.findElementsByFullName( thePackageName, "Package" );
     	
-    	if (theExistingPkg == null){
-    		JFileChooser theFileChooser = new JFileChooser(System.getProperty("user.dir"));
-    		theFileChooser.setFileFilter(new FileNameExtensionFilter("Package", "sbs"));
+    	if( theExistingPkg == null ){
     		
-    		int choice = theFileChooser.showDialog(null, "Choose " + thePackageName);
+    		JFileChooser theFileChooser = new JFileChooser( System.getProperty("user.dir") );
+    		theFileChooser.setFileFilter( new FileNameExtensionFilter( "Package", "sbs" ) );
     		
-    		if (choice==JFileChooser.CANCEL_OPTION){
+    		int choice = theFileChooser.showDialog( null, "Choose " + thePackageName );
+    		
+    		if( choice==JFileChooser.CANCEL_OPTION ){
     			Logger.writeLine("Operation cancelled by user when trying to choose " + thePackageName);
     			
-    		} else if (choice==JFileChooser.APPROVE_OPTION){
+    		} else if( choice==JFileChooser.APPROVE_OPTION ){
+    			
     			File theFile = theFileChooser.getSelectedFile();
     			String thePath = theFile.getAbsolutePath();
-    			SysMLHelperPlugin.getRhapsodyApp().addToModelByReference(thePath);
+    			
+    			SysMLHelperPlugin.getRhapsodyApp().addToModelByReference( thePath );
+    			
+    			if( relative ){
+        			int trimSize = thePackageName.length()+5;
+        			
+        			String thePathMinusFile = thePath.substring(0, thePath.length()-trimSize);     			
+        			
+        			String theCurrentDir = inProject.getCurrentDirectory();
+        			
+        			String theCurrentDirMinusProject = 
+        					theCurrentDir.replaceAll(
+        							inProject.getName()+"$", "");
+        			
+        			String theRelativePath = "../../" + new File(
+        					theCurrentDirMinusProject ).toURI().relativize(
+        							new File( thePathMinusFile ).toURI()).getPath();
+     
+        			IRPModelElement theCandidate = inProject.findAllByName(thePackageName, "Package");
+        			
+        			if( theCandidate != null && theCandidate instanceof IRPPackage ){
+        				
+        				IRPPackage theAddedPackage = (IRPPackage)theCandidate;
+        				
+        				theAddedPackage.setUnitPath( theRelativePath );
+        				
+        				Logger.writeLine( "Unit called " + thePackageName + 
+        						".sbs was changed from absolute path='" + thePathMinusFile +"' to relative path='" + 
+        						theRelativePath + "'" );
+        			}
+    			}
     		}
     	}
 	}
@@ -154,6 +188,7 @@ public class PopulatePkg {
 
     Change history:
     #006 02-MAY-2016: Add FunctionalAnalysisPkg helper support (F.J.Chadburn)
+    #046 06-JUL-2016: Fix external RequirementsAnalysisPkg reference to be created with relative path (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

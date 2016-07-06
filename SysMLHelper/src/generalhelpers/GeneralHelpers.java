@@ -301,7 +301,7 @@ public class GeneralHelpers {
 		List <IRPModelElement> theMatches = findElementsWithMetaClassAndName(
 				theMetaClass, andName, underneathTheEl);
 
-		if (theMatches.size()== 1){
+		if (theMatches.size()==1){
 		
 			theElement = theMatches.get(0);
 		
@@ -333,11 +333,7 @@ public class GeneralHelpers {
 				theElements.add( theCandidate );
 			}
 		}
-		
-		if (theElements.isEmpty()){
-			Logger.writeLine("Warning in findElementsWithMetaClassAndName(" + theMetaClass + "," + andName + ","+Logger.elementInfo(underneathTheEl)+"), no elements were found");
-		} 
-		
+				
 		return theElements;
 	}
 	
@@ -655,6 +651,7 @@ public class GeneralHelpers {
     #035 15-JUN-2016: New panel to configure requirements package naming and gateway set-up (F.J.Chadburn)
     #041 29-JUN-2016: Derive downstream requirement menu added for reqts on diagrams (F.J.Chadburn)
     #044 03-JUL-2016: Minor re-factoring/code corrections (F.J.Chadburn)
+    #051 06-JUL-2016: Re-factored the GW panel to allow it to incrementally add to previous setup (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 
