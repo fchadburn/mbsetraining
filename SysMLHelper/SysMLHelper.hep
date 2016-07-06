@@ -29,7 +29,7 @@ DLLServerCompatible3=1
 name4=MBSE Method: Design Synthesis\Create the DesignSynthesisPkg package structure
 isPluginCommand4=1
 command4=InvokeSysMLHelper
-applicableTo4=Project,SysML
+applicableTo4=
 isVisible4=1
 DLLServerCompatible4=1
 
@@ -42,7 +42,7 @@ isVisible5=1
 DLLServerCompatible5=1
 
 #REM: Add pop-up menu 
-name6=MBSE Method: Requirements Analysis\Setup Gateway project based on rqtf template
+name6=MBSE Method: General Utilities\Setup Gateway project based on rqtf template
 isPluginCommand6=1
 command6=InvokeSysMLHelper
 applicableTo6=Project,SysML
@@ -66,6 +66,8 @@ Triggers7=
 #REM Change history:
 #REM #021 30-MAY-2016: Added Copyright/History statements to the hep files (F.J.Chadburn)
 #REM #035 15-JUN-2016: New panel to configure requirements package naming and gateway set-up (F.J.Chadburn)
+#REM #050 06-JUL-2016: Setup Gateway project based on rqtf template option now under General Utilities menu (F.J.Chadburn)
+#REM #052 06-JUL-2016: DesignSynthesisPkg creation menus now hidden until more complete (F.J.Chadburn)
 #REM
 #REM This file is part of SysMLHelperPlugin.
 #REM
