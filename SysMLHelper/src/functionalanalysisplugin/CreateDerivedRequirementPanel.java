@@ -87,22 +87,37 @@ public class CreateDerivedRequirementPanel extends CreateTracedElementPanel {
 			} else if (theModelObject instanceof IRPAcceptEventAction){
 			
 				IRPAcceptEventAction theAcceptEvent = (IRPAcceptEventAction)theModelObject;
+				
+				// not all accept events will have an event
 				IRPInterfaceItem theEvent = theAcceptEvent.getEvent();
 
-				Set<IRPRequirement> theReqts = 
-						TraceabilityHelper.getRequirementsThatTraceFromWithStereotype(
-								theEvent, "satisfy");
+				if( theEvent != null ){
+					Set<IRPRequirement> theReqts = 
+							TraceabilityHelper.getRequirementsThatTraceFromWithStereotype(
+									theEvent, "satisfy");
 
-				CreateDerivedRequirementPanel.launchThePanel( 
-						theSelectedGraphEls.get(0), 
-						theReqts, 
-						RequirementsAnalysisPlugin.getActiveProject() );
-				
+					CreateDerivedRequirementPanel.launchThePanel( 
+							theSelectedGraphEls.get(0), 
+							theReqts, 
+							RequirementsAnalysisPlugin.getActiveProject() );			
+				} else {
+
+					Set<IRPRequirement> theReqts = 
+							TraceabilityHelper.getRequirementsThatTraceFromWithStereotype(
+									theAcceptEvent, "derive");
+
+					CreateDerivedRequirementPanel.launchThePanel( 
+							theSelectedGraphEls.get(0), 
+							theReqts, 
+							RequirementsAnalysisPlugin.getActiveProject() );
+				}
+
 			} else if (theModelObject instanceof IRPState) { // SendAction
 
 				IRPState theState = (IRPState)theModelObject;
+				String theStateType = theState.getStateType();
 				
-				if (theState.getStateType().equals("EventState")){ // receive event
+				if (theStateType.equals("EventState")){ // receive event
 					
 					IRPSendAction theSendAction = theState.getSendAction();
 					
@@ -119,11 +134,29 @@ public class CreateDerivedRequirementPanel extends CreateTracedElementPanel {
 									theReqts, 
 									RequirementsAnalysisPlugin.getActiveProject() );
 						} else {
-							Logger.writeLine("Error in deriveDownstreamRequirement, theSendAction.getEvent() is null");
+							Set<IRPRequirement> theReqts = 
+									TraceabilityHelper.getRequirementsThatTraceFromWithStereotype(
+											theState, "derive");
+
+							CreateDerivedRequirementPanel.launchThePanel( 
+									theSelectedGraphEls.get(0), 
+									theReqts, 
+									RequirementsAnalysisPlugin.getActiveProject() );
 						}
 					} else {
 						Logger.writeLine("Error in deriveDownstreamRequirement, theSendAction is null");
 					}
+					
+				} else if (theStateType.equals("Action")){
+					
+					Set<IRPRequirement> theReqts = 
+							TraceabilityHelper.getRequirementsThatTraceFromWithStereotype(
+									theState, "derive");
+
+					CreateDerivedRequirementPanel.launchThePanel( 
+							theSelectedGraphEls.get(0), 
+							theReqts, 
+							RequirementsAnalysisPlugin.getActiveProject() );
 					
 				} else {
 					Logger.writeLine("Warning in deriveDownstreamRequirement, this operation is not supported for theState.getStateType()=" + theState.getStateType());
@@ -263,13 +296,15 @@ public class CreateDerivedRequirementPanel extends CreateTracedElementPanel {
 	
 	private Component createWestCentrePanel() {
 		
-		JLabel theSpecText = new JLabel( "Specification:" );
+		JLabel theSpecText = new JLabel( "Specification text:" );
+		theSpecText.setBorder( BorderFactory.createEmptyBorder(10, 0, 0, 0));
 		theSpecText.setAlignmentX( LEFT_ALIGNMENT );
 		
 		JPanel theMoveIntoPanel = new JPanel();
 		theMoveIntoPanel.setLayout( new BoxLayout( theMoveIntoPanel, BoxLayout.X_AXIS ) );
 		theMoveIntoPanel.add( m_MoveIntoCheckBox );
 		theMoveIntoPanel.add( m_FromPackageComboBox );
+		theMoveIntoPanel.setBorder( BorderFactory.createEmptyBorder(10, 0, 0, 0));
 		theMoveIntoPanel.setAlignmentX( LEFT_ALIGNMENT );
 
 		JPanel thePanel = new JPanel();
@@ -435,36 +470,37 @@ public class CreateDerivedRequirementPanel extends CreateTracedElementPanel {
 
 			IRPCallOperation theCallOp = (IRPCallOperation)theSourceModelObject;
 
-			TraceabilityHelper.addStereotypedDependencyIfOneDoesntExist(
-					theCallOp, theRequirement, "derive");
-			
 			IRPInterfaceItem theOperation = theCallOp.getOperation();
 			
 			if( theOperation != null ){
 
 				TraceabilityHelper.addStereotypedDependencyIfOneDoesntExist(
+						theCallOp, theRequirement, "derive");
+				
+				TraceabilityHelper.addStereotypedDependencyIfOneDoesntExist(
 						theOperation, theRequirement, "derive");
 
 			} else {
-				Logger.writeLine("Error in addDeriveRelationsTo, no Operation found for the call operation");
+				Logger.writeLine("Skipped adding derive dependencies as no Operation found for the call operation");
 			}
 			
 		} else if ( theSourceModelObject instanceof IRPAcceptEventAction ){
 
-			IRPAcceptEventAction theAcceptEventAction = (IRPAcceptEventAction)theSourceModelObject;
-
-			TraceabilityHelper.addStereotypedDependencyIfOneDoesntExist(
-					theAcceptEventAction, theRequirement, "derive");
+			IRPAcceptEventAction theAcceptEventAction = 
+					(IRPAcceptEventAction)theSourceModelObject;
 
 			IRPInterfaceItem theEvent = theAcceptEventAction.getEvent();
 
 			if( theEvent != null ){
 
 				TraceabilityHelper.addStereotypedDependencyIfOneDoesntExist(
+						theAcceptEventAction, theRequirement, "derive");
+				
+				TraceabilityHelper.addStereotypedDependencyIfOneDoesntExist(
 						theEvent, theRequirement, "derive");
 
 			} else {
-				Logger.writeLine("Error in addDeriveRelationsTo, no Event found for the caccept event action");
+				Logger.writeLine("Skipped adding derive dependencies as no Event was found for the accept event action");
 			}
 			
 		} else if ( theSourceModelObject instanceof IRPState ){
@@ -475,9 +511,6 @@ public class CreateDerivedRequirementPanel extends CreateTracedElementPanel {
 			
 			if( theStateType.equals( "EventState") ){
 				
-				TraceabilityHelper.addStereotypedDependencyIfOneDoesntExist(
-						theState, theRequirement, "derive");
-				
 				IRPSendAction theSendAction = theState.getSendAction();
 				
 				if( theSendAction != null ){
@@ -486,15 +519,23 @@ public class CreateDerivedRequirementPanel extends CreateTracedElementPanel {
 					if( theEvent != null ){
 						
 						TraceabilityHelper.addStereotypedDependencyIfOneDoesntExist(
+								theState, theRequirement, "derive");
+						
+						TraceabilityHelper.addStereotypedDependencyIfOneDoesntExist(
 									theEvent, theRequirement, "derive");
 
 					} else {
-						Logger.writeLine("Error in addDeriveRelationsTo, theEvent==null for " + Logger.elementInfo(theState));
+						Logger.writeLine("Skipped adding derive dependencies as no event found for " + Logger.elementInfo(theState));
 					}
 					
 				} else {
 					Logger.writeLine("Error in addDeriveRelationsTo, theSendAction==null for " + Logger.elementInfo(theState)); 
 				}
+				
+			} else if ( theStateType.equals( "Action") ){ // i.e. just text
+
+				// don't add 
+				
 			} else {
 				Logger.writeLine("Warning in addDeriveRelationsTo, getStateType=" + theStateType + " is not supported");
 			}
@@ -564,7 +605,8 @@ public class CreateDerivedRequirementPanel extends CreateTracedElementPanel {
     #041 29-JUN-2016: Derive downstream requirement menu added for reqts on diagrams (F.J.Chadburn) 
     #043 03-JUL-2016: Add Derive downstream reqt for CallOps, InterfaceItems and Event Actions (F.J.Chadburn)
     #049 06-JUL-2016: Derive new requirement now under Functional Analysis not Requirements Analysis menu (F.J.Chadburn)
-    
+    #055 13-JUL-2016: Support requirement derivation from simplified AD elements (F.J.Chadburn)
+
     This file is part of SysMLHelperPlugin.
 
     SysMLHelperPlugin is free software: you can redistribute it and/or modify

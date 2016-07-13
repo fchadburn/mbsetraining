@@ -39,7 +39,7 @@ public class CreateOperationPanel extends CreateTracedElementPanel {
 		if (GeneralHelpers.doUnderlyingModelElementsIn( theSelectedGraphEls, "Requirement" )){
 			
 			// only requirements are selected hence assume only a single operation is needed
-			launchThePanel(	theSelectedGraphEls.get(0), theSelectedReqts, theActiveProject );
+			launchThePanel(	theSelectedGraphEls.get(0), theSelectedReqts, theActiveProject, false );
 		} else {
 			
 			// launch a dialog for each selected element that is not a requirement
@@ -50,16 +50,17 @@ public class CreateOperationPanel extends CreateTracedElementPanel {
 				if (theModelObject != null && !(theModelObject instanceof IRPRequirement)){
 					
 					// only launch a dialog for non requirement elements
-					launchThePanel(	theGraphEl, theSelectedReqts, theActiveProject );
+					launchThePanel(	theGraphEl, theSelectedReqts, theActiveProject, false );
 				}		
 			}
 		}
 	}
 	
-	private static void launchThePanel(
+	public static void launchThePanel(
 			final IRPGraphElement selectedDiagramEl, 
 			final Set<IRPRequirement> withReqtsAlsoAdded,
-			final IRPProject inProject){
+			final IRPProject inProject,
+			final boolean isPopulateSelected ){
 	
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 
@@ -78,7 +79,8 @@ public class CreateOperationPanel extends CreateTracedElementPanel {
 				CreateOperationPanel thePanel = new CreateOperationPanel(
 						selectedDiagramEl,
 						withReqtsAlsoAdded,
-						theLogicalSystemBlock);
+						theLogicalSystemBlock,
+						isPopulateSelected);
 
 				frame.setContentPane( thePanel );
 				frame.pack();
@@ -91,13 +93,18 @@ public class CreateOperationPanel extends CreateTracedElementPanel {
 	public CreateOperationPanel(
 			IRPGraphElement forSourceGraphElement, 
 			Set<IRPRequirement> withReqtsAlsoAdded,
-			IRPClassifier onTargetBlock) {
+			IRPClassifier onTargetBlock,
+			boolean isPopulateSelected ) {
 		
 		super(forSourceGraphElement, withReqtsAlsoAdded, onTargetBlock);
 		 
 		IRPModelElement theModelObject = m_SourceGraphElement.getModelObject();
 		
-		final String theSourceText = GeneralHelpers.getActionTextFrom( theModelObject );	
+		String theSourceText = GeneralHelpers.getActionTextFrom( theModelObject );	
+		
+		if( theSourceText == null ){
+			theSourceText = "function_name";
+		}
 		
 		Logger.writeLine("CreateOperationPanel constructor called with text '" + theSourceText + "'");
 		
@@ -117,7 +124,7 @@ public class CreateOperationPanel extends CreateTracedElementPanel {
 		theNamePanel.setAlignmentX(LEFT_ALIGNMENT);
 		
 		m_CallOperationIsNeededCheckBox = new JCheckBox("Populate on diagram?");
-		m_CallOperationIsNeededCheckBox.setSelected(false);
+		m_CallOperationIsNeededCheckBox.setSelected( isPopulateSelected );
 		
 		JPanel thePageStartPanel = new JPanel();
 		thePageStartPanel.setLayout( new BoxLayout( thePageStartPanel, BoxLayout.X_AXIS ) );
@@ -161,8 +168,11 @@ public class CreateOperationPanel extends CreateTracedElementPanel {
 							m_ChosenNameTextField.getText() );	
 			
 			theOperation.highLightElement();
-			addTraceabilityDependenciesTo( theOperation, m_RequirementsPanel.getSelectedRequirementsList() );
-			bleedColorToElementsRelatedTo( m_SourceGraphElement );
+			
+			if( !(m_SourceGraphElement.getModelObject() instanceof IRPCallOperation) ){
+				addTraceabilityDependenciesTo( theOperation, m_RequirementsPanel.getSelectedRequirementsList() );
+				bleedColorToElementsRelatedTo( m_SourceGraphElement );
+			}
 			
 			if (m_CallOperationIsNeededCheckBox.isSelected()){
 				populateCallOperationActionOnDiagram( theOperation );
@@ -184,6 +194,7 @@ public class CreateOperationPanel extends CreateTracedElementPanel {
     #034 05-JUN-2016: Re-factored design to move static constructors into appropriate panel class (F.J.Chadburn)
     #042 29-JUN-2016: launchThePanel renaming to improve Panel class design consistency (F.J.Chadburn)
     #043 03-JUL-2016: Add Derive downstream reqt for CallOps, InterfaceItems and Event Actions (F.J.Chadburn)
+    #058 13-JUL-2016: Dropping CallOp on diagram now gives option to create Op on block (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

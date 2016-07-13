@@ -396,8 +396,10 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
 		if (checkValidity( false )){
 			String theName = m_BlockNameTextField.getText();
 			
-			IRPPackage theBlockPackage = m_RootPackage.addNestedPackage( theName + "Pkg" );  
+			IRPPackage theRootPackage = m_RootPackage.addNestedPackage( theName + "Pkg" );  
 			
+			// Create nested package for block and its events
+			IRPPackage theBlockPackage = theRootPackage.addNestedPackage(theName + "Block" + "Pkg");
 			IRPClass theLogicalSystemBlock = theBlockPackage.addClass( theName );
 			GeneralHelpers.applyExistingStereotype("LogicalSystem", theLogicalSystemBlock);
 			theLogicalSystemBlock.changeTo("Block");
@@ -414,15 +416,18 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
 			}
 
 			// Create nested package with components necessary for wiring up a simulation
-			IRPPackage theBlockTestPackage = theBlockPackage.addNestedPackage(theName + "Test" + "Pkg");
+			IRPPackage theBlockTestPackage = theRootPackage.addNestedPackage(theName + "Test" + "Pkg");
 
 			IRPClass theUsageDomainBlock = theBlockTestPackage.addClass(theName + "_UsageDomain");
 			theUsageDomainBlock.changeTo("Block");
 
-			IRPObjectModelDiagram theBDD = theBlockPackage.addObjectModelDiagram("BDD - " + theUsageDomainBlock.getName());
+			IRPObjectModelDiagram theBDD = theBlockTestPackage.addObjectModelDiagram("BDD - " + theUsageDomainBlock.getName());
 			theBDD.changeTo("Block Definition Diagram");
 
-			IRPStructureDiagram theIBD = (IRPStructureDiagram) theUsageDomainBlock.addNewAggr("StructureDiagram", "IBD - " + theUsageDomainBlock.getName());
+			IRPStructureDiagram theIBD = 
+					(IRPStructureDiagram) theUsageDomainBlock.addNewAggr(
+							"StructureDiagram", "IBD - " + theUsageDomainBlock.getName());
+			
 			theIBD.changeTo("Internal Block Diagram");					    	
 
 			// Make the LogicalSystem a part of the UsageDomain block
@@ -455,9 +460,9 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
 			} else {
 				Logger.writeLine("Setting " + Logger.elementInfo(theTagForPackageUnderDev) 
 						+ " owned by " + Logger.elementInfo( m_RootPackage ) + " to " 
-						+ Logger.elementInfo(theBlockPackage));
+						+ Logger.elementInfo(theRootPackage));
 				
-				m_RootPackage.setTagElementValue(theTagForPackageUnderDev, theBlockPackage);
+				m_RootPackage.setTagElementValue(theTagForPackageUnderDev, theRootPackage);
 			}
 								
 			IRPStatechartDiagram theStatechart = theLogicalSystemBlock.getStatechart().getStatechartDiagram();
@@ -468,7 +473,7 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
 			}
 			
 			// Create nested package for housing the ADs
-			IRPPackage theWorkingPackage = theBlockPackage.addNestedPackage(theName + "Working" + "Pkg");
+			IRPPackage theWorkingPackage = theRootPackage.addNestedPackage(theName + "Working" + "Pkg");
 			
 			// This dependency is also used to locate the working package
 			IRPDependency theRAProfileDependency = 
@@ -505,7 +510,8 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
     #044 03-JUL-2016: Minor re-factoring/code corrections (F.J.Chadburn)
     #045 03-JUL-2016: Fix CopyActivityDiagramsPanel capability (F.J.Chadburn)
     #048 06-JUL-2016: RequirementsPkg now created in FunctionalAnalysisPkg.sbs rather than nested deeper (F.J.Chadburn)
-    
+    #054 13-JUL-2016: Create a nested BlockPkg package to contain the Block and events (F.J.Chadburn)
+
     This file is part of SysMLHelperPlugin.
 
     SysMLHelperPlugin is free software: you can redistribute it and/or modify

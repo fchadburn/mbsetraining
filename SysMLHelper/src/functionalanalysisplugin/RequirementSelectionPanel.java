@@ -42,67 +42,72 @@ public class RequirementSelectionPanel extends JPanel {
 		super();
 
 		GridLayout theLayout = new GridLayout(0, 1);
+		
 		setLayout( theLayout );
 
-		setBorder( BorderFactory.createLineBorder( new Color(0,0,0) ));
-		
-		Box theBox = Box.createVerticalBox();
+		if( !theReqts.isEmpty() ){
+				
+			setBorder( BorderFactory.createLineBorder( new Color(0,0,0) ));
+			
+			Box theBox = Box.createVerticalBox();
 
-		theBox.setBorder( BorderFactory.createEmptyBorder(10, 10, 10, 10));
+			theBox.setBorder( BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-		JLabel theLabel = new JLabel(theLabelText);
-		theLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
-		theBox.add( theLabel );
+			JLabel theLabel = new JLabel(theLabelText);
+			theLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+			theBox.add( theLabel );
 
-		JPanel theReqtsTable = createContent( theReqts );
-		theReqtsTable.setAlignmentX(Component.LEFT_ALIGNMENT);
-		theBox.add( theReqtsTable );
-		
-		add( theBox );
+			JPanel theReqtsTable = createContent( theReqts );
+			theReqtsTable.setAlignmentX(Component.LEFT_ALIGNMENT);
+			theBox.add( theReqtsTable );
+			
+			add( theBox );
+		}
 	}
 	
 	private JPanel createContent(Set<IRPRequirement> theReqts){
 		
-	    JPanel thePanel = new JPanel();
-	    
-	    GroupLayout theGroupLayout = new GroupLayout( thePanel );
-	    thePanel.setLayout( theGroupLayout );
-	    theGroupLayout.setAutoCreateGaps( true );
+		JPanel thePanel = new JPanel();
+
+		GroupLayout theGroupLayout = new GroupLayout( thePanel );
+		thePanel.setLayout( theGroupLayout );
+		theGroupLayout.setAutoCreateGaps( true );
 
 		SequentialGroup theHorizSequenceGroup = theGroupLayout.createSequentialGroup();
 		SequentialGroup theVerticalSequenceGroup = theGroupLayout.createSequentialGroup();
-	
+
 		ParallelGroup theColumn1ParallelGroup = theGroupLayout.createParallelGroup( GroupLayout.Alignment.LEADING );
 		ParallelGroup theColumn2ParallelGroup = theGroupLayout.createParallelGroup( GroupLayout.Alignment.LEADING );
 
 		theHorizSequenceGroup.addGroup( theColumn1ParallelGroup );
-	    theHorizSequenceGroup.addGroup( theColumn2ParallelGroup );
+		theHorizSequenceGroup.addGroup( theColumn2ParallelGroup );
 
 		for (IRPRequirement theReqt : theReqts) {
-			
-		    JCheckBox theReqtCheckBox = new JCheckBox( theReqt.getName()) ;
-		    
+
+			JCheckBox theReqtCheckBox = new JCheckBox( theReqt.getName()) ;
+
 			theReqtCheckBox.setSelected(true);
-						 
+
 			JTextArea theSpecification = new JTextArea( theReqt.getSpecification() );
-			JScrollPane scrollPane = new JScrollPane(theSpecification);
-			
+			theSpecification.setEditable( false );
+			JScrollPane scrollPane = new JScrollPane( theSpecification );
+
 			scrollPane.setPreferredSize( new Dimension( 500, 35 ) );
 
-		    theColumn1ParallelGroup.addComponent( theReqtCheckBox );   
-		    theColumn2ParallelGroup.addComponent( scrollPane, 700, 700, 700 );    
-    
-		    ParallelGroup theVertical1ParallelGroup = 
-		    		theGroupLayout.createParallelGroup( GroupLayout.Alignment.BASELINE );
-		    
-		    theVertical1ParallelGroup.addComponent( theReqtCheckBox );
-		    theVertical1ParallelGroup.addComponent( scrollPane );
-		    
-		    theVerticalSequenceGroup.addGroup( theVertical1ParallelGroup );		  
-		    
-		    m_CheckBoxMap.put(theReqt, theReqtCheckBox);
+			theColumn1ParallelGroup.addComponent( theReqtCheckBox );   
+			theColumn2ParallelGroup.addComponent( scrollPane, 700, 700, 700 );    
+
+			ParallelGroup theVertical1ParallelGroup = 
+					theGroupLayout.createParallelGroup( GroupLayout.Alignment.BASELINE );
+
+			theVertical1ParallelGroup.addComponent( theReqtCheckBox );
+			theVertical1ParallelGroup.addComponent( scrollPane );
+
+			theVerticalSequenceGroup.addGroup( theVertical1ParallelGroup );		  
+
+			m_CheckBoxMap.put(theReqt, theReqtCheckBox);
 		}
-		
+
 		theGroupLayout.setHorizontalGroup( theHorizSequenceGroup );
 		theGroupLayout.setVerticalGroup( theVerticalSequenceGroup );
 
@@ -142,6 +147,8 @@ public class RequirementSelectionPanel extends JPanel {
     #033 05-JUN-2016: Add support for creation of operations and events from raw requirement selection (F.J.Chadburn)
     #041 29-JUN-2016: Derive downstream requirement menu added for reqts on diagrams (F.J.Chadburn)
     #051 06-JUL-2016: Re-factored the GW panel to allow it to incrementally add to previous setup (F.J.Chadburn)
+    #056 13-JUL-2016: Minor fixes to RequirementsSelectionPanel to make it clearer (F.J.Chadburn)
+    #058 13-JUL-2016: Dropping CallOp on diagram now gives option to create Op on block (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

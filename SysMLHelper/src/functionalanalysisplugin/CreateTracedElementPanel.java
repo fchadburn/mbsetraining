@@ -251,14 +251,22 @@ public abstract class CreateTracedElementPanel extends JPanel {
 				
 				IRPFlowchart theFlowchart = theAD.getFlowchart();
 				
-				IRPCallOperation theCallOp = 
-						(IRPCallOperation) theFlowchart.addNewAggr(
-								"CallOperation", theOperation.getName() );
-				
-				theCallOp.setOperation(theOperation);
-				theFlowchart.addNewNodeForElement(theCallOp, x, y, 300, 40);
-				
-				theRhpApp.highLightElement( theCallOp );
+				if( m_SourceGraphElement.getModelObject() instanceof IRPCallOperation ){
+					
+					IRPCallOperation theCallOp = (IRPCallOperation) m_SourceGraphElement.getModelObject();
+					theCallOp.setOperation(theOperation);
+					
+				} else {
+					IRPCallOperation theCallOp = 
+							(IRPCallOperation) theFlowchart.addNewAggr(
+									"CallOperation", theOperation.getName() );
+					
+					theCallOp.setOperation(theOperation);
+					theFlowchart.addNewNodeForElement(theCallOp, x, y, 300, 40);
+					
+					theRhpApp.highLightElement( theCallOp );
+				}
+
 				
 			} else if (theDiagram instanceof IRPObjectModelDiagram){				
 				
@@ -292,6 +300,7 @@ public abstract class CreateTracedElementPanel extends JPanel {
     #040 17-JUN-2016: Extend populate event/ops to work on OMD, i.e., REQ diagrams (F.J.Chadburn)
     #041 29-JUN-2016: Derive downstream requirement menu added for reqts on diagrams (F.J.Chadburn)
     #043 03-JUL-2016: Add Derive downstream reqt for CallOps, InterfaceItems and Event Actions (F.J.Chadburn)
+    #058 13-JUL-2016: Dropping CallOp on diagram now gives option to create Op on block (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

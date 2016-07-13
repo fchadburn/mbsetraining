@@ -6,17 +6,24 @@ import generalhelpers.Logger;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
-import java.util.ArrayList;
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
+import javax.swing.GroupLayout;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.GroupLayout.ParallelGroup;
+import javax.swing.GroupLayout.SequentialGroup;
 
 import com.telelogic.rhapsody.core.*;
 
@@ -27,10 +34,11 @@ public class CopyActivityDiagramsPanel extends CreateStructuralElementPanel {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private Map<IRPFlowchart, JCheckBox> m_CheckBoxMap = new HashMap<IRPFlowchart, JCheckBox>();
+	private Map<IRPUseCase, CopyActivityDiagramsInfo> m_RadioButtonMap = new HashMap<IRPUseCase, CopyActivityDiagramsInfo>();
 	private IRPModelElement m_ToElement = null;
 	private IRPModelElement m_UnderneathTheEl = null;
-	private JCheckBox m_ApplyMoreDetailedADCheckBox;
+	private JCheckBox m_ApplyMoreDetailedADCheckBox; 
+	private JCheckBox m_CopyAllCheckBox;
 
 	public static void launchThePanel(
 			final IRPModelElement underneathTheEl, 
@@ -68,57 +76,67 @@ public class CopyActivityDiagramsPanel extends CreateStructuralElementPanel {
 		m_UnderneathTheEl = underneathTheEl;
 		m_ToElement = toElement;
 		
-		m_ApplyMoreDetailedADCheckBox = 
-				new JCheckBox(
-						"Switch toolbars and formatting to more detailed AD ready for conversion?");
-		
-		List<IRPFlowchart> allTheFlowcharts = new ArrayList<IRPFlowchart>();
-		
 		List<IRPUseCase> theUseCases = 
 				m_UnderneathTheEl.getNestedElementsByMetaClass("UseCase", 1).toList();	
 		
-		for (IRPUseCase theUseCase : theUseCases) {
-			
-			allTheFlowcharts.addAll( 
-					theUseCase.getNestedElementsByMetaClass("ActivityDiagram", 1).toList() );		
+		for (IRPUseCase theUseCase : theUseCases) {	
+			m_RadioButtonMap.put( theUseCase, new CopyActivityDiagramsInfo( theUseCase ) );
 		}
-		
-		for (IRPFlowchart theFlowchart : allTheFlowcharts) {
-			
-			JCheckBox theCheckbox = new JCheckBox( theFlowchart.getName() );
-			theCheckbox.setSelected(true);
-			
-			m_CheckBoxMap.put(theFlowchart, theCheckbox);
-		}
+
+		setLayout( new BorderLayout(10,10) );
+		setBorder( BorderFactory.createEmptyBorder( 10, 10, 10, 10 ) );
 		
 		Box theBox = Box.createVerticalBox();
 
 		theBox.setBorder( BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-		if (allTheFlowcharts.isEmpty()){
-			JLabel theLabel = new JLabel("There are no activity diagrams to copy");
+		if( theUseCases.isEmpty() ){
+			JLabel theLabel = new JLabel("There are no use cases");
 			theLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
 			theBox.add( theLabel );
 		} else {
-			JLabel theLabel = new JLabel("Copy the following activity diagrams to " + Logger.elementInfo(toElement) + ": ");
-			theLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
-			theBox.add( theLabel );
-		}
-		
-	    for (Entry<IRPFlowchart, JCheckBox> entry : m_CheckBoxMap.entrySet()){
+			m_CopyAllCheckBox = new JCheckBox("Copy and link to existing upstream activity diagrams");
+			m_CopyAllCheckBox.setAlignmentX(Component.LEFT_ALIGNMENT);
+			m_CopyAllCheckBox.setSelected(true);
 			
-			JCheckBox theCheckBox = entry.getValue();		
-		    theBox.add( theCheckBox );
+			m_CopyAllCheckBox.addActionListener( new ActionListener() {
+				
+				public void actionPerformed(ActionEvent actionEvent) {
+
+					AbstractButton abstractButton = (AbstractButton) actionEvent.getSource();
+
+					boolean selected = abstractButton.getModel().isSelected();
+
+					for (Entry<IRPUseCase, CopyActivityDiagramsInfo> entry : m_RadioButtonMap.entrySet()){
+
+						CopyActivityDiagramsInfo theValue = entry.getValue();
+
+						if (!selected){
+							theValue.getDoNothingButton().setSelected(true);
+						} else {
+							if (theValue.hasActivityDiagrams()){
+								theValue.getCopyExistingButton().setSelected(true);
+							}
+						}
+					}
+
+				}} );
+			
+			theBox.add( m_CopyAllCheckBox );
+
+			JPanel theRadioButtonTable = createCopyADChoicesPanel();
+			theRadioButtonTable.setAlignmentX(Component.LEFT_ALIGNMENT);
+			theBox.add( theRadioButtonTable );
 		}
-	    
-		setLayout( new BorderLayout() );
 		
-		add( theBox, BorderLayout.PAGE_START );
+		m_ApplyMoreDetailedADCheckBox = new JCheckBox("Switch toolbars and formatting to more detailed AD ready for conversion?");
+		m_ApplyMoreDetailedADCheckBox.setSelected(true);
 		
-		if( !allTheFlowcharts.isEmpty() ){
-			add( m_ApplyMoreDetailedADCheckBox, BorderLayout.WEST );			
+		if( !m_RadioButtonMap.isEmpty() ){
+			theBox.add( m_ApplyMoreDetailedADCheckBox );			
 		}
-		
+
+		add( theBox, BorderLayout.CENTER );
 		add( createOKCancelPanel(), BorderLayout.PAGE_END );
 	}
 	
@@ -133,14 +151,66 @@ public class CopyActivityDiagramsPanel extends CreateStructuralElementPanel {
 		try {
 			if (checkValidity( false )){
 				
-				for (Entry<IRPFlowchart, JCheckBox> entry : m_CheckBoxMap.entrySet()){
+				for (Entry<IRPUseCase, CopyActivityDiagramsInfo> entry : m_RadioButtonMap.entrySet()){
 					
-					JCheckBox theCheckBox = entry.getValue();		
-				    IRPFlowchart theFlowchart = entry.getKey();
+					IRPUseCase theUseCase = entry.getKey();
+					CopyActivityDiagramsInfo theValue = entry.getValue();
 				    
-				    Logger.writeLine(theFlowchart, "was selected");
-				    if (theCheckBox.isSelected()){
-				    	cloneTheFlowchart( m_ToElement, theFlowchart );
+				    if( theValue.getCopyExistingButton().isSelected() ){
+				    	
+				    	List<IRPFlowchart> theFlowcharts = theValue.getFlowcharts();
+				    	
+			    		Logger.writeLine("Copying " + theFlowcharts.size() + " nested ADs for " + 
+			    				Logger.elementInfo(theUseCase) );
+
+				    	for (IRPFlowchart theFlowchart : theFlowcharts) {
+				    		
+				    		cloneTheFlowchart( 
+				    				m_ToElement, 
+				    				theFlowchart, 
+				    				m_ApplyMoreDetailedADCheckBox.isSelected() );
+						}    	
+				    }
+				    
+				    if( theValue.getCreateNewButton().isSelected() ){
+				    					    	
+			    		Logger.writeLine( "Create new ADs for " + 
+			    				Logger.elementInfo( theUseCase ) );
+
+			    		String theUniqueName = GeneralHelpers.determineUniqueNameBasedOn(
+			    				"Working - AD - " + theUseCase.getName(), "ActivityDiagram", m_ToElement);
+			    		
+			    		Logger.writeLine("Creating new AD on " + 
+			    				Logger.elementInfo( m_ToElement ) + " with unique name " + theUniqueName );
+			    		
+			    		IRPFlowchart theNewFlowchart = 
+			    				(IRPFlowchart) m_ToElement.addNewAggr( "ActivityDiagram", theUniqueName );
+			    		
+			    		IRPDependency theDependency = theNewFlowchart.addDependencyTo( theUseCase );
+			    		theDependency.changeTo("Refinement");
+			    		
+			    		Logger.writeLine("A " + Logger.elementInfo(theDependency) + " from " + Logger.elementInfo(theNewFlowchart) + " to " + Logger.elementInfo(theUseCase) + " has been added to the model.");
+			    		
+			    		IRPGraphNode theNote = theNewFlowchart.addNewNodeByType("Note", 20, 44, 120, 70);
+			    		
+			    		theNote.setGraphicalProperty(
+			    				"Text", 
+			    				"This activity model for the use case can be used to generate operations\n");
+			    		
+			    		theNote.setGraphicalProperty(
+			    				"BackgroundColor",
+			    				"255,0,0" ); // red
+
+			    		if( m_ApplyMoreDetailedADCheckBox.isSelected()  ){			
+			    			PopulateFunctionalAnalysisPkg.switchToMoreDetailedAD( 
+			    					theNewFlowchart.getFlowchartDiagram() );
+
+			    		} else {
+			    			Logger.writeLine("User chose not to apply the detailed AD settings to the newly created AD");
+			    		}
+			    		
+			    		theNewFlowchart.highLightElement();
+			    		theNewFlowchart.getFlowchartDiagram().openDiagram();  	
 				    }
 				}				
 			} else {
@@ -152,9 +222,64 @@ public class CopyActivityDiagramsPanel extends CreateStructuralElementPanel {
 
 	}
 	
+	private JPanel createCopyADChoicesPanel(){
+		
+		JPanel thePanel = new JPanel();
+
+		GroupLayout theGroupLayout = new GroupLayout( thePanel );
+		thePanel.setLayout( theGroupLayout );
+		theGroupLayout.setAutoCreateGaps( true );
+
+		SequentialGroup theHorizSequenceGroup = theGroupLayout.createSequentialGroup();
+		SequentialGroup theVerticalSequenceGroup = theGroupLayout.createSequentialGroup();
+
+		ParallelGroup theColumn1ParallelGroup = theGroupLayout.createParallelGroup( GroupLayout.Alignment.LEADING );
+		ParallelGroup theColumn2ParallelGroup = theGroupLayout.createParallelGroup( GroupLayout.Alignment.LEADING );
+		ParallelGroup theColumn3ParallelGroup = theGroupLayout.createParallelGroup( GroupLayout.Alignment.LEADING );
+		ParallelGroup theColumn4ParallelGroup = theGroupLayout.createParallelGroup( GroupLayout.Alignment.LEADING );
+
+		theHorizSequenceGroup.addGroup( theColumn1ParallelGroup );
+		theHorizSequenceGroup.addGroup( theColumn2ParallelGroup );
+		theHorizSequenceGroup.addGroup( theColumn3ParallelGroup );
+		theHorizSequenceGroup.addGroup( theColumn4ParallelGroup );
+		
+		for (Entry<IRPUseCase, CopyActivityDiagramsInfo> entry : m_RadioButtonMap.entrySet()){
+		    
+			IRPUseCase theUseCase = entry.getKey();
+			CopyActivityDiagramsInfo theValue = entry.getValue();
+
+			JLabel theName = new JLabel( theUseCase.getName()) ;
+			theName.setMinimumSize( new Dimension( 150, 22 ) );
+			theName.setBorder( BorderFactory.createEmptyBorder(0, 10, 0, 10));
+
+			
+			theColumn1ParallelGroup.addComponent( theName );   
+			theColumn2ParallelGroup.addComponent( theValue.getCopyExistingButton() );    
+			theColumn3ParallelGroup.addComponent( theValue.getCreateNewButton() );    
+			theColumn4ParallelGroup.addComponent( theValue.getDoNothingButton() );    
+
+			ParallelGroup theVertical1ParallelGroup = 
+					theGroupLayout.createParallelGroup( GroupLayout.Alignment.BASELINE );
+
+			theVertical1ParallelGroup.addComponent( theName );
+			theVertical1ParallelGroup.addComponent( theValue.getCopyExistingButton() );
+			theVertical1ParallelGroup.addComponent( theValue.getCreateNewButton() );
+			theVertical1ParallelGroup.addComponent( theValue.getDoNothingButton() );
+			
+			theVerticalSequenceGroup.addGroup( theVertical1ParallelGroup );		  
+		}
+
+		theGroupLayout.setHorizontalGroup( theHorizSequenceGroup );
+		theGroupLayout.setVerticalGroup( theVerticalSequenceGroup );
+
+	    return thePanel;
+
+	}
+	
 	private void cloneTheFlowchart(
 			IRPModelElement toNewOwner,
-			IRPFlowchart theFlowchart) {
+			IRPFlowchart theFlowchart,
+			boolean isSwitchToDetailedAD ) {
 		
 		String theUniqueName = GeneralHelpers.determineUniqueNameBasedOn(
 				"Working - " + theFlowchart.getName(), "ActivityDiagram", toNewOwner);
@@ -162,7 +287,8 @@ public class CopyActivityDiagramsPanel extends CreateStructuralElementPanel {
 		Logger.writeLine("Cloned " + Logger.elementInfo(theFlowchart) + " to " + 
 				Logger.elementInfo(toNewOwner) + " with unique name " + theUniqueName);
 		
-		IRPFlowchart theNewFlowchart = (IRPFlowchart) theFlowchart.clone(theUniqueName, toNewOwner);
+		IRPFlowchart theNewFlowchart = 
+				(IRPFlowchart) theFlowchart.clone(theUniqueName, toNewOwner);
 		
 		IRPDependency theDependency = theNewFlowchart.addDependencyTo(theFlowchart);
 		theDependency.changeTo("Refinement");
@@ -179,8 +305,9 @@ public class CopyActivityDiagramsPanel extends CreateStructuralElementPanel {
 				"BackgroundColor",
 				"255,0,0" ); // red
 
-		if( m_ApplyMoreDetailedADCheckBox.isSelected() ){			
-			PopulateFunctionalAnalysisPkg.switchToMoreDetailedAD( theNewFlowchart.getFlowchartDiagram() );
+		if( isSwitchToDetailedAD ){			
+			PopulateFunctionalAnalysisPkg.switchToMoreDetailedAD( 
+					theNewFlowchart.getFlowchartDiagram() );
 
 		} else {
 			Logger.writeLine("User chose not to apply the detailed AD settings to the cloned AD");
@@ -200,7 +327,8 @@ public class CopyActivityDiagramsPanel extends CreateStructuralElementPanel {
     #035 15-JUN-2016: New panel to configure requirements package naming and gateway set-up (F.J.Chadburn)
     #045 03-JUL-2016: Fix CopyActivityDiagramsPanel capability (F.J.Chadburn)
     #047 06-JUL-2016: Tweaked properties and added options to switch to MoreDetailedAD automatically (F.J.Chadburn)
-    
+    #057 13-JUL-2016: Enhanced Copy AD panel to list use cases and give a create new option (F.J.Chadburn)
+
     This file is part of SysMLHelperPlugin.
 
     SysMLHelperPlugin is free software: you can redistribute it and/or modify

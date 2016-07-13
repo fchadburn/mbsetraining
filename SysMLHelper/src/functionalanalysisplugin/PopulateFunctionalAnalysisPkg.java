@@ -19,9 +19,9 @@ public class PopulateFunctionalAnalysisPkg extends PopulatePkg {
 		
 		IRPModelElement theSelectedEl = theApp.getSelectedElement();
 		
-		if (theSelectedEl instanceof IRPPackage){
-			IRPPackage thePackage = (IRPPackage) theSelectedEl;
-			addNewActorToPackageUnderDevelopement( thePackage );
+		if (theSelectedEl instanceof IRPProject){
+
+			copyActivityDiagrams( (IRPProject) theSelectedEl );
 		}
 	}
 	
@@ -223,13 +223,12 @@ public class PopulateFunctionalAnalysisPkg extends PopulatePkg {
 		} else {
 			
 			theDiagram.addStereotype( theStereotypeName, "ActivityDiagramGE" );
-			
-			//theDiagram.getProject().save();
+			IRPFlowchart theFC = theDiagram.getFlowchart();
+			theFC.setIsAnalysisOnly( 1 );
 			
 			if (theDiagram.isOpen()==1){
 				theDiagram.closeDiagram();
 				theDiagram.highLightElement();
-				//theDiagram.openDiagram();
 			}
 			
 			Logger.writeLine( "Applied stereotype «" + theStereotypeName + "» to " + 
@@ -258,6 +257,7 @@ public class PopulateFunctionalAnalysisPkg extends PopulatePkg {
     #027 31-MAY-2016: Add new menu to launch dialog to copy Activity Diagrams (F.J.Chadburn)
     #045 03-JUL-2016: Fix CopyActivityDiagramsPanel capability (F.J.Chadburn)
     #047 06-JUL-2016: Tweaked properties and added options to switch to MoreDetailedAD automatically (F.J.Chadburn)
+    #059 13-JUL-2016: Improvements so ADs in FunctionalAnalysisPkg now include full tools/menus (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

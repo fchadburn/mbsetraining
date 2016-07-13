@@ -35,6 +35,25 @@ public class FunctionalAnalysisSettings {
 		return thePackage;
 	}
 	
+	public static IRPPackage getEventPkgForPkgUnderDev(IRPProject inTheProject){
+		
+		IRPPackage theEventPkg = null;
+		
+		IRPClass theLogicalBlock = getBlockUnderDev( inTheProject );
+		
+		if( theLogicalBlock != null ){
+			IRPModelElement theOwner = theLogicalBlock.getOwner();
+			
+			if( theOwner instanceof IRPPackage ){
+				theEventPkg = (IRPPackage)theOwner;
+			} else {
+				Logger.writeLine( "Error in getEventPkgForPkgUnderDev: Can't find event pkg for " + Logger.elementInfo( theLogicalBlock ) );
+			}
+		}
+		
+		return theEventPkg;
+	}
+	
 	public static IRPPackage getWorkingPkgUnderDev(IRPProject inTheProject){
 		
 		IRPPackage theWorkingPkg = null;
@@ -78,45 +97,57 @@ public class FunctionalAnalysisSettings {
 		return theWorkingPkg;
 	}
 	
-	public static IRPClass getBlockUnderDev(IRPProject inTheProject){
+	public static IRPClass getBlockUnderDev(
+			IRPProject inTheProject ){
 		
 		IRPClass theBlock = null;
 		
 		IRPPackage thePackageUnderDev = getPackageUnderDev( inTheProject );
 		
 		if( thePackageUnderDev != null ){
-			IRPInstance partUnderDev = getPartUnderDev( inTheProject );
 			
-			theBlock = (IRPClass) partUnderDev.getOtherClass();
+			List<IRPModelElement> theBlocks = 
+					GeneralHelpers.findElementsWithMetaClassAndStereotype(
+							"Class", "LogicalSystem", thePackageUnderDev );
+			
+			if( theBlocks.size()==1 ){				
+				theBlock = (IRPClass) theBlocks.get( 0 );
+			} else {
+				Logger.writeLine( "Error in getBlockUnderDev: Can't find LogicalSystem block for " + Logger.elementInfo( thePackageUnderDev ) );
+			}		
+		} else {
+			Logger.writeLine("Error in getBlockUnderDev for " + Logger.elementInfo(inTheProject) + 
+					", unable to determine package under development");
 		}
 
 		return theBlock;
 	}
 	
-	public static IRPInstance getPartUnderDev(IRPProject inTheProject){
+	public static IRPInstance getPartUnderDev(
+			IRPProject inTheProject ){
 		
-		IRPInstance partUnderDev = null;
+		IRPInstance thePart = null;
 		
 		IRPPackage thePackageUnderDev = getPackageUnderDev( inTheProject );
 		
 		if( thePackageUnderDev != null ){
 			
-			
-			List<IRPModelElement> theBlocks = 
+			List<IRPModelElement> theParts = 
 						GeneralHelpers.findElementsWithMetaClassAndStereotype(
 								"Part", "LogicalSystem", thePackageUnderDev );
 				
-			if (theBlocks.size()==1){
+			if( theParts.size()==1 ){
 					
-				partUnderDev = (IRPInstance) theBlocks.get(0);
-					
-				Logger.writeLine(partUnderDev, "Found");
+				thePart = (IRPInstance) theParts.get( 0 );				
 			} else {
-				Logger.writeLine("Error in getLogicalSystemBlock: Can't find LogicalSystem part");
+				Logger.writeLine( "Error in getPartUnderDev: Can't find LogicalSystem part for " + Logger.elementInfo( thePackageUnderDev ) );
 			}		
+		} else {
+			Logger.writeLine( "Error in getPartUnderDev for " + Logger.elementInfo(inTheProject) + 
+					", unable to determine package under development");
 		}
 
-		return partUnderDev;
+		return thePart;
 	}
 	
 	public static IRPStereotype getStereotypeForFunctionTracing(IRPProject inTheProject){
@@ -146,6 +177,7 @@ public class FunctionalAnalysisSettings {
     #006 02-MAY-2016: Add FunctionalAnalysisPkg helper support (F.J.Chadburn)
     #025 31-MAY-2016: Add new menu and dialog to add a new actor to package under development (F.J.Chadburn)
     #026 31-MAY-2016: Add dialog to allow user to choose which Activity Diagrams to synch (F.J.Chadburn)
+    #054 13-JUL-2016: Create a nested BlockPkg package to contain the Block and events (F.J.Chadburn)
     
     This file is part of SysMLHelperPlugin.
 

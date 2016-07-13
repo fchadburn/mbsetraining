@@ -40,7 +40,7 @@ public class CreateIncomingEventPanel extends CreateTracedElementPanel {
 	private JPanel m_AttributeNamePanel;
 	private JLabel m_CreateAttributeLabel;
 	
-	private IRPPackage m_PackageUnderDev;
+	private IRPPackage m_PackageForEvent;
 	private IRPActor m_SourceActor;
 
 	public static void createIncomingEventsFor(
@@ -81,12 +81,12 @@ public class CreateIncomingEventPanel extends CreateTracedElementPanel {
 			IRPClassifier onTargetBlock,
 			Set<IRPRequirement> withReqtsAlsoAdded,
 			IRPActor theSourceActor, 
-			IRPPackage thePackageUnderDev ){
+			IRPPackage thePackageForEvent ){
 		
 		super( forSourceGraphElement, withReqtsAlsoAdded, onTargetBlock );
 		
 		m_SourceActor = theSourceActor;
-		m_PackageUnderDev = thePackageUnderDev;
+		m_PackageForEvent = thePackageForEvent;
 		
 		final String theSourceText = GeneralHelpers.getActionTextFrom( m_SourceGraphElement.getModelObject() );	
 		
@@ -179,7 +179,7 @@ public class CreateIncomingEventPanel extends CreateTracedElementPanel {
 			final IRPProject inProject){
 		
 		final IRPInstance partUnderDev = FunctionalAnalysisSettings.getPartUnderDev( inProject );
-		final IRPPackage forPackageUnderDev = FunctionalAnalysisSettings.getPackageUnderDev( inProject );
+		final IRPPackage thePackageForEvent = FunctionalAnalysisSettings.getEventPkgForPkgUnderDev( inProject );
 		
 		final IRPModelElement theActor = 
 				GeneralHelpers.launchDialogToSelectElement(
@@ -206,7 +206,7 @@ public class CreateIncomingEventPanel extends CreateTracedElementPanel {
 									theLogicalSystem, 
 									withReqtsAlsoAdded,
 									(IRPActor)theActor, 
-									forPackageUnderDev );
+									thePackageForEvent );
 
 					frame.setContentPane( thePanel );
 					
@@ -576,7 +576,7 @@ public class CreateIncomingEventPanel extends CreateTracedElementPanel {
 		} else if (!GeneralHelpers.isElementNameUnique(
 				theChosenName, 
 				"Event", 
-				m_PackageUnderDev.getProject(), 
+				m_PackageForEvent.getProject(), 
 				1)){
 
 			errorMessage = "Unable to proceed as the event name '" + theChosenName + "' is not unique";
@@ -642,7 +642,7 @@ public class CreateIncomingEventPanel extends CreateTracedElementPanel {
 		// do silent check first
 		if (checkValidity( false )){
 			
-			IRPEvent theEvent = m_PackageUnderDev.addEvent( m_ChosenNameTextField.getText() );
+			IRPEvent theEvent = m_PackageForEvent.addEvent( m_ChosenNameTextField.getText() );
 
 			// add value argument before cloning the event to create the test-bench send
 			if (m_AttributeCheckBox.isSelected()){
@@ -770,6 +770,7 @@ public class CreateIncomingEventPanel extends CreateTracedElementPanel {
     #042 29-JUN-2016: launchThePanel renaming to improve Panel class design consistency (F.J.Chadburn)
     #043 03-JUL-2016: Add Derive downstream reqt for CallOps, InterfaceItems and Event Actions (F.J.Chadburn)
     #044 03-JUL-2016: Minor re-factoring/code corrections (F.J.Chadburn)
+    #054 13-JUL-2016: Create a nested BlockPkg package to contain the Block and events (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

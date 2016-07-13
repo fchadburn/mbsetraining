@@ -30,7 +30,7 @@ public class CreateOutgoingEventPanel extends CreateTracedElementPanel {
 	
 	private JCheckBox m_ActionOnDiagramIsNeededCheckBox;
 	private IRPActor m_DestinationActor;
-	private IRPPackage m_PackageUnderDev;
+	private IRPPackage m_PackageForEvent;
 	private JCheckBox m_SendOperationIsNeededCheckBox;
 	private JCheckBox m_ActiveAgumentNeededCheckBox;
 
@@ -70,12 +70,12 @@ public class CreateOutgoingEventPanel extends CreateTracedElementPanel {
 			IRPClassifier onTargetBlock,
 			Set<IRPRequirement> withReqtsAlsoAdded,
 			IRPActor toDestinationActor,
-			IRPPackage forPackageUnderDev) {
+			IRPPackage thePackageForEvent ) {
 		
 		super( forSourceGraphElement, withReqtsAlsoAdded, onTargetBlock );
 		
 		m_DestinationActor = toDestinationActor;
-		m_PackageUnderDev = forPackageUnderDev;
+		m_PackageForEvent = thePackageForEvent;
 		
 		String theSourceText = GeneralHelpers.getActionTextFrom( forSourceGraphElement.getModelObject() );		
 		
@@ -125,8 +125,6 @@ public class CreateOutgoingEventPanel extends CreateTracedElementPanel {
 		m_ActionOnDiagramIsNeededCheckBox = new JCheckBox("Populate on diagram?");
 		m_ActionOnDiagramIsNeededCheckBox.setSelected(false);
 		
-
-		
 		JPanel thePageStartPanel = new JPanel();
 		thePageStartPanel.setLayout( new BoxLayout( thePageStartPanel, BoxLayout.X_AXIS ) );
 		thePageStartPanel.add( createChosenNamePanelWith( "Create an event called:  ", theProposedName ) );
@@ -171,8 +169,11 @@ public class CreateOutgoingEventPanel extends CreateTracedElementPanel {
 			final Set<IRPRequirement> withReqtsAlsoAdded,
 			final IRPProject inProject){
 		
-		final IRPInstance partUnderDev = FunctionalAnalysisSettings.getPartUnderDev( inProject );
-		final IRPPackage forPackageUnderDev = FunctionalAnalysisSettings.getPackageUnderDev( inProject );
+		final IRPInstance partUnderDev = 
+				FunctionalAnalysisSettings.getPartUnderDev( inProject );
+		
+		final IRPPackage thePackageForEvent = 
+				FunctionalAnalysisSettings.getEventPkgForPkgUnderDev( inProject );
 		
 		final IRPModelElement theActor = 
 				GeneralHelpers.launchDialogToSelectElement(
@@ -197,7 +198,7 @@ public class CreateOutgoingEventPanel extends CreateTracedElementPanel {
 							theLogicalSystem, 
 							withReqtsAlsoAdded,
 							(IRPActor)theActor, 
-							forPackageUnderDev);
+							thePackageForEvent );
 
 					frame.setContentPane( thePanel );
 					frame.pack();
@@ -214,13 +215,16 @@ public class CreateOutgoingEventPanel extends CreateTracedElementPanel {
 		
 		IRPPort thePort = null;
 		
-		IRPModelElement theContextEl = FunctionalAnalysisSettings.getPartUnderDev(m_PackageUnderDev.getProject()).getOwner();
+		IRPModelElement theContextEl = 
+				FunctionalAnalysisSettings.getPartUnderDev(
+						m_PackageForEvent.getProject() ).getOwner();
 		
 		if (theContextEl instanceof IRPClassifier){
 			IRPClassifier theContextBlock = (IRPClassifier) theContextEl;
 			
 			@SuppressWarnings("unchecked")
-			List<IRPModelElement> theLinks = theContextBlock.getNestedElementsByMetaClass("Link", 1).toList();
+			List<IRPModelElement> theLinks = 
+				theContextBlock.getNestedElementsByMetaClass("Link", 1).toList();
 			
 			for (IRPModelElement irpModelElement : theLinks) {
 				
@@ -338,7 +342,7 @@ public class CreateOutgoingEventPanel extends CreateTracedElementPanel {
 		} else if (!GeneralHelpers.isElementNameUnique(
 				theChosenName, 
 				"Event", 
-				m_PackageUnderDev.getProject(), 
+				m_PackageForEvent.getProject(), 
 				1)){
 
 			errorMessage = "Unable to proceed as the event name '" + theChosenName + "' is not unique";
@@ -384,7 +388,7 @@ public class CreateOutgoingEventPanel extends CreateTracedElementPanel {
 			
 			if (!theEventName.isEmpty()){
 				
-				IRPEvent theEvent = m_PackageUnderDev.addEvent(theEventName);
+				IRPEvent theEvent = m_PackageForEvent.addEvent(theEventName);
 				
 				List<IRPRequirement> selectedReqtsList = m_RequirementsPanel.getSelectedRequirementsList();
 				
@@ -452,6 +456,7 @@ public class CreateOutgoingEventPanel extends CreateTracedElementPanel {
     #040 17-JUN-2016: Extend populate event/ops to work on OMD, i.e., REQ diagrams (F.J.Chadburn)
     #042 29-JUN-2016: launchThePanel renaming to improve Panel class design consistency (F.J.Chadburn)
     #043 03-JUL-2016: Add Derive downstream reqt for CallOps, InterfaceItems and Event Actions (F.J.Chadburn)
+    #054 13-JUL-2016: Create a nested BlockPkg package to contain the Block and events (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 
