@@ -1,6 +1,10 @@
 package generalhelpers;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -97,38 +101,53 @@ public class PopulatePkg {
     		} else if( choice==JFileChooser.APPROVE_OPTION ){
     			
     			File theFile = theFileChooser.getSelectedFile();
-    			String thePath = theFile.getAbsolutePath();
     			
-    			SysMLHelperPlugin.getRhapsodyApp().addToModelByReference( thePath );
+    			String theTargetPath;
     			
-    			if( relative ){
-        			int trimSize = thePackageName.length()+5;
-        			
-        			String thePathMinusFile = thePath.substring(0, thePath.length()-trimSize);     			
-        			
-        			String theCurrentDir = inProject.getCurrentDirectory();
-        			
-        			String theCurrentDirMinusProject = 
-        					theCurrentDir.replaceAll(
-        							inProject.getName()+"$", "");
-        			
-        			String theRelativePath = "../../" + new File(
-        					theCurrentDirMinusProject ).toURI().relativize(
-        							new File( thePathMinusFile ).toURI()).getPath();
-     
-        			IRPModelElement theCandidate = inProject.findAllByName(thePackageName, "Package");
-        			
-        			if( theCandidate != null && theCandidate instanceof IRPPackage ){
-        				
-        				IRPPackage theAddedPackage = (IRPPackage)theCandidate;
-        				
-        				theAddedPackage.setUnitPath( theRelativePath );
-        				
-        				Logger.writeLine( "Unit called " + thePackageName + 
-        						".sbs was changed from absolute path='" + thePathMinusFile +"' to relative path='" + 
-        						theRelativePath + "'" );
-        			}
-    			}
+				try {
+					theTargetPath = theFile.getCanonicalPath();
+					
+		  			SysMLHelperPlugin.getRhapsodyApp().addToModelByReference( theTargetPath );
+	    			
+	    			if( relative ){
+	    				
+	        			int trimSize = thePackageName.length()+5;
+	        			
+	        			Path targetPath = Paths.get( theTargetPath.substring(0, theTargetPath.length()-trimSize) );
+	        			Path targetRoot = targetPath.getRoot();
+	        			
+	        			Path sourcePath = Paths.get( 
+	        					inProject.getCurrentDirectory().replaceAll(
+	        							inProject.getName()+"$", "") );
+	        			
+	        			Path sourceRoot = sourcePath.getRoot();
+	        			
+	        			if( !targetRoot.equals( sourceRoot ) ){
+	        				Logger.writeLine("Unable to set Unit called " + thePackageName + " to relative, as the drive letters are different");
+		        			Logger.writeLine("theTargetDir root =" + targetPath.getRoot());
+		        			Logger.writeLine("theTargetDir=" + targetPath);
+		        			Logger.writeLine("theSourceDir root =" + sourcePath.getRoot());
+		        			Logger.writeLine("theSourceDir=" + sourcePath);
+	        			} else {
+		        			Path theRelativePath = sourcePath.relativize(targetPath);
+		        		     
+		        			IRPModelElement theCandidate = inProject.findAllByName( thePackageName, "Package" );
+		        			
+		        			if( theCandidate != null && theCandidate instanceof IRPPackage ){
+		        				
+		        				IRPPackage theAddedPackage = (IRPPackage)theCandidate;
+		        				
+		        				theAddedPackage.setUnitPath( "..\\..\\" + theRelativePath.toString() );
+		        				
+		        				Logger.writeLine( "Unit called " + thePackageName + 
+		        						".sbs was changed from absolute path='" + theTargetPath + 
+		        						"' to relative path='" + theRelativePath + "'" );
+		        			}
+	        			}
+	    			}
+				} catch (IOException e) {
+					Logger.writeLine("Error, unhandled IOException in PopulatePkg.browseAndAddByReferenceIfNotPresent");
+				}
     		}
     	}
 	}
@@ -189,6 +208,7 @@ public class PopulatePkg {
     Change history:
     #006 02-MAY-2016: Add FunctionalAnalysisPkg helper support (F.J.Chadburn)
     #046 06-JUL-2016: Fix external RequirementsAnalysisPkg reference to be created with relative path (F.J.Chadburn)
+    #053 13-JUL-2016: Fix #046 issues in calc of relative path when adding RequirementsAnalysisPkg (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

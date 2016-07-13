@@ -155,7 +155,7 @@ public class GeneralHelpers {
 	}
 	public static String getActionTextFrom(IRPModelElement theEl) {
 		
-		String theSourceInfo = "Null";
+		String theSourceInfo = null;
 		
 		if (theEl instanceof IRPState){
 			IRPState theState = (IRPState)theEl;
@@ -652,6 +652,7 @@ public class GeneralHelpers {
     #041 29-JUN-2016: Derive downstream requirement menu added for reqts on diagrams (F.J.Chadburn)
     #044 03-JUL-2016: Minor re-factoring/code corrections (F.J.Chadburn)
     #051 06-JUL-2016: Re-factored the GW panel to allow it to incrementally add to previous setup (F.J.Chadburn)
+    #055 13-JUL-2016: Support requirement derivation from simplified AD elements (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

@@ -27,7 +27,7 @@ public class Logger {
 		String theInfo = "Error (Null Element)";
 		
 		if (forTheEl != null){
-			theInfo = forTheEl.getMetaClass() + " called " + forTheEl.getName();
+			theInfo = forTheEl.getUserDefinedMetaClass() + " called " + forTheEl.getName();
 		}
 		
 		return theInfo;
@@ -40,6 +40,7 @@ public class Logger {
     Change history:
     #004 10-APR-2016: Re-factored projects into single workspace (F.J.Chadburn)
     #044 03-JUL-2016: Minor re-factoring/code corrections (F.J.Chadburn)
+    #060 13-JUL-2016: Changed elementInfo to return user defined meta-class for log entries (F.J.Chadburn)
         
     This file is part of SysMLHelperPlugin.
 
@@ -56,4 +57,3 @@ public class Logger {
     You should have received a copy of the GNU General Public License
     along with SysMLHelperPlugin.  If not, see <http://www.gnu.org/licenses/>.
 */
-
