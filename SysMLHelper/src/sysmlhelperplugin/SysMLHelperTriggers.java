@@ -1,5 +1,8 @@
 package sysmlhelperplugin;
 
+import functionalanalysisplugin.CreateOperationPanel;
+import functionalanalysisplugin.FunctionalAnalysisPlugin;
+import functionalanalysisplugin.FunctionalAnalysisSettings;
 import generalhelpers.Logger;
 import generalhelpers.UserInterfaceHelpers;
 
@@ -23,29 +26,61 @@ public class SysMLHelperTriggers extends RPApplicationListener {
 
 	public boolean afterAddElement(
 			IRPModelElement modelElement) {
-		
-		boolean doDefault = false;
 
-		if (modelElement != null && 
-			modelElement instanceof IRPDependency && 
-			modelElement.getUserDefinedMetaClass().equals("Derive Requirement")){
-			
-			IRPDependency theDependency = (IRPDependency)modelElement;
-			Logger.writeLine(modelElement, "was found");
-			
-			IRPModelElement theDependent = theDependency.getDependent();
-			
-			if (theDependent instanceof IRPRequirement){
+		boolean doDefault = false;
+		
+		try {
+			if (modelElement != null && 
+				modelElement instanceof IRPDependency && 
+				modelElement.getUserDefinedMetaClass().equals("Derive Requirement")){
 				
-				IRPStereotype theExistingGatewayStereotype = getStereotypeAppliedTo(theDependent, "from.*");
+				IRPDependency theDependency = (IRPDependency)modelElement;
+				Logger.writeLine(modelElement, "was found");
 				
-				if (theExistingGatewayStereotype != null){
+				IRPModelElement theDependent = theDependency.getDependent();
+				
+				if (theDependent instanceof IRPRequirement){
 					
-					modelElement.setStereotype(theExistingGatewayStereotype);
-					modelElement.changeTo("Derive Requirement");
-				}			
+					IRPStereotype theExistingGatewayStereotype = getStereotypeAppliedTo(theDependent, "from.*");
+					
+					if (theExistingGatewayStereotype != null){
+						
+						modelElement.setStereotype(theExistingGatewayStereotype);
+						modelElement.changeTo("Derive Requirement");
+					}			
+				}
+			} else if (modelElement != null && 
+					modelElement instanceof IRPCallOperation){
+				
+				IRPClass theBlock = FunctionalAnalysisSettings.getBlockUnderDev(
+						modelElement.getProject() );
+				
+				if (theBlock != null){
+					boolean answer = UserInterfaceHelpers.askAQuestion("Do you want to add an Operation to " + 
+							Logger.elementInfo( theBlock ) + "?");
+					
+					if( answer==true ){
+						
+						IRPApplication theRhpApp =  FunctionalAnalysisPlugin.getRhapsodyApp();
+						
+						@SuppressWarnings("unchecked")
+						List<IRPGraphElement> theSelectedGraphEls = 
+							theRhpApp.getSelectedGraphElements().toList();
+						
+						Set<IRPRequirement> theReqts = new HashSet<IRPRequirement>();
+						
+						CreateOperationPanel.launchThePanel( 
+								theSelectedGraphEls.get(0), 
+								theReqts, 
+								theRhpApp.activeProject(),
+								true );
+					}
+				}
 			}
-		} 
+
+		} catch (Exception e) {
+			Logger.writeLine("Error in SysMLHelperTriggers.afterAddElement, unhandled exception was detected related to " + Logger.elementInfo(modelElement));
+		}
 
 		return doDefault;
 	}
@@ -308,7 +343,8 @@ public class SysMLHelperTriggers extends RPApplicationListener {
     #004 10-APR-2016: Re-factored projects into single workspace (F.J.Chadburn)
     #017 11-MAY-2016: Double-click now works with both nested and hyper-linked diagrams (F.J.Chadburn)
     #035 15-JUN-2016: Re-factored SysMLHelperTriggers to make a little more extensible (F.J.Chadburn)
-    
+    #058 13-JUL-2016: Dropping CallOp on diagram now gives option to create Op on block (F.J.Chadburn)
+
     This file is part of SysMLHelperPlugin.
 
     SysMLHelperPlugin is free software: you can redistribute it and/or modify
