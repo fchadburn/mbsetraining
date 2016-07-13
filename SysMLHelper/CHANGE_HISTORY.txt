@@ -98,3 +98,13 @@ RELEASE 2.0.14 (03-JUL-2016)
 ----------------------------------------------------------------------------------
 RELEASE 2.0.15 (06-JUL-2016)
 ----------------------------------------------------------------------------------
+#053 13-JUL-2016: Fix #046 issues in calc of relative path when adding RequirementsAnalysisPkg (F.J.Chadburn)
+#054 13-JUL-2016: Create a nested BlockPkg package to contain the Block and events (F.J.Chadburn)
+#055 13-JUL-2016: Support requirement derivation from simplified AD elements (F.J.Chadburn)
+#056 13-JUL-2016: Minor fixes to RequirementsSelectionPanel to make it clearer (F.J.Chadburn)
+#057 13-JUL-2016: Enhanced Copy AD panel to list use cases and give a create new option (F.J.Chadburn)
+#058 13-JUL-2016: Dropping CallOp on diagram now gives option to create Op on block (F.J.Chadburn)
+#059 13-JUL-2016: Create AD in BlockPkg package now includes additional toolbar (F.J.Chadburn)
+----------------------------------------------------------------------------------
+RELEASE 2.0.16 (13-JUL-2016)
+----------------------------------------------------------------------------------
