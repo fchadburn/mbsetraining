@@ -78,16 +78,21 @@ I-Logix-RPY-Archive version 8.11.0 C++ 9499822
 					{ IPropertyMetaclass 
 						- _Name = "Graphics";
 						- Properties = { IRPYRawContainer 
-							- size = 3;
+							- size = 4;
 							- value = 
 							{ IProperty 
+								- _Name = "ActivityDiagramToolbar";
+								- _Value = "action,actionpin,sendaction,accepteventaction,accepttimeevent,callbehavior,calloperation,defaulttransition,controlflow,objectflow,interruptibleregion,activityparameter,objectnode,decisionnode,mergenode,diagramconnector,joinconnector,forkconnector,activityfinal,flowfinal,swimlaneframe,swimlanedivider,derivation,derive requirement,requirement";
+								- _Type = String;
+							}
+							{ IProperty 
 								- _Name = "ObjectModelDiagramToolbar";
-								- _Value = "RpyDefault,hltrace";
+								- _Value = "RpyDefault,derivation,derive requirement,requirement";
 								- _Type = String;
 							}
 							{ IProperty 
 								- _Name = "SequenceDiagramToolbar";
-								- _Value = "RpyDefault,hltrace";
+								- _Value = "RpyDefault,derivation,derive requirement,requirement";
 								- _Type = String;
 							}
 							{ IProperty 
@@ -328,7 +333,7 @@ I-Logix-RPY-Archive version 8.11.0 C++ 9499822
 		}
 	}
 	- _name = "FunctionalAnalysisProfile";
-	- _modifiedTimeWeak = 5.5.2016::12:6:24;
+	- _modifiedTimeWeak = 7.13.2016::10:34:52;
 	- _lastID = 11;
 	- Declaratives = { IRPYRawContainer 
 		- size = 9;
@@ -552,8 +557,8 @@ I-Logix-RPY-Archive version 8.11.0 C++ 9499822
 			}
 		}
 	}
-	- weakCGTime = 5.5.2016::12:6:24;
-	- strongCGTime = 5.5.2016::12:6:24;
+	- weakCGTime = 7.13.2016::10:34:52;
+	- strongCGTime = 7.13.2016::10:34:52;
 	- _defaultComposite = GUID bd2a5ac5-0f4b-43af-a366-5b283c84c9b7;
 	- _eventsBaseID = -1;
 	- Classes = { IRPYRawContainer 
@@ -563,9 +568,9 @@ I-Logix-RPY-Archive version 8.11.0 C++ 9499822
 			- _id = GUID bd2a5ac5-0f4b-43af-a366-5b283c84c9b7;
 			- _myState = 40960;
 			- _name = "TopLevel";
-			- _modifiedTimeWeak = 5.5.2016::7:25:51;
-			- weakCGTime = 5.5.2016::7:25:51;
-			- strongCGTime = 5.2.2016::11:27:7;
+			- _modifiedTimeWeak = 5.5.2016::12:6:24;
+			- weakCGTime = 5.5.2016::12:6:24;
+			- strongCGTime = 5.5.2016::12:6:24;
 			- _multiplicity = "";
 			- _itsStateChart = { IHandle 
 				- _m2Class = "";

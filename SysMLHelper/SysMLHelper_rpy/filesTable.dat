@@ -1,7 +1,7 @@
 I-Logix-RPY-Archive version 8.11.0 * 9499822
 
 - filesTable = { IRPYRawContainer 
-	- size = 13;
+	- size = 14;
 	- value = "SysMLHelper.rpy" ""
 	"SysMLHelper_rpy\\BasePkg.sbs" "FunctionalAnalysisPkg::BasePkg"
 	"SysMLHelper_rpy\\DesignSynthesisPkg.sbs" "DesignSynthesisPkg"
@@ -13,6 +13,7 @@ I-Logix-RPY-Archive version 8.11.0 * 9499822
 	"SysMLHelper_rpy\\RequirementsAnalysisPkg.sbs" "RequirementsAnalysisPkg"
 	"SysMLHelper_rpy\\RequirementsAnalysisProfile.sbs" "RequirementsAnalysisProfile"
 	"SysMLHelper_rpy\\RequirementsPkg.sbs" "RequirementsAnalysisPkg::RequirementsPkg"
+	"SysMLHelper_rpy\\RequirementsPkg_1.sbs" "FunctionalAnalysisPkg::RequirementsPkg"
 	"SysMLHelper_rpy\\SysMLHelperProfile.sbs" "SysMLHelperProfile"
 	"SysMLHelper_rpy\\UseCaseDiagramsPkg.sbs" "RequirementsAnalysisPkg::UseCaseDiagramsPkg"
 	
