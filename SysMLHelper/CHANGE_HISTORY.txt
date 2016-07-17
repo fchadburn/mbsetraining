@@ -105,6 +105,15 @@ RELEASE 2.0.15 (06-JUL-2016)
 #057 13-JUL-2016: Enhanced Copy AD panel to list use cases and give a create new option (F.J.Chadburn)
 #058 13-JUL-2016: Dropping CallOp on diagram now gives option to create Op on block (F.J.Chadburn)
 #059 13-JUL-2016: Create AD in BlockPkg package now includes additional toolbar (F.J.Chadburn)
+#060 13-JUL-2016: Changed elementInfo to return user defined meta-class for log entries (F.J.Chadburn)
 ----------------------------------------------------------------------------------
 RELEASE 2.0.16 (13-JUL-2016)
+----------------------------------------------------------------------------------
+#061 17-JUL-2016: Ensure BasePkg is added by reference from profile to aid future integration (F.J.Chadburn)
+#062 17-JUL-2016: Create InterfacesPkg and correct build issues by adding a Usage dependency (F.J.Chadburn)
+#063 17-JUL-2016: Gateway project creator now mimics GatewayProjectFiles pkg creation if necessary (F.J.Chadburn)
+#064 17-JUL-2016: Set GlobalPreferencesProfile properties to turn off role names on UCD for 8.1.5+ (F.J.Chadburn)
+#065 17-JUL-2016: Changed simplified AD to use Name rather than Label for Event descriptions (F.J.Chadburn)
+----------------------------------------------------------------------------------
+RELEASE 2.0.17 (17-JUL-2016)
 ----------------------------------------------------------------------------------
