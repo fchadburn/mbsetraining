@@ -170,8 +170,8 @@ public class GeneralHelpers {
 				IRPEvent theEvent = theAcceptEventAction.getEvent();
 				
 				if (theEvent==null){
-					Logger.writeLine("Event has no name so using Label");
-					theSourceInfo = theState.getDisplayName();
+					Logger.writeLine("Event has no name so using Name");
+					theSourceInfo = theState.getName();
 				} else {
 					theSourceInfo = theEvent.getName();
 				}
@@ -182,8 +182,8 @@ public class GeneralHelpers {
 				IRPEvent theEvent = theSendAction.getEvent();
 				
 				if (theEvent==null){
-					Logger.writeLine("Event has no name so using Label");
-					theSourceInfo = theState.getDisplayName();
+					Logger.writeLine("Event has no name so using Name");
+					theSourceInfo = theState.getName();
 				} else {
 					theSourceInfo = theEvent.getName();
 				}		
@@ -653,6 +653,7 @@ public class GeneralHelpers {
     #044 03-JUL-2016: Minor re-factoring/code corrections (F.J.Chadburn)
     #051 06-JUL-2016: Re-factored the GW panel to allow it to incrementally add to previous setup (F.J.Chadburn)
     #055 13-JUL-2016: Support requirement derivation from simplified AD elements (F.J.Chadburn)
+    #065 17-JUL-2016: Changed simplified AD to use Name rather than Label for Event descriptions (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

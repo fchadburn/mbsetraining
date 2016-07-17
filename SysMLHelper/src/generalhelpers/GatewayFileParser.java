@@ -74,8 +74,6 @@ public class GatewayFileParser {
 						
 						theFileSection.setValueFor( theSettingName, theSettingValue );
 					}
-				} else {
-					Logger.writeLine("Error in GatewayProjectParser, theGatewayDoc is unexpectedly null");
 				}
 			}
 			
@@ -191,7 +189,7 @@ public class GatewayFileParser {
 
 	}
 	
-	public void writeRqtfFileTo(String theFileName) {
+	public void writeGatewayFileTo(String theFileName) {
 		try {
 			Logger.writeLine("Building file called " + theFileName);
 			
@@ -214,7 +212,7 @@ public class GatewayFileParser {
 			
 		} catch (FileNotFoundException e) {
 			
-			Logger.writeLine("Error in writeTheNewRqtfFile, unhandled FileNotFoundException detected");
+			Logger.writeLine("Error in writeGatewayFileTo, unhandled FileNotFoundException detected");
 		}
 	}
 }
@@ -225,6 +223,7 @@ public class GatewayFileParser {
     Change history:
     #035 15-JUN-2016: New panel to configure requirements package naming and gateway set-up (F.J.Chadburn)
     #051 06-JUL-2016: Re-factored the GW panel to allow it to incrementally add to previous setup (F.J.Chadburn)
+    #063 17-JUL-2016: Gateway project creator now mimics GatewayProjectFiles pkg creation if necessary (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

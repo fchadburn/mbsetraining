@@ -152,10 +152,21 @@ public class PopulatePkg {
     	}
 	}
 	
-	protected static IRPPackage addPackageFromProfileRpyFolder(IRPProject toTheProject, String withTheName){
+	protected static IRPPackage addPackageFromProfileRpyFolder(
+			String withTheName,
+			IRPProject toTheProject, 
+			boolean byReference ){
 		
-		RequirementsAnalysisPlugin.getRhapsodyApp().addToModel(
-				"$OMROOT\\Profiles\\SysMLHelper\\SysMLHelper_rpy\\" + withTheName + ".sbs", 1);	
+		IRPApplication theRhpApp = RequirementsAnalysisPlugin.getRhapsodyApp();
+		
+		if( byReference ){
+			theRhpApp.addToModelByReference(
+					"$OMROOT\\Profiles\\SysMLHelper\\SysMLHelper_rpy\\" + withTheName + ".sbs" );				
+			
+		} else {
+			theRhpApp.addToModel(
+					"$OMROOT\\Profiles\\SysMLHelper\\SysMLHelper_rpy\\" + withTheName + ".sbs", 1);				
+		}
 		
 		IRPPackage thePackage = (IRPPackage) toTheProject.findElementsByFullName( withTheName, "Package");
 				
@@ -209,7 +220,8 @@ public class PopulatePkg {
     #006 02-MAY-2016: Add FunctionalAnalysisPkg helper support (F.J.Chadburn)
     #046 06-JUL-2016: Fix external RequirementsAnalysisPkg reference to be created with relative path (F.J.Chadburn)
     #053 13-JUL-2016: Fix #046 issues in calc of relative path when adding RequirementsAnalysisPkg (F.J.Chadburn)
-
+    #061 17-JUL-2016: Ensure BasePkg is added by reference from profile to aid future integration (F.J.Chadburn)
+    
     This file is part of SysMLHelperPlugin.
 
     SysMLHelperPlugin is free software: you can redistribute it and/or modify

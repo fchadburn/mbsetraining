@@ -441,55 +441,52 @@ public class CreateGatewayProjectPanel extends CreateStructuralElementPanel {
 	
 	private void createDesignatedReqtPackagesInTheModel() {
 		
-		for (GatewayDocumentPanel gatewayDocumentPanel : m_GatewayDocumentPanel) {
+		for( GatewayDocumentPanel gatewayDocumentPanel : m_GatewayDocumentPanel ) {
 			
-			// check to see if root package is writable
 			IRPPackage theRootPkg = gatewayDocumentPanel.getRootPackage();
 			String thePkgName = gatewayDocumentPanel.getReqtsPkgName();
 			String theStereotypeName = "from" + gatewayDocumentPanel.getAnalysisTypeName();
 			
-			if (theRootPkg.isReadOnly()==1){
+			IRPModelElement existingPkg = 
+					GeneralHelpers.findElementWithMetaClassAndName(
+							"Package", thePkgName, m_Project );
+
+			if( existingPkg != null ){
+
+				Logger.writeLine( "Skipping creation of " + thePkgName + 
+						" as package already exists with the name " + thePkgName );
 				
+			} else if( theRootPkg.isReadOnly() == 1 ) { // check to see if root package is writable	 
+
 				Logger.writeLine( "Skipping creation of " + thePkgName + 
 						" as unable to write to " + Logger.elementInfo( theRootPkg ) );
+				
 			} else {
-				
-				IRPModelElement existingPkg = 
-						GeneralHelpers.findElementWithMetaClassAndName(
-								"Package", thePkgName, m_Project);
-				
-				if (existingPkg != null){
-					
-					Logger.writeLine( "Skipping creation of " + thePkgName + 
-							" as package already exists with the name " + thePkgName );
-					
-				} else {	
-					Logger.writeLine( "Create package called '" + thePkgName + " with the type of analysis '" + 
-							gatewayDocumentPanel.getAnalysisTypeName() + "' in the root " + 
-							Logger.elementInfo( theRootPkg ) );
-				
-					IRPPackage theReqtsDocPkg = (IRPPackage) theRootPkg.addNewAggr( "Package", thePkgName );
-					theReqtsDocPkg.highLightElement();
-					
-					IRPModelElement theFoundStereotype = 
-							m_Project.findAllByName( theStereotypeName , "Stereotype" );
-					
-					IRPStereotype theFromStereotype = null;
-					
-					if (theFoundStereotype == null){
-						theFromStereotype = theReqtsDocPkg.addStereotype( theStereotypeName, "Package" );
-						
-						theFromStereotype.addMetaClass( "Dependency" );
-						theFromStereotype.addMetaClass( "HyperLink" );
-						theFromStereotype.addMetaClass( "Requirement" );
-						theFromStereotype.addMetaClass( "Type" );
-						
-						theFromStereotype.setOwner( theReqtsDocPkg );
-						theFromStereotype.highLightElement();
+				Logger.writeLine( "Create package called '" + thePkgName + " with the type of analysis '" + 
+						gatewayDocumentPanel.getAnalysisTypeName() + "' in the root " + 
+						Logger.elementInfo( theRootPkg ) );
 
-					} else {
-						theFromStereotype = theReqtsDocPkg.addStereotype( theStereotypeName, "Package" );
-					}
+				IRPPackage theReqtsDocPkg = (IRPPackage) theRootPkg.addNewAggr( "Package", thePkgName );
+				theReqtsDocPkg.highLightElement();
+
+				IRPModelElement theFoundStereotype = 
+						m_Project.findAllByName( theStereotypeName , "Stereotype" );
+
+				IRPStereotype theFromStereotype = null;
+
+				if( theFoundStereotype == null ){
+					theFromStereotype = theReqtsDocPkg.addStereotype( theStereotypeName, "Package" );
+
+					theFromStereotype.addMetaClass( "Dependency" );
+					theFromStereotype.addMetaClass( "HyperLink" );
+					theFromStereotype.addMetaClass( "Requirement" );
+					theFromStereotype.addMetaClass( "Type" );
+
+					theFromStereotype.setOwner( theReqtsDocPkg );
+					theFromStereotype.highLightElement();
+
+				} else {
+					theFromStereotype = theReqtsDocPkg.addStereotype( theStereotypeName, "Package" );
 				}
 			}
 		}
@@ -597,21 +594,61 @@ public class CreateGatewayProjectPanel extends CreateStructuralElementPanel {
 	@Override
 	protected void performAction() {
 		
-		// do silent check first
-		if( checkValidity( false ) ){
+		try {
+			// do silent check first
+			if( checkValidity( false ) ){
 
-			updateGatewayDocInfoBasedOnUserSelections();
-			
-			String theProjectPath = m_Project.getCurrentDirectory() + "/" + m_Project.getName() + "_rpy" + "/";
-			
-			m_ChosenProjectFile.writeRqtfFileTo( theProjectPath + m_Project.getName() + ".rqtf" );
-			m_ChosenTypesFile.writeRqtfFileTo( theProjectPath + m_Project.getName() + ".types" );
+				updateGatewayDocInfoBasedOnUserSelections();
+				
+				String theProjectPath = m_Project.getCurrentDirectory() + "/" + m_Project.getName() + "_rpy" + "/";
 
-			createDesignatedReqtPackagesInTheModel();
-		
-		} else {
-			Logger.writeLine("Error in CreateGatewayProjectPanel.performAction, checkValidity returned false");
-		}	
+				final String theGatewayPkgName = "GatewayProjectFiles";
+				
+				IRPModelElement theExistingGWPackage = 
+						GeneralHelpers.findElementWithMetaClassAndName(
+								"Package", theGatewayPkgName, m_Project);
+				
+				IRPPackage theGatewayProjectFilesPkg = null;
+				
+				if( theExistingGWPackage != null && theExistingGWPackage instanceof IRPPackage ){
+					theGatewayProjectFilesPkg = (IRPPackage)theExistingGWPackage;
+				} else {
+					// mimic Rhapsody by adding the GatewayProjectFiles package containing the GW files
+					theGatewayProjectFilesPkg = m_Project.addNestedPackage("GatewayProjectFiles");
+				}
+				
+				String theRqtfFileName = m_Project.getName() + ".rqtf";
+				String theRqtfFullFilePathForProject = theProjectPath + theRqtfFileName;
+				
+				m_ChosenProjectFile.writeGatewayFileTo( theRqtfFullFilePathForProject );
+				
+				if( GeneralHelpers.findElementWithMetaClassAndName(
+						"ControlledFile", theRqtfFileName, theGatewayProjectFilesPkg ) == null ){
+					
+					theGatewayProjectFilesPkg.addNewAggr(
+							"ControlledFile",  theRqtfFileName);
+				}
+
+				String theTypesFileName = m_Project.getName() + ".types";
+				String theTypesFullFilePathForProject = theProjectPath + theTypesFileName;
+				m_ChosenTypesFile.writeGatewayFileTo( theTypesFullFilePathForProject );
+				
+				if( GeneralHelpers.findElementWithMetaClassAndName(
+						"ControlledFile", theTypesFileName, theGatewayProjectFilesPkg ) == null ){
+				
+					theGatewayProjectFilesPkg.addNewAggr(
+							"ControlledFile",  theTypesFileName);
+				}
+				
+				createDesignatedReqtPackagesInTheModel();
+			
+			} else {
+				Logger.writeLine("Error in CreateGatewayProjectPanel.performAction, checkValidity returned false");
+			}	
+		} catch (Exception e) {
+			Logger.writeLine("Error, unhandled exception in CreateGatewayProjectPanel.performAction");
+		}
+
 	}
 }
 
@@ -622,6 +659,7 @@ public class CreateGatewayProjectPanel extends CreateStructuralElementPanel {
     #035 5-JUN-2016: New panel to configure requirements package naming and gateway set-up (F.J.Chadburn)
     #039 17-JUN-2016: Minor fixes and improvements to robustness of Gateway project setup (F.J.Chadburn)
     #051 06-JUL-2016: Re-factored the GW panel to allow it to incrementally add to previous setup (F.J.Chadburn)
+    #063 17-JUL-2016: Gateway project creator now mimics GatewayProjectFiles pkg creation if necessary (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 
