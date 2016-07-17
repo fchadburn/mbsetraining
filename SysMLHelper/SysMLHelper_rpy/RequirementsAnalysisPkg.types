@@ -1,8 +1,8 @@
 
 [Types]
-Names=FSOI,FSRD,Usage Requirements
+Names=Feature Requirements,System Requirements,Usage Requirements
 
-[FSOI]
+[Feature Requirements]
 Tool=DoorsXML
 ToolEdit=Doors
 Image=doors
@@ -22,13 +22,13 @@ Section1Tree=<Object number="$i"><Attribute value="$l" name="Object Heading"></A
 Requirement1Name=Requirement
 Requirement1Value1Key=WizardExact
 Requirement1Value1Value=Object Type
-Requirement1Tree=<Object id="$i"><Picture>$g</Picture><Text>$t</Text><Attribute name="Object Type" value="^Requirement$"></Attribute></Object>
+Requirement1Tree=<Object id="$i"><Picture>$g</Picture><Text>$t</Text><Attribute name="Requirement" value="^True$"></Attribute></Object>
 Reference1Name=System to Customer
 Reference1Tree=<Out-link target="$i" linkModule="System to Customer"></Out-link>
 TextFormat=1
 Type=xml
 
-[FSRD]
+[System Requirements]
 Tool=DoorsXML
 ToolEdit=Doors
 Image=doors
@@ -48,7 +48,7 @@ Section1Tree=<Object number="$i"><Attribute value="$l" name="Object Heading"></A
 Requirement1Name=Requirement
 Requirement1Value1Key=WizardExact
 Requirement1Value1Value=Object Type
-Requirement1Tree=<Object id="$i"><Picture>$g</Picture><Text>$t</Text><Attribute name="Object Type" value="^Requirement$"></Attribute></Object>
+Requirement1Tree=<Object id="$i"><Picture>$g</Picture><Text>$t</Text><Attribute name="Requirement" value="^True$"></Attribute></Object>
 Reference1Name=System to Customer
 Reference1Tree=<Out-link target="$i" linkModule="System to Customer"></Out-link>
 TextFormat=1

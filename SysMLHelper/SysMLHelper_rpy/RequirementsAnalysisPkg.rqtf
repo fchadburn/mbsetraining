@@ -1,5 +1,5 @@
 [Files]
-Names=UML Model,L2_FSOI_XXXXX
+Names=UML Model,Feature_XXXXX
 Variable1Name=syncExportReqTool
 Variable1Value=0
 Variable2Name=syncAddHLReqs
@@ -29,7 +29,7 @@ Variable3Value=0
 Variable4Name=notImportedRequirementsDocuments
 Variable4Value=
 Variable5Name=requirementsPackage
-Variable5Value=SysMLHelper/Packages/RequirementsAnalysisPkg/Packages/RequirementsPkg¥L2_FSOI_XXXXX
+Variable5Value=SysMLHelper/Packages/RequirementsAnalysisPkg/Packages/RequirementsPkg¥Feature_XXXXX
 Variable6Name=requirementDescription
 Variable6Value=0
 Variable7Name=addHLReqsModified
@@ -45,7 +45,7 @@ Variable11Value=C++
 Variable12Name=createDependency
 Variable12Value=1
 Variable13Name=previousReqsPackage
-Variable13Value=SysMLHelper/Packages/RequirementsAnalysisPkg/Packages/RequirementsPkg¥L2_FSOI_XXXXX
+Variable13Value=SysMLHelper/Packages/RequirementsAnalysisPkg/Packages/RequirementsPkg¥Feature_XXXXX
 Variable14Name=addHLReqsLinkStereo
 Variable14Value=deriveReqt
 Variable15Name=addHLRichText
@@ -54,7 +54,7 @@ Type=Rhapsody SysML
 Path=..\SysMLHelper.rpy
 AbsolutePath=
 
-[L2_FSOI_XXXXX]
+[Feature_XXXXX]
 Cover1=UML Model
 Cover1Position=3010@1590
 GraphicPosition=3820@980
@@ -67,5 +67,6 @@ Variable3Value=0
 Variable4Name=purgeAttributes
 Variable4Value=0
 UseIntermediateFile=1
-Type=FSOI
-Path=
+Type=Feature Requirements
+Path=/Sample1/Higher Level Requirements/Feature Requirements
+
