@@ -398,7 +398,7 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
 			
 			IRPPackage theRootPackage = m_RootPackage.addNestedPackage( theName + "Pkg" );  
 			
-			// Create nested package for block and its events
+			// Create nested package for block
 			IRPPackage theBlockPackage = theRootPackage.addNestedPackage(theName + "Block" + "Pkg");
 			IRPClass theLogicalSystemBlock = theBlockPackage.addClass( theName );
 			GeneralHelpers.applyExistingStereotype("LogicalSystem", theLogicalSystemBlock);
@@ -414,14 +414,27 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
 				theLogicalSystemBlock.addGeneralization( (IRPClassifier) theChosenOne );
 				Logger.writeLine(theChosenOne, "was the chosen one");
 			}
+			
+			// Create nested package for events and interfaces
+			IRPPackage theInterfacesPkg = theRootPackage.addNestedPackage(theName + "Interfaces" + "Pkg");
 
+			// Add Usage dependency to the interfaces package that will contain the events
+			IRPDependency theBlocksUsageDep = theBlockPackage.addDependencyTo( theInterfacesPkg );
+			theBlocksUsageDep.addStereotype( "Usage", "Dependency" );
+			
 			// Create nested package with components necessary for wiring up a simulation
 			IRPPackage theBlockTestPackage = theRootPackage.addNestedPackage(theName + "Test" + "Pkg");
+			
+			// Add Usage dependency to the interfaces package that will contain the events
+			IRPDependency theUsageDep = theBlockTestPackage.addDependencyTo( theInterfacesPkg );
+			theUsageDep.addStereotype( "Usage", "Dependency" );
 
 			IRPClass theUsageDomainBlock = theBlockTestPackage.addClass(theName + "_UsageDomain");
 			theUsageDomainBlock.changeTo("Block");
 
-			IRPObjectModelDiagram theBDD = theBlockTestPackage.addObjectModelDiagram("BDD - " + theUsageDomainBlock.getName());
+			IRPObjectModelDiagram theBDD = 
+					theBlockTestPackage.addObjectModelDiagram("BDD - " + theUsageDomainBlock.getName());
+			
 			theBDD.changeTo("Block Definition Diagram");
 
 			IRPStructureDiagram theIBD = 
@@ -491,6 +504,8 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
 			CopyActivityDiagramsPanel.launchThePanel(
 					m_RequirementsAnalysisPkg, 
 					theWorkingPackage);
+			
+			
 		} else {
 			Logger.writeLine("Error in CreateFunctionalBlockPackagePanel.performAction, checkValidity returned false");
 		}	
@@ -511,6 +526,7 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
     #045 03-JUL-2016: Fix CopyActivityDiagramsPanel capability (F.J.Chadburn)
     #048 06-JUL-2016: RequirementsPkg now created in FunctionalAnalysisPkg.sbs rather than nested deeper (F.J.Chadburn)
     #054 13-JUL-2016: Create a nested BlockPkg package to contain the Block and events (F.J.Chadburn)
+    #062 17-JUL-2016: Create InterfacesPkg and correct build issues by adding a Usage dependency (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

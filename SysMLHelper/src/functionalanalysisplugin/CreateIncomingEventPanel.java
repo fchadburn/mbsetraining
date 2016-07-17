@@ -178,14 +178,17 @@ public class CreateIncomingEventPanel extends CreateTracedElementPanel {
 			final Set<IRPRequirement> withReqtsAlsoAdded,
 			final IRPProject inProject){
 		
-		final IRPInstance partUnderDev = FunctionalAnalysisSettings.getPartUnderDev( inProject );
-		final IRPPackage thePackageForEvent = FunctionalAnalysisSettings.getEventPkgForPkgUnderDev( inProject );
+		final IRPInstance partUnderDev = 
+				FunctionalAnalysisSettings.getPartUnderDev( inProject );
+		
+		final IRPPackage thePackageForEvent = 
+				FunctionalAnalysisSettings.getPkgThatOwnsEventsAndInterfaces( inProject );
 		
 		final IRPModelElement theActor = 
 				GeneralHelpers.launchDialogToSelectElement(
 						getActorsRelatedTo( partUnderDev ), "Select Actor", true);
 		
-		if (theActor != null && theActor instanceof IRPActor){
+		if( theActor != null && theActor instanceof IRPActor ){
 
 			final IRPClassifier theLogicalSystem = partUnderDev.getOtherClass();
 			
@@ -771,6 +774,7 @@ public class CreateIncomingEventPanel extends CreateTracedElementPanel {
     #043 03-JUL-2016: Add Derive downstream reqt for CallOps, InterfaceItems and Event Actions (F.J.Chadburn)
     #044 03-JUL-2016: Minor re-factoring/code corrections (F.J.Chadburn)
     #054 13-JUL-2016: Create a nested BlockPkg package to contain the Block and events (F.J.Chadburn)
+    #062 17-JUL-2016: Create InterfacesPkg and correct build issues by adding a Usage dependency (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

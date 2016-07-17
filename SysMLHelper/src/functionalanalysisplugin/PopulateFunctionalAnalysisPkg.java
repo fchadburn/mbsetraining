@@ -84,7 +84,8 @@ public class PopulateFunctionalAnalysisPkg extends PopulatePkg {
 		}
 	}
 		
-	static void populateFunctionalAnalysisPkg(IRPProject forProject) {
+	static void populateFunctionalAnalysisPkg(
+			IRPProject forProject ) {
 		
 		addProfileIfNotPresent("SysML", forProject);		
 		addProfileIfNotPresent("GlobalPreferencesProfile", forProject);
@@ -93,9 +94,13 @@ public class PopulateFunctionalAnalysisPkg extends PopulatePkg {
 		
 		forProject.changeTo("SysML");
 		
-		IRPPackage theFunctionalAnalysisPkg = addPackageFromProfileRpyFolder(forProject, "FunctionalAnalysisPkg");
+		IRPPackage theFunctionalAnalysisPkg = 
+				addPackageFromProfileRpyFolder(
+						"FunctionalAnalysisPkg", forProject, false );
 		
-		if (theFunctionalAnalysisPkg != null){
+		if( theFunctionalAnalysisPkg != null ){
+			
+			addPackageFromProfileRpyFolder( "BasePkg", forProject, true );
 		
 			deleteIfPresent( "Structure1", "StructureDiagram", forProject );
 	    	deleteIfPresent( "Default", "Package", forProject );
@@ -258,6 +263,7 @@ public class PopulateFunctionalAnalysisPkg extends PopulatePkg {
     #045 03-JUL-2016: Fix CopyActivityDiagramsPanel capability (F.J.Chadburn)
     #047 06-JUL-2016: Tweaked properties and added options to switch to MoreDetailedAD automatically (F.J.Chadburn)
     #059 13-JUL-2016: Improvements so ADs in FunctionalAnalysisPkg now include full tools/menus (F.J.Chadburn)
+	#061 17-JUL-2016: Ensure BasePkg is added by reference from profile to aid future integration (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

@@ -173,7 +173,7 @@ public class CreateOutgoingEventPanel extends CreateTracedElementPanel {
 				FunctionalAnalysisSettings.getPartUnderDev( inProject );
 		
 		final IRPPackage thePackageForEvent = 
-				FunctionalAnalysisSettings.getEventPkgForPkgUnderDev( inProject );
+				FunctionalAnalysisSettings.getPkgThatOwnsEventsAndInterfaces( inProject );
 		
 		final IRPModelElement theActor = 
 				GeneralHelpers.launchDialogToSelectElement(
@@ -457,6 +457,7 @@ public class CreateOutgoingEventPanel extends CreateTracedElementPanel {
     #042 29-JUN-2016: launchThePanel renaming to improve Panel class design consistency (F.J.Chadburn)
     #043 03-JUL-2016: Add Derive downstream reqt for CallOps, InterfaceItems and Event Actions (F.J.Chadburn)
     #054 13-JUL-2016: Create a nested BlockPkg package to contain the Block and events (F.J.Chadburn)
+    #062 17-JUL-2016: Create InterfacesPkg and correct build issues by adding a Usage dependency (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

@@ -35,13 +35,25 @@ public class FunctionalAnalysisSettings {
 		return thePackage;
 	}
 	
-	public static IRPPackage getEventPkgForPkgUnderDev(IRPProject inTheProject){
+	public static IRPPackage getPkgThatOwnsEventsAndInterfaces(
+			IRPProject inTheProject ){
 		
 		IRPPackage theEventPkg = null;
 		
+		IRPPackage thePkgUnderDev = getPackageUnderDev( inTheProject );
 		IRPClass theLogicalBlock = getBlockUnderDev( inTheProject );
 		
-		if( theLogicalBlock != null ){
+		// in new projects there will be an InterfacesPkg
+		IRPModelElement theCandidate = thePkgUnderDev.findNestedElement(
+				theLogicalBlock.getName() + "InterfacesPkg", "Package");
+		
+		if( theCandidate != null && theCandidate instanceof IRPPackage ){
+			
+			theEventPkg = (IRPPackage)theCandidate;
+			
+		} else if( theLogicalBlock != null ){ 
+			
+			// old projects may not have an InterfacesPkg hence use the package the block is in
 			IRPModelElement theOwner = theLogicalBlock.getOwner();
 			
 			if( theOwner instanceof IRPPackage ){
@@ -178,7 +190,8 @@ public class FunctionalAnalysisSettings {
     #025 31-MAY-2016: Add new menu and dialog to add a new actor to package under development (F.J.Chadburn)
     #026 31-MAY-2016: Add dialog to allow user to choose which Activity Diagrams to synch (F.J.Chadburn)
     #054 13-JUL-2016: Create a nested BlockPkg package to contain the Block and events (F.J.Chadburn)
-    
+    #062 17-JUL-2016: Create InterfacesPkg and correct build issues by adding a Usage dependency (F.J.Chadburn)
+
     This file is part of SysMLHelperPlugin.
 
     SysMLHelperPlugin is free software: you can redistribute it and/or modify
