@@ -1116,8 +1116,25 @@ I-Logix-RPY-Archive version 8.11.0 C++ 9499822
 			{ IPropertySubject 
 				- _Name = "UseCaseGe";
 				- Metaclasses = { IRPYRawContainer 
-					- size = 4;
+					- size = 5;
 					- value = 
+					{ IPropertyMetaclass 
+						- _Name = "Association";
+						- Properties = { IRPYRawContainer 
+							- size = 2;
+							- value = 
+							{ IProperty 
+								- _Name = "ShowSourceRole";
+								- _Value = "False";
+								- _Type = Bool;
+							}
+							{ IProperty 
+								- _Name = "ShowTargetRole";
+								- _Value = "False";
+								- _Type = Bool;
+							}
+						}
+					}
 					{ IPropertyMetaclass 
 						- _Name = "Comment";
 						- Properties = { IRPYRawContainer 
@@ -1197,7 +1214,7 @@ I-Logix-RPY-Archive version 8.11.0 C++ 9499822
 		}
 	}
 	- _name = "GlobalPreferencesProfile";
-	- _modifiedTimeWeak = 7.4.2016::10:24:49;
+	- _modifiedTimeWeak = 7.17.2016::8:38:1;
 	- _lastID = 1;
 	- Declaratives = { IRPYRawContainer 
 		- size = 5;
@@ -1480,8 +1497,8 @@ I-Logix-RPY-Archive version 8.11.0 C++ 9499822
 			}
 		}
 	}
-	- weakCGTime = 7.4.2016::10:24:49;
-	- strongCGTime = 11.8.2015::16:53:3;
+	- weakCGTime = 7.17.2016::8:38:1;
+	- strongCGTime = 7.17.2016::8:38:1;
 	- _defaultComposite = GUID d99cf07a-d91b-4fe7-8454-c53a4512e0b1;
 	- _eventsBaseID = -1;
 	- Classes = { IRPYRawContainer 
@@ -1491,8 +1508,8 @@ I-Logix-RPY-Archive version 8.11.0 C++ 9499822
 			- _id = GUID d99cf07a-d91b-4fe7-8454-c53a4512e0b1;
 			- _myState = 40960;
 			- _name = "TopLevel";
-			- _modifiedTimeWeak = 7.4.2016::10:23:33;
-			- weakCGTime = 7.4.2016::10:23:33;
+			- _modifiedTimeWeak = 7.4.2016::10:24:49;
+			- weakCGTime = 7.4.2016::10:24:49;
 			- strongCGTime = 11.8.2015::16:53:3;
 			- _multiplicity = "";
 			- _itsStateChart = { IHandle 

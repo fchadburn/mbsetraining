@@ -1,5 +1,5 @@
 [Files]
-Names=UML Model,L2_FSOI_XXXXX
+Names=UML Model,L2_FSOI_XXXXX,L3_FSRD_XXXXX
 Variable1Name=syncExportReqTool
 Variable1Value=0
 Variable2Name=syncAddHLReqs
@@ -29,7 +29,7 @@ Variable3Value=0
 Variable4Name=notImportedRequirementsDocuments
 Variable4Value=
 Variable5Name=requirementsPackage
-Variable5Value=SysMLHelper/Packages/RequirementsAnalysisPkg/Packages/RequirementsPkg他2_FSOI_XXXXX
+Variable5Value=SysMLHelper/Packages/FunctionalAnalysisPkg/Packages/RequirementsPkg他3_FSRD_XXXXX兄ysMLHelper/Packages/RequirementsAnalysisPkg/Packages/RequirementsPkg他2_FSOI_XXXXX
 Variable6Name=requirementDescription
 Variable6Value=0
 Variable7Name=addHLReqsModified
@@ -45,7 +45,7 @@ Variable11Value=C++
 Variable12Name=createDependency
 Variable12Value=1
 Variable13Name=previousReqsPackage
-Variable13Value=SysMLHelper/Packages/RequirementsAnalysisPkg/Packages/RequirementsPkg他2_FSOI_XXXXX
+Variable13Value=SysMLHelper/Packages/FunctionalAnalysisPkg/Packages/RequirementsPkg他3_FSRD_XXXXX兄ysMLHelper/Packages/RequirementsAnalysisPkg/Packages/RequirementsPkg他2_FSOI_XXXXX
 Variable14Name=addHLReqsLinkStereo
 Variable14Value=deriveReqt
 Variable15Name=addHLRichText
@@ -57,6 +57,8 @@ AbsolutePath=
 [L2_FSOI_XXXXX]
 Cover1=UML Model
 Cover1Position=3010@1590
+Cover2=L3_FSRD_XXXXX
+Cover2Position=4050@1790
 GraphicPosition=3820@980
 Variable1Name=uniqueID
 Variable1Value=5720a69874d667a4-000228c2
@@ -69,3 +71,20 @@ Variable4Value=0
 UseIntermediateFile=1
 Type=FSOI
 Path=
+
+[L3_FSRD_XXXXX]
+Cover1=UML Model
+Cover1Position=3240@2400
+GraphicPosition=4280@2600
+Variable1Name=uniqueID
+Variable1Value=5720a69874d667a4-00022920
+Variable2Name=baseline
+Variable2Value=
+Variable3Name=withDiagrams
+Variable3Value=0
+Variable4Name=purgeAttributes
+Variable4Value=0
+UseIntermediateFile=1
+Type=FSRD
+Path=
+

@@ -9,7 +9,7 @@ I-Logix-RPY-Archive version 8.11.0 C++ 9499822
 			{ IPropertySubject 
 				- _Name = "Activity_diagram";
 				- Metaclasses = { IRPYRawContainer 
-					- size = 2;
+					- size = 4;
 					- value = 
 					{ IPropertyMetaclass 
 						- _Name = "AcceptEventAction";
@@ -18,7 +18,7 @@ I-Logix-RPY-Archive version 8.11.0 C++ 9499822
 							- value = 
 							{ IProperty 
 								- _Name = "ShowNotation";
-								- _Value = "Label";
+								- _Value = "Name";
 								- _Type = Enum;
 								- _ExtraTypeInfo = "Name,Label,Event";
 							}
@@ -34,6 +34,44 @@ I-Logix-RPY-Archive version 8.11.0 C++ 9499822
 								- _Value = "Label";
 								- _Type = Enum;
 								- _ExtraTypeInfo = "Name,Duration,Label,None";
+							}
+						}
+					}
+					{ IPropertyMetaclass 
+						- _Name = "Action";
+						- Properties = { IRPYRawContainer 
+							- size = 3;
+							- value = 
+							{ IProperty 
+								- _Name = "ShowAction";
+								- _Value = "Action";
+								- _Type = Enum;
+								- _ExtraTypeInfo = "Action,Description,Label";
+							}
+							{ IProperty 
+								- _Name = "ShowName";
+								- _Value = "None";
+								- _Type = Enum;
+								- _ExtraTypeInfo = "Name,Label,None";
+							}
+							{ IProperty 
+								- _Name = "ShowStereotype";
+								- _Value = "Bitmap";
+								- _Type = Enum;
+								- _ExtraTypeInfo = "Label,Bitmap,None";
+							}
+						}
+					}
+					{ IPropertyMetaclass 
+						- _Name = "SendAction";
+						- Properties = { IRPYRawContainer 
+							- size = 1;
+							- value = 
+							{ IProperty 
+								- _Name = "ShowNotation";
+								- _Value = "Name";
+								- _Type = Enum;
+								- _ExtraTypeInfo = "Name,Label,FullNotation,Event";
 							}
 						}
 					}
@@ -102,7 +140,7 @@ I-Logix-RPY-Archive version 8.11.0 C++ 9499822
 		}
 	}
 	- _name = "RequirementsAnalysisProfile";
-	- _modifiedTimeWeak = 4.12.2016::10:58:46;
+	- _modifiedTimeWeak = 7.17.2016::8:50:36;
 	- _description = { IDescription 
 		- _text = "This provide provides views, queries, and stereotypes related to use case and requirements analysis. It is suppored by the SysMLHelperPlugin provided by MBSE Training and Consulting Ltd (GPL v3). It was modified on 31/3/2016 to include stereotypes used by the A18 attribute team (A18_Profile_v3.sbs).";
 	}
@@ -185,8 +223,8 @@ cStruct, DDS/tpQosPolicy, DDS/udQosPolicy, DDS/wdlQosPolicy, DDS/ddsDiagram, DDS
 			}
 		}
 	}
-	- weakCGTime = 4.12.2016::10:58:46;
-	- strongCGTime = 4.10.2016::9:17:57;
+	- weakCGTime = 7.17.2016::8:50:36;
+	- strongCGTime = 7.17.2016::8:50:36;
 	- _defaultComposite = GUID 47ada376-b4c8-4895-8007-9fe51d77a548;
 	- _eventsBaseID = -1;
 	- Classes = { IRPYRawContainer 
@@ -196,9 +234,9 @@ cStruct, DDS/tpQosPolicy, DDS/udQosPolicy, DDS/wdlQosPolicy, DDS/ddsDiagram, DDS
 			- _id = GUID 47ada376-b4c8-4895-8007-9fe51d77a548;
 			- _myState = 40960;
 			- _name = "TopLevel";
-			- _modifiedTimeWeak = 4.10.2016::11:33:10;
-			- weakCGTime = 4.10.2016::11:33:10;
-			- strongCGTime = 4.10.2016::9:17:57;
+			- _modifiedTimeWeak = 7.17.2016::8:49:15;
+			- weakCGTime = 7.17.2016::8:49:15;
+			- strongCGTime = 7.17.2016::8:42:45;
 			- _multiplicity = "";
 			- StateCharts = { IRPYRawContainer 
 				- size = 1;
@@ -207,9 +245,9 @@ cStruct, DDS/tpQosPolicy, DDS/udQosPolicy, DDS/wdlQosPolicy, DDS/ddsDiagram, DDS
 					- _id = GUID 366b4e03-1300-4cda-a456-4b8b4d0f0171;
 					- _myState = 8192;
 					- _name = "template_for_act";
-					- _modifiedTimeWeak = 4.9.2016::19:46:28;
+					- _modifiedTimeWeak = 7.17.2016::8:49:15;
 					- _lastID = 4;
-					- weakCGTime = 4.9.2016::19:46:28;
+					- weakCGTime = 7.17.2016::8:49:15;
 					- strongCGTime = 1.31.2016::17:20:59;
 					- _multiplicity = "";
 					- _itsStateChart = { IHandle 
@@ -349,9 +387,8 @@ cStruct, DDS/tpQosPolicy, DDS/udQosPolicy, DDS/wdlQosPolicy, DDS/ddsDiagram, DDS
 						}
 						{ IAcceptEventAction 
 							- _id = GUID 85ff87c5-1b48-4af7-8b41-27def659a7d6;
-							- _name = "Trigger";
-							- _displayName = "<Type text-based Use Case Trigger as this Label>";
-							- _modifiedTimeWeak = 4.9.2016::19:46:4;
+							- _name = "<Type text-based Use Case Trigger>";
+							- _modifiedTimeWeak = 7.17.2016::8:43:59;
 							- _parent = GUID 694749c2-d207-4cad-870a-ab90070b7f86;
 							- _stateType = AcceptEventAction;
 							- _defaultTrans = ;
@@ -387,7 +424,7 @@ cStruct, DDS/tpQosPolicy, DDS/udQosPolicy, DDS/wdlQosPolicy, DDS/ddsDiagram, DDS
 							- _defaultTrans = ;
 						}
 					}
-					- _version = 4.9.2016::20:46:14;
+					- _version = 7.17.2016::9:43:59;
 					- _baseVersion = 1.2.1990::0:0:0;
 					- _diagram = GUID 0a690dfb-d082-48a8-918f-773aa75b20d7;
 					- Views = { IRPYRawContainer 
@@ -398,40 +435,8 @@ cStruct, DDS/tpQosPolicy, DDS/udQosPolicy, DDS/wdlQosPolicy, DDS/ddsDiagram, DDS
 							- _myState = 10240;
 							- _properties = { IPropertyContainer 
 								- Subjects = { IRPYRawContainer 
-									- size = 2;
+									- size = 1;
 									- value = 
-									{ IPropertySubject 
-										- _Name = "Activity_diagram";
-										- Metaclasses = { IRPYRawContainer 
-											- size = 1;
-											- value = 
-											{ IPropertyMetaclass 
-												- _Name = "Action";
-												- Properties = { IRPYRawContainer 
-													- size = 3;
-													- value = 
-													{ IProperty 
-														- _Name = "ShowAction";
-														- _Value = "Action";
-														- _Type = Enum;
-														- _ExtraTypeInfo = "Action,Description,Label";
-													}
-													{ IProperty 
-														- _Name = "ShowName";
-														- _Value = "None";
-														- _Type = Enum;
-														- _ExtraTypeInfo = "Name,Label,None";
-													}
-													{ IProperty 
-														- _Name = "ShowStereotype";
-														- _Value = "Bitmap";
-														- _Type = Enum;
-														- _ExtraTypeInfo = "Label,Bitmap,None";
-													}
-												}
-											}
-										}
-									}
 									{ IPropertySubject 
 										- _Name = "Format";
 										- Metaclasses = { IRPYRawContainer 
@@ -740,8 +745,8 @@ cStruct, DDS/tpQosPolicy, DDS/udQosPolicy, DDS/wdlQosPolicy, DDS/ddsDiagram, DDS
 								}
 							}
 							- _name = "activitydiagram_0";
-							- _modifiedTimeWeak = 4.9.2016::19:46:4;
-							- _lastModifiedTime = "4.9.2016::19:46:28";
+							- _modifiedTimeWeak = 7.17.2016::8:49:15;
+							- _lastModifiedTime = "7.17.2016::8:49:15";
 							- _graphicChart = { CGIStateChart 
 								- _id = GUID 510d5383-844f-482d-b927-6684f707df4a;
 								- m_type = 0;
@@ -877,7 +882,7 @@ cStruct, DDS/tpQosPolicy, DDS/udQosPolicy, DDS/wdlQosPolicy, DDS/ddsDiagram, DDS
 															- value = 
 															{ IProperty 
 																- _Name = "ShowNotation";
-																- _Value = "Label";
+																- _Value = "Name";
 																- _Type = Enum;
 																- _ExtraTypeInfo = "Name,Label,Event";
 															}
@@ -902,7 +907,7 @@ cStruct, DDS/tpQosPolicy, DDS/udQosPolicy, DDS/wdlQosPolicy, DDS/ddsDiagram, DDS
 															}
 															{ IProperty 
 																- _Name = "ShowLabels";
-																- _Value = "True";
+																- _Value = "False";
 																- _Type = Bool;
 															}
 														}
@@ -918,7 +923,7 @@ cStruct, DDS/tpQosPolicy, DDS/udQosPolicy, DDS/wdlQosPolicy, DDS/ddsDiagram, DDS
 									}
 									- m_pParent = GUID 9643822f-50b8-4e6d-8aa6-b44aef4f70a8;
 									- m_name = { CGIText 
-										- m_str = "<Type text-based Use Case Trigger as this Label>";
+										- m_str = "Trigger";
 										- m_style = "Arial" 10 0 0 0 1 ;
 										- m_color = { IColor 
 											- m_fgColor = 0;
@@ -1549,7 +1554,7 @@ Tips:
 
 6. Once verified steps, create requirements for each step and trace from the action to the requirement, e.g., using a \«derive\» dependency.
 
-7. Rules have been relaxed on this diagram to allow free-flowing text, e.g., the events are captured in Labels. 
+7. Rules have been relaxed on this diagram to allow free-flowing text. Take care not to move diagram into an area of the model that does not allow this.
 
 8. The right-click menu provides a mechanism to check the diagram for traceability completeness. This will also rename the actions in the browser. Run this periodically.
 
@@ -1645,10 +1650,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -1660,10 +1661,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -1675,10 +1672,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -1690,10 +1683,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -1705,10 +1694,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -1720,10 +1705,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -1735,10 +1716,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -1750,10 +1727,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -1765,10 +1738,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -1780,10 +1749,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -1795,10 +1760,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -1810,10 +1771,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -1825,10 +1782,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -1840,10 +1793,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -1855,10 +1804,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -1870,10 +1815,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -1885,10 +1826,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -1900,10 +1837,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -1915,10 +1848,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -1930,10 +1859,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -1945,10 +1870,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -1960,10 +1881,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -1975,10 +1892,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -1990,10 +1903,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -2005,10 +1914,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -2020,10 +1925,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -2035,10 +1936,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -2050,10 +1947,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -2065,10 +1958,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -2080,10 +1969,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -2095,10 +1980,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -2110,10 +1991,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -2125,10 +2002,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -2140,10 +2013,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -2155,10 +2024,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -2170,10 +2035,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -2185,10 +2046,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -2200,10 +2057,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -2215,10 +2068,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -2230,10 +2079,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -2245,10 +2090,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -2260,10 +2101,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -2275,10 +2112,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -2290,10 +2123,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -2305,10 +2134,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -2320,10 +2145,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -2335,10 +2156,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -2350,10 +2167,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -2365,10 +2178,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -2380,10 +2189,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -2395,10 +2200,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -2410,10 +2211,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -2425,10 +2222,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -2440,10 +2233,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -2455,10 +2244,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -2470,10 +2255,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -2485,10 +2266,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -2500,10 +2277,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -2515,10 +2288,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -2530,10 +2299,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -2545,10 +2310,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -2560,10 +2321,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -2575,10 +2332,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -2590,10 +2343,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -2605,10 +2354,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -2620,10 +2365,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -2635,10 +2376,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -2650,10 +2387,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -2665,10 +2398,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -2680,10 +2409,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -2695,10 +2420,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -2710,10 +2431,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -2725,10 +2442,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -2740,10 +2453,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -2755,10 +2464,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -2770,10 +2475,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -2785,10 +2486,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -2800,10 +2497,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -2815,10 +2508,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -2830,10 +2519,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -2845,10 +2530,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -2860,10 +2541,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -2875,10 +2552,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -2890,10 +2563,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -2905,10 +2574,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -2920,10 +2585,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -2935,10 +2596,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -2950,10 +2607,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -2965,10 +2618,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -2980,10 +2629,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -2995,10 +2640,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -3010,10 +2651,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -3025,10 +2662,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -3040,10 +2673,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -3055,10 +2684,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -3070,10 +2695,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -3085,10 +2706,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -3100,10 +2717,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -3115,10 +2728,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -3130,10 +2739,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -3145,10 +2750,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -3160,10 +2761,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -3175,10 +2772,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -3190,10 +2783,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -3205,10 +2794,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -3220,10 +2805,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -3235,10 +2816,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -3250,10 +2827,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -3265,10 +2838,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -3280,10 +2849,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -3295,10 +2860,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -3310,10 +2871,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -3325,10 +2882,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -3340,10 +2893,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -3355,10 +2904,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -3370,10 +2915,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -3385,10 +2926,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -3400,10 +2937,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -3415,10 +2948,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -3430,10 +2959,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -3445,10 +2970,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -3460,10 +2981,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -3475,10 +2992,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -3490,10 +3003,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -3505,10 +3014,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -3520,10 +3025,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -3535,10 +3036,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -3550,10 +3047,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -3565,10 +3058,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -3580,10 +3069,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -3595,10 +3080,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -3610,10 +3091,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -3625,10 +3102,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -3640,10 +3113,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -3655,10 +3124,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -3670,10 +3135,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -3685,10 +3146,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -3700,10 +3157,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -3715,10 +3168,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -3730,10 +3179,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -3745,10 +3190,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -3760,10 +3201,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -3775,10 +3212,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 					}
 					- _modelElement = { IHandle 
@@ -4177,10 +3610,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID f3eb8934-48be-4638-acd3-976a9caec4ec;
 					}
 					- _modelElement = { IHandle 
@@ -4411,10 +3840,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID f3eb8934-48be-4638-acd3-976a9caec4ec;
 					}
 					- _modelElement = { IHandle 
@@ -4581,10 +4006,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID 40276ab2-baaf-4a08-8143-84d77e1bc88f;
 					}
 					- _modelElement = { IHandle 
@@ -4596,10 +4017,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID 40276ab2-baaf-4a08-8143-84d77e1bc88f;
 					}
 					- _modelElement = { IHandle 
@@ -4646,10 +4063,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID b79471f7-d7b6-4b8f-b0aa-73635856bd5c;
 					}
 					- _modelElement = { IHandle 
@@ -4665,10 +4078,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID b79471f7-d7b6-4b8f-b0aa-73635856bd5c;
 					}
 					- _modelElement = { IHandle 
@@ -4680,10 +4089,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID b79471f7-d7b6-4b8f-b0aa-73635856bd5c;
 					}
 					- _modelElement = { IHandle 
@@ -4881,10 +4286,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID 02352e7a-0d6c-4b78-a88d-ac1b6ff45ba1;
 					}
 					- _modelElement = { IHandle 
@@ -5114,10 +4515,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID 5251a2b0-f53d-4b5d-9f6c-dc039336c357;
 					}
 					- _modelElement = { IHandle 
@@ -5300,10 +4697,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID e077fcf1-591a-4048-86c9-e41aeb061c50;
 					}
 					- _modelElement = { IHandle 
@@ -5319,10 +4712,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID e077fcf1-591a-4048-86c9-e41aeb061c50;
 					}
 					- _modelElement = { IHandle 
@@ -5334,10 +4723,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID e077fcf1-591a-4048-86c9-e41aeb061c50;
 					}
 					- _modelElement = { IHandle 
@@ -5349,10 +4734,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID e077fcf1-591a-4048-86c9-e41aeb061c50;
 					}
 					- _modelElement = { IHandle 
@@ -5364,10 +4745,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID e077fcf1-591a-4048-86c9-e41aeb061c50;
 					}
 					- _modelElement = { IHandle 
@@ -5384,10 +4761,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID e077fcf1-591a-4048-86c9-e41aeb061c50;
 					}
 					- _modelElement = { IHandle 
@@ -5585,10 +4958,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID ba6a52ff-d05b-447d-ab12-e2ef230a91e2;
 					}
 					- _modelElement = { IHandle 
@@ -5818,10 +5187,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID ba6a52ff-d05b-447d-ab12-e2ef230a91e2;
 					}
 					- _modelElement = { IHandle 
@@ -6090,10 +5455,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID 8c20d269-4d26-48d9-8eb7-240ac4f55293;
 					}
 					- _modelElement = { IHandle 
@@ -6192,10 +5553,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "IMatrixLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID 7c5618bb-ce51-4bd0-baa0-27d6947e348d;
 					}
 					- _modelElement = { IHandle 
@@ -6211,10 +5568,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "IMatrixLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID 7c5618bb-ce51-4bd0-baa0-27d6947e348d;
 					}
 					- _modelElement = { IHandle 
@@ -6230,10 +5583,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "IMatrixLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID 7c5618bb-ce51-4bd0-baa0-27d6947e348d;
 					}
 					- _modelElement = { IHandle 
@@ -6255,10 +5604,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "IMatrixLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID d0f99b87-9d35-453b-a2a9-9e22ec5fee1d;
 					}
 					- _modelElement = { IHandle 
@@ -6274,10 +5619,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "IMatrixLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID 7c5618bb-ce51-4bd0-baa0-27d6947e348d;
 					}
 					- _modelElement = { IHandle 
@@ -6293,10 +5634,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "IMatrixLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID d0f99b87-9d35-453b-a2a9-9e22ec5fee1d;
 					}
 					- _modelElement = { IHandle 
@@ -6318,10 +5655,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "IMatrixLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID 41bbc743-af05-42c9-8ac2-f49a22d6a621;
 					}
 					- _modelElement = { IHandle 
@@ -6333,10 +5666,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "IMatrixLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID 41bbc743-af05-42c9-8ac2-f49a22d6a621;
 					}
 					- _modelElement = { IHandle 
@@ -6348,10 +5677,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "IMatrixLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID 41bbc743-af05-42c9-8ac2-f49a22d6a621;
 					}
 					- _modelElement = { IHandle 
@@ -6363,10 +5688,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "IMatrixLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID 41bbc743-af05-42c9-8ac2-f49a22d6a621;
 					}
 					- _modelElement = { IHandle 
@@ -6378,10 +5699,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "IMatrixLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID 41bbc743-af05-42c9-8ac2-f49a22d6a621;
 					}
 					- _modelElement = { IHandle 
@@ -6393,10 +5710,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "IMatrixLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID 41bbc743-af05-42c9-8ac2-f49a22d6a621;
 					}
 					- _modelElement = { IHandle 
@@ -6412,10 +5725,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "IMatrixLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID 7c5618bb-ce51-4bd0-baa0-27d6947e348d;
 					}
 					- _modelElement = { IHandle 
@@ -6431,10 +5740,6 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "IMatrixLayout";
-						- _filename = "";
-						- _subsystem = "";
-						- _class = "";
-						- _name = "";
 						- _id = GUID 41bbc743-af05-42c9-8ac2-f49a22d6a621;
 					}
 					- _modelElement = { IHandle 
