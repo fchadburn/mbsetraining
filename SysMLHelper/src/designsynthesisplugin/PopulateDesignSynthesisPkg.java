@@ -59,7 +59,9 @@ public class PopulateDesignSynthesisPkg extends PopulatePkg {
 		
 		forProject.changeTo("SysML");
 		
-		IRPPackage theDesignSynthesisPkg = addPackageFromProfileRpyFolder( forProject, "DesignSynthesisPkg" );
+		IRPPackage theDesignSynthesisPkg = 
+				addPackageFromProfileRpyFolder(
+						"DesignSynthesisPkg", forProject, false );
 		
 		if (theDesignSynthesisPkg != null){
 		
@@ -82,7 +84,8 @@ public class PopulateDesignSynthesisPkg extends PopulatePkg {
     Change history:
     #006 02-MAY-2016: Add FunctionalAnalysisPkg helper support (F.J.Chadburn)
     #046 06-JUL-2016: Fix external RequirementsAnalysisPkg reference to be created with relative path (F.J.Chadburn)
-    
+    #061 17-JUL-2016: Ensure BasePkg is added by reference from profile to aid future integration (F.J.Chadburn)
+
     This file is part of SysMLHelperPlugin.
 
     SysMLHelperPlugin is free software: you can redistribute it and/or modify
