@@ -79,11 +79,13 @@ public class PopulateRequirementsAnalysisPkg extends PopulatePkg {
 		
 		forProject.changeTo("SysML");
 		
-		IRPPackage theRequirementsAnalysisPkg = addPackageFromProfileRpyFolder(forProject, "RequirementsAnalysisPkg" );
+		IRPPackage theRequirementsAnalysisPkg = 
+				addPackageFromProfileRpyFolder(
+						"RequirementsAnalysisPkg", forProject, false );
 		
-		if (theRequirementsAnalysisPkg != null){
+		if( theRequirementsAnalysisPkg != null ){
 			
-			Logger.writeLine(theRequirementsAnalysisPkg, "was successfully copied from the SysMLHelper profile");
+			Logger.writeLine( theRequirementsAnalysisPkg, "was successfully copied from the SysMLHelper profile" );
 					
 			deleteIfPresent( "Structure1", "StructureDiagram", forProject );
 			deleteIfPresent( "Default", "Package", forProject );
@@ -133,6 +135,7 @@ public class PopulateRequirementsAnalysisPkg extends PopulatePkg {
     #007 05-MAY-2016: Move FileHelper into generalhelpers and remove duplicate class (F.J.Chadburn)
     #035 15-JUN-2016: New panel to configure requirements package naming and gateway set-up (F.J.Chadburn)
     #051 06-JUL-2016: Re-factored the GW panel to allow it to incrementally add to previous setup (F.J.Chadburn)
+    #061 17-JUL-2016: Ensure BasePkg is added by reference from profile to aid future integration (F.J.Chadburn)
     
     This file is part of SysMLHelperPlugin.
 
