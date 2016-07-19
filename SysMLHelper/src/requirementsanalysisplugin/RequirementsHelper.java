@@ -10,8 +10,19 @@ import java.util.List;
 import com.telelogic.rhapsody.core.*;
    
 public class RequirementsHelper {
+	
+	public static void main(String[] args) {
+		IRPApplication theRhpApp = RhapsodyAppServer.getActiveRhapsodyApplication();
+		
+		@SuppressWarnings("unchecked")
+		List<IRPGraphElement> theGraphEls = theRhpApp.getSelectedGraphElements().toList();
+		
+		createNewRequirementsFor(theGraphEls);
+	}
  	
-	private static List<IRPModelElement> getElementsThatFlowInto(IRPModelElement theElement, IRPDiagram onTheDiagram){
+	private static List<IRPModelElement> getElementsThatFlowInto(
+			IRPModelElement theElement, 
+			IRPDiagram onTheDiagram){
 		
 		List<IRPModelElement> theElementsFound = new ArrayList<IRPModelElement>();
 		 
@@ -37,6 +48,14 @@ public class RequirementsHelper {
 							
 							if (!theBody.isEmpty()){
 								theElementsFound.add(theModelEl);
+							} 
+						} else { // theGuard==null
+							
+							//  does the transition come from an event?
+							IRPModelElement theSource = theTrans.getItsSource();
+							
+							if( theSource instanceof IRPAcceptEventAction ){
+								theElementsFound.add( theSource );
 							}
 						}
 					}				
@@ -47,7 +66,8 @@ public class RequirementsHelper {
 		return theElementsFound;	
 	}
 
-	private static void createNewRequirementFor(IRPGraphElement theGraphEl){
+	private static void createNewRequirementFor(
+			IRPGraphElement theGraphEl ){
 		
 		IRPModelElement theModelObject = theGraphEl.getModelObject();
 		IRPDiagram theDiagram = theGraphEl.getDiagram();
@@ -55,59 +75,57 @@ public class RequirementsHelper {
 
 		IRPRequirement theReqt = null;
 		
-		if (theModelObject != null){
+		if( theModelObject != null ){
 			
-			List<IRPModelElement> theRelations = getElementsThatFlowInto( theModelObject, theDiagram);
+			List<IRPModelElement> theRelations = getElementsThatFlowInto( theModelObject, theDiagram );
+
+			String theText = null;
 			
-			String theText = getCreateRequirementTextForPrefixing(theModelObject.getProject());
+			String theActionText = 
+					GeneralHelpers.decapitalize( 
+							GeneralHelpers.getActionTextFrom( theModelObject ) );
 			
-			if (!theRelations.isEmpty()){
-				
-				theText+= "when ";
-				
-				Iterator<IRPModelElement> theModelElIter = theRelations.iterator();
-				while (theModelElIter.hasNext()) {
+			if( theRelations.isEmpty() ){
 					
-					IRPModelElement theModelEl = theModelElIter.next();
+				if( theActionText.isEmpty() ){
+					Logger.writeLine("Warning, " + Logger.elementInfo( theModelObject ) + " has no text");
 					
-					if (theModelEl instanceof IRPTransition){
-						IRPTransition theTransition = (IRPTransition)theModelEl;
+					theText = getCreateRequirementTextForPrefixing( theModelObject.getProject() );
+				} else {
+					theText = getCreateRequirementTextForPrefixing( theModelObject.getProject() ) + theActionText;				
+				}
+				
+			} else {
+				
+				theText = "When ";
+				
+				Iterator<IRPModelElement> theRelatedModelElIter = theRelations.iterator();
+				
+				while( theRelatedModelElIter.hasNext() ) {
+					
+					IRPModelElement theRelatedModelEl = theRelatedModelElIter.next();
+					
+					if( theRelatedModelEl instanceof IRPTransition ){
+						IRPTransition theTransition = (IRPTransition)theRelatedModelEl;
 						String theGuardBody = theTransition.getItsGuard().getBody();
 						
 						theText+= theGuardBody;
+					
+					} else if( theRelatedModelEl instanceof IRPAcceptEventAction ){
+						
+						theText+= GeneralHelpers.decapitalize( 
+							GeneralHelpers.getActionTextFrom( theRelatedModelEl ) );
 					}
 					
-					if (theModelElIter.hasNext()){
+					if( theRelatedModelElIter.hasNext() ){
 						theText+= " or ";
 					}		
 				}
 				
-				theText += " ";
+				theText += " the feature shall " + theActionText;
 			}
 			
-			String theActionText = GeneralHelpers.decapitalize( GeneralHelpers.getActionTextFrom(theModelObject) );
-			
-			if (theActionText.isEmpty()){
-				Logger.writeLine("Warning, " + Logger.elementInfo( theModelObject ) + " has no text");
-			}
-			
-			theText+= theActionText;
-			theReqt = (IRPRequirement) theDiagram.addNewAggr("Requirement", "");
-			theReqt.setSpecification(theText);
-			theReqt.highLightElement();
-			
-			Logger.writeLine("Created a requirement called " + theReqt.getName() + " with the text '" + theText + "'");
-
-			IRPDependency theDep = theModelObject.addDependencyTo(theReqt);
-
-			IRPStereotype theDependencyStereotype = getStereotypeForActionTracing(theDiagram.getProject());
-			
-			if (theDependencyStereotype != null){
-				Logger.writeLine(Logger.elementInfo(theDependencyStereotype) + " was found");
-				theDep.addSpecificStereotype(theDependencyStereotype);
-			} else {
-				theDep.addStereotype("derive", "Dependency");				
-			}			
+			theReqt = addNewRequirementTracedTo( theModelObject, theDiagram, theText );			
 		}
 		
 		IRPGraphicalProperty theGraphicalProperty = null;
@@ -132,6 +150,32 @@ public class RequirementsHelper {
 
 			theDiagram.completeRelations(theCollection, 0);
 		}	
+	}
+
+	private static IRPRequirement addNewRequirementTracedTo(
+			IRPModelElement theModelObject, 
+			IRPDiagram theDiagram,
+			String theText) {
+		
+		IRPRequirement theReqt = (IRPRequirement) theDiagram.addNewAggr("Requirement", "");
+		theReqt.setSpecification(theText);
+		theReqt.highLightElement();	
+
+		IRPDependency theDep = theModelObject.addDependencyTo(theReqt);
+
+		IRPStereotype theDependencyStereotype = getStereotypeForActionTracing(theDiagram.getProject());
+		
+		if (theDependencyStereotype != null){
+			theDep.addSpecificStereotype(theDependencyStereotype);
+		} else {
+			theDep.addStereotype("derive", "Dependency");				
+		}
+		
+		Logger.writeLine("Created a Requirement called " + theReqt.getName() + 
+				" with the text '" + theText + "' related to " + 
+				Logger.elementInfo(theModelObject) + " with a " + Logger.elementInfo(theDep));
+		
+		return theReqt;
 	}
 			
 	public static void createNewRequirementsFor(List<IRPGraphElement> theGraphEls){
@@ -250,7 +294,8 @@ public class RequirementsHelper {
     Change history:
     #004 10-APR-2016: Re-factored projects into single workspace (F.J.Chadburn)
     #005 10-APR-2016: Support ProductName substitution in reqt text tag (F.J.Chadburn)
-        
+    #067 19-JUL-2016: Improvement to forming Event/Guard+Action text when creating new requirements (F.J.Chadburn) 
+    
     This file is part of SysMLHelperPlugin.
 
     SysMLHelperPlugin is free software: you can redistribute it and/or modify
