@@ -117,3 +117,9 @@ RELEASE 2.0.16 (13-JUL-2016)
 ----------------------------------------------------------------------------------
 RELEASE 2.0.17 (17-JUL-2016)
 ----------------------------------------------------------------------------------
+#066 19-JUL-2016: Added optional baseline box to the fast Gateway setup panel (F.J.Chadburn)
+#067 19-JUL-2016: Improvement to forming Event/Guard+Action text when creating new requirements (F.J.Chadburn) 
+#068 19-JUL-2016: Newline added to Open diagram dialog (F.J.Chadburn)
+----------------------------------------------------------------------------------
+RELEASE 2.0.18 (19-JUL-2016)
+----------------------------------------------------------------------------------
