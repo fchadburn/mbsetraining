@@ -279,7 +279,7 @@ public class SysMLHelperTriggers extends RPApplicationListener {
 					
 					boolean theAnswer = UserInterfaceHelpers.askAQuestion(
 						"The " + relatedToModelEl.getUserDefinedMetaClass() + " called '" +
-								relatedToModelEl.getName() + "' has an associated " + theType + " called '" + theName + "'.\n" +
+								relatedToModelEl.getName() + "' has an \nassociated " + theType + " called '" + theName + "'.\n" +
 						"Do you want to open it?");
 					
 					if (theAnswer==true){
@@ -344,6 +344,7 @@ public class SysMLHelperTriggers extends RPApplicationListener {
     #017 11-MAY-2016: Double-click now works with both nested and hyper-linked diagrams (F.J.Chadburn)
     #035 15-JUN-2016: Re-factored SysMLHelperTriggers to make a little more extensible (F.J.Chadburn)
     #058 13-JUL-2016: Dropping CallOp on diagram now gives option to create Op on block (F.J.Chadburn)
+    #068 19-JUL-2016: Newline added to Open diagram dialog (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 
