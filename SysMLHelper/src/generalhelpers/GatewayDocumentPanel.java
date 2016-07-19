@@ -24,9 +24,11 @@ public class GatewayDocumentPanel extends JPanel {
 	private JTextField m_ChosenNameTextField = null;
 	private JComboBox<String> m_AnalysisTypeComboBox = null;
 	private JTextField m_Path = null;
+	private JTextField m_ChosenBaselineTextField = null;
 	private String m_OriginalName = null;
 	private String m_OriginalAnalysisType = null;
 	private String m_OriginalPath = null;
+	private String m_OriginalBaseline = null;
 	private JComboBox<Object> m_RequirementsPkgComboBox = null;
 	private NamedElementMap m_NamedElementMap = null;
 	
@@ -35,6 +37,7 @@ public class GatewayDocumentPanel extends JPanel {
 			String[] theAnalysisTypeNames,
 			String theSelectedAnalysisType,
 			String thePath,
+			String theBaseline,
 			List<IRPModelElement> thePackagesToImportInto,
 			IRPModelElement theDefaultPackage,
 			boolean isImmutable,
@@ -45,6 +48,7 @@ public class GatewayDocumentPanel extends JPanel {
 		m_OriginalName = theOriginalName;
 		m_OriginalAnalysisType = theSelectedAnalysisType;
 		m_OriginalPath = thePath;
+		m_OriginalBaseline = theBaseline;
 		
 		m_ChosenNameTextField = new JTextField( theOriginalName );
 		m_ChosenNameTextField.setMinimumSize( new Dimension( 200, 20 ) );
@@ -67,6 +71,11 @@ public class GatewayDocumentPanel extends JPanel {
 		m_Path.setPreferredSize( new Dimension( 200, 20 ) );
 		m_Path.setEnabled( !isImmutable );
 
+ 		m_ChosenBaselineTextField = new JTextField( theBaseline );
+ 		m_ChosenBaselineTextField.setMinimumSize( new Dimension( 40, 20 ) );
+ 		m_ChosenBaselineTextField.setPreferredSize( new Dimension( 40, 20 ) );
+ 		m_ChosenBaselineTextField.setEnabled( !isImmutable );
+		
 		JPanel line1 = new JPanel();
 		line1.setLayout( new BoxLayout( line1, BoxLayout.X_AXIS )  );
 		line1.setBorder( BorderFactory.createEmptyBorder( 0, 0, 10, 0 ) );
@@ -82,7 +91,9 @@ public class GatewayDocumentPanel extends JPanel {
 		line2.add( m_RequirementsPkgComboBox );	
 		line2.add( new JLabel("  with path (optional/leave blank):  "));
 		line2.add( m_Path );	
-
+		line2.add( new JLabel("  and baseline:  "));
+		line2.add( m_ChosenBaselineTextField );	
+		
 		setLayout( new BoxLayout( this, BoxLayout.Y_AXIS ) );	
 		add( line1 );
 		add( line2 );
@@ -98,6 +109,10 @@ public class GatewayDocumentPanel extends JPanel {
 	
 	public String getOriginalPath(){
 		return m_OriginalPath.trim();
+	}
+	
+	public String getOriginalBaseline(){
+		return m_OriginalBaseline.trim();
 	}
 	
 	public String getReqtsPkgName(){
@@ -133,6 +148,12 @@ public class GatewayDocumentPanel extends JPanel {
 		String thePath = m_Path.getText().trim();
 		return thePath;
 	} 
+	
+	public String getBaseline(){
+		
+		String theBaseline = m_ChosenBaselineTextField.getText().trim();
+		return theBaseline;
+	} 
 }
 
 /**
@@ -142,6 +163,7 @@ public class GatewayDocumentPanel extends JPanel {
     #035 15-JUN-2016: New panel to configure requirements package naming and gateway set-up (F.J.Chadburn)
     #039 17-JUN-2016: Minor fixes and improvements to robustness of Gateway project setup (F.J.Chadburn)
     #051 06-JUL-2016: Re-factored the GW panel to allow it to incrementally add to previous setup (F.J.Chadburn)
+    #066 19-JUL-2016: Added optional baseline box to the fast Gateway setup panel (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

@@ -250,6 +250,7 @@ public class CreateGatewayProjectPanel extends CreateStructuralElementPanel {
 									theAnalysisTypes, 
 									gatewayDoc.getValueFor("Type"),
 									gatewayDoc.getValueFor("Path"), 
+									gatewayDoc.getVariableXValue("baseline"),
 									forSelectablePackages,
 									theSelectedPkg,
 									gatewayDoc.isImmutable(),
@@ -515,6 +516,7 @@ public class CreateGatewayProjectPanel extends CreateStructuralElementPanel {
     		    		
     		theGatewayDoc.setValueFor("Type", gatewayDocumentPanel.getAnalysisTypeName());
       	    theGatewayDoc.setValueFor("Path", gatewayDocumentPanel.getPathName());
+      	    theGatewayDoc.setVariableXValue("baseline", gatewayDocumentPanel.getBaseline());
 		}
 				
 		GatewayFileSection theUMLModelDoc = m_ChosenProjectFile.getFileSectionWith("UML Model");
@@ -660,6 +662,7 @@ public class CreateGatewayProjectPanel extends CreateStructuralElementPanel {
     #039 17-JUN-2016: Minor fixes and improvements to robustness of Gateway project setup (F.J.Chadburn)
     #051 06-JUL-2016: Re-factored the GW panel to allow it to incrementally add to previous setup (F.J.Chadburn)
     #063 17-JUL-2016: Gateway project creator now mimics GatewayProjectFiles pkg creation if necessary (F.J.Chadburn)
+    #066 19-JUL-2016: Added optional baseline box to the fast Gateway setup panel (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 
