@@ -2,20 +2,19 @@ package functionalanalysisplugin;
 
 import generalhelpers.Logger;
 
-import com.telelogic.rhapsody.core.IRPGraphNode;
-import com.telelogic.rhapsody.core.IRPGraphicalProperty;
+import com.telelogic.rhapsody.core.*;
 
 public class PolygonInfo {
 
-	private IRPGraphNode m_GraphNode = null;
+	private IRPGraphElement m_GraphElement = null;
 	private String[] component; 
 	
-	public PolygonInfo(IRPGraphNode theGraphNode) {
+	public PolygonInfo(IRPGraphElement theGraphNode) {
 		
-		m_GraphNode = theGraphNode;
+		m_GraphElement = theGraphNode;
 		
 		IRPGraphicalProperty theGraphicalProperty = 
-				m_GraphNode.getGraphicalProperty("Polygon");
+				m_GraphElement.getGraphicalProperty("Polygon");
 		
 		String theValue = theGraphicalProperty.getValue();		
 		component = theValue.split(",");		
@@ -41,6 +40,7 @@ public class PolygonInfo {
 
     Change history:
     #019 15-MAY-2016: (new) Improvements to Functional Analysis Block default naming approach (F.J.Chadburn)
+    #069 20-JUL-2016: Fix population of events/ops on diagram when creating from a transition (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

@@ -42,7 +42,7 @@ public class CreateIncomingEventPanel extends CreateTracedElementPanel {
 	
 	private IRPPackage m_PackageForEvent;
 	private IRPActor m_SourceActor;
-
+	
 	public static void createIncomingEventsFor(
 			IRPProject theActiveProject,
 			List<IRPGraphElement> theSelectedGraphEls) {
@@ -519,7 +519,6 @@ public class CreateIncomingEventPanel extends CreateTracedElementPanel {
 		} else {
 			Logger.writeLine("Error did not find MonitoringConditions state");
 		}
-
 	}
 	
 	private IRPGraphElement findGraphEl(
@@ -623,7 +622,6 @@ public class CreateIncomingEventPanel extends CreateTracedElementPanel {
 				isValid = false;
 			}
 		}
-		
 
 		if (isMessageEnabled && !isValid && errorMessage != null){
 
@@ -642,118 +640,115 @@ public class CreateIncomingEventPanel extends CreateTracedElementPanel {
 	@Override
 	protected void performAction() {
 		
-		// do silent check first
-		if (checkValidity( false )){
-			
-			IRPEvent theEvent = m_PackageForEvent.addEvent( m_ChosenNameTextField.getText() );
-
-			// add value argument before cloning the event to create the test-bench send
-			if (m_AttributeCheckBox.isSelected()){
-				theEvent.addArgument( "value" );
-			}
-			
-			List<IRPRequirement> selectedReqtsList = m_RequirementsPanel.getSelectedRequirementsList();
-
-			addTraceabilityDependenciesTo( theEvent, selectedReqtsList );
-
-			IRPModelElement theReception = m_TargetOwningElement.addNewAggr( "Reception", m_ChosenNameTextField.getText() );
-			addTraceabilityDependenciesTo( theReception, selectedReqtsList );		
-
-			if ( m_CreateSendEvent.isSelected() ) {
-
-				String theSendEventName = determineSendEventNameFor( theEvent.getName() );
+		try {
+			// do silent check first
+			if( checkValidity( false ) ){
 				
-				Logger.writeLine("Send event option was enabled, create event called " + theSendEventName);
+				IRPEvent theEvent = m_PackageForEvent.addEvent( m_ChosenNameTextField.getText() );
 
-				IRPModelElement theTestbenchReception = 
-						createTestBenchSendFor( theEvent, (IRPActor) m_SourceActor, theSendEventName );
-
-				theTestbenchReception.highLightElement();
-			} else {
-
-				Logger.writeLine("Send event option was not enabled, so skipping this");
-				theReception.highLightElement();
-			}
-
-			if ( m_AttributeCheckBox.isSelected() ){
+				// add value argument before cloning the event to create the test-bench send
+				if (m_AttributeCheckBox.isSelected()){
+					theEvent.addArgument( "value" );
+				}
 				
-				IRPAttribute theAttribute = 
-						((IRPClassifier) m_TargetOwningElement).addAttribute(
-								m_AttributeNameTextField.getText() );
-				
-				theAttribute.setDefaultValue("0");
-				addTraceabilityDependenciesTo( theAttribute, selectedReqtsList );
-				theAttribute.highLightElement();
+				List<IRPRequirement> selectedReqtsList = m_RequirementsPanel.getSelectedRequirementsList();
 
-				if ( m_CheckOperationCheckBox.isSelected() ){
+				addTraceabilityDependenciesTo( theEvent, selectedReqtsList );
+
+				IRPModelElement theReception = m_TargetOwningElement.addNewAggr( "Reception", m_ChosenNameTextField.getText() );
+				addTraceabilityDependenciesTo( theReception, selectedReqtsList );		
+
+				if ( m_CreateSendEvent.isSelected() ) {
+
+					String theSendEventName = determineSendEventNameFor( theEvent.getName() );
 					
-					IRPOperation theCheckOp = addCheckOperationFor( theAttribute );		
-					addTraceabilityDependenciesTo( theCheckOp, selectedReqtsList);	
-					theCheckOp.highLightElement();
+					Logger.writeLine( "Send event option was enabled, create event called " + theSendEventName );
+
+					IRPModelElement theTestbenchReception = 
+							createTestBenchSendFor( theEvent, (IRPActor) m_SourceActor, theSendEventName );
+
+					theTestbenchReception.highLightElement();
+				} else {
+
+					Logger.writeLine( "Send event option was not enabled, so skipping this" );
+					theReception.highLightElement();
 				}
 
-				addAnAttributeToMonitoringStateWith(
-						theAttribute, theEvent.getName(), (IRPClassifier)m_TargetOwningElement );
+				if ( m_AttributeCheckBox.isSelected() ){
+					
+					IRPAttribute theAttribute = 
+							((IRPClassifier) m_TargetOwningElement).addAttribute(
+									m_AttributeNameTextField.getText() );
+					
+					theAttribute.setDefaultValue("0");
+					addTraceabilityDependenciesTo( theAttribute, selectedReqtsList );
+					theAttribute.highLightElement();
+
+					if ( m_CheckOperationCheckBox.isSelected() ){
+						
+						IRPOperation theCheckOp = addCheckOperationFor( theAttribute );		
+						addTraceabilityDependenciesTo( theCheckOp, selectedReqtsList);	
+						theCheckOp.highLightElement();
+					}
+
+					addAnAttributeToMonitoringStateWith(
+							theAttribute, theEvent.getName(), (IRPClassifier)m_TargetOwningElement );
+				}	
+				
+				bleedColorToElementsRelatedTo( m_SourceGraphElement );
+				
+				if( m_EventActionIsNeededCheckBox.isSelected() ){
+					populateReceiveEventActionOnDiagram( theEvent );
+				}
+				
+				theEvent.highLightElement();
+				
+			} else {
+				Logger.writeLine( "Error in CreateIncomingEventPanel.performAction, checkValidity returned false" );
 			}	
-			
-			bleedColorToElementsRelatedTo( m_SourceGraphElement );
-			
-			if( m_EventActionIsNeededCheckBox.isSelected() ){
-				populateReceiveEventActionOnDiagram( theEvent );
-			}
-			
-			theEvent.highLightElement();
-			
-		} else {
-			Logger.writeLine("Error in CreateIncomingEventPanel.performAction, checkValidity returned false");
-		}	
+		} catch (Exception e) {
+			Logger.writeLine( "Error, unhandled exception detected in CreateIncomingEventPanel.performAction" );
+		}
 	}
 	
 	private void populateReceiveEventActionOnDiagram(
-			IRPEvent theEvent) {
+			IRPEvent theEvent ){
 		
-		IRPApplication theRhpApp = FunctionalAnalysisPlugin.getRhapsodyApp();
-		
-		if (m_SourceGraphElement instanceof IRPGraphNode){
-			GraphNodeInfo theNodeInfo = new GraphNodeInfo( (IRPGraphNode) m_SourceGraphElement );
-			
-			int x = theNodeInfo.getTopLeftX() + 20;
-			int y = theNodeInfo.getTopLeftY() + 20;
-			
-			IRPDiagram theDiagram = m_SourceGraphElement.getDiagram();
-							
-			if (theDiagram instanceof IRPActivityDiagram){
-				
-				IRPActivityDiagram theAD = (IRPActivityDiagram)theDiagram;
-				
-				IRPFlowchart theFlowchart = theAD.getFlowchart();
-				
-				IRPAcceptEventAction theAcceptEvent = 
-						(IRPAcceptEventAction) theFlowchart.addNewAggr(
-								"AcceptEventAction", theEvent.getName() );
-				
-				theAcceptEvent.setEvent( theEvent );			
-				theFlowchart.addNewNodeForElement( theAcceptEvent, x, y, 300, 40 );
-				
-				theRhpApp.highLightElement( theAcceptEvent );
-			
-			} else if (theDiagram instanceof IRPObjectModelDiagram){				
-				
-				IRPObjectModelDiagram theOMD = (IRPObjectModelDiagram)theDiagram;
-				
-				IRPGraphNode theEventNode = theOMD.addNewNodeForElement(theEvent, x + 50, y + 50, 300, 40);	
-				
-				IRPCollection theGraphElsToDraw = theRhpApp.createNewCollection();
-				theGraphElsToDraw.addGraphicalItem( m_SourceGraphElement );
-				theGraphElsToDraw.addGraphicalItem( theEventNode );
-				
-				theOMD.completeRelations( theGraphElsToDraw, 1 );
-				
-				theRhpApp.highLightElement( theEvent );
-			
-			} else {
-				Logger.writeLine("Error in CreateOperationPanel.performAction, expected an IRPActivityDiagram");
-			}
+		IRPApplication theRhpApp = FunctionalAnalysisPlugin.getRhapsodyApp();		
+
+		IRPDiagram theDiagram = m_SourceGraphElement.getDiagram();
+
+		if( theDiagram instanceof IRPActivityDiagram ){
+
+			IRPActivityDiagram theAD = (IRPActivityDiagram)theDiagram;
+
+			IRPFlowchart theFlowchart = theAD.getFlowchart();
+
+			IRPAcceptEventAction theAcceptEvent = 
+					(IRPAcceptEventAction) theFlowchart.addNewAggr(
+							"AcceptEventAction", theEvent.getName() );
+
+			theAcceptEvent.setEvent( theEvent );			
+			theFlowchart.addNewNodeForElement( theAcceptEvent, getSourceElementX(), getSourceElementY(), 300, 40 );
+
+			theRhpApp.highLightElement( theAcceptEvent );
+
+		} else if( theDiagram instanceof IRPObjectModelDiagram ){				
+
+			IRPObjectModelDiagram theOMD = (IRPObjectModelDiagram)theDiagram;
+
+			IRPGraphNode theEventNode = theOMD.addNewNodeForElement(theEvent, getSourceElementX() + 50, getSourceElementY() + 50, 300, 40);	
+
+			IRPCollection theGraphElsToDraw = theRhpApp.createNewCollection();
+			theGraphElsToDraw.addGraphicalItem( m_SourceGraphElement );
+			theGraphElsToDraw.addGraphicalItem( theEventNode );
+
+			theOMD.completeRelations( theGraphElsToDraw, 1 );
+
+			theRhpApp.highLightElement( theEvent );
+
+		} else {
+			Logger.writeLine( "Error in CreateOperationPanel.performAction, expected an IRPActivityDiagram" );
 		}
 	}
 }
@@ -775,6 +770,7 @@ public class CreateIncomingEventPanel extends CreateTracedElementPanel {
     #044 03-JUL-2016: Minor re-factoring/code corrections (F.J.Chadburn)
     #054 13-JUL-2016: Create a nested BlockPkg package to contain the Block and events (F.J.Chadburn)
     #062 17-JUL-2016: Create InterfacesPkg and correct build issues by adding a Usage dependency (F.J.Chadburn)
+    #069 20-JUL-2016: Fix population of events/ops on diagram when creating from a transition (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

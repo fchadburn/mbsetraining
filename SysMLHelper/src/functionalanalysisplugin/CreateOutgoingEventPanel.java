@@ -272,54 +272,50 @@ public class CreateOutgoingEventPanel extends CreateTracedElementPanel {
 			IRPEvent theEvent) {
 		
 		IRPApplication theRhpApp = FunctionalAnalysisPlugin.getRhapsodyApp();
-		
-		if (m_SourceGraphElement instanceof IRPGraphNode){
-			GraphNodeInfo theNodeInfo = new GraphNodeInfo( (IRPGraphNode) m_SourceGraphElement );
-			
-			int x = theNodeInfo.getTopLeftX() + 20;
-			int y = theNodeInfo.getTopLeftY() + 20;
-			
-			IRPDiagram theDiagram = m_SourceGraphElement.getDiagram();
-							
-			if (theDiagram instanceof IRPActivityDiagram){
-				
-				IRPActivityDiagram theAD = (IRPActivityDiagram)theDiagram;
-				
-				IRPFlowchart theFlowchart = theAD.getFlowchart();
-				
-				IRPState theState = 
-						(IRPState) theFlowchart.addNewAggr(
-								"State", theEvent.getName() );
-				
-				theState.setStateType("EventState");
-			
-				if( theState != null ){
-					
-					IRPSendAction theSendAction = theState.getSendAction();
-					theSendAction.setEvent(theEvent);
-				}
-		
-				theFlowchart.addNewNodeForElement( theState, x, y, 300, 40 );
-				
-				theRhpApp.highLightElement( theState );
-			
-			} else if (theDiagram instanceof IRPObjectModelDiagram){				
-				
-				IRPObjectModelDiagram theOMD = (IRPObjectModelDiagram)theDiagram;
-				
-				IRPGraphNode theEventNode = theOMD.addNewNodeForElement(theEvent, x + 50, y + 50, 300, 40);	
-				
-				IRPCollection theGraphElsToDraw = theRhpApp.createNewCollection();
-				theGraphElsToDraw.addGraphicalItem( m_SourceGraphElement );
-				theGraphElsToDraw.addGraphicalItem( theEventNode );
-				
-				theOMD.completeRelations( theGraphElsToDraw, 1 );
-				
-				theRhpApp.highLightElement( theEvent );
-			
-			} else {
-				Logger.writeLine("Error in CreateOperationPanel.performAction, expected an IRPActivityDiagram");
+
+		IRPDiagram theDiagram = m_SourceGraphElement.getDiagram();
+
+		if( theDiagram instanceof IRPActivityDiagram ){
+
+			IRPActivityDiagram theAD = (IRPActivityDiagram)theDiagram;
+
+			IRPFlowchart theFlowchart = theAD.getFlowchart();
+
+			IRPState theState = 
+					(IRPState) theFlowchart.addNewAggr(
+							"State", theEvent.getName() );
+
+			theState.setStateType("EventState");
+
+			if( theState != null ){
+
+				IRPSendAction theSendAction = theState.getSendAction();
+				theSendAction.setEvent(theEvent);
 			}
+
+			theFlowchart.addNewNodeForElement(
+					theState, getSourceElementX(), getSourceElementY(), 300, 40 );
+
+			theRhpApp.highLightElement( theState );
+
+		} else if( theDiagram instanceof IRPObjectModelDiagram ){				
+
+			IRPObjectModelDiagram theOMD = (IRPObjectModelDiagram)theDiagram;
+
+			IRPGraphNode theEventNode = theOMD.addNewNodeForElement(
+					theEvent, getSourceElementX() + 50, getSourceElementY() + 50, 300, 40 );	
+
+			IRPCollection theGraphElsToDraw = theRhpApp.createNewCollection();
+			theGraphElsToDraw.addGraphicalItem( m_SourceGraphElement );
+			theGraphElsToDraw.addGraphicalItem( theEventNode );
+
+			theOMD.completeRelations( theGraphElsToDraw, 1 );
+
+			theRhpApp.highLightElement( theEvent );
+
+		} else {
+			Logger.writeLine( "Warning in populateSendActionOnDiagram " + Logger.elementInfo( theDiagram ) + 
+					" is not supported for populating on");
 		}
 	}
 	
@@ -381,64 +377,69 @@ public class CreateOutgoingEventPanel extends CreateTracedElementPanel {
 	@Override
 	protected void performAction() {
 		
-		// do silent check first
-		if (checkValidity( false )){
-			
-			String theEventName = m_ChosenNameTextField.getText(); 
-			
-			if (!theEventName.isEmpty()){
-				
-				IRPEvent theEvent = m_PackageForEvent.addEvent(theEventName);
-				
-				List<IRPRequirement> selectedReqtsList = m_RequirementsPanel.getSelectedRequirementsList();
-				
-				addTraceabilityDependenciesTo( theEvent, selectedReqtsList );
-				
-				if (m_ActiveAgumentNeededCheckBox.isSelected()){
-					theEvent.addArgument("active");
-				}
-				
-				theEvent.highLightElement();
-				
-				IRPModelElement theReception = m_DestinationActor.addNewAggr("Reception", theEventName);
-				addTraceabilityDependenciesTo( theReception, selectedReqtsList );
-				
-				theReception.highLightElement();
-				
-				if (m_SendOperationIsNeededCheckBox.isSelected()){
-					
-					IRPPort thePort = getPortForDestinationActor();
-					
-					Logger.writeLine("Adding an inform Operation");		
+		try {
+			// do silent check first
+			if( checkValidity( false ) ){
 
-					IRPOperation informOp =
-							((IRPClassifier)m_TargetOwningElement).addOperation(
-									determineBestInformNameFor(
-											(IRPClassifier)m_TargetOwningElement, theEventName ) );
-					
-					informOp.highLightElement();
-					
-					addTraceabilityDependenciesTo( informOp, selectedReqtsList );
-					
-					if (m_ActiveAgumentNeededCheckBox.isSelected()){
-						
-						informOp.addArgument("active");
-						informOp.setBody("OPORT(" + thePort.getName()+")->GEN(" + theEventName + "( active ) );");
-					} else {
-						informOp.setBody("OPORT(" + thePort.getName()+")->GEN(" + theEventName + ");");
-					}			
-					
-					if( m_ActionOnDiagramIsNeededCheckBox.isSelected() ){
-						populateSendActionOnDiagram( theEvent );
+				String theEventName = m_ChosenNameTextField.getText(); 
+
+				if( !theEventName.isEmpty() ){
+
+					IRPEvent theEvent = m_PackageForEvent.addEvent( theEventName );
+
+					List<IRPRequirement> selectedReqtsList = m_RequirementsPanel.getSelectedRequirementsList();
+
+					addTraceabilityDependenciesTo( theEvent, selectedReqtsList );
+
+					if( m_ActiveAgumentNeededCheckBox.isSelected() ){
+						theEvent.addArgument( "active" );
 					}
-				}	
-				
-				bleedColorToElementsRelatedTo( m_SourceGraphElement );
-			}
-			
-		} else {
-			Logger.writeLine("Error in CreateOutgoingEventPanel.performAction, checkValidity returned false");
-		}	
+
+					theEvent.highLightElement();
+
+					IRPModelElement theReception = m_DestinationActor.addNewAggr("Reception", theEventName);
+					addTraceabilityDependenciesTo( theReception, selectedReqtsList );
+
+					theReception.highLightElement();
+
+					if (m_SendOperationIsNeededCheckBox.isSelected()){
+
+						IRPPort thePort = getPortForDestinationActor();
+
+						Logger.writeLine("Adding an inform Operation");		
+
+						IRPOperation informOp =
+								((IRPClassifier)m_TargetOwningElement).addOperation(
+										determineBestInformNameFor(
+												(IRPClassifier)m_TargetOwningElement, theEventName ) );
+
+						informOp.highLightElement();
+
+						addTraceabilityDependenciesTo( informOp, selectedReqtsList );
+
+						if (m_ActiveAgumentNeededCheckBox.isSelected()){
+
+							informOp.addArgument("active");
+							informOp.setBody("OPORT(" + thePort.getName()+")->GEN(" + theEventName + "( active ) );");
+						} else {
+							informOp.setBody("OPORT(" + thePort.getName()+")->GEN(" + theEventName + ");");
+						}			
+
+						if( m_ActionOnDiagramIsNeededCheckBox.isSelected() ){
+							populateSendActionOnDiagram( theEvent );
+						}
+					}	
+
+					bleedColorToElementsRelatedTo( m_SourceGraphElement );
+				}
+
+			} else {
+				Logger.writeLine("Error in CreateOutgoingEventPanel.performAction, checkValidity returned false");
+			}	
+
+		} catch (Exception e) {
+			Logger.writeLine("Error in CreateOutgoingEventPanel.performAction, unhandled exception detected");
+		}
 	}
 }
 
@@ -458,6 +459,7 @@ public class CreateOutgoingEventPanel extends CreateTracedElementPanel {
     #043 03-JUL-2016: Add Derive downstream reqt for CallOps, InterfaceItems and Event Actions (F.J.Chadburn)
     #054 13-JUL-2016: Create a nested BlockPkg package to contain the Block and events (F.J.Chadburn)
     #062 17-JUL-2016: Create InterfacesPkg and correct build issues by adding a Usage dependency (F.J.Chadburn)
+    #069 20-JUL-2016: Fix population of events/ops on diagram when creating from a transition (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 
