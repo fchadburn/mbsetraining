@@ -8,35 +8,35 @@ RELEASE 1.1 (10-APR-2016)
 ----------------------------------------------------------------------------------
 #006 02-MAY-2016: Add FunctionalAnalysisPkg helper support (F.J.Chadburn)
 ----------------------------------------------------------------------------------
-RELEASE 2.0.1 (02-MAY-2016)
+UNDER DEV RELEASE 2.0.1 (02-MAY-2016)
 ----------------------------------------------------------------------------------
 #007 05-MAY-2016: Move FileHelper into generalhelpers and remove duplicate class (F.J.Chadburn)
 #008 05-MAY-2016: Fix the OMROOT problem with add profile functionality (F.J.Chadburn)
 #009 05-MAY-2016: Remove the DesignSythesisProfile and merge into the FunctionalAnalysisProfile (F.J.Chadburn)
 ----------------------------------------------------------------------------------
-RELEASE 2.0.2 (08-MAY-2016)
+UNDER DEV RELEASE 2.0.2 (08-MAY-2016)
 ----------------------------------------------------------------------------------
 #010 08-MAY-2016: Remove white-space from actor names (F.J.Chadburn)
 #011 08-MAY-2016: Simplify version numbering mechanism (F.J.Chadburn)
 #012 08-MAY-2016: Fix Send event without value plus re-word check box titles (F.J.Chadburn)
 ----------------------------------------------------------------------------------
-RELEASE 2.0.3 (08-MAY-2016)
+UNDER DEV RELEASE 2.0.3 (08-MAY-2016)
 ----------------------------------------------------------------------------------
 #013 10-MAY-2016: Add support for sequence diagram req't and verification relation population (F.J.Chadburn)
 #014 10-MAY-2016: Fix Component/Configuration creation to include derived and web-enabled settings (F.J.Chadburn)
 #015 10-MAY-2016: Add SE-Toolkit > Modeling Toolbox to SysMLHelper.hep file to make it available (F.J.Chadburn)
 ----------------------------------------------------------------------------------
-RELEASE 2.0.4 (10-MAY-2016)
+UNDER DEV RELEASE 2.0.4 (10-MAY-2016)
 ----------------------------------------------------------------------------------
 #016 11-MAY-2016: Add GPL advisory to the Log window (F.J.Chadburn)
 #017 11-MAY-2016: Double-click now works with both nested and hyper-linked diagrams (F.J.Chadburn)
 #018 11-MAY-2016: Provide advisory before add by reference of an external RequirementsAnalysisPkg (F.J.Chadburn)
 ----------------------------------------------------------------------------------
-RELEASE 2.0.5 (11-MAY-2016)
+UNDER DEV RELEASE 2.0.5 (11-MAY-2016)
 ----------------------------------------------------------------------------------
 #019 15-MAY-2016: Improvements to Functional Analysis Block default naming approach (F.J.Chadburn)
 ----------------------------------------------------------------------------------
-RELEASE 2.0.6 (15-MAY-2016)
+UNDER DEV RELEASE 2.0.6 (15-MAY-2016)
 ----------------------------------------------------------------------------------
 #020 30-MAY-2016: Fixed FunctionalAnalysisProfile.hep file so it has SD commands (F.J.Chadburn)
 #021 30-MAY-2016: Added Copyright/History statements to the hep files (F.J.Chadburn)
@@ -44,49 +44,49 @@ RELEASE 2.0.6 (15-MAY-2016)
 #023 30-MAY-2016: Added form to support validation checks for analysis block hierarchy creation (F.J.Chadburn) 
 #024 30-MAY-2016: Check box to allow user to choose whether to add the check operation (F.J.Chadburn)
 ----------------------------------------------------------------------------------
-RELEASE 2.0.7 (30-MAY-2016)
+UNDER DEV RELEASE 2.0.7 (30-MAY-2016)
 ----------------------------------------------------------------------------------
 #025 31-MAY-2016: Add new menu and dialog to add a new actor to package under development (F.J.Chadburn)
 #026 31-MAY-2016: Add dialog to allow user to choose which Activity Diagrams to synch (F.J.Chadburn)
 #027 31-MAY-2016: Add new menu to launch dialog to copy Activity Diagrams (F.J.Chadburn)
 ----------------------------------------------------------------------------------
-RELEASE 2.0.8 (31-MAY-2016)
+UNDER DEV RELEASE 2.0.8 (31-MAY-2016)
 ----------------------------------------------------------------------------------
 #028 01-JUN-2016: Add new menu to create a stand-alone attribute owned by the system (F.J.Chadburn)
 #029 01-JUN-2016: Add Warning Dialog helper to UserInterfaceHelpers (F.J.Chadburn)
 #030 01-JUN-2016: Improve legal name checking across helpers (F.J.Chadburn)
 #031 01-JUN-2016: Scroll pane added for readability of requirement text on panels (F.J.Chadburn)
 ----------------------------------------------------------------------------------
-RELEASE 2.0.9 (01-JUN-2016)
+UNDER DEV RELEASE 2.0.9 (01-JUN-2016)
 ----------------------------------------------------------------------------------
 #032 05-JUN-2016: Populate call operation/event actions on diagram check-box added (F.J.Chadburn)
 #033 05-JUN-2016: Add support for creation of operations and events from raw requirement selection (F.J.Chadburn)
 #034 05-JUN-2016: Re-factored design to move static constructors into appropriate panel class (F.J.Chadburn)
 ----------------------------------------------------------------------------------
-RELEASE 2.0.10 (05-JUN-2016)
+UNDER DEV RELEASE 2.0.10 (05-JUN-2016)
 ----------------------------------------------------------------------------------
 #035 15-JUN-2016: New panel to configure requirements package naming and gateway set-up (F.J.Chadburn)
 #036 15-JUN-2016: Re-factored SysMLHelperTriggers to make a little more extensible (F.J.Chadburn)
 #037 15-JUN-2016: Added "allow the " text to the default requirement pretext string (F.J.Chadburn)
 ----------------------------------------------------------------------------------
-RELEASE 2.0.11 (15-JUN-2016)
+UNDER DEV RELEASE 2.0.11 (15-JUN-2016)
 ----------------------------------------------------------------------------------
 #038 17-JUN-2016: Populate diagram now populates a SendAction in case of send events (F.J.Chadburn)
 #039 17-JUN-2016: Minor fixes and improvements to robustness of Gateway project setup (F.J.Chadburn)
 #040 17-JUN-2016: Extend populate event/ops to work on OMD, i.e., REQ diagrams (F.J.Chadburn)
 ----------------------------------------------------------------------------------
-RELEASE 2.0.12 (17-JUN-2016)
+UNDER DEV RELEASE 2.0.12 (17-JUN-2016)
 ----------------------------------------------------------------------------------
 #041 29-JUN-2016: Derive downstream requirement menu added for reqts on diagrams (F.J.Chadburn)
 #042 29-JUN-2016: launchThePanel renaming to improve Panel class design consistency (F.J.Chadburn)
 ----------------------------------------------------------------------------------
-RELEASE 2.0.13 (29-JUN-2016)
+UNDER DEV RELEASE 2.0.13 (29-JUN-2016)
 ----------------------------------------------------------------------------------
 #043 03-JUL-2016: Add Derive downstream reqt for CallOps, InterfaceItems and Event Actions (F.J.Chadburn)
 #044 03-JUL-2016: Minor re-factoring/code corrections (F.J.Chadburn)
 #045 03-JUL-2016: Fix CopyActivityDiagramsPanel capability (F.J.Chadburn)
 ----------------------------------------------------------------------------------
-RELEASE 2.0.14 (03-JUL-2016)
+UNDER DEV RELEASE 2.0.14 (03-JUL-2016)
 ----------------------------------------------------------------------------------
 #046 06-JUL-2016: Fix external RequirementsAnalysisPkg reference to be created with relative path (F.J.Chadburn)
 #047 06-JUL-2016: Tweaked properties and added options to switch to MoreDetailedAD automatically (F.J.Chadburn)
@@ -96,7 +96,7 @@ RELEASE 2.0.14 (03-JUL-2016)
 #051 06-JUL-2016: Re-factored the GW panel to allow it to incrementally add to previous setup (F.J.Chadburn)
 #052 06-JUL-2016: DesignSynthesisPkg creation menus now hidden until more complete (F.J.Chadburn)
 ----------------------------------------------------------------------------------
-RELEASE 2.0.15 (06-JUL-2016)
+UNDER DEV RELEASE 2.0.15 (06-JUL-2016)
 ----------------------------------------------------------------------------------
 #053 13-JUL-2016: Fix #046 issues in calc of relative path when adding RequirementsAnalysisPkg (F.J.Chadburn)
 #054 13-JUL-2016: Create a nested BlockPkg package to contain the Block and events (F.J.Chadburn)
@@ -107,7 +107,7 @@ RELEASE 2.0.15 (06-JUL-2016)
 #059 13-JUL-2016: Create AD in BlockPkg package now includes additional toolbar (F.J.Chadburn)
 #060 13-JUL-2016: Changed elementInfo to return user defined meta-class for log entries (F.J.Chadburn)
 ----------------------------------------------------------------------------------
-RELEASE 2.0.16 (13-JUL-2016)
+UNDER DEV RELEASE 2.0.16 (13-JUL-2016)
 ----------------------------------------------------------------------------------
 #061 17-JUL-2016: Ensure BasePkg is added by reference from profile to aid future integration (F.J.Chadburn)
 #062 17-JUL-2016: Create InterfacesPkg and correct build issues by adding a Usage dependency (F.J.Chadburn)
@@ -115,11 +115,18 @@ RELEASE 2.0.16 (13-JUL-2016)
 #064 17-JUL-2016: Set GlobalPreferencesProfile properties to turn off role names on UCD for 8.1.5+ (F.J.Chadburn)
 #065 17-JUL-2016: Changed simplified AD to use Name rather than Label for Event descriptions (F.J.Chadburn)
 ----------------------------------------------------------------------------------
-RELEASE 2.0.17 (17-JUL-2016)
+BETA TEST RELEASE 2.0.17 (17-JUL-2016)
 ----------------------------------------------------------------------------------
 #066 19-JUL-2016: Added optional baseline box to the fast Gateway setup panel (F.J.Chadburn)
 #067 19-JUL-2016: Improvement to forming Event/Guard+Action text when creating new requirements (F.J.Chadburn) 
 #068 19-JUL-2016: Newline added to Open diagram dialog (F.J.Chadburn)
 ----------------------------------------------------------------------------------
-RELEASE 2.0.18 (19-JUL-2016)
+BETA TEST RELEASE 2.0.18 (19-JUL-2016)
 ----------------------------------------------------------------------------------
+#069 20-JUL-2016: Fix population of events/ops on diagram when creating from a transition (F.J.Chadburn)
+#070 20-JUL-2016: Fix exception when populating events/ops from transitions with no guard (F.J.Chadburn)
+----------------------------------------------------------------------------------
+BETA TEST RELEASE 2.0.19 (20-JUL-2016)
+----------------------------------------------------------------------------------
+
+
