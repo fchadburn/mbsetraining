@@ -190,10 +190,23 @@ public class GeneralHelpers {
 			}		
 			
 		} else if (theEl instanceof IRPTransition){
-			theSourceInfo = ((IRPTransition) theEl).getItsGuard().getBody();
+			
+			IRPTransition theTrans = (IRPTransition)theEl;
+			IRPGuard theGuard = theTrans.getItsGuard();
+			
+			// check that transition has a guard before trying to use it
+			if( theGuard != null ){
+				theSourceInfo = ((IRPTransition) theEl).getItsGuard().getBody();
+			} else {
+				theSourceInfo = "TBD"; // no source info available
+			}
+			
 		} else if (theEl instanceof IRPComment){
+			
 			theSourceInfo = theEl.getDescription();
+			
 		} else if (theEl instanceof IRPRequirement){
+			
 			IRPRequirement theReqt = (IRPRequirement)theEl;
 			theSourceInfo = theReqt.getSpecification();
 		}
@@ -654,6 +667,7 @@ public class GeneralHelpers {
     #051 06-JUL-2016: Re-factored the GW panel to allow it to incrementally add to previous setup (F.J.Chadburn)
     #055 13-JUL-2016: Support requirement derivation from simplified AD elements (F.J.Chadburn)
     #065 17-JUL-2016: Changed simplified AD to use Name rather than Label for Event descriptions (F.J.Chadburn)
+    #070 20-JUL-2016: Fix exception when populating events/ops from transitions with no guard (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 
