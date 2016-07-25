@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -178,16 +179,35 @@ public class GeneralHelpers {
 				
 			} else if (theStateType.equals("EventState")){ // send event
 				
-				IRPSendAction theSendAction = (IRPSendAction)theEl;
-				IRPEvent theEvent = theSendAction.getEvent();
+				IRPSendAction theSendAction = theState.getSendAction();
 				
-				if (theEvent==null){
-					Logger.writeLine("Event has no name so using Name");
-					theSourceInfo = theState.getName();
+				if (theSendAction != null){
+					IRPEvent theEvent = theSendAction.getEvent();
+					
+					if (theEvent != null){
+						theSourceInfo = theEvent.getName();
+					} else {
+						Logger.writeLine("SendAction has no Event so using Name of action");
+						theSourceInfo = theState.getName();
+					}
 				} else {
-					theSourceInfo = theEvent.getName();
-				}		
-			}		
+					Logger.writeLine("Error in deriveDownstreamRequirement, theSendAction is null");
+				}	
+				
+			} else if (theStateType.equals("TimeEvent")){
+				
+				IRPAcceptTimeEvent theAcceptTimeEvent = (IRPAcceptTimeEvent)theEl;
+				String theDuration = theAcceptTimeEvent.getDurationTime();
+				
+				if (theDuration.isEmpty()){
+					theSourceInfo = theAcceptTimeEvent.getName();
+				} else {
+					theSourceInfo = theDuration;
+				}
+				
+			} else {
+				Logger.writeLine("Warning in getActionTextFrom, " + theStateType + " was not handled");
+			}
 			
 		} else if (theEl instanceof IRPTransition){
 			
@@ -204,11 +224,29 @@ public class GeneralHelpers {
 		} else if (theEl instanceof IRPComment){
 			
 			theSourceInfo = theEl.getDescription();
-			
+
 		} else if (theEl instanceof IRPRequirement){
 			
 			IRPRequirement theReqt = (IRPRequirement)theEl;
 			theSourceInfo = theReqt.getSpecification();
+
+		} else if (theEl instanceof IRPConstraint){
+			
+			IRPConstraint theConstraint = (IRPConstraint)theEl;
+			theSourceInfo = theConstraint.getSpecification();		
+
+		} else {
+			Logger.writeLine("Warning in getActionTextFrom, " + Logger.elementInfo(theEl) + " was not handled as of an unexpected type");
+			theSourceInfo = ""; // default
+		}
+		
+		if( theSourceInfo != null ){
+			
+			if( theSourceInfo.isEmpty() ){
+				Logger.writeLine("Warning, " + Logger.elementInfo( theEl ) + " has no text");
+			} else {
+				theSourceInfo = decapitalize( theSourceInfo );
+			}
 		}
 		
 		return theSourceInfo;
@@ -668,7 +706,10 @@ public class GeneralHelpers {
     #055 13-JUL-2016: Support requirement derivation from simplified AD elements (F.J.Chadburn)
     #065 17-JUL-2016: Changed simplified AD to use Name rather than Label for Event descriptions (F.J.Chadburn)
     #070 20-JUL-2016: Fix exception when populating events/ops from transitions with no guard (F.J.Chadburn)
-
+	#071 25-JUL-2016: Fix exception to allow creating requirements from pre-condition statements (F.J.Chadburn) 
+	#072 25-JUL-2016: Improved robustness when graphEls that don't have model elements are selected (F.J.Chadburn)
+	#074 25-JUL-2016: Support creation of requirements from AcceptTimeEvents (F.J.Chadburn)
+	
     This file is part of SysMLHelperPlugin.
 
     SysMLHelperPlugin is free software: you can redistribute it and/or modify
