@@ -1,0 +1,60 @@
+I-Logix-RPY-Archive version 8.11.0 C++ 9499822
+{ IProfile 
+	- _id = GUID 8867afa3-3659-4a6e-a860-1fc1426764d7;
+	- _myState = 8192;
+	- _properties = { IPropertyContainer 
+		- Subjects = { IRPYRawContainer 
+			- size = 1;
+			- value = 
+			{ IPropertySubject 
+				- _Name = "Model";
+				- Metaclasses = { IRPYRawContainer 
+					- size = 1;
+					- value = 
+					{ IPropertyMetaclass 
+						- _Name = "Profile";
+						- Properties = { IRPYRawContainer 
+							- size = 2;
+							- value = 
+							{ IProperty 
+								- _Name = "AdditionalHelpersFiles";
+								- _Value = "$OMROOT/Profiles/SysMLHelper/DesignSynthesisProfile.hep";
+								- _Type = String;
+							}
+							{ IProperty 
+								- _Name = "GloballyApplied";
+								- _Value = "False";
+								- _Type = Bool;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	- _name = "DesignSynthesisProfile";
+	- _modifiedTimeWeak = 7.25.2016::11:51:40;
+	- weakCGTime = 7.25.2016::11:51:40;
+	- strongCGTime = 7.25.2016::11:51:40;
+	- _defaultComposite = GUID 44661a52-2513-44fc-ab8c-2012103b2418;
+	- _eventsBaseID = -1;
+	- Classes = { IRPYRawContainer 
+		- size = 1;
+		- value = 
+		{ IClass 
+			- _id = GUID 44661a52-2513-44fc-ab8c-2012103b2418;
+			- _myState = 40960;
+			- _name = "TopLevel";
+			- _modifiedTimeWeak = 1.2.1990::0:0:0;
+			- weakCGTime = 1.2.1990::0:0:0;
+			- strongCGTime = 1.2.1990::0:0:0;
+			- _multiplicity = "";
+			- _itsStateChart = { IHandle 
+				- _m2Class = "";
+			}
+			- _classModifier = Unspecified;
+		}
+	}
+	- _configurationRelatedTime = 1.1.1970::0:0:0;
+}
+
