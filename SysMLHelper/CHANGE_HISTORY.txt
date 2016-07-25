@@ -128,5 +128,10 @@ BETA TEST RELEASE 2.0.18 (19-JUL-2016)
 ----------------------------------------------------------------------------------
 BETA TEST RELEASE 2.0.19 (20-JUL-2016)
 ----------------------------------------------------------------------------------
-
-
+#071 25-JUL-2016: Fix exception to allow creating requirements from pre-condition statements (F.J.Chadburn) 
+#072 25-JUL-2016: Improved robustness when graphEls that don't have model elements are selected (F.J.Chadburn)
+#073 25-JUL-2016: Add DesignSythesisProfile.sbs back into _rpy to allow pub/sub port menu (F.J.Chadburn)
+#074 25-JUL-2016: Support creation of requirements from AcceptTimeEvents (F.J.Chadburn)
+----------------------------------------------------------------------------------
+BETA TEST RELEASE 2.0.20 (25-JUL-2016)
+----------------------------------------------------------------------------------

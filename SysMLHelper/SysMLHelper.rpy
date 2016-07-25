@@ -40,8 +40,8 @@ I-Logix-RPY-Archive version 8.11.0 C++ 9499822
 			- _id = GUID 052b8171-a32b-4f45-a829-5585f79f9deb;
 		}
 	}
-	- _modifiedTimeWeak = 7.6.2016::6:49:42;
-	- _lastID = 11;
+	- _modifiedTimeWeak = 7.25.2016::11:50:40;
+	- _lastID = 12;
 	- _UserColors = { IRPYRawContainer 
 		- size = 16;
 		- value = 16777215; 16777215; 16777215; 16777215; 16777215; 16777215; 16777215; 16777215; 16777215; 16777215; 16777215; 16777215; 16777215; 16777215; 16777215; 16777215; 
@@ -83,7 +83,7 @@ I-Logix-RPY-Archive version 8.11.0 C++ 9499822
 		}
 	}
 	- Subsystems = { IRPYRawContainer 
-		- size = 9;
+		- size = 10;
 		- value = 
 		{ IProfile 
 			- fileName = "SysMLHelperProfile";
@@ -122,6 +122,10 @@ I-Logix-RPY-Archive version 8.11.0 C++ 9499822
 		{ ISubsystem 
 			- fileName = "DesignSynthesisPkg";
 			- _id = GUID ef01473f-f4ad-4b16-90a4-a42254559db4;
+		}
+		{ IProfile 
+			- fileName = "DesignSynthesisProfile";
+			- _id = GUID 8867afa3-3659-4a6e-a860-1fc1426764d7;
 		}
 	}
 	- Diagrams = { IRPYRawContainer 
