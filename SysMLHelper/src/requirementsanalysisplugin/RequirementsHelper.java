@@ -77,79 +77,75 @@ public class RequirementsHelper {
 		
 		if( theModelObject != null ){
 			
-			List<IRPModelElement> theRelations = getElementsThatFlowInto( theModelObject, theDiagram );
+			String theActionText = GeneralHelpers.getActionTextFrom( theModelObject );
+			
+			if( theActionText != null ){
+				List<IRPModelElement> theRelations = getElementsThatFlowInto( theModelObject, theDiagram );
 
-			String theText = null;
-			
-			String theActionText = 
-					GeneralHelpers.decapitalize( 
-							GeneralHelpers.getActionTextFrom( theModelObject ) );
-			
-			if( theRelations.isEmpty() ){
-					
-				if( theActionText.isEmpty() ){
-					Logger.writeLine("Warning, " + Logger.elementInfo( theModelObject ) + " has no text");
-					
-					theText = getCreateRequirementTextForPrefixing( theModelObject.getProject() );
-				} else {
+				String theText = null;
+				
+				if( theRelations.isEmpty() ){
+						
 					theText = getCreateRequirementTextForPrefixing( theModelObject.getProject() ) + theActionText;				
-				}
-				
-			} else {
-				
-				theText = "When ";
-				
-				Iterator<IRPModelElement> theRelatedModelElIter = theRelations.iterator();
-				
-				while( theRelatedModelElIter.hasNext() ) {
 					
-					IRPModelElement theRelatedModelEl = theRelatedModelElIter.next();
+				} else {
 					
-					if( theRelatedModelEl instanceof IRPTransition ){
-						IRPTransition theTransition = (IRPTransition)theRelatedModelEl;
-						String theGuardBody = theTransition.getItsGuard().getBody();
+					theText = "When ";
+					
+					Iterator<IRPModelElement> theRelatedModelElIter = theRelations.iterator();
+					
+					while( theRelatedModelElIter.hasNext() ) {
 						
-						theText+= theGuardBody;
-					
-					} else if( theRelatedModelEl instanceof IRPAcceptEventAction ){
+						IRPModelElement theRelatedModelEl = theRelatedModelElIter.next();
 						
-						theText+= GeneralHelpers.decapitalize( 
-							GeneralHelpers.getActionTextFrom( theRelatedModelEl ) );
+						if( theRelatedModelEl instanceof IRPTransition ){
+							IRPTransition theTransition = (IRPTransition)theRelatedModelEl;
+							String theGuardBody = theTransition.getItsGuard().getBody();
+							
+							theText+= theGuardBody;
+						
+						} else if( theRelatedModelEl instanceof IRPAcceptEventAction ){
+							
+							theText+= GeneralHelpers.decapitalize( 
+								GeneralHelpers.getActionTextFrom( theRelatedModelEl ) );
+						}
+						
+						if( theRelatedModelElIter.hasNext() ){
+							theText+= " or ";
+						}		
 					}
 					
-					if( theRelatedModelElIter.hasNext() ){
-						theText+= " or ";
-					}		
+					theText += " the feature shall " + theActionText;
 				}
 				
-				theText += " the feature shall " + theActionText;
-			}
-			
-			theReqt = addNewRequirementTracedTo( theModelObject, theDiagram, theText );			
+				theReqt = addNewRequirementTracedTo( theModelObject, theDiagram, theText );	
+				
+				IRPGraphicalProperty theGraphicalProperty = null;
+				
+				if (theGraphEl instanceof IRPGraphNode){
+					theGraphicalProperty = theGraphEl.getGraphicalProperty("Position");
+				} else if (theGraphEl instanceof IRPGraphEdge){
+					theGraphicalProperty = theGraphEl.getGraphicalProperty("TargetPosition");
+				}
+				
+				if (theGraphicalProperty != null){
+					String theValue = theGraphicalProperty.getValue();
+					String[] thePosition = theValue.split(",");
+
+					int x = Integer.parseInt(thePosition[0]);
+					int y = Integer.parseInt(thePosition[1]);
+
+					IRPGraphNode theGraphNode = theDiagram.addNewNodeForElement(theReqt, x+100, y+150, 300, 100);
+
+					theCollection.addGraphicalItem(theGraphEl);
+					theCollection.addGraphicalItem(theGraphNode);
+
+					theDiagram.completeRelations(theCollection, 0);
+				}	
+			} // theActionText == null
+		} else { // theModelObject == null
+			Logger.writeLine("theModelObject == null");
 		}
-		
-		IRPGraphicalProperty theGraphicalProperty = null;
-		
-		if (theGraphEl instanceof IRPGraphNode){
-			theGraphicalProperty = theGraphEl.getGraphicalProperty("Position");
-		} else if (theGraphEl instanceof IRPGraphEdge){
-			theGraphicalProperty = theGraphEl.getGraphicalProperty("TargetPosition");
-		}
-		
-		if (theGraphicalProperty != null){
-			String theValue = theGraphicalProperty.getValue();
-			String[] thePosition = theValue.split(",");
-
-			int x = Integer.parseInt(thePosition[0]);
-			int y = Integer.parseInt(thePosition[1]);
-
-			IRPGraphNode theGraphNode = theDiagram.addNewNodeForElement(theReqt, x+100, y+150, 300, 100);
-
-			theCollection.addGraphicalItem(theGraphEl);
-			theCollection.addGraphicalItem(theGraphNode);
-
-			theDiagram.completeRelations(theCollection, 0);
-		}	
 	}
 
 	private static IRPRequirement addNewRequirementTracedTo(
@@ -295,6 +291,7 @@ public class RequirementsHelper {
     #004 10-APR-2016: Re-factored projects into single workspace (F.J.Chadburn)
     #005 10-APR-2016: Support ProductName substitution in reqt text tag (F.J.Chadburn)
     #067 19-JUL-2016: Improvement to forming Event/Guard+Action text when creating new requirements (F.J.Chadburn) 
+    #072 25-JUL-2016: Improved robustness when graphEls that don't have model elements are selected (F.J.Chadburn)
     
     This file is part of SysMLHelperPlugin.
 
