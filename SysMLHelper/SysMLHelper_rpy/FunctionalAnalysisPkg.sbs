@@ -33,9 +33,9 @@ I-Logix-RPY-Archive version 8.11.0 C++ 9499822
 			}
 		}
 	}
-	- _modifiedTimeWeak = 7.17.2016::14:16:3;
+	- _modifiedTimeWeak = 7.28.2016::9:34:8;
 	- Tags = { IRPYRawContainer 
-		- size = 2;
+		- size = 3;
 		- value = 
 		{ ITag 
 			- _id = GUID d568061a-8009-4ad3-a287-556b6676b750;
@@ -75,8 +75,32 @@ I-Logix-RPY-Archive version 8.11.0 C++ 9499822
 			}
 			- _isOrdered = 0;
 		}
+		{ ITag 
+			- _id = GUID 056fb0f5-9460-47d1-8c0c-9ca094260e51;
+			- _myState = 8192;
+			- _name = "isPopulateWantedByDefault";
+			- _modifiedTimeWeak = 7.28.2016::9:34:8;
+			- ValueSpecifications = { IRPYRawContainer 
+				- size = 1;
+				- value = 
+				{ ILiteralSpecification 
+					- _id = GUID c9730413-3e9f-4356-b37d-67594f15e7da;
+					- _modifiedTimeWeak = 7.28.2016::9:34:8;
+					- _value = "false";
+				}
+			}
+			- _typeOf = { IHandle 
+				- _m2Class = "IType";
+				- _filename = "PredefinedTypes.sbs";
+				- _subsystem = "PredefinedTypes";
+				- _class = "";
+				- _name = "RhpBoolean";
+				- _id = GUID f19b56f2-78ab-44fa-860e-6ead487ecb07;
+			}
+			- _isOrdered = 0;
+		}
 	}
-	- _lastID = 3;
+	- _lastID = 4;
 	- Declaratives = { IRPYRawContainer 
 		- size = 1;
 		- value = 
@@ -86,7 +110,7 @@ I-Logix-RPY-Archive version 8.11.0 C++ 9499822
 			- _name = "RequirementsPkg";
 		}
 	}
-	- weakCGTime = 7.17.2016::14:16:3;
+	- weakCGTime = 7.28.2016::9:34:8;
 	- strongCGTime = 5.2.2016::10:11:7;
 	- _defaultComposite = GUID e1d8914f-8f41-4c60-82ca-74d684bda7f3;
 	- _eventsBaseID = -1;
@@ -97,8 +121,8 @@ I-Logix-RPY-Archive version 8.11.0 C++ 9499822
 			- _id = GUID e1d8914f-8f41-4c60-82ca-74d684bda7f3;
 			- _myState = 40960;
 			- _name = "TopLevel";
-			- _modifiedTimeWeak = 7.17.2016::14:11:14;
-			- weakCGTime = 7.17.2016::14:11:14;
+			- _modifiedTimeWeak = 7.17.2016::14:16:3;
+			- weakCGTime = 7.17.2016::14:16:3;
 			- strongCGTime = 5.2.2016::10:11:7;
 			- _multiplicity = "";
 			- _itsStateChart = { IHandle 
@@ -107,6 +131,6 @@ I-Logix-RPY-Archive version 8.11.0 C++ 9499822
 			- _classModifier = Unspecified;
 		}
 	}
-	- _configurationRelatedTime = 7.17.2016::14:16:3;
+	- _configurationRelatedTime = 7.28.2016::9:32:33;
 }
 
