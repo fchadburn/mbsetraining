@@ -30,8 +30,8 @@ I-Logix-RPY-Archive version 8.11.0 * 9499822
 				- _name = "RD - TBD";
 				- _id = GUID 60a85594-9551-41ab-90bc-2b9a7826e8a5;
 			}
-			- _UpLeft = -10 0 ;
-			- _DownRight = 2359 1054 ;
+			- _UpLeft = 0 0 ;
+			- _DownRight = 5004 2499 ;
 			- _instanceName = "";
 			- m_nDiagramIndex = 0;
 		}
