@@ -14,15 +14,15 @@ public class NestedActivityDiagram {
 			
 			if (theElement instanceof IRPUseCase){
 				Logger.writeLine("Creating a nested Activity Diagram underneath " + Logger.elementInfo(theElement));
-				createNestedActivityDiagram( (IRPUseCase)theElement);
+				createNestedActivityDiagram( (IRPUseCase)theElement, "AD - " + theElement.getName() );
 			} 
 		}
 	}
 	
-	public static void createNestedActivityDiagram(IRPUseCase forUseCase){
+	public static void createNestedActivityDiagram(
+			IRPUseCase forUseCase, String withUnadornedName ){
 		
-		String theUnadornedName = "AD - " + forUseCase.getName();
-		String theName = theUnadornedName;
+		String theName = withUnadornedName;
 		 
 		// check if existing AD with same name
 		IRPFlowchart theAD = (IRPFlowchart) forUseCase.findNestedElement( theName , "ActivityDiagram");
@@ -32,7 +32,7 @@ public class NestedActivityDiagram {
 			
 			Logger.writeLine(forUseCase, "already has a nested activity diagram called " + theName);
 			count++;
-			theName = theUnadornedName + " " + count;
+			theName = withUnadornedName + " " + count;
 			theAD = (IRPFlowchart) forUseCase.findNestedElement( theName , "ActivityDiagram");
 		}
 		
@@ -59,6 +59,7 @@ public class NestedActivityDiagram {
 
     Change history:
     #004 10-APR-2016: Re-factored projects into single workspace (F.J.Chadburn)
+    #080 28-JUL-2016: Added activity diagram name to the create AD dialog for use cases (F.J.Chadburn)
         
     This file is part of SysMLHelperPlugin.
 
