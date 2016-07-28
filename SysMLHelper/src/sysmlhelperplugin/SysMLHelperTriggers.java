@@ -1,7 +1,6 @@
 package sysmlhelperplugin;
 
 import functionalanalysisplugin.CreateOperationPanel;
-import functionalanalysisplugin.FunctionalAnalysisPlugin;
 import functionalanalysisplugin.FunctionalAnalysisSettings;
 import generalhelpers.Logger;
 import generalhelpers.UserInterfaceHelpers;
@@ -52,30 +51,33 @@ public class SysMLHelperTriggers extends RPApplicationListener {
 			} else if (modelElement != null && 
 					modelElement instanceof IRPCallOperation){
 				
-				IRPClass theBlock = FunctionalAnalysisSettings.getBlockUnderDev(
-						modelElement.getProject() );
+				@SuppressWarnings("unchecked")
+				List<IRPGraphElement> theSelectedGraphEls = 
+					theApp.getSelectedGraphElements().toList();
 				
-				if (theBlock != null){
-					boolean answer = UserInterfaceHelpers.askAQuestion("Do you want to add an Operation to " + 
-							Logger.elementInfo( theBlock ) + "?");
+				IRPCallOperation theCallOp = (IRPCallOperation)modelElement;
+				IRPInterfaceItem theOp = theCallOp.getOperation();
+				
+				if( theOp==null ){
+					IRPClass theBlock = FunctionalAnalysisSettings.getBlockUnderDev(
+							modelElement.getProject() );
 					
-					if( answer==true ){
+					if (theBlock != null){
+						boolean answer = UserInterfaceHelpers.askAQuestion("Do you want to add an Operation to " + 
+								Logger.elementInfo( theBlock ) + "?");
 						
-						IRPApplication theRhpApp =  FunctionalAnalysisPlugin.getRhapsodyApp();
-						
-						@SuppressWarnings("unchecked")
-						List<IRPGraphElement> theSelectedGraphEls = 
-							theRhpApp.getSelectedGraphElements().toList();
-						
-						Set<IRPRequirement> theReqts = new HashSet<IRPRequirement>();
-						
-						CreateOperationPanel.launchThePanel( 
-								theSelectedGraphEls.get(0), 
-								theReqts, 
-								theRhpApp.activeProject(),
-								true );
+						if( answer==true ){
+							
+							Set<IRPRequirement> theReqts = new HashSet<IRPRequirement>();
+							
+							CreateOperationPanel.launchThePanel( 
+									theSelectedGraphEls.get(0), 
+									theReqts, 
+									theApp.activeProject(),
+									true );
+						}
 					}
-				}
+				} // Operation already exists, i.e. element was dragged on so do nothing
 			}
 
 		} catch (Exception e) {
@@ -139,6 +141,16 @@ public class SysMLHelperTriggers extends RPApplicationListener {
 					
 					optionsList = getDiagramsFor( theOp );
 				}
+				
+			} else if (pModelElement instanceof IRPInstance){
+				
+				IRPInstance thePart = (IRPInstance)pModelElement;
+				
+				IRPClassifier theClassifier = thePart.getOtherClass();
+				
+				if( theClassifier != null ){
+					optionsList = getDiagramsFor( theClassifier );
+				}
 			}
 			
 			if (optionsList == null){
@@ -149,16 +161,20 @@ public class SysMLHelperTriggers extends RPApplicationListener {
 			
 			if (numberOfDiagrams > 0){
 				
-				openNestedDiagramDialogFor( optionsList, pModelElement);
+				theReturn = openNestedDiagramDialogFor( optionsList, pModelElement);
 				
 			} else if (pModelElement instanceof IRPUseCase){
 				
+				String theUnadornedName = "AD - " + pModelElement.getName();
+				
 				boolean theAnswer = UserInterfaceHelpers.askAQuestion(
-						"This use case has no nested Activity Diagram. Do you want to create one?");
+						"This use case has no nested text-based Activity Diagram.\n"+
+						"Do you want to create one called '" + theUnadornedName + "'?");
 
 				if (theAnswer==true){
 					Logger.writeLine("User chose to create a new activity diagram");
-					NestedActivityDiagram.createNestedActivityDiagram( (IRPUseCase)pModelElement );
+					NestedActivityDiagram.createNestedActivityDiagram( 
+							(IRPUseCase)pModelElement, "AD - " + pModelElement.getName());
 				}
 
 				theReturn = true; // don't launch the Features  window									
@@ -345,7 +361,12 @@ public class SysMLHelperTriggers extends RPApplicationListener {
     #035 15-JUN-2016: Re-factored SysMLHelperTriggers to make a little more extensible (F.J.Chadburn)
     #058 13-JUL-2016: Dropping CallOp on diagram now gives option to create Op on block (F.J.Chadburn)
     #068 19-JUL-2016: Newline added to Open diagram dialog (F.J.Chadburn)
-
+    #075 28-JUL-2016: Fix unintended pop-up of Features dialog when opening diagrams with double-click (F.J.Chadburn)
+    #076 28-JUL-2016: Support IBD drill down by making double-click of part consider diagrams of Block (F.J.Chadburn)
+    #079 28-JUL-2016: Improved robustness of post add CallOp behaviour to prevent Rhapsody hanging (F.J.Chadburn)
+    #080 28-JUL-2016: Added activity diagram name to the create AD dialog for use cases (F.J.Chadburn)
+    #081 28-JUL-2016: Dragging a CallOp on to diagram should not ask to add a new one (F.J.Chadburn)
+    
     This file is part of SysMLHelperPlugin.
 
     SysMLHelperPlugin is free software: you can redistribute it and/or modify
