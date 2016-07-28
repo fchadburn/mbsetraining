@@ -11,7 +11,8 @@ public class FunctionalAnalysisSettings {
 	
 	private static final String tagNameForPackageUnderDev = "packageUnderDev";
 	private static final String tagNameForDependency = "traceabilityTypeToUseForFunctions";	
-	
+	private static final String tagNameForPopulateWantedByDefault = "isPopulateWantedByDefault";	
+
 	public static IRPPackage getPackageUnderDev(IRPProject inTheProject){
 		
 		IRPPackage thePackage = null;
@@ -21,9 +22,19 @@ public class FunctionalAnalysisSettings {
 		
 		if (theRootPackage != null){
 			IRPTag theTag = theRootPackage.getTag( tagNameForPackageUnderDev );
-			String thePackageName = theTag.getValue();
 			
-			thePackage = (IRPPackage) inTheProject.findNestedElementRecursive(thePackageName, "Package");
+			if( theTag != null ){
+				String thePackageName = theTag.getValue();
+				
+				thePackage = (IRPPackage) inTheProject.findNestedElementRecursive(thePackageName, "Package");
+				
+				if( thePackage==null){
+					Logger.writeLine("Error in getPackageUnderDev, unable to find package called " + thePackageName);
+				}
+			} else {
+				Logger.writeLine("Error in getPackageUnderDev, unable to find tag called " + tagNameForPackageUnderDev + 
+						" underneath " + Logger.elementInfo( theRootPackage ) );
+			}
 		} else {
 			Logger.writeLine("Error in getPackageUnderDev, unable to find FunctionalAnalysisPkg");
 		}
@@ -180,6 +191,39 @@ public class FunctionalAnalysisSettings {
 		
 		return theStereotype;
 	}
+	
+	public static boolean getIsPopulateWantedByDefault(
+			IRPProject inTheProject ){
+		
+		boolean result = false;
+		
+		IRPModelElement theRootPackage = 
+				inTheProject.findNestedElementRecursive(
+						"FunctionalAnalysisPkg", "Package" );
+		
+		if (theRootPackage != null){
+			IRPTag theTag = theRootPackage.getTag( tagNameForPopulateWantedByDefault );
+			
+			if( theTag != null ){
+				
+				String theTagValue = theTag.getValue();
+				
+				if( theTagValue.contains("true")){
+					result = true;
+				}
+
+			} else {
+				Logger.writeLine( "Warning in getIsPopulateWantedByDefault, unable to find tag called " + 
+						tagNameForPopulateWantedByDefault + " underneath " + Logger.elementInfo( theRootPackage ) );
+				
+				result = false;
+			}
+		} else {
+			Logger.writeLine( "Error in getIsPopulateWantedByDefault, unable to find FunctionalAnalysisPkg" );
+		}
+		
+		return result;
+	}
 }
 
 /**
@@ -191,7 +235,9 @@ public class FunctionalAnalysisSettings {
     #026 31-MAY-2016: Add dialog to allow user to choose which Activity Diagrams to synch (F.J.Chadburn)
     #054 13-JUL-2016: Create a nested BlockPkg package to contain the Block and events (F.J.Chadburn)
     #062 17-JUL-2016: Create InterfacesPkg and correct build issues by adding a Usage dependency (F.J.Chadburn)
-
+    #078 28-JUL-2016: Added isPopulateWantedByDefault tag to FunctionalAnalysisPkg to give user option (F.J.Chadburn)
+    #079 28-JUL-2016: Improved robustness of post add CallOp behaviour to prevent Rhapsody hanging (F.J.Chadburn)
+    
     This file is part of SysMLHelperPlugin.
 
     SysMLHelperPlugin is free software: you can redistribute it and/or modify

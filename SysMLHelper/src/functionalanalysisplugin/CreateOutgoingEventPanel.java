@@ -5,12 +5,9 @@ import generalhelpers.Logger;
 import generalhelpers.UserInterfaceHelpers;
 
 import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.List;
 import java.util.Set;
 
-import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JCheckBox;
@@ -93,26 +90,7 @@ public class CreateOutgoingEventPanel extends CreateTracedElementPanel {
 				onTargetBlock.getProject() );	
 		
 		m_SendOperationIsNeededCheckBox = new JCheckBox();
-		
 		m_SendOperationIsNeededCheckBox.setSelected(true);
-
-		m_SendOperationIsNeededCheckBox.addActionListener( new ActionListener() {
-			
-		      public void actionPerformed(ActionEvent actionEvent) {
-		    	  
-			        AbstractButton theSourceButton = (AbstractButton) actionEvent.getSource();
-			        
-			        boolean isSelected = theSourceButton.getModel().isSelected();
-			        
-			        // populate on diagram will use the send operation hence 
-			        // disable if user de-selects the send operation option
-			        if (!isSelected){
-			        	m_ActionOnDiagramIsNeededCheckBox.setSelected( false );
-				        m_ActionOnDiagramIsNeededCheckBox.setEnabled( false );
-			        } else {
-			        	m_ActionOnDiagramIsNeededCheckBox.setEnabled( true );
-			        }
-			      }} );
 		
 		m_ActiveAgumentNeededCheckBox = new JCheckBox(
 				"Add an 'active' argument to the event (e.g. for on/off conditions)");
@@ -123,7 +101,12 @@ public class CreateOutgoingEventPanel extends CreateTracedElementPanel {
 		setBorder( BorderFactory.createEmptyBorder( 10, 10, 10, 10 ) );
 
 		m_ActionOnDiagramIsNeededCheckBox = new JCheckBox("Populate on diagram?");
-		m_ActionOnDiagramIsNeededCheckBox.setSelected(false);
+		
+		boolean isPopulate = 
+				FunctionalAnalysisSettings.getIsPopulateWantedByDefault(
+						thePackageForEvent.getProject() );
+		
+		m_ActionOnDiagramIsNeededCheckBox.setSelected( isPopulate );
 		
 		JPanel thePageStartPanel = new JPanel();
 		thePageStartPanel.setLayout( new BoxLayout( thePageStartPanel, BoxLayout.X_AXIS ) );
@@ -424,11 +407,11 @@ public class CreateOutgoingEventPanel extends CreateTracedElementPanel {
 						} else {
 							informOp.setBody("OPORT(" + thePort.getName()+")->GEN(" + theEventName + ");");
 						}			
-
-						if( m_ActionOnDiagramIsNeededCheckBox.isSelected() ){
-							populateSendActionOnDiagram( theEvent );
-						}
 					}	
+					
+					if( m_ActionOnDiagramIsNeededCheckBox.isSelected() ){
+						populateSendActionOnDiagram( theEvent );
+					}
 
 					bleedColorToElementsRelatedTo( m_SourceGraphElement );
 				}
@@ -460,6 +443,7 @@ public class CreateOutgoingEventPanel extends CreateTracedElementPanel {
     #054 13-JUL-2016: Create a nested BlockPkg package to contain the Block and events (F.J.Chadburn)
     #062 17-JUL-2016: Create InterfacesPkg and correct build issues by adding a Usage dependency (F.J.Chadburn)
     #069 20-JUL-2016: Fix population of events/ops on diagram when creating from a transition (F.J.Chadburn)
+    #078 28-JUL-2016: Added isPopulateWantedByDefault tag to FunctionalAnalysisPkg to give user option (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

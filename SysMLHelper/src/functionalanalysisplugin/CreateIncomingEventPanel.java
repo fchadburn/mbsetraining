@@ -100,7 +100,12 @@ public class CreateIncomingEventPanel extends CreateTracedElementPanel {
 		setBorder( BorderFactory.createEmptyBorder( 10, 10, 10, 10 ) );
 		
 		m_EventActionIsNeededCheckBox = new JCheckBox("Populate on diagram?");
-		m_EventActionIsNeededCheckBox.setSelected(false);
+		
+		boolean isPopulate = 
+				FunctionalAnalysisSettings.getIsPopulateWantedByDefault(
+						thePackageForEvent.getProject() );
+		
+		m_EventActionIsNeededCheckBox.setSelected( isPopulate );
 		
 		JPanel thePageStartPanel = new JPanel();
 		thePageStartPanel.setLayout( new BoxLayout( thePageStartPanel, BoxLayout.X_AXIS ) );
@@ -771,6 +776,7 @@ public class CreateIncomingEventPanel extends CreateTracedElementPanel {
     #054 13-JUL-2016: Create a nested BlockPkg package to contain the Block and events (F.J.Chadburn)
     #062 17-JUL-2016: Create InterfacesPkg and correct build issues by adding a Usage dependency (F.J.Chadburn)
     #069 20-JUL-2016: Fix population of events/ops on diagram when creating from a transition (F.J.Chadburn)
+    #078 28-JUL-2016: Added isPopulateWantedByDefault tag to FunctionalAnalysisPkg to give user option (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

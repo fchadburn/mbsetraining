@@ -36,10 +36,14 @@ public class CreateOperationPanel extends CreateTracedElementPanel {
 		@SuppressWarnings("unchecked")
 		Set<IRPRequirement> theSelectedReqts = (Set<IRPRequirement>)(Set<?>) theMatchingEls;
 		
+		boolean isPopulate = 
+				FunctionalAnalysisSettings.getIsPopulateWantedByDefault(
+						theActiveProject );
+		
 		if (GeneralHelpers.doUnderlyingModelElementsIn( theSelectedGraphEls, "Requirement" )){
 			
 			// only requirements are selected hence assume only a single operation is needed
-			launchThePanel(	theSelectedGraphEls.get(0), theSelectedReqts, theActiveProject, false );
+			launchThePanel(	theSelectedGraphEls.get(0), theSelectedReqts, theActiveProject, isPopulate );
 		} else {
 			
 			// launch a dialog for each selected element that is not a requirement
@@ -50,7 +54,7 @@ public class CreateOperationPanel extends CreateTracedElementPanel {
 				if (theModelObject != null && !(theModelObject instanceof IRPRequirement)){
 					
 					// only launch a dialog for non requirement elements
-					launchThePanel(	theGraphEl, theSelectedReqts, theActiveProject, false );
+					launchThePanel(	theGraphEl, theSelectedReqts, theActiveProject, isPopulate );
 				}		
 			}
 		}
@@ -195,6 +199,7 @@ public class CreateOperationPanel extends CreateTracedElementPanel {
     #042 29-JUN-2016: launchThePanel renaming to improve Panel class design consistency (F.J.Chadburn)
     #043 03-JUL-2016: Add Derive downstream reqt for CallOps, InterfaceItems and Event Actions (F.J.Chadburn)
     #058 13-JUL-2016: Dropping CallOp on diagram now gives option to create Op on block (F.J.Chadburn)
+	#078 28-JUL-2016: Added isPopulateWantedByDefault tag to FunctionalAnalysisPkg to give user option (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 
