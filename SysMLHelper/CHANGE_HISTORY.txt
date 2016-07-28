@@ -135,3 +135,13 @@ BETA TEST RELEASE 2.0.19 (20-JUL-2016)
 ----------------------------------------------------------------------------------
 BETA TEST RELEASE 2.0.20 (25-JUL-2016)
 ----------------------------------------------------------------------------------
+#075 28-JUL-2016: Fix unintended pop-up of Features dialog when opening diagrams with double-click (F.J.Chadburn)
+#076 28-JUL-2016: Support IBD drill down by making double-click of part consider diagrams of Block (F.J.Chadburn)
+#077 28-JUL-2016: Move BasePkg to project root to ease shared usage with DesignSynthesisPkg models (F.J.Chadburn)
+#078 28-JUL-2016: Added isPopulateWantedByDefault tag to FunctionalAnalysisPkg to give user option (F.J.Chadburn)
+#079 28-JUL-2016: Improved robustness of post add CallOp behaviour to prevent Rhapsody hanging (F.J.Chadburn)
+#080 28-JUL-2016: Added activity diagram name to the create AD dialog for use cases (F.J.Chadburn)
+#081 28-JUL-2016: Dragging a CallOp on to diagram should not ask to add a new one (F.J.Chadburn)
+----------------------------------------------------------------------------------
+BETA TEST RELEASE 2.0.21 (28-JUL-2016)
+----------------------------------------------------------------------------------
