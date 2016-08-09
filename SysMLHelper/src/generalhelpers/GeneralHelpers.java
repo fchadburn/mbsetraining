@@ -154,7 +154,9 @@ public class GeneralHelpers {
 		
 		return theResult;
 	}
-	public static String getActionTextFrom(IRPModelElement theEl) {
+	
+	public static String getActionTextFrom(
+			IRPModelElement theEl) {
 		
 		String theSourceInfo = null;
 		
@@ -253,7 +255,9 @@ public class GeneralHelpers {
 	}
 	
 	public static IRPModelElement launchDialogToSelectElement(
-			List<IRPModelElement> inList, String messageToDisplay, Boolean isFullPathRequested){
+			List<IRPModelElement> inList, 
+			String messageToDisplay, 
+			Boolean isFullPathRequested){
 		
 		IRPModelElement theEl = null;
 		
@@ -289,7 +293,9 @@ public class GeneralHelpers {
 		return theEl;
 	}
 	
-	public static void applyExistingStereotype(String withTheName, IRPModelElement toTheEl){
+	public static void applyExistingStereotype(
+			String withTheName, 
+			IRPModelElement toTheEl){
 		
 		IRPStereotype theStereotype = 
 				(IRPStereotype) toTheEl.getProject().findNestedElementRecursive(
@@ -302,7 +308,9 @@ public class GeneralHelpers {
 		}
 	}
 	
-	public static IRPStereotype getStereotypeCalled(String theName, IRPModelElement onTheEl){
+	public static IRPStereotype getStereotypeCalled(
+			String theName, 
+			IRPModelElement onTheEl){
 		
 		int count = 0;
 		IRPStereotype theFoundStereotype = null;
@@ -326,7 +334,9 @@ public class GeneralHelpers {
 		return theFoundStereotype;
 	}
 	
-	public static Boolean hasStereotypeCalled(String theName, IRPModelElement onTheEl){
+	public static Boolean hasStereotypeCalled(
+			String theName, 
+			IRPModelElement onTheEl){
 		
 		Boolean isFound = false;
 		
@@ -389,7 +399,9 @@ public class GeneralHelpers {
 	}
 	
 	public static List<IRPModelElement> findElementsWithMetaClassAndStereotype(
-			String theMetaClass, String andStereotype, IRPModelElement underneathTheEl){
+			String theMetaClass, 
+			String andStereotype, 
+			IRPModelElement underneathTheEl){
 		
 		List <IRPModelElement> theFilteredList = new ArrayList<IRPModelElement>();
 		
@@ -407,8 +419,33 @@ public class GeneralHelpers {
 		return theFilteredList;
 	}
 	
+	public static List<IRPModelElement> findElementsWithMetaClassStereotypeAndName(
+			String theMetaClass, 
+			String andStereotype, 
+			String andName, 
+			IRPModelElement underneathTheEl){
+		
+		List <IRPModelElement> theFilteredList = new ArrayList<IRPModelElement>();
+		
+		List <IRPModelElement> theCandidates = 
+				findElementsWithMetaClassAndName(
+						theMetaClass, andName, underneathTheEl );
+
+		for (IRPModelElement theCandidate : theCandidates) {
+			
+			if (hasStereotypeCalled(andStereotype, theCandidate)){
+				theFilteredList.add(theCandidate);
+			}
+		}
+		
+		return theFilteredList;
+	}
+	
 	public static String promptUserForTextEntry(
-			String withTitle, String andQuestion, String andDefault, int size){
+			String withTitle, 
+			String andQuestion, 
+			String andDefault, 
+			int size){
 		
 		String theEntry = andDefault;
 		
@@ -437,7 +474,9 @@ public class GeneralHelpers {
 		return theEntry;
 	}
 	
-	public static IRPStereotype getStereotypeAppliedTo(IRPModelElement theElement, String thatMatchesRegEx){
+	public static IRPStereotype getStereotypeAppliedTo(
+			IRPModelElement theElement, 
+			String thatMatchesRegEx){
 		
 		IRPStereotype foundStereotype = null;
 		
@@ -464,7 +503,8 @@ public class GeneralHelpers {
 		return foundStereotype;
 	}
 	
-	public static boolean askQuestion(String question){
+	public static boolean askQuestion(
+			String question){
 		
 		boolean isYes = false;
 		
@@ -507,7 +547,8 @@ public class GeneralHelpers {
 	}
 	
 	public static Set<IRPModelElement> findModelElementsIn(
-			List<IRPGraphElement> theGraphElementList, String withMetaClass){
+			List<IRPGraphElement> theGraphElementList, 
+			String withMetaClass){
 		
 		Set<IRPModelElement> theFilteredSet = new HashSet<IRPModelElement>();
 		
@@ -524,7 +565,8 @@ public class GeneralHelpers {
 	}
 	
 	public static List<IRPModelElement> findElementsIn(
-			List<IRPModelElement> theModelElementList, String withMetaClass){
+			List<IRPModelElement> theModelElementList, 
+			String withMetaClass){
 		
 		List<IRPModelElement> theFilteredList = new ArrayList<IRPModelElement>();
 		
@@ -580,7 +622,10 @@ public class GeneralHelpers {
 		return theFound;
 	}
 
-	public static List<IRPModelElement> findModelElementsWithoutStereotypeNestedUnder(IRPModelElement rootEl, String ofMetaClass, String withStereotypeMatchingRegEx){
+	public static List<IRPModelElement> findModelElementsWithoutStereotypeNestedUnder(
+			IRPModelElement rootEl, 
+			String ofMetaClass, 
+			String withStereotypeMatchingRegEx){
 		
 		@SuppressWarnings("unchecked")
 		List<IRPModelElement> theCandidateEls = rootEl.getNestedElementsByMetaClass(ofMetaClass, 1).toList();
@@ -594,7 +639,6 @@ public class GeneralHelpers {
 				theFound.add(theEl);
 			}			
 		}
-		
 		
 		return theFound;
 	}
@@ -709,6 +753,7 @@ public class GeneralHelpers {
 	#071 25-JUL-2016: Fix exception to allow creating requirements from pre-condition statements (F.J.Chadburn) 
 	#072 25-JUL-2016: Improved robustness when graphEls that don't have model elements are selected (F.J.Chadburn)
 	#074 25-JUL-2016: Support creation of requirements from AcceptTimeEvents (F.J.Chadburn)
+	#085 09-AUG-2016: Add helper to findElementsWithMetaClassStereotypeAndName (F.J.Chadburn)
 	
     This file is part of SysMLHelperPlugin.
 

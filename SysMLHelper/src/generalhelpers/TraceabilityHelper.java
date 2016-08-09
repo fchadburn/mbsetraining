@@ -99,6 +99,32 @@ public class TraceabilityHelper {
 		
 		return theReqts;
 	}
+	
+	public static Set<IRPModelElement> getElementsThatHaveStereotypedDependencyRelationsFrom(
+			IRPModelElement theElement, 
+			String withDependencyStereotype ){
+		
+		Set<IRPModelElement> theEls = new HashSet<IRPModelElement>();
+		
+		@SuppressWarnings("unchecked")
+		List<IRPDependency> theExistingDeps = theElement.getDependencies().toList();
+		
+		for( IRPDependency theDependency : theExistingDeps ){
+			
+			IRPModelElement theDependsOn = theDependency.getDependsOn();
+			
+			if( theDependsOn != null && theDependsOn instanceof IRPModelElement ){
+				
+				if( GeneralHelpers.hasStereotypeCalled( 
+						withDependencyStereotype, theDependency) ){
+					
+					theEls.add( theDependsOn );
+				}	
+			}
+		}
+		
+		return theEls;
+	}
 }
 
 /**
@@ -111,6 +137,7 @@ public class TraceabilityHelper {
     #033 05-JUN-2016: Add support for creation of operations and events from raw requirement selection (F.J.Chadburn)
     #043 03-JUL-2016: Add Derive downstream reqt for CallOps, InterfaceItems and Event Actions (F.J.Chadburn)
     #044 03-JUL-2016: Minor re-factoring/code corrections (F.J.Chadburn)
+	#083 09-AUG-2016: Add an Update attribute menu option and panel with add check operation option (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 
