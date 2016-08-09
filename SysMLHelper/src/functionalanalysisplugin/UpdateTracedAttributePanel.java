@@ -2,6 +2,7 @@ package functionalanalysisplugin;
 
 import generalhelpers.GeneralHelpers;
 import generalhelpers.Logger;
+import generalhelpers.TraceabilityHelper;
 import generalhelpers.UserInterfaceHelpers;
 
 import java.awt.BorderLayout;
@@ -21,7 +22,7 @@ import javax.swing.event.DocumentListener;
 
 import com.telelogic.rhapsody.core.*;
 
-public class CreateTracedAttributePanel extends CreateTracedElementPanel {
+public class UpdateTracedAttributePanel extends CreateTracedElementPanel {
 
 	/**
 	 * 
@@ -30,66 +31,26 @@ public class CreateTracedAttributePanel extends CreateTracedElementPanel {
 	
 	protected JTextField m_InitialValueTextField = null;
 	private JCheckBox m_CheckOperationCheckBox;
-	
-	public static void createSystemAttributesFor(
-			IRPProject theActiveProject,
-			List<IRPGraphElement> theSelectedGraphEls) {
 		
-		Set<IRPModelElement> theMatchingEls = 
-				GeneralHelpers.findModelElementsIn( theSelectedGraphEls, "Requirement" );
-		
-		// cast to IRPRequirement
-		@SuppressWarnings("unchecked")
-		Set<IRPRequirement> theSelectedReqts = (Set<IRPRequirement>)(Set<?>) theMatchingEls;
-		
-		if (GeneralHelpers.doUnderlyingModelElementsIn( theSelectedGraphEls, "Requirement" )){
-			
-			// only requirements are selected hence assume only a single operation is needed
-			launchThePanel(	theSelectedGraphEls.get(0), theSelectedReqts, theActiveProject );
-		} else {
-			
-			// launch a dialog for each selected element that is not a requirement
-			for (IRPGraphElement theGraphEl : theSelectedGraphEls) {
-				
-				IRPModelElement theModelObject = theGraphEl.getModelObject();
-				
-				if (theModelObject != null && !(theModelObject instanceof IRPRequirement)){
-					
-					// only launch a dialog for non requirement elements
-					launchThePanel(	theGraphEl, theSelectedReqts, theActiveProject );
-				}		
-			}
-		}
-	}
-	
-	public CreateTracedAttributePanel(
-			IRPGraphElement forSourceGraphElement, 
+	public UpdateTracedAttributePanel(
+			IRPAttribute forExistingAttribute, 
 			final Set<IRPRequirement> withReqtsAlsoAdded,
 			IRPClassifier onTargetBlock) {
 		
-		super(forSourceGraphElement, withReqtsAlsoAdded, onTargetBlock);
+		super( forExistingAttribute, withReqtsAlsoAdded, onTargetBlock );
 		
-		IRPModelElement theModelObject = m_SourceGraphElement.getModelObject();
-		
-		final String theSourceText = GeneralHelpers.getActionTextFrom( theModelObject );	
-		
-		Logger.writeLine("CreateTracedAttributePanel constructor called with text '" + theSourceText + "'");
-		
-		String theProposedName = GeneralHelpers.determineUniqueNameBasedOn( 
-				GeneralHelpers.toMethodName( theSourceText ), 
-				"Attribute", 
-				onTargetBlock );
-
+		String theProposedName = forExistingAttribute.getName();
+			
 		Logger.writeLine("The proposed name is '" + theProposedName + "'");
 		
 		JPanel thePageStartPanel = new JPanel();
 		thePageStartPanel.setLayout( new BoxLayout( thePageStartPanel, BoxLayout.X_AXIS ) );
 		
-		JPanel theNamePanel = createChosenNamePanelWith( "Create an attribute called:  ", theProposedName );
+		JPanel theNamePanel = createChosenNamePanelWith( "Update attribute called:  ", theProposedName );
 		theNamePanel.setAlignmentX(LEFT_ALIGNMENT);
 		thePageStartPanel.add( theNamePanel );
 
-		JPanel theInitialValuePanel = createInitialValuePanel( "0" );
+		JPanel theInitialValuePanel = createInitialValuePanel( forExistingAttribute.getDefaultValue() );
 		theInitialValuePanel.setAlignmentX( LEFT_ALIGNMENT );
 		thePageStartPanel.add( theInitialValuePanel );
 
@@ -152,9 +113,9 @@ public class CreateTracedAttributePanel extends CreateTracedElementPanel {
 		
 		return thePanel;
 	}
-	
+
 	public static void launchThePanel(
-			final IRPGraphElement selectedDiagramEl, 
+			final IRPAttribute theExistingAttribute, 
 			final Set<IRPRequirement> withReqtsAlsoAdded,
 			final IRPProject inProject){
 
@@ -167,13 +128,13 @@ public class CreateTracedAttributePanel extends CreateTracedElementPanel {
 				JFrame.setDefaultLookAndFeelDecorated( true );
 
 				JFrame frame = new JFrame(
-						"Create an attribute on " + theLogicalSystemBlock.getUserDefinedMetaClass() 
-						+ " called " + theLogicalSystemBlock.getName());
+						"Update attribute called " + theExistingAttribute.getName() + " on " + 
+						theLogicalSystemBlock.getUserDefinedMetaClass() + " called " + theLogicalSystemBlock.getName());
 
 				frame.setDefaultCloseOperation( JFrame.DISPOSE_ON_CLOSE );
 
-				CreateTracedAttributePanel thePanel = new CreateTracedAttributePanel(
-						selectedDiagramEl, 
+				UpdateTracedAttributePanel thePanel = new UpdateTracedAttributePanel(
+						theExistingAttribute, 
 						withReqtsAlsoAdded,
 						theLogicalSystemBlock);
 
@@ -182,19 +143,20 @@ public class CreateTracedAttributePanel extends CreateTracedElementPanel {
 				frame.setLocationRelativeTo( null );
 				frame.setVisible( true );
 			}
-		});			
-	}
+		});		
+	}	
 	
 	private void updateNames(){
 		
 		m_CheckOperationCheckBox.setText(
-				"Add a '" + getCheckOpName() + 
-				"' operation to the block that returns the attribute value" );
+				"Add a '" + determineBestCheckOperationNameFor(
+						(IRPClassifier)m_TargetOwningElement, m_ChosenNameTextField.getText() ) 
+				+ "' operation to the block that returns the attribute value");
 	}
 	
 	@Override
 	protected boolean checkValidity(
-			boolean isMessageEnabled ){
+			boolean isMessageEnabled) {
 		
 		String errorMessage = "";
 		boolean isValid = true;
@@ -203,18 +165,9 @@ public class CreateTracedAttributePanel extends CreateTracedElementPanel {
 		
 		boolean isLegalName = GeneralHelpers.isLegalName( theChosenName );
 		
-		if( !isLegalName ){
+		if (!isLegalName){
 			
 			errorMessage += theChosenName + " is not legal as an identifier representing an executable attribute\n";				
-			isValid = false;
-			
-		} else if( !GeneralHelpers.isElementNameUnique(
-				m_ChosenNameTextField.getText(), 
-				"Attribute", 
-				m_TargetOwningElement, 
-				1 ) ){
-
-			errorMessage = "Unable to proceed as the name '" + m_ChosenNameTextField.getText() + "' is not unique";
 			isValid = false;
 
 		} else if( m_CheckOperationCheckBox.isSelected() && 
@@ -253,34 +206,60 @@ public class CreateTracedAttributePanel extends CreateTracedElementPanel {
 	    
 	    return true;
 	}
+	
 
+	private IRPOperation getExistingCheckOp( 
+			IRPAttribute forTheAttribute ){
+	
+		IRPOperation theExistingCheckOp = null;
+		
+		Set<IRPModelElement> theEls = 
+				TraceabilityHelper.getElementsThatHaveStereotypedDependencyRelationsFrom(
+						forTheAttribute, "AutoRipple" );
+		
+		for( IRPModelElement theEl : theEls ) {
+			
+			if( (theEl instanceof IRPOperation) && theEl.getName().contains("check") ){
+				theExistingCheckOp = (IRPOperation)theEl;
+			}
+		}
+		return theExistingCheckOp;
+		
+	}
+	
 	@Override
 	protected void performAction() {
 		
 		// do silent check first
-		if (checkValidity( false )){
-			
-			IRPAttribute theAttribute =
-					((IRPClassifier)m_TargetOwningElement).addAttribute(
-							m_ChosenNameTextField.getText() );				
-			
-			theAttribute.highLightElement();
-			theAttribute.setDefaultValue( m_InitialValueTextField.getText() );
-			
-			List<IRPRequirement> selectedReqtsList = m_RequirementsPanel.getSelectedRequirementsList();
-			
-			addTraceabilityDependenciesTo( theAttribute, selectedReqtsList );
-			
-			if( m_CheckOperationCheckBox.isSelected() ){
-				IRPOperation theCheckOp = addCheckOperationFor( theAttribute );
-				addTraceabilityDependenciesTo( theCheckOp, selectedReqtsList );	
-				theCheckOp.highLightElement();
-			}
-			
-			bleedColorToElementsRelatedTo( m_SourceGraphElement );
-			
-			theAttribute.highLightElement();
-			
+		if( checkValidity( false ) ){
+
+			if( m_SourceModelElement instanceof IRPAttribute ){
+
+				IRPAttribute theExistingAttribute = (IRPAttribute)m_SourceModelElement;
+
+				theExistingAttribute.setName( m_ChosenNameTextField.getText() );				
+				
+				theExistingAttribute.highLightElement();
+				theExistingAttribute.setDefaultValue( m_InitialValueTextField.getText() );
+				
+				if( m_CheckOperationCheckBox.isSelected() ){
+					IRPOperation theExistingCheckOp = getExistingCheckOp( theExistingAttribute );
+					
+					if( theExistingCheckOp==null ){
+						
+						List<IRPRequirement> selectedReqtsList = 
+								m_RequirementsPanel.getSelectedRequirementsList();
+						
+						addTraceabilityDependenciesTo( theExistingAttribute, selectedReqtsList );
+						
+						if( m_CheckOperationCheckBox.isSelected() ){
+							IRPOperation theCheckOp = addCheckOperationFor( theExistingAttribute );
+							addTraceabilityDependenciesTo( theCheckOp, selectedReqtsList );	
+							theCheckOp.highLightElement();
+						}
+					}
+				}
+			}			
 		} else {
 			Logger.writeLine("Error in CreateOperationPanel.performAction, checkValidity returned false");
 		}	
@@ -292,12 +271,7 @@ public class CreateTracedAttributePanel extends CreateTracedElementPanel {
  * Copyright (C) 2016  MBSE Training and Consulting Limited (www.executablembse.com)
 
     Change history:
-    #028 01-JUN-2016: Add new menu to create a stand-alone attribute owned by the system (F.J.Chadburn)
-    #033 05-JUN-2016: Add support for creation of operations and events from raw requirement selection (F.J.Chadburn)
-    #034 05-JUN-2016: Re-factored design to move static constructors into appropriate panel class (F.J.Chadburn)
-    #042 29-JUN-2016: launchThePanel renaming to improve Panel class design consistency (F.J.Chadburn)
-    #043 03-JUL-2016: Add Derive new requirement to CallOperations and Event Actions (F.J.Chadburn)
-    #082 09-AUG-2016: Add a check operation check box added to the create attribute dialog (F.J.Chadburn)
+    #083 09-AUG-2016: (new) Add an Update attribute menu option and panel with add check operation option (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

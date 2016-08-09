@@ -1,8 +1,10 @@
 package functionalanalysisplugin;
 
 import generalhelpers.Logger;
+import generalhelpers.TraceabilityHelper;
 
 import java.util.List;
+import java.util.Set;
 
 import sysmlhelperplugin.SysMLHelperPlugin;
 
@@ -114,6 +116,36 @@ public class FunctionalAnalysisPlugin extends RPUserPlugin {
 						Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking CreateTracedAttributePanel.createSystemAttributeFor");
 					}
 				}
+
+			} else if (menuItem.equals("MBSE Method: Functional Analysis\\Update attribute and/or check operation owned by the system")){
+
+				if ( theSelectedEl instanceof IRPAttribute ){
+					try {
+						Set<IRPRequirement> theReqts = 
+								TraceabilityHelper.getRequirementsThatTraceFrom( theSelectedEl, false );
+						
+						UpdateTracedAttributePanel.launchThePanel( 
+								(IRPAttribute)theSelectedEl, theReqts, theActiveProject );
+						
+					} catch (Exception e) {
+						Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking UpdateTracedAttributePanel.launchThePanel");
+					}
+				}
+
+			} else if (menuItem.equals("MBSE Method: Functional Analysis\\Create an incoming event sent by an actor to change this attribute")){
+
+				if ( theSelectedEl instanceof IRPAttribute ){
+					try {
+						Set<IRPRequirement> theReqts = 
+								TraceabilityHelper.getRequirementsThatTraceFrom( theSelectedEl, false );
+						
+						CreateIncomingEventPanel.launchThePanel( 
+								(IRPAttribute)theSelectedEl, theReqts, theActiveProject );
+						
+					} catch (Exception e) {
+						Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking UpdateTracedAttributePanel.launchThePanel");
+					}
+				}				
 
 			} else if (menuItem.equals("MBSE Method: Functional Analysis\\Derive downstream requirement")){
 				
@@ -241,7 +273,9 @@ public class FunctionalAnalysisPlugin extends RPUserPlugin {
     #028 01-JUN-2016: Add new menu to create a stand-alone attribute owned by the system (F.J.Chadburn)
     #034 05-JUN-2016: Re-factored design to move static constructors into appropriate panel class (F.J.Chadburn)
     #047 06-JUL-2016: Tweaked properties and added options to switch to MoreDetailedAD automatically (F.J.Chadburn)
-    
+    #083 09-AUG-2016: Add an Update attribute menu option and panel with add check operation option (F.J.Chadburn)
+    #084 09-AUG-2016: Add new right-click menu to create an incoming event for an attribute (F.J.Chadburn)
+
     This file is part of SysMLHelperPlugin.
 
     SysMLHelperPlugin is free software: you can redistribute it and/or modify

@@ -9,9 +9,10 @@ import com.telelogic.rhapsody.core.*;
 
 public class FunctionalAnalysisSettings {
 	
-	private static final String tagNameForPackageUnderDev = "packageUnderDev";
-	private static final String tagNameForDependency = "traceabilityTypeToUseForFunctions";	
-	private static final String tagNameForPopulateWantedByDefault = "isPopulateWantedByDefault";	
+	public static final String tagNameForPackageUnderDev = "packageUnderDev";
+	public static final String tagNameForDependency = "traceabilityTypeToUseForFunctions";	
+	public static final String tagNameForPopulateWantedByDefault = "isPopulateWantedByDefault";
+	public static final String tagNameForPackageForEventsAndInterfaces = "packageForEventsAndInterfaces";
 
 	public static IRPPackage getPackageUnderDev(IRPProject inTheProject){
 		
@@ -49,32 +50,47 @@ public class FunctionalAnalysisSettings {
 	public static IRPPackage getPkgThatOwnsEventsAndInterfaces(
 			IRPProject inTheProject ){
 		
-		IRPPackage theEventPkg = null;
+		IRPPackage thePackage = null;
+
+		IRPModelElement theRootPackage = inTheProject.findNestedElementRecursive(
+				"FunctionalAnalysisPkg", "Package");
 		
-		IRPPackage thePkgUnderDev = getPackageUnderDev( inTheProject );
-		IRPClass theLogicalBlock = getBlockUnderDev( inTheProject );
-		
-		// in new projects there will be an InterfacesPkg
-		IRPModelElement theCandidate = thePkgUnderDev.findNestedElement(
-				theLogicalBlock.getName() + "InterfacesPkg", "Package");
-		
-		if( theCandidate != null && theCandidate instanceof IRPPackage ){
+		if (theRootPackage != null){
+			IRPTag theTag = theRootPackage.getTag( tagNameForPackageForEventsAndInterfaces );
 			
-			theEventPkg = (IRPPackage)theCandidate;
-			
-		} else if( theLogicalBlock != null ){ 
+			if( theTag != null ){
+				String thePackageName = theTag.getValue();
+				
+				thePackage = (IRPPackage) inTheProject.findNestedElementRecursive(
+						thePackageName, "Package");
+				
+				if( thePackage==null){
+					Logger.writeLine("Error in getPkgThatOwnsEventsAndInterfaces, unable to find package called " + thePackageName);
+				}
+			} else {
+				Logger.writeLine("Error in getPkgThatOwnsEventsAndInterfaces, unable to find tag called " + tagNameForPackageUnderDev + 
+						" underneath " + Logger.elementInfo( theRootPackage ) );
+			}
+		} else {
+			Logger.writeLine("Error in getPkgThatOwnsEventsAndInterfaces, unable to find FunctionalAnalysisPkg");
+		}
+		
+		if (thePackage==null){
+			Logger.writeLine("Error in getPkgThatOwnsEventsAndInterfaces, unable to determine packageUnderDev from the tag value");
+		
+			IRPClass theLogicalBlock = getBlockUnderDev( inTheProject );
 			
 			// old projects may not have an InterfacesPkg hence use the package the block is in
 			IRPModelElement theOwner = theLogicalBlock.getOwner();
 			
 			if( theOwner instanceof IRPPackage ){
-				theEventPkg = (IRPPackage)theOwner;
+				thePackage = (IRPPackage)theOwner;
 			} else {
-				Logger.writeLine( "Error in getEventPkgForPkgUnderDev: Can't find event pkg for " + Logger.elementInfo( theLogicalBlock ) );
+				Logger.writeLine( "Error in getPkgThatOwnsEventsAndInterfaces: Can't find event pkg for " + Logger.elementInfo( theLogicalBlock ) );
 			}
 		}
 		
-		return theEventPkg;
+		return thePackage;
 	}
 	
 	public static IRPPackage getWorkingPkgUnderDev(IRPProject inTheProject){
@@ -237,7 +253,8 @@ public class FunctionalAnalysisSettings {
     #062 17-JUL-2016: Create InterfacesPkg and correct build issues by adding a Usage dependency (F.J.Chadburn)
     #078 28-JUL-2016: Added isPopulateWantedByDefault tag to FunctionalAnalysisPkg to give user option (F.J.Chadburn)
     #079 28-JUL-2016: Improved robustness of post add CallOp behaviour to prevent Rhapsody hanging (F.J.Chadburn)
-    
+    #087 09-AUG-2016: Added packageForEventsAndInterfaces tag to give user flexibility to change (F.J.Chadburn)
+
     This file is part of SysMLHelperPlugin.
 
     SysMLHelperPlugin is free software: you can redistribute it and/or modify

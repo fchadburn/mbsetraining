@@ -1,5 +1,6 @@
 package functionalanalysisplugin;
 
+import generalhelpers.GeneralHelpers;
 import generalhelpers.Logger;
 import generalhelpers.TraceabilityHelper;
 
@@ -33,6 +34,7 @@ public abstract class CreateTracedElementPanel extends JPanel {
 	protected IRPModelElement m_TargetOwningElement = null;
 	protected JTextField m_ChosenNameTextField = null;
 	protected IRPGraphElement m_SourceGraphElement = null;
+	protected IRPModelElement m_SourceModelElement = null;
 	
 	public CreateTracedElementPanel(
 			IRPGraphElement forSourceGraphElement, 
@@ -43,20 +45,41 @@ public abstract class CreateTracedElementPanel extends JPanel {
 
 		m_TargetOwningElement = onTargetClassifier;		
 		m_SourceGraphElement = forSourceGraphElement;
+		m_SourceModelElement = m_SourceGraphElement.getModelObject();
+			
+		setupRequirementsPanel( withReqtsAlsoAdded );
+	}
+
+	public CreateTracedElementPanel(
+			IRPModelElement forSourceModelElement, 
+			Set<IRPRequirement> withReqtsAlsoAdded,
+			IRPClassifier onTargetClassifier) {
 		
-		IRPModelElement theModelObject = m_SourceGraphElement.getModelObject();
+		super();
+
+		m_TargetOwningElement = onTargetClassifier;		
+		m_SourceGraphElement = null;
+		m_SourceModelElement = forSourceModelElement;
 		
-		Set<IRPRequirement> tracedToReqts = TraceabilityHelper.getRequirementsThatTraceFrom( theModelObject, true );
+		setupRequirementsPanel( withReqtsAlsoAdded );
+	}
+	
+	
+	private void setupRequirementsPanel(
+			Set<IRPRequirement> withReqtsAlsoAdded ){
+		
+		Set<IRPRequirement> tracedToReqts = TraceabilityHelper.getRequirementsThatTraceFrom( m_SourceModelElement, true );
 		
 		tracedToReqts.addAll( withReqtsAlsoAdded );
 		
-		if (tracedToReqts.isEmpty()){
+		if (tracedToReqts.isEmpty()){	
 			m_RequirementsPanel = new RequirementSelectionPanel( 
 					tracedToReqts, "There are no requirements to establish «satisfy» dependencies to" );
 		} else {
 			m_RequirementsPanel = new RequirementSelectionPanel( 
 					tracedToReqts, "With «satisfy» dependencies to:" );
 		}
+		
 	}
 	
 	public JPanel createChosenNamePanelWith(
@@ -79,6 +102,74 @@ public abstract class CreateTracedElementPanel extends JPanel {
 		
 		return thePanel;
 	}
+	
+	protected String getCheckOpName(){
+		
+		String theName = determineBestCheckOperationNameFor(
+				(IRPClassifier)m_TargetOwningElement, m_ChosenNameTextField.getText() );
+		
+		return theName;
+	}
+	
+	protected IRPOperation addCheckOperationFor(
+			IRPAttribute theAttribute ){
+		
+		IRPOperation theOperation = null;
+		
+		IRPModelElement theOwner = theAttribute.getOwner();
+		
+		if( theOwner instanceof IRPClassifier ){
+			IRPClassifier theClassifier = (IRPClassifier)theOwner;
+			String theAttributeName = theAttribute.getName();
+			
+			theOperation = theClassifier.addOperation( getCheckOpName() );
+			
+			theOperation.setBody("OM_RETURN( " + theAttributeName + " );");
+			
+			IRPDependency theAutoRippleDependency = theAttribute.addDependencyTo(theOperation);
+			theAutoRippleDependency.addStereotype("AutoRipple", "Dependency");
+			IRPClassifier theType = findTypeCalled("int");
+			
+			if (theType!=null){
+				theOperation.setReturns(theType);
+			}
+		} else {
+			Logger.writeLine("Error in addCheckOperationFor, owner of " + Logger.elementInfo(theAttribute) + " is not a Classifier");
+		}
+		
+		return theOperation;
+	}
+	
+	private IRPClassifier findTypeCalled(String theName){
+		
+		IRPClassifier theTypeFound = null;
+		int count = 0;
+		
+		@SuppressWarnings("unchecked")
+		List<IRPModelElement> theTypes = 
+				FunctionalAnalysisPlugin.getActiveProject().getNestedElementsByMetaClass("Type", 1).toList();
+		
+		for (IRPModelElement irpModelElement : theTypes) {			
+			
+			if (irpModelElement.getName().equals(theName) 
+					&& irpModelElement instanceof IRPClassifier){
+				theTypeFound = (IRPClassifier) irpModelElement;
+				Logger.writeLine(irpModelElement, "was found in findTypeCalled");
+				count++;
+			}
+		}
+		
+		if (theTypeFound==null){
+			Logger.writeLine("Error in findTypeCalled, unable to find type called '" + theName + "'");
+		}
+		
+		if (count>1){
+			Logger.writeLine("Warning in findTypeCalled, unexpectedly " + count + " types called '" + theName + "' were found");
+		}
+		
+		return theTypeFound;
+	}
+
 	
 	// implementation specific provided by parent
 	protected abstract boolean checkValidity(boolean isMessageEnabled);
@@ -329,6 +420,19 @@ public abstract class CreateTracedElementPanel extends JPanel {
 			Logger.writeLine("Error in populateCallOperationActionOnDiagram, unhandled exception was detected");
 		}
 	}
+	
+	public static String determineBestCheckOperationNameFor(
+			IRPClassifier onTargetBlock,
+			String theAttributeName){
+		
+		String theProposedName = GeneralHelpers.determineUniqueNameBasedOn( 
+				GeneralHelpers.toMethodName( "check" + GeneralHelpers.capitalize( theAttributeName ) ), 
+				"Attribute", 
+				onTargetBlock );
+		
+		return theProposedName;
+	}
+
 }
 
 /**
@@ -344,6 +448,8 @@ public abstract class CreateTracedElementPanel extends JPanel {
     #043 03-JUL-2016: Add Derive downstream reqt for CallOps, InterfaceItems and Event Actions (F.J.Chadburn)
     #058 13-JUL-2016: Dropping CallOp on diagram now gives option to create Op on block (F.J.Chadburn)
     #069 20-JUL-2016: Fix population of events/ops on diagram when creating from a transition (F.J.Chadburn)
+    #082 09-AUG-2016: Add a check operation check box added to the create attribute dialog (F.J.Chadburn)
+    #083 09-AUG-2016: Add an Update attribute menu option and panel with add check operation option (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

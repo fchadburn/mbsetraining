@@ -396,10 +396,10 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
 		if (checkValidity( false )){
 			String theName = m_BlockNameTextField.getText();
 			
-			IRPPackage theRootPackage = m_RootPackage.addNestedPackage( theName + "Pkg" );  
+			IRPPackage theFunctionalBlockPkg = m_RootPackage.addNestedPackage( theName + "Pkg" );  
 			
 			// Create nested package for block
-			IRPPackage theBlockPackage = theRootPackage.addNestedPackage(theName + "Block" + "Pkg");
+			IRPPackage theBlockPackage = theFunctionalBlockPkg.addNestedPackage(theName + "Block" + "Pkg");
 			IRPClass theLogicalSystemBlock = theBlockPackage.addClass( theName );
 			GeneralHelpers.applyExistingStereotype("LogicalSystem", theLogicalSystemBlock);
 			theLogicalSystemBlock.changeTo("Block");
@@ -416,14 +416,17 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
 			}
 			
 			// Create nested package for events and interfaces
-			IRPPackage theInterfacesPkg = theRootPackage.addNestedPackage(theName + "Interfaces" + "Pkg");
+			IRPPackage theInterfacesPkg = theFunctionalBlockPkg.addNestedPackage(theName + "Interfaces" + "Pkg");
 
+			// Update tag to point to the nested package
+			setTagOn( m_RootPackage, FunctionalAnalysisSettings.tagNameForPackageForEventsAndInterfaces, theInterfacesPkg );
+								
 			// Add Usage dependency to the interfaces package that will contain the events
 			IRPDependency theBlocksUsageDep = theBlockPackage.addDependencyTo( theInterfacesPkg );
 			theBlocksUsageDep.addStereotype( "Usage", "Dependency" );
 			
 			// Create nested package with components necessary for wiring up a simulation
-			IRPPackage theBlockTestPackage = theRootPackage.addNestedPackage(theName + "Test" + "Pkg");
+			IRPPackage theBlockTestPackage = theFunctionalBlockPkg.addNestedPackage(theName + "Test" + "Pkg");
 			
 			// Add Usage dependency to the interfaces package that will contain the events
 			IRPDependency theUsageDep = theBlockTestPackage.addDependencyTo( theInterfacesPkg );
@@ -462,21 +465,8 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
 
 			// Add a sequence diagram
 			createSequenceDiagramFor(theUsageDomainBlock, "SD - " + theName);
-
-			final String tagNameForPackageUnderDev = "packageUnderDev";
-			
-			// Set up the settings
-			IRPTag theTagForPackageUnderDev = m_RootPackage.getTag( tagNameForPackageUnderDev );
-			
-			if (theTagForPackageUnderDev==null){
-				Logger.writeLine("Error in setFunctionalAnalysisSettings, unable to find tag called " + tagNameForPackageUnderDev);
-			} else {
-				Logger.writeLine("Setting " + Logger.elementInfo(theTagForPackageUnderDev) 
-						+ " owned by " + Logger.elementInfo( m_RootPackage ) + " to " 
-						+ Logger.elementInfo(theRootPackage));
-				
-				m_RootPackage.setTagElementValue(theTagForPackageUnderDev, theRootPackage);
-			}
+	
+			setTagOn( m_RootPackage, FunctionalAnalysisSettings.tagNameForPackageUnderDev, theFunctionalBlockPkg );
 								
 			IRPStatechartDiagram theStatechart = theLogicalSystemBlock.getStatechart().getStatechartDiagram();
 
@@ -486,7 +476,7 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
 			}
 			
 			// Create nested package for housing the ADs
-			IRPPackage theWorkingPackage = theRootPackage.addNestedPackage(theName + "Working" + "Pkg");
+			IRPPackage theWorkingPackage = theFunctionalBlockPkg.addNestedPackage(theName + "Working" + "Pkg");
 			
 			// This dependency is also used to locate the working package
 			IRPDependency theRAProfileDependency = 
@@ -510,6 +500,27 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
 			Logger.writeLine("Error in CreateFunctionalBlockPackagePanel.performAction, checkValidity returned false");
 		}	
 	}
+
+	private void setTagOn(
+			IRPPackage theRootPackage,
+			final String withTagName,
+			IRPPackage toPackage ) {
+		
+		// Set up the settings
+		IRPTag theTag = m_RootPackage.getTag( withTagName );
+		
+		if( theTag == null ){
+			Logger.writeLine( "Error in setTagOn " + Logger.elementInfo( theRootPackage ) + 
+					", unable to find tag called " + withTagName );
+			
+		} else {
+			Logger.writeLine( "Setting " + withTagName + 
+					" tag owned by " + Logger.elementInfo( theRootPackage ) + " to " + 
+					Logger.elementInfo( toPackage ));
+			
+			m_RootPackage.setTagElementValue( theTag, toPackage );
+		}
+	}
 }
 
 /**
@@ -527,6 +538,7 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
     #048 06-JUL-2016: RequirementsPkg now created in FunctionalAnalysisPkg.sbs rather than nested deeper (F.J.Chadburn)
     #054 13-JUL-2016: Create a nested BlockPkg package to contain the Block and events (F.J.Chadburn)
     #062 17-JUL-2016: Create InterfacesPkg and correct build issues by adding a Usage dependency (F.J.Chadburn)
+    #087 09-AUG-2016: Added packageForEventsAndInterfaces tag to give user flexibility to change (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 
