@@ -1,5 +1,5 @@
 [Helpers]
-numberOfElements=14
+numberOfElements=16
 
 #REM: Definition of the plug-in
 name1=InvokeFunctionalAnalysisHelper
@@ -113,6 +113,22 @@ applicableTo14=ActivityDiagram
 isVisible14=1
 DLLServerCompatible14=1
 
+#REM: Add pop-up menu
+name15=MBSE Method: Functional Analysis\Update attribute and/or check operation owned by the system
+isPluginCommand15=1
+command15=InvokeFunctionalAnalysisHelper
+applicableTo15=Attribute
+isVisible15=1
+DLLServerCompatible15=1
+
+#REM: Add pop-up menu
+name16=MBSE Method: Functional Analysis\Create an incoming event sent by an actor to change this attribute
+isPluginCommand16=1
+command16=InvokeFunctionalAnalysisHelper
+applicableTo16=Attribute
+isVisible16=1
+DLLServerCompatible16=1
+
 #REM Copyright (C) 2016  MBSE Training and Consulting Limited (www.executablembse.com)
 #REM
 #REM Change history:
@@ -123,6 +139,8 @@ DLLServerCompatible14=1
 #REM #028 01-JUN-2016: Add new menu to create a stand-alone attribute owned by the system (F.J.Chadburn)
 #REM #047 06-JUL-2016: Tweaked properties and added options to switch to MoreDetailedAD automatically (F.J.Chadburn)
 #REM #049 06-JUL-2016: Derive new requirement now under Functional Analysis not Requirements Analysis menu (F.J.Chadburn)
+#REM #083 09-AUG-2016: Add an Update attribute menu option and panel with add check operation option (F.J.Chadburn)
+#REM #084 09-AUG-2016: Add new right-click menu to create an incoming event for an attribute (F.J.Chadburn)
 #REM
 #REM This file is part of SysMLHelperPlugin.
 #REM

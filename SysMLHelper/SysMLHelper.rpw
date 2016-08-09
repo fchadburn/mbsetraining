@@ -18,20 +18,20 @@ I-Logix-RPY-Archive version 8.11.0 * 9499822
 				- m_ptMaxPositionY = -30;
 				- m_nLeft = 25;
 				- m_nTop = 25;
-				- m_nRight = 736;
-				- m_nBottom = 294;
+				- m_nRight = 1143;
+				- m_nBottom = 274;
 			}
 			- _wasOpenedOnCloseProject = 1;
 			- _theDiagram = { IHandle 
-				- _m2Class = "IDiagram";
-				- _filename = "RequirementsPkg_1.sbs";
-				- _subsystem = "FunctionalAnalysisPkg::RequirementsPkg";
-				- _class = "";
-				- _name = "RD - TBD";
-				- _id = GUID 60a85594-9551-41ab-90bc-2b9a7826e8a5;
+				- _m2Class = "IStateChartDiagram";
+				- _filename = "BasePkg.sbs";
+				- _subsystem = "BasePkg";
+				- _class = "ElapsedTime";
+				- _name = "StatechartDiagram.ROOT.Active.MonitoringConditionsParallelRegion";
+				- _id = GUID be1bd297-8406-4026-8a14-97ba4029d517;
 			}
-			- _UpLeft = 0 0 ;
-			- _DownRight = 5004 2499 ;
+			- _UpLeft = 0 91 ;
+			- _DownRight = 745 472 ;
 			- _instanceName = "";
 			- m_nDiagramIndex = 0;
 		}
@@ -44,22 +44,22 @@ I-Logix-RPY-Archive version 8.11.0 * 9499822
 				- m_ptMinPositionY = -1;
 				- m_ptMaxPositionX = -8;
 				- m_ptMaxPositionY = -30;
-				- m_nLeft = 78;
-				- m_nTop = 78;
-				- m_nRight = 1285;
-				- m_nBottom = 542;
+				- m_nLeft = 0;
+				- m_nTop = 0;
+				- m_nRight = 401;
+				- m_nBottom = 239;
 			}
 			- _wasOpenedOnCloseProject = 1;
 			- _theDiagram = { IHandle 
-				- _m2Class = "IUCDiagram";
-				- _filename = "UseCaseDiagramsPkg.sbs";
-				- _subsystem = "RequirementsAnalysisPkg::UseCaseDiagramsPkg";
-				- _class = "";
-				- _name = "UCD - ProjectName";
-				- _id = GUID 95229afd-9d92-45ca-857b-74295e0efd78;
+				- _m2Class = "IStateChartDiagram";
+				- _filename = "BasePkg.sbs";
+				- _subsystem = "BasePkg";
+				- _class = "ElapsedTime";
+				- _name = "StatechartDiagram";
+				- _id = GUID 8a35c5c1-8e38-445f-a021-bed182c39fb8;
 			}
-			- _UpLeft = 0 0 ;
-			- _DownRight = 5850 2025 ;
+			- _UpLeft = 0 180 ;
+			- _DownRight = 364 360 ;
 			- _instanceName = "";
 			- m_nDiagramIndex = 1;
 		}

@@ -145,3 +145,13 @@ BETA TEST RELEASE 2.0.20 (25-JUL-2016)
 ----------------------------------------------------------------------------------
 BETA TEST RELEASE 2.0.21 (28-JUL-2016)
 ----------------------------------------------------------------------------------
+#082 09-AUG-2016: Add a check operation check box added to the create attribute dialog (F.J.Chadburn)
+#083 09-AUG-2016: Add an Update attribute menu option and panel with add check operation option (F.J.Chadburn)
+#084 09-AUG-2016: Add new right-click menu to create an incoming event for an attribute (F.J.Chadburn)
+#085 09-AUG-2016: Add helper to findElementsWithMetaClassStereotypeAndName (F.J.Chadburn)
+#086 09-AUG-2016: Added events to control the ElapsedTime actor for WB execution (F.J.Chadburn)
+#087 09-AUG-2016: Added packageForEventsAndInterfaces tag to give user flexibility to change (F.J.Chadburn)
+#088 09-AUG-2016: Added a create send event via Panel to the incoming event dialog (F.J.Chadburn)
+----------------------------------------------------------------------------------
+BETA TEST RELEASE 2.0.22 (09-AUG-2016)
+----------------------------------------------------------------------------------
