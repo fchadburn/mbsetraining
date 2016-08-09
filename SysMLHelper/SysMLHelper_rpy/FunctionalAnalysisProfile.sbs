@@ -333,10 +333,10 @@ I-Logix-RPY-Archive version 8.11.0 C++ 9499822
 		}
 	}
 	- _name = "FunctionalAnalysisProfile";
-	- _modifiedTimeWeak = 7.13.2016::10:34:52;
-	- _lastID = 11;
+	- _modifiedTimeWeak = 8.9.2016::14:10:39;
+	- _lastID = 12;
 	- Declaratives = { IRPYRawContainer 
-		- size = 9;
+		- size = 10;
 		- value = 
 		{ IStereotype 
 			- _id = GUID 95c8e146-8a56-46cd-ad46-884d54fb2dd3;
@@ -556,8 +556,18 @@ I-Logix-RPY-Archive version 8.11.0 C++ 9499822
 				- value = "Attribute"; 
 			}
 		}
+		{ IStereotype 
+			- _id = GUID 42cc719f-8c1b-40a0-be49-9fe5ee4e400e;
+			- _myState = 8192;
+			- _name = "AutoRipple";
+			- _modifiedTimeWeak = 8.9.2016::14:10:39;
+			- _m2Classes = { IRPYRawContainer 
+				- size = 1;
+				- value = "Dependency"; 
+			}
+		}
 	}
-	- weakCGTime = 7.13.2016::10:34:52;
+	- weakCGTime = 8.9.2016::14:10:39;
 	- strongCGTime = 7.13.2016::10:34:52;
 	- _defaultComposite = GUID bd2a5ac5-0f4b-43af-a366-5b283c84c9b7;
 	- _eventsBaseID = -1;
@@ -568,9 +578,9 @@ I-Logix-RPY-Archive version 8.11.0 C++ 9499822
 			- _id = GUID bd2a5ac5-0f4b-43af-a366-5b283c84c9b7;
 			- _myState = 40960;
 			- _name = "TopLevel";
-			- _modifiedTimeWeak = 5.5.2016::12:6:24;
-			- weakCGTime = 5.5.2016::12:6:24;
-			- strongCGTime = 5.5.2016::12:6:24;
+			- _modifiedTimeWeak = 7.13.2016::10:34:52;
+			- weakCGTime = 7.13.2016::10:34:52;
+			- strongCGTime = 7.13.2016::10:34:52;
 			- _multiplicity = "";
 			- _itsStateChart = { IHandle 
 				- _m2Class = "";
