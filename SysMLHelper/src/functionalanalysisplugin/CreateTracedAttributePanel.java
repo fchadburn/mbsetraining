@@ -30,6 +30,7 @@ public class CreateTracedAttributePanel extends CreateTracedElementPanel {
 	
 	protected JTextField m_InitialValueTextField = null;
 	private JCheckBox m_CheckOperationCheckBox;
+	private String m_CheckOpName;
 	
 	public static void createSystemAttributesFor(
 			IRPProject theActiveProject,
@@ -162,7 +163,10 @@ public class CreateTracedAttributePanel extends CreateTracedElementPanel {
 
 			@Override
 			public void run() {
-				IRPClassifier theLogicalSystemBlock = FunctionalAnalysisSettings.getBlockUnderDev( inProject );
+				IRPClassifier theLogicalSystemBlock = 
+						FunctionalAnalysisSettings.getBlockUnderDev( 
+								inProject, 
+								FunctionalAnalysisSettings.getIsEnableBlockSelectionByUser( inProject ) );
 
 				JFrame.setDefaultLookAndFeelDecorated( true );
 
@@ -187,8 +191,12 @@ public class CreateTracedAttributePanel extends CreateTracedElementPanel {
 	
 	private void updateNames(){
 		
+		m_CheckOpName = determineBestCheckOperationNameFor(
+				(IRPClassifier)m_TargetOwningElement, 
+				m_ChosenNameTextField.getText() );
+		
 		m_CheckOperationCheckBox.setText(
-				"Add a '" + getCheckOpName() + 
+				"Add a '" + m_CheckOpName + 
 				"' operation to the block that returns the attribute value" );
 	}
 	
@@ -218,11 +226,14 @@ public class CreateTracedAttributePanel extends CreateTracedElementPanel {
 			isValid = false;
 
 		} else if( m_CheckOperationCheckBox.isSelected() && 
-				!GeneralHelpers.isElementNameUnique(
-					getCheckOpName(), "Operation", m_TargetOwningElement, 1 ) ){
+				   !GeneralHelpers.isElementNameUnique(
+						   m_CheckOpName,
+						   "Operation",
+						   m_TargetOwningElement, 
+						   1 ) ){
 
 			errorMessage = "Unable to proceed as the derived check operation name '" + 
-					getCheckOpName() + "' is not unique";
+					m_CheckOpName + "' is not unique";
 			
 			isValid = false;
 			
@@ -272,7 +283,7 @@ public class CreateTracedAttributePanel extends CreateTracedElementPanel {
 			addTraceabilityDependenciesTo( theAttribute, selectedReqtsList );
 			
 			if( m_CheckOperationCheckBox.isSelected() ){
-				IRPOperation theCheckOp = addCheckOperationFor( theAttribute );
+				IRPOperation theCheckOp = addCheckOperationFor( theAttribute, m_CheckOpName );
 				addTraceabilityDependenciesTo( theCheckOp, selectedReqtsList );	
 				theCheckOp.highLightElement();
 			}
@@ -298,6 +309,8 @@ public class CreateTracedAttributePanel extends CreateTracedElementPanel {
     #042 29-JUN-2016: launchThePanel renaming to improve Panel class design consistency (F.J.Chadburn)
     #043 03-JUL-2016: Add Derive new requirement to CallOperations and Event Actions (F.J.Chadburn)
     #082 09-AUG-2016: Add a check operation check box added to the create attribute dialog (F.J.Chadburn)
+    #089 15-AUG-2016: Add a pull-down list to select Block when adding events/ops in white box (F.J.Chadburn)
+    #090 15-AUG-2016: Fix check operation name issue introduced in fixes #083 and #084 (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

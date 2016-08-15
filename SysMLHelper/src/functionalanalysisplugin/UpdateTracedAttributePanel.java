@@ -31,6 +31,7 @@ public class UpdateTracedAttributePanel extends CreateTracedElementPanel {
 	
 	protected JTextField m_InitialValueTextField = null;
 	private JCheckBox m_CheckOperationCheckBox;
+	private String m_CheckOpName;
 		
 	public UpdateTracedAttributePanel(
 			IRPAttribute forExistingAttribute, 
@@ -123,20 +124,21 @@ public class UpdateTracedAttributePanel extends CreateTracedElementPanel {
 
 			@Override
 			public void run() {
-				IRPClassifier theLogicalSystemBlock = FunctionalAnalysisSettings.getBlockUnderDev( inProject );
 
 				JFrame.setDefaultLookAndFeelDecorated( true );
+				
+				IRPModelElement theBlockEl = theExistingAttribute.getOwner();
 
 				JFrame frame = new JFrame(
-						"Update attribute called " + theExistingAttribute.getName() + " on " + 
-						theLogicalSystemBlock.getUserDefinedMetaClass() + " called " + theLogicalSystemBlock.getName());
+						"Update attribute called " + theExistingAttribute.getName() + 
+						" on " + Logger.elementInfo( theBlockEl ) );
 
 				frame.setDefaultCloseOperation( JFrame.DISPOSE_ON_CLOSE );
 
 				UpdateTracedAttributePanel thePanel = new UpdateTracedAttributePanel(
 						theExistingAttribute, 
 						withReqtsAlsoAdded,
-						theLogicalSystemBlock);
+						(IRPClassifier) theBlockEl);
 
 				frame.setContentPane( thePanel );
 				frame.pack();
@@ -148,10 +150,12 @@ public class UpdateTracedAttributePanel extends CreateTracedElementPanel {
 	
 	private void updateNames(){
 		
+		m_CheckOpName = determineBestCheckOperationNameFor(
+				(IRPClassifier)m_TargetOwningElement, 
+				m_ChosenNameTextField.getText() );
+		
 		m_CheckOperationCheckBox.setText(
-				"Add a '" + determineBestCheckOperationNameFor(
-						(IRPClassifier)m_TargetOwningElement, m_ChosenNameTextField.getText() ) 
-				+ "' operation to the block that returns the attribute value");
+				"Add a '" +  m_CheckOpName + "' operation to the block that returns the attribute value");
 	}
 	
 	@Override
@@ -171,11 +175,14 @@ public class UpdateTracedAttributePanel extends CreateTracedElementPanel {
 			isValid = false;
 
 		} else if( m_CheckOperationCheckBox.isSelected() && 
-				!GeneralHelpers.isElementNameUnique(
-					getCheckOpName(), "Operation", m_TargetOwningElement, 1 ) ){
+				   !GeneralHelpers.isElementNameUnique(
+						   m_CheckOpName,
+						   "Operation",
+						   m_TargetOwningElement, 
+						   1 ) ){
 
 			errorMessage = "Unable to proceed as the derived check operation name '" + 
-					getCheckOpName() + "' is not unique";
+					m_CheckOpName + "' is not unique";
 			
 			isValid = false;
 			
@@ -253,7 +260,7 @@ public class UpdateTracedAttributePanel extends CreateTracedElementPanel {
 						addTraceabilityDependenciesTo( theExistingAttribute, selectedReqtsList );
 						
 						if( m_CheckOperationCheckBox.isSelected() ){
-							IRPOperation theCheckOp = addCheckOperationFor( theExistingAttribute );
+							IRPOperation theCheckOp = addCheckOperationFor( theExistingAttribute, m_CheckOpName );
 							addTraceabilityDependenciesTo( theCheckOp, selectedReqtsList );	
 							theCheckOp.highLightElement();
 						}
@@ -272,7 +279,8 @@ public class UpdateTracedAttributePanel extends CreateTracedElementPanel {
 
     Change history:
     #083 09-AUG-2016: (new) Add an Update attribute menu option and panel with add check operation option (F.J.Chadburn)
-
+    #090 15-AUG-2016: Fix check operation name issue introduced in fixes #083 and #084 (F.J.Chadburn)
+    
     This file is part of SysMLHelperPlugin.
 
     SysMLHelperPlugin is free software: you can redistribute it and/or modify

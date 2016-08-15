@@ -1,5 +1,6 @@
 package functionalanalysisplugin;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import generalhelpers.GeneralHelpers;
@@ -13,6 +14,7 @@ public class FunctionalAnalysisSettings {
 	public static final String tagNameForDependency = "traceabilityTypeToUseForFunctions";	
 	public static final String tagNameForPopulateWantedByDefault = "isPopulateWantedByDefault";
 	public static final String tagNameForPackageForEventsAndInterfaces = "packageForEventsAndInterfaces";
+	public static final String tagNameForIsUserBlockChoiceEnabled = "isUserBlockChoiceEnabled";
 
 	public static IRPPackage getPackageUnderDev(IRPProject inTheProject){
 		
@@ -47,6 +49,82 @@ public class FunctionalAnalysisSettings {
 		return thePackage;
 	}
 	
+	public static List<IRPModelElement> getNonActorOrTestBlocks(
+			IRPClass withInstancesUnderTheBlock ){
+	
+		@SuppressWarnings("unchecked")
+		List<IRPModelElement> theCandidateParts = 
+				withInstancesUnderTheBlock.getNestedElementsByMetaClass( "Instance", 1 ).toList();
+					
+		List<IRPModelElement> theNonActorOrTestBlocks = new ArrayList<IRPModelElement>();
+		
+		for( IRPModelElement theCandidatePart : theCandidateParts ) {
+			
+			IRPInstance theInstance = (IRPInstance)theCandidatePart;
+			IRPClassifier theClassifier = theInstance.getOtherClass();
+			
+			// don't add actors or test driver
+			if( theClassifier != null && 
+				theClassifier instanceof IRPClass &&
+				!GeneralHelpers.hasStereotypeCalled( "TestDriver", theClassifier ) &&
+				!theNonActorOrTestBlocks.contains( theClassifier ) ){
+				
+				theNonActorOrTestBlocks.add( theClassifier );
+			}
+		}
+		
+		return theNonActorOrTestBlocks;
+	}
+	
+	public static IRPClass getBuildingBlock( 
+			IRPPackage underneathThePkg ){
+		
+		int count = 0;
+		
+		IRPClass theBuildingBlock = null;
+
+		@SuppressWarnings("unchecked")
+		List<IRPModelElement> theCandidateBlocks = 
+				underneathThePkg.getNestedElementsByMetaClass( "Class", 1 ).toList();
+		
+		for( IRPModelElement theCandidateBlock : theCandidateBlocks ) {
+			
+			@SuppressWarnings("unchecked")
+			List<IRPModelElement> theInstances = 
+					theCandidateBlock.getNestedElementsByMetaClass( "Instance", 0 ).toList();
+			
+			boolean isBuildingBlock = false;
+			
+			for( IRPModelElement theInstance : theInstances ) {
+					
+				if( theInstance.getUserDefinedMetaClass().equals("Object") ){
+						
+					isBuildingBlock = true;
+					break;
+				}
+			}
+
+			if( isBuildingBlock && theCandidateBlock instanceof IRPClass){
+				Logger.writeLine( "getBuildingBlock called for " + Logger.elementInfo( underneathThePkg ) + 
+						" successfully found " + Logger.elementInfo( theCandidateBlock ));
+				
+				theBuildingBlock = (IRPClass) theCandidateBlock;
+				count++;
+			}
+		}
+		
+		if( count > 1 ){
+			Logger.writeLine( "Warning in getBuildingBlock, " + count + 
+					" building blocks were found when expecting just one." );
+		
+		} else if( count == 0 ){
+			Logger.writeLine( "Error in getBuildingBlock, no building block was found in " + 
+					Logger.elementInfo( underneathThePkg ) );
+		}
+		
+		return theBuildingBlock;
+	}
+	
 	public static IRPPackage getPkgThatOwnsEventsAndInterfaces(
 			IRPProject inTheProject ){
 		
@@ -78,7 +156,7 @@ public class FunctionalAnalysisSettings {
 		if (thePackage==null){
 			Logger.writeLine("Error in getPkgThatOwnsEventsAndInterfaces, unable to determine packageUnderDev from the tag value");
 		
-			IRPClass theLogicalBlock = getBlockUnderDev( inTheProject );
+			IRPClass theLogicalBlock = getBlockUnderDev( inTheProject, false );
 			
 			// old projects may not have an InterfacesPkg hence use the package the block is in
 			IRPModelElement theOwner = theLogicalBlock.getOwner();
@@ -136,30 +214,107 @@ public class FunctionalAnalysisSettings {
 		return theWorkingPkg;
 	}
 	
-	public static IRPClass getBlockUnderDev(
-			IRPProject inTheProject ){
+	private static IRPClass launchDialogToSelectBlock(
+			IRPPackage underPackage ){
 		
 		IRPClass theBlock = null;
 		
-		IRPPackage thePackageUnderDev = getPackageUnderDev( inTheProject );
+		@SuppressWarnings("unchecked")
+		List<IRPModelElement> theCandidateParts = 
+				underPackage.getNestedElementsByMetaClass( "Instance", 1 ).toList();
+					
+		List<IRPModelElement> theBlocks = new ArrayList<IRPModelElement>();
 		
-		if( thePackageUnderDev != null ){
+		for( IRPModelElement theCandidatePart : theCandidateParts ) {
 			
-			List<IRPModelElement> theBlocks = 
-					GeneralHelpers.findElementsWithMetaClassAndStereotype(
-							"Class", "LogicalSystem", thePackageUnderDev );
+			IRPInstance theInstance = (IRPInstance)theCandidatePart;
+			IRPClassifier theClassifier = theInstance.getOtherClass();
 			
-			if( theBlocks.size()==1 ){				
-				theBlock = (IRPClass) theBlocks.get( 0 );
-			} else {
-				Logger.writeLine( "Error in getBlockUnderDev: Can't find LogicalSystem block for " + Logger.elementInfo( thePackageUnderDev ) );
-			}		
-		} else {
-			Logger.writeLine("Error in getBlockUnderDev for " + Logger.elementInfo(inTheProject) + 
-					", unable to determine package under development");
+			// don't add actors or test driver
+			if( theClassifier != null && 
+				theClassifier instanceof IRPClass &&
+				!GeneralHelpers.hasStereotypeCalled("TestDriver", theClassifier) &&
+				!theBlocks.contains( theClassifier ) ){
+				
+				theBlocks.add( theClassifier );
+			}
 		}
 
+		theBlock = (IRPClass) GeneralHelpers.launchDialogToSelectElement(
+				theBlocks, "Select Block to add the element to:", true );
+		
+		if( theBlock == null ){
+			Logger.writeLine("Warning in launchDialogToSelectBlock, user did not select a block");
+		}
+		
 		return theBlock;
+	}
+	
+	public static IRPClass getBlockUnderDev(
+			IRPProject inTheProject, 
+			boolean withSelection ){
+		
+		IRPClass theBlockUnderDev = null;
+		
+		IRPPackage thePackageUnderDev = getPackageUnderDev( inTheProject );
+		
+		if( thePackageUnderDev == null ){
+			
+			Logger.writeLine( "Error in getBlockUnderDev, no package under development was found in " + 
+					Logger.elementInfo( inTheProject ) );	
+		} else {
+			
+			IRPClass theBuildingBlock = 
+					FunctionalAnalysisSettings.getBuildingBlock( thePackageUnderDev );
+			
+			if( theBuildingBlock == null ){
+				
+				Logger.writeLine( "Error in getBlockUnderDev, no building block was found underneath " + 
+						Logger.elementInfo( thePackageUnderDev ) );
+			
+			} else {
+				
+				List<IRPModelElement> theCandidates = 
+						getNonActorOrTestBlocks( theBuildingBlock );
+				
+				if( theCandidates.isEmpty() ){
+					
+					Logger.writeLine("Error in getBlockUnderDev, no parts typed by Blocks were found underneath " + 
+							Logger.elementInfo( theBuildingBlock ) );
+				} else {
+				
+					if( withSelection ){
+						
+						if( theCandidates.size() > 1 ){
+							final IRPModelElement theChosenBlockEl = 
+									GeneralHelpers.launchDialogToSelectElement(
+											theCandidates, "Select Block to add operation to:", true );
+							
+							if( theChosenBlockEl != null && theChosenBlockEl instanceof IRPClass ){
+								theBlockUnderDev = (IRPClass) theChosenBlockEl;
+							}
+						} else {
+							theBlockUnderDev = (IRPClass) theCandidates.get( 0 );
+						}
+
+					} else {
+						
+						for( IRPModelElement theCandidate : theCandidates ) {
+							
+							if( theCandidate instanceof IRPClass && 
+								GeneralHelpers.hasStereotypeCalled( "LogicalSystem", theCandidate )){
+								theBlockUnderDev = (IRPClass) theCandidate;
+							}
+							
+						}
+					}
+					
+				}
+
+			}
+		}
+
+		return theBlockUnderDev;
 	}
 	
 	public static IRPInstance getPartUnderDev(
@@ -171,16 +326,37 @@ public class FunctionalAnalysisSettings {
 		
 		if( thePackageUnderDev != null ){
 			
-			List<IRPModelElement> theParts = 
+			if( getIsEnableBlockSelectionByUser( inTheProject ) ){
+				
+				@SuppressWarnings("unchecked")
+				List<IRPModelElement> theCandidateParts = 
+						thePackageUnderDev.getNestedElementsByMetaClass( "Instance", 1 ).toList();
+							
+				IRPModelElement theSelectedBlock =
+						launchDialogToSelectBlock( thePackageUnderDev );
+				
+				for( IRPModelElement theCandidatePart : theCandidateParts ) {
+					
+					IRPInstance theInstance = (IRPInstance)theCandidatePart;
+					IRPClassifier theClassifier = theInstance.getOtherClass();
+					
+					if( theClassifier != null && theClassifier.equals(theSelectedBlock)){
+						thePart = (IRPInstance) theCandidatePart;
+					}
+				}
+				
+			} else {
+				List<IRPModelElement> theParts = 
 						GeneralHelpers.findElementsWithMetaClassAndStereotype(
 								"Part", "LogicalSystem", thePackageUnderDev );
 				
-			if( theParts.size()==1 ){
-					
-				thePart = (IRPInstance) theParts.get( 0 );				
-			} else {
-				Logger.writeLine( "Error in getPartUnderDev: Can't find LogicalSystem part for " + Logger.elementInfo( thePackageUnderDev ) );
-			}		
+				if( theParts.size()==1 ){	
+					thePart = (IRPInstance) theParts.get( 0 );				
+				} else {
+					Logger.writeLine( "Error in getPartUnderDev: Can't find LogicalSystem part for " + Logger.elementInfo( thePackageUnderDev ) );
+				}	
+			}
+	
 		} else {
 			Logger.writeLine( "Error in getPartUnderDev for " + Logger.elementInfo(inTheProject) + 
 					", unable to determine package under development");
@@ -208,8 +384,8 @@ public class FunctionalAnalysisSettings {
 		return theStereotype;
 	}
 	
-	public static boolean getIsPopulateWantedByDefault(
-			IRPProject inTheProject ){
+	public static boolean getTagBooleanValue(
+			IRPProject inTheProject, String forTagName ){
 		
 		boolean result = false;
 		
@@ -218,7 +394,7 @@ public class FunctionalAnalysisSettings {
 						"FunctionalAnalysisPkg", "Package" );
 		
 		if (theRootPackage != null){
-			IRPTag theTag = theRootPackage.getTag( tagNameForPopulateWantedByDefault );
+			IRPTag theTag = theRootPackage.getTag( forTagName );
 			
 			if( theTag != null ){
 				
@@ -229,14 +405,31 @@ public class FunctionalAnalysisSettings {
 				}
 
 			} else {
-				Logger.writeLine( "Warning in getIsPopulateWantedByDefault, unable to find tag called " + 
-						tagNameForPopulateWantedByDefault + " underneath " + Logger.elementInfo( theRootPackage ) );
-				
-				result = false;
+				Logger.writeLine( "Warning in getTagBooleanValue, unable to find tag called " + 
+						forTagName + " underneath " + Logger.elementInfo( theRootPackage ) );
 			}
 		} else {
-			Logger.writeLine( "Error in getIsPopulateWantedByDefault, unable to find FunctionalAnalysisPkg" );
+			Logger.writeLine( "Error in getTagBooleanValue, unable to find FunctionalAnalysisPkg" );
 		}
+		
+		return result;
+	}
+	
+	public static boolean getIsPopulateWantedByDefault(
+			IRPProject inTheProject ){
+		
+		boolean result = getTagBooleanValue(
+				inTheProject, tagNameForPopulateWantedByDefault );
+		
+		return result;
+	}
+	
+	
+	public static boolean getIsEnableBlockSelectionByUser(
+			IRPProject inTheProject ){
+		
+		boolean result = getTagBooleanValue(
+				inTheProject, tagNameForIsUserBlockChoiceEnabled );
 		
 		return result;
 	}
@@ -254,7 +447,8 @@ public class FunctionalAnalysisSettings {
     #078 28-JUL-2016: Added isPopulateWantedByDefault tag to FunctionalAnalysisPkg to give user option (F.J.Chadburn)
     #079 28-JUL-2016: Improved robustness of post add CallOp behaviour to prevent Rhapsody hanging (F.J.Chadburn)
     #087 09-AUG-2016: Added packageForEventsAndInterfaces tag to give user flexibility to change (F.J.Chadburn)
-
+    #089 15-AUG-2016: Add a pull-down list to select Block when adding events/ops in white box (F.J.Chadburn)
+    
     This file is part of SysMLHelperPlugin.
 
     SysMLHelperPlugin is free software: you can redistribute it and/or modify

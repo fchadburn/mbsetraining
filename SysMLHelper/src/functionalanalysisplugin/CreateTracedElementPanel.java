@@ -89,7 +89,7 @@ public abstract class CreateTracedElementPanel extends JPanel {
 		JPanel thePanel = new JPanel();
 		thePanel.setLayout( new BoxLayout(thePanel, BoxLayout.X_AXIS ) );	
 		
-		JLabel theLabel =  new JLabel( theLabelText );//"Create an operation called:  ");
+		JLabel theLabel =  new JLabel( theLabelText );
 		thePanel.add( theLabel );
 		
 		m_ChosenNameTextField = new JTextField();
@@ -103,16 +103,9 @@ public abstract class CreateTracedElementPanel extends JPanel {
 		return thePanel;
 	}
 	
-	protected String getCheckOpName(){
-		
-		String theName = determineBestCheckOperationNameFor(
-				(IRPClassifier)m_TargetOwningElement, m_ChosenNameTextField.getText() );
-		
-		return theName;
-	}
-	
 	protected IRPOperation addCheckOperationFor(
-			IRPAttribute theAttribute ){
+			IRPAttribute theAttribute,
+			String withTheName ){
 		
 		IRPOperation theOperation = null;
 		
@@ -122,7 +115,7 @@ public abstract class CreateTracedElementPanel extends JPanel {
 			IRPClassifier theClassifier = (IRPClassifier)theOwner;
 			String theAttributeName = theAttribute.getName();
 			
-			theOperation = theClassifier.addOperation( getCheckOpName() );
+			theOperation = theClassifier.addOperation( withTheName );
 			
 			theOperation.setBody("OM_RETURN( " + theAttributeName + " );");
 			
@@ -323,6 +316,28 @@ public abstract class CreateTracedElementPanel extends JPanel {
 		return theActors;
 	}
 	
+	protected static List<IRPModelElement> getActorsRelatedTo(
+			 IRPClassifier theBuildingBlock ){
+		
+		List<IRPModelElement> theActors = new ArrayList<IRPModelElement>();
+		
+		// get the logical system part and block
+		@SuppressWarnings("unchecked")
+		List<IRPInstance> theParts = 
+ 			theBuildingBlock.getNestedElementsByMetaClass("Part", 0).toList();
+		
+		for (IRPInstance thePart : theParts) {
+			
+			IRPClassifier theOtherClass = thePart.getOtherClass();
+			
+			if (theOtherClass instanceof IRPActor){
+				theActors.add((IRPActor) theOtherClass);
+			}
+		}
+		
+		return theActors;
+	}
+	
 	protected int getSourceElementX(){
 		
 		int x = 10;
@@ -432,6 +447,58 @@ public abstract class CreateTracedElementPanel extends JPanel {
 		
 		return theProposedName;
 	}
+	
+	protected static IRPClass selectBlockBasedOn(
+			IRPActor theActor,
+			IRPClass inTheBuildingBlock,
+			String withMsg,
+			boolean withSelection ){
+	
+		IRPClass theBlock = null;
+
+		List<IRPModelElement> theCandidates = 
+				GeneralHelpers.getNonActorOrTestingClassifiersConnectedTo( 
+						(IRPActor)theActor, inTheBuildingBlock );
+
+		if( theCandidates.isEmpty() ){
+
+			Logger.writeLine("Error in launchDialogsToSelectBlockBasedOn, no parts typed by Blocks were found underneath " + 
+					Logger.elementInfo( inTheBuildingBlock ) );
+
+		} else if ( theCandidates.size() == 1 ){
+
+			theBlock = (IRPClass) theCandidates.get( 0 );
+
+		} else { // theCandidates.size() > 1
+
+			if( withSelection ){
+
+				IRPModelElement theUserSelectedEl = GeneralHelpers.launchDialogToSelectElement(
+						theCandidates, withMsg, true );
+
+				if( theUserSelectedEl != null && theUserSelectedEl instanceof IRPClass ){
+
+					theBlock = (IRPClass)theUserSelectedEl;
+
+				} else {
+
+					Logger.writeLine("Error in launchDialogsToSelectBlockBasedOn, no user selection");
+				}
+
+			} else {
+
+				for( IRPModelElement theCandidate : theCandidates ) {
+
+					if( theCandidate instanceof IRPClass && 
+							GeneralHelpers.hasStereotypeCalled( "LogicalSystem", theCandidate )){
+						theBlock = (IRPClass) theCandidate;
+					}
+				}
+			}
+		}
+
+		return theBlock;
+	}
 
 }
 
@@ -450,6 +517,8 @@ public abstract class CreateTracedElementPanel extends JPanel {
     #069 20-JUL-2016: Fix population of events/ops on diagram when creating from a transition (F.J.Chadburn)
     #082 09-AUG-2016: Add a check operation check box added to the create attribute dialog (F.J.Chadburn)
     #083 09-AUG-2016: Add an Update attribute menu option and panel with add check operation option (F.J.Chadburn)
+    #089 15-AUG-2016: Add a pull-down list to select Block when adding events/ops in white box (F.J.Chadburn)
+    #090 15-AUG-2016: Fix check operation name issue introduced in fixes #083 and #084 (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

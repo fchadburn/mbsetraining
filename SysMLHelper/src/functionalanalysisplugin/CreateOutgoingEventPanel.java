@@ -27,6 +27,7 @@ public class CreateOutgoingEventPanel extends CreateTracedElementPanel {
 	
 	private JCheckBox m_ActionOnDiagramIsNeededCheckBox;
 	private IRPActor m_DestinationActor;
+	private IRPPort m_DestinationActorPort;
 	private IRPPackage m_PackageForEvent;
 	private JCheckBox m_SendOperationIsNeededCheckBox;
 	private JCheckBox m_ActiveAgumentNeededCheckBox;
@@ -67,11 +68,13 @@ public class CreateOutgoingEventPanel extends CreateTracedElementPanel {
 			IRPClassifier onTargetBlock,
 			Set<IRPRequirement> withReqtsAlsoAdded,
 			IRPActor toDestinationActor,
+			IRPPort toDestinationActorPort,
 			IRPPackage thePackageForEvent ) {
 		
 		super( forSourceGraphElement, withReqtsAlsoAdded, onTargetBlock );
 		
 		m_DestinationActor = toDestinationActor;
+		m_DestinationActorPort = toDestinationActorPort;
 		m_PackageForEvent = thePackageForEvent;
 		
 		String theSourceText = GeneralHelpers.getActionTextFrom( forSourceGraphElement.getModelObject() );		
@@ -152,84 +155,82 @@ public class CreateOutgoingEventPanel extends CreateTracedElementPanel {
 			final Set<IRPRequirement> withReqtsAlsoAdded,
 			final IRPProject inProject){
 		
-		final IRPInstance partUnderDev = 
-				FunctionalAnalysisSettings.getPartUnderDev( inProject );
+		IRPPackage thePackageUnderDev =
+				FunctionalAnalysisSettings.getPackageUnderDev( inProject );
 		
-		final IRPPackage thePackageForEvent = 
-				FunctionalAnalysisSettings.getPkgThatOwnsEventsAndInterfaces( inProject );
-		
-		final IRPModelElement theActor = 
-				GeneralHelpers.launchDialogToSelectElement(
-						getActorsRelatedTo( partUnderDev ), "Select Actor to send Event to", true);
-		
-		if (theActor != null && theActor instanceof IRPActor){
+		if( thePackageUnderDev != null ){
 
-			final IRPClassifier theLogicalSystem = partUnderDev.getOtherClass();
+			IRPClass theBuildingBlock = 
+					FunctionalAnalysisSettings.getBuildingBlock( thePackageUnderDev );
 			
-			javax.swing.SwingUtilities.invokeLater(new Runnable() {
-
-				@Override
-				public void run() {
-					
-					JFrame.setDefaultLookAndFeelDecorated( true );
-					JFrame frame = new JFrame("Create an outgoing event to " + Logger.elementInfo( theActor ) );
-					
-					frame.setDefaultCloseOperation( JFrame.DISPOSE_ON_CLOSE );
-
-					CreateOutgoingEventPanel thePanel = new CreateOutgoingEventPanel(
-							theSourceGraphElement, 
-							theLogicalSystem, 
-							withReqtsAlsoAdded,
-							(IRPActor)theActor, 
-							thePackageForEvent );
-
-					frame.setContentPane( thePanel );
-					frame.pack();
-					frame.setLocationRelativeTo( null );
-					frame.setVisible( true );
-				}
-			});
-		} else {
-			Logger.writeLine("No actor was selected");
-		}
-	}
-	
-	private IRPPort getPortForDestinationActor(){
-		
-		IRPPort thePort = null;
-		
-		IRPModelElement theContextEl = 
-				FunctionalAnalysisSettings.getPartUnderDev(
-						m_PackageForEvent.getProject() ).getOwner();
-		
-		if (theContextEl instanceof IRPClassifier){
-			IRPClassifier theContextBlock = (IRPClassifier) theContextEl;
-			
-			@SuppressWarnings("unchecked")
-			List<IRPModelElement> theLinks = 
-				theContextBlock.getNestedElementsByMetaClass("Link", 1).toList();
-			
-			for (IRPModelElement irpModelElement : theLinks) {
+			if( theBuildingBlock != null ){
 				
-				if (irpModelElement instanceof IRPLink){
+				final IRPPackage thePackageForEvent = 
+						FunctionalAnalysisSettings.getPkgThatOwnsEventsAndInterfaces( inProject );
+				
+				final IRPModelElement theActor = 
+						GeneralHelpers.launchDialogToSelectElement(
+								getActorsRelatedTo( theBuildingBlock ), "Select Actor to send Event to", true);
+	
+				if( theActor != null && theActor instanceof IRPActor ){
 					
-					IRPLink theLink = (IRPLink) irpModelElement;
-					IRPPort toPort = theLink.getToPort();
-					
-					IRPInstance theFromObject = (IRPInstance) theLink.getFromElement();
-					
-					IRPModelElement theToType = theFromObject.getOtherClass();
-					System.out.print( "theToType=" + Logger.elementInfo( theToType ) + "\n");
-					
-					if (theToType.equals( m_DestinationActor )){
-						thePort = toPort;
-						Logger.writeLine("Port to generate event on is " + Logger.elementInfo( toPort ));
-					}
+					List<IRPModelElement> theCandidates = 
+							GeneralHelpers.getNonActorOrTestingClassifiersConnectedTo( 
+									(IRPActor)theActor, theBuildingBlock );
+						
+					if( theCandidates.isEmpty() ){
+						
+						UserInterfaceHelpers.showWarningDialog("The " + Logger.elementInfo( theBuildingBlock ) + 
+								" does not have any connectors that connect the " + Logger.elementInfo(theActor) + " with Blocks.\n\n" +
+								"Fix this and then try again");
+						
+					} else {
+						
+						final IRPClass theChosenBlock = selectBlockBasedOn(
+								(IRPActor) theActor,
+								theBuildingBlock,
+								"Select Block to send event from:",
+								true );
+						
+						if( theChosenBlock != null ){
+							
+							final IRPPort thePort = GeneralHelpers.getPortThatConnects(
+									(IRPClassifier)theChosenBlock,
+									(IRPActor)theActor, 
+									theBuildingBlock );
+							
+							if( thePort != null ){
+								
+								javax.swing.SwingUtilities.invokeLater(new Runnable() {
+
+									@Override
+									public void run() {
+										
+										JFrame.setDefaultLookAndFeelDecorated( true );
+										JFrame frame = new JFrame("Create an outgoing event to " + Logger.elementInfo( theActor ) );
+										
+										frame.setDefaultCloseOperation( JFrame.DISPOSE_ON_CLOSE );
+
+										CreateOutgoingEventPanel thePanel = new CreateOutgoingEventPanel(
+												theSourceGraphElement, 
+												theChosenBlock, 
+												withReqtsAlsoAdded,
+												(IRPActor)theActor, 
+												thePort,
+												thePackageForEvent );
+
+										frame.setContentPane( thePanel );
+										frame.pack();
+										frame.setLocationRelativeTo( null );
+										frame.setVisible( true );
+									}
+								});
+							}
+						}
+					}			
 				}
 			}
 		}
-	
-		return thePort;
 	}
 	
 	private void updateNames(){
@@ -387,8 +388,6 @@ public class CreateOutgoingEventPanel extends CreateTracedElementPanel {
 
 					if (m_SendOperationIsNeededCheckBox.isSelected()){
 
-						IRPPort thePort = getPortForDestinationActor();
-
 						Logger.writeLine("Adding an inform Operation");		
 
 						IRPOperation informOp =
@@ -400,12 +399,14 @@ public class CreateOutgoingEventPanel extends CreateTracedElementPanel {
 
 						addTraceabilityDependenciesTo( informOp, selectedReqtsList );
 
+						String thePortName = m_DestinationActorPort.getName();
+						
 						if (m_ActiveAgumentNeededCheckBox.isSelected()){
 
 							informOp.addArgument("active");
-							informOp.setBody("OPORT(" + thePort.getName()+")->GEN(" + theEventName + "( active ) );");
+							informOp.setBody("OPORT( " + thePortName + " )->GEN( " + theEventName + "( active ) );");
 						} else {
-							informOp.setBody("OPORT(" + thePort.getName()+")->GEN(" + theEventName + ");");
+							informOp.setBody("OPORT( " + thePortName + " )->GEN( " + theEventName + " );");
 						}			
 					}	
 					
@@ -444,6 +445,7 @@ public class CreateOutgoingEventPanel extends CreateTracedElementPanel {
     #062 17-JUL-2016: Create InterfacesPkg and correct build issues by adding a Usage dependency (F.J.Chadburn)
     #069 20-JUL-2016: Fix population of events/ops on diagram when creating from a transition (F.J.Chadburn)
     #078 28-JUL-2016: Added isPopulateWantedByDefault tag to FunctionalAnalysisPkg to give user option (F.J.Chadburn)
+    #089 15-AUG-2016: Add a pull-down list to select Block when adding events/ops in white box (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

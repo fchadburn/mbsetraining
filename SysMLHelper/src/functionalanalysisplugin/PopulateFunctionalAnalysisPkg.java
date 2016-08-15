@@ -148,18 +148,23 @@ public class PopulateFunctionalAnalysisPkg extends PopulatePkg {
 	}
 	
 	
-	public static void addNewActorToPackageUnderDevelopement(IRPModelElement theSelectedEl){
+	public static void addNewActorToPackageUnderDevelopement(
+			IRPModelElement theSelectedEl ){
 		
 		final String rootPackageName = "FunctionalAnalysisPkg";
 		
+		IRPProject theProject = theSelectedEl.getProject();
+		
 		final IRPModelElement theRootPackage = 
-				theSelectedEl.getProject().findElementsByFullName(rootPackageName, "Package");
+				theProject.findElementsByFullName( rootPackageName, "Package" );
 		
 		final IRPPackage thePackageUnderDev = 
-				FunctionalAnalysisSettings.getPackageUnderDev( theSelectedEl.getProject() );
+				FunctionalAnalysisSettings.getPackageUnderDev( theProject );
 
 		final IRPClass theBlockUnderDev = 
-				FunctionalAnalysisSettings.getBlockUnderDev( theSelectedEl.getProject() );
+				FunctionalAnalysisSettings.getBlockUnderDev( 
+						theProject, 
+						FunctionalAnalysisSettings.getIsEnableBlockSelectionByUser( theProject ) );
 		
 		Logger.writeLine("Add new actor part to " + Logger.elementInfo( thePackageUnderDev ) + " was invoked");
 		
@@ -264,6 +269,7 @@ public class PopulateFunctionalAnalysisPkg extends PopulatePkg {
     #047 06-JUL-2016: Tweaked properties and added options to switch to MoreDetailedAD automatically (F.J.Chadburn)
     #059 13-JUL-2016: Improvements so ADs in FunctionalAnalysisPkg now include full tools/menus (F.J.Chadburn)
 	#061 17-JUL-2016: Ensure BasePkg is added by reference from profile to aid future integration (F.J.Chadburn)
+    #089 15-AUG-2016: Add a pull-down list to select Block when adding events/ops in white box (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

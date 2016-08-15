@@ -70,13 +70,15 @@ public class CreateOperationPanel extends CreateTracedElementPanel {
 
 			@Override
 			public void run() {
-				IRPClassifier theLogicalSystemBlock = FunctionalAnalysisSettings.getBlockUnderDev( inProject );
+				IRPClassifier theLogicalSystemBlock = 
+						FunctionalAnalysisSettings.getBlockUnderDev( 
+								inProject, 
+								FunctionalAnalysisSettings.getIsEnableBlockSelectionByUser(inProject) );
 				
 				JFrame.setDefaultLookAndFeelDecorated( true );
 				
 				JFrame frame = new JFrame(
-						"Create an operation on " + theLogicalSystemBlock.getUserDefinedMetaClass() 
-						+ " called " + theLogicalSystemBlock.getName());
+						"Create an operation on " + Logger.elementInfo( theLogicalSystemBlock ) );
 				
 				frame.setDefaultCloseOperation( JFrame.DISPOSE_ON_CLOSE );
 				
@@ -84,7 +86,7 @@ public class CreateOperationPanel extends CreateTracedElementPanel {
 						selectedDiagramEl,
 						withReqtsAlsoAdded,
 						theLogicalSystemBlock,
-						isPopulateSelected);
+						isPopulateSelected );
 
 				frame.setContentPane( thePanel );
 				frame.pack();
@@ -200,6 +202,7 @@ public class CreateOperationPanel extends CreateTracedElementPanel {
     #043 03-JUL-2016: Add Derive downstream reqt for CallOps, InterfaceItems and Event Actions (F.J.Chadburn)
     #058 13-JUL-2016: Dropping CallOp on diagram now gives option to create Op on block (F.J.Chadburn)
 	#078 28-JUL-2016: Added isPopulateWantedByDefault tag to FunctionalAnalysisPkg to give user option (F.J.Chadburn)
+    #089 15-AUG-2016: Add a pull-down list to select Block when adding events/ops in white box (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

@@ -126,10 +126,11 @@ public class CreateNewActorPanel extends CreateStructuralElementPanel {
 		
 		if (checkValidity( false )){
 			
-			IRPInstance partUnderDev = FunctionalAnalysisSettings.getPartUnderDev( m_RootPackage.getProject() );
+			IRPInstance partUnderDev = 
+					FunctionalAnalysisSettings.getPartUnderDev(
+							m_RootPackage.getProject() );
 			
 			if (partUnderDev != null){
-				
 				IRPClass theUsageBlock = (IRPClass)partUnderDev.getOwner();
 				m_ClassifierMappingInfo.performActorPartCreationIfSelectedTo( theUsageBlock );
 			}
