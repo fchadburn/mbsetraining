@@ -60,10 +60,11 @@ public class SysMLHelperTriggers extends RPApplicationListener {
 				
 				if( theOp==null ){
 					IRPClass theBlock = FunctionalAnalysisSettings.getBlockUnderDev(
-							modelElement.getProject() );
+							modelElement.getProject(), true );
 					
 					if (theBlock != null){
-						boolean answer = UserInterfaceHelpers.askAQuestion("Do you want to add an Operation to " + 
+						boolean answer = UserInterfaceHelpers.askAQuestion(
+								"Do you want to add an Operation to " + 
 								Logger.elementInfo( theBlock ) + "?");
 						
 						if( answer==true ){
@@ -366,6 +367,7 @@ public class SysMLHelperTriggers extends RPApplicationListener {
     #079 28-JUL-2016: Improved robustness of post add CallOp behaviour to prevent Rhapsody hanging (F.J.Chadburn)
     #080 28-JUL-2016: Added activity diagram name to the create AD dialog for use cases (F.J.Chadburn)
     #081 28-JUL-2016: Dragging a CallOp on to diagram should not ask to add a new one (F.J.Chadburn)
+    #089 15-AUG-2016: Add a pull-down list to select Block when adding events/ops in white box (F.J.Chadburn)
     
     This file is part of SysMLHelperPlugin.
 
