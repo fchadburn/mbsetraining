@@ -730,6 +730,134 @@ public class GeneralHelpers {
 		
 		return theUniqueName;
 	}
+	
+	public static List<IRPModelElement> getNonActorOrTestingClassifiersConnectedTo( 
+			IRPClassifier theClassifier,
+			IRPClass inTheBuildingBlock ){
+		
+		List<IRPModelElement> theClassifiersConnectedTo = new ArrayList<IRPModelElement>();
+		
+		@SuppressWarnings("unchecked")
+		List<IRPModelElement> theConnectors = inTheBuildingBlock.getLinks().toList();
+		
+		for( IRPModelElement theConnector : theConnectors ) {
+			
+			IRPLink theLink = (IRPLink) theConnector;
+			
+			IRPPort theFromPort = theLink.getFromPort();
+			IRPPort theToPort = theLink.getToPort();
+			
+			if( theFromPort != null && theToPort != null ){
+				
+				if( theFromPort.getOwner().equals( theClassifier ) ){
+					
+					IRPModelElement theOwner = theToPort.getOwner();
+					
+					if( theOwner instanceof IRPClass &&
+						!GeneralHelpers.hasStereotypeCalled("TestDriver", theOwner) ){
+						theClassifiersConnectedTo.add( theOwner );
+					}
+					
+				} else if( theToPort.getOwner().equals( theClassifier ) ){
+					
+					IRPModelElement theOwner = theFromPort.getOwner();
+					
+					if( theOwner instanceof IRPClass &&
+						!GeneralHelpers.hasStereotypeCalled("TestDriver", theOwner) ){
+						theClassifiersConnectedTo.add( theOwner );
+					}
+				}
+			}
+		}
+
+		return theClassifiersConnectedTo;
+	}
+
+	public static IRPPort getPortThatConnects(
+			IRPClassifier theChosenClassifier, 
+			IRPActor withTheActor,
+			IRPClass inTheBuildingBlock ) {
+		
+		IRPPort thePort = null;
+		
+		@SuppressWarnings("unchecked")
+		List<IRPModelElement> theConnectors = inTheBuildingBlock.getLinks().toList();
+		
+		for( IRPModelElement theConnector : theConnectors ){
+			
+			IRPLink theLink = (IRPLink) theConnector;
+			
+			IRPPort theFromPort = theLink.getFromPort();
+			IRPPort theToPort = theLink.getToPort();
+			
+			if( theFromPort != null && theToPort != null ){
+				
+				if( theFromPort.getOwner().equals( withTheActor ) && 
+					theToPort.getOwner().equals( theChosenClassifier )){
+					
+					Logger.writeLine( "Found " + Logger.elementInfo(theConnector) + " owned by " + Logger.elementInfo( inTheBuildingBlock ) + 
+							"that goes from " + Logger.elementInfo(theFromPort) + " to " + Logger.elementInfo(theToPort));
+
+					thePort = theToPort;
+					
+				} else if( theToPort.getOwner().equals( withTheActor ) && 
+						   theFromPort.getOwner().equals( theChosenClassifier )){
+					
+					Logger.writeLine( "Found " + Logger.elementInfo(theConnector) + " owned by " + Logger.elementInfo( inTheBuildingBlock ) + 
+							"that goes from " + Logger.elementInfo(theFromPort) + " to " + Logger.elementInfo(theToPort));
+
+					thePort = theFromPort;
+				}
+			}
+		}
+		
+		Logger.writeLine("getPortThatConnects is returning " + Logger.elementInfo(thePort));
+		
+		return thePort;
+	}
+	
+	public static IRPPort getPortThatConnects(
+			IRPActor theActor,
+			IRPClassifier withTheChosenClassifier, 
+			IRPClass inTheBuildingBlock ) {
+		
+		IRPPort thePort = null;
+		
+		@SuppressWarnings("unchecked")
+		List<IRPModelElement> theConnectors = inTheBuildingBlock.getLinks().toList();
+		
+		for( IRPModelElement theConnector : theConnectors ){
+			
+			IRPLink theLink = (IRPLink) theConnector;
+			
+			IRPPort theFromPort = theLink.getFromPort();
+			IRPPort theToPort = theLink.getToPort();
+			
+			if( theFromPort != null && theToPort != null ){
+				
+				if( theFromPort.getOwner().equals(theActor) && 
+					theToPort.getOwner().equals( withTheChosenClassifier)){
+					
+					Logger.writeLine( "Found " + Logger.elementInfo(theConnector) + " owned by " + Logger.elementInfo( inTheBuildingBlock ) + 
+							"that goes from " + Logger.elementInfo(theFromPort) + " to " + Logger.elementInfo(theToPort));
+
+					thePort = theFromPort;
+					
+				} else if( theToPort.getOwner().equals(theActor) && 
+						   theFromPort.getOwner().equals( withTheChosenClassifier )){
+					
+					Logger.writeLine( "Found " + Logger.elementInfo(theConnector) + " owned by " + Logger.elementInfo( inTheBuildingBlock ) + 
+							"that goes from " + Logger.elementInfo(theFromPort) + " to " + Logger.elementInfo(theToPort));
+
+					thePort = theToPort;
+				}
+			}
+		}
+		
+		Logger.writeLine("getPortThatConnects is returning " + Logger.elementInfo(thePort));
+		
+		return thePort;
+	}
 }
 
 /**
@@ -754,6 +882,7 @@ public class GeneralHelpers {
 	#072 25-JUL-2016: Improved robustness when graphEls that don't have model elements are selected (F.J.Chadburn)
 	#074 25-JUL-2016: Support creation of requirements from AcceptTimeEvents (F.J.Chadburn)
 	#085 09-AUG-2016: Add helper to findElementsWithMetaClassStereotypeAndName (F.J.Chadburn)
+	#089 15-AUG-2016: Add a pull-down list to select Block when adding events/ops in white box (F.J.Chadburn)
 	
     This file is part of SysMLHelperPlugin.
 
