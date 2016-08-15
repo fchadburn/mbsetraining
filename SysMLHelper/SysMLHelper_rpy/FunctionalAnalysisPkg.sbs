@@ -33,9 +33,9 @@ I-Logix-RPY-Archive version 8.11.0 C++ 9499822
 			}
 		}
 	}
-	- _modifiedTimeWeak = 8.9.2016::12:51:4;
+	- _modifiedTimeWeak = 8.15.2016::20:50:36;
 	- Tags = { IRPYRawContainer 
-		- size = 4;
+		- size = 5;
 		- value = 
 		{ ITag 
 			- _id = GUID d568061a-8009-4ad3-a287-556b6676b750;
@@ -113,8 +113,32 @@ I-Logix-RPY-Archive version 8.11.0 C++ 9499822
 			}
 			- _isOrdered = 0;
 		}
+		{ ITag 
+			- _id = GUID fc1ef563-5a05-4358-90e6-a33fde1c1221;
+			- _myState = 8192;
+			- _name = "isUserBlockChoiceEnabled";
+			- _modifiedTimeWeak = 8.15.2016::20:50:36;
+			- ValueSpecifications = { IRPYRawContainer 
+				- size = 1;
+				- value = 
+				{ ILiteralSpecification 
+					- _id = GUID c323d94e-1839-4605-8ad7-29f36194d863;
+					- _modifiedTimeWeak = 8.15.2016::20:50:36;
+					- _value = "true";
+				}
+			}
+			- _typeOf = { IHandle 
+				- _m2Class = "IType";
+				- _filename = "PredefinedTypes.sbs";
+				- _subsystem = "PredefinedTypes";
+				- _class = "";
+				- _name = "RhpBoolean";
+				- _id = GUID f19b56f2-78ab-44fa-860e-6ead487ecb07;
+			}
+			- _isOrdered = 0;
+		}
 	}
-	- _lastID = 5;
+	- _lastID = 6;
 	- Declaratives = { IRPYRawContainer 
 		- size = 1;
 		- value = 
@@ -124,7 +148,7 @@ I-Logix-RPY-Archive version 8.11.0 C++ 9499822
 			- _name = "RequirementsPkg";
 		}
 	}
-	- weakCGTime = 8.9.2016::12:51:4;
+	- weakCGTime = 8.15.2016::20:50:36;
 	- strongCGTime = 5.2.2016::10:11:7;
 	- _defaultComposite = GUID e1d8914f-8f41-4c60-82ca-74d684bda7f3;
 	- _eventsBaseID = -1;
@@ -135,8 +159,8 @@ I-Logix-RPY-Archive version 8.11.0 C++ 9499822
 			- _id = GUID e1d8914f-8f41-4c60-82ca-74d684bda7f3;
 			- _myState = 40960;
 			- _name = "TopLevel";
-			- _modifiedTimeWeak = 7.28.2016::9:34:8;
-			- weakCGTime = 7.28.2016::9:34:8;
+			- _modifiedTimeWeak = 8.9.2016::12:51:4;
+			- weakCGTime = 8.9.2016::12:51:4;
 			- strongCGTime = 5.2.2016::10:11:7;
 			- _multiplicity = "";
 			- _itsStateChart = { IHandle 
