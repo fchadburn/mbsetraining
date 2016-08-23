@@ -75,6 +75,7 @@ public class SysMLHelperTriggers extends RPApplicationListener {
 									theSelectedGraphEls.get(0), 
 									theReqts, 
 									theApp.activeProject(),
+									true,
 									true );
 						}
 					}
@@ -368,7 +369,8 @@ public class SysMLHelperTriggers extends RPApplicationListener {
     #080 28-JUL-2016: Added activity diagram name to the create AD dialog for use cases (F.J.Chadburn)
     #081 28-JUL-2016: Dragging a CallOp on to diagram should not ask to add a new one (F.J.Chadburn)
     #089 15-AUG-2016: Add a pull-down list to select Block when adding events/ops in white box (F.J.Chadburn)
-    
+    #093 23-AUG-2016: Added isPopulateOptionHidden tag to allow hiding of the populate check-box on dialogs (F.J.Chadburn)
+
     This file is part of SysMLHelperPlugin.
 
     SysMLHelperPlugin is free software: you can redistribute it and/or modify
