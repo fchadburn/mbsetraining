@@ -4,7 +4,7 @@ I-Logix-RPY-Archive version 8.11.0 C++ 9499822
 	- _myState = 8192;
 	- _properties = { IPropertyContainer 
 		- Subjects = { IRPYRawContainer 
-			- size = 1;
+			- size = 2;
 			- value = 
 			{ IPropertySubject 
 				- _Name = "Model";
@@ -30,12 +30,253 @@ I-Logix-RPY-Archive version 8.11.0 C++ 9499822
 					}
 				}
 			}
+			{ IPropertySubject 
+				- _Name = "ObjectModelGe";
+				- Metaclasses = { IRPYRawContainer 
+					- size = 2;
+					- value = 
+					{ IPropertyMetaclass 
+						- _Name = "Link";
+						- Properties = { IRPYRawContainer 
+							- size = 1;
+							- value = 
+							{ IProperty 
+								- _Name = "line_style";
+								- _Value = "straight_arrows";
+								- _Type = Enum;
+								- _ExtraTypeInfo = "straight_arrows,rectilinear_arrows,spline_arrows";
+							}
+						}
+					}
+					{ IPropertyMetaclass 
+						- _Name = "Object";
+						- Properties = { IRPYRawContainer 
+							- size = 3;
+							- value = 
+							{ IProperty 
+								- _Name = "Compartments";
+								- _Value = "Operation";
+								- _Type = MultiLine;
+							}
+							{ IProperty 
+								- _Name = "ShowName";
+								- _Value = "Type";
+								- _Type = Enum;
+								- _ExtraTypeInfo = "Full_path,Relative,Name_only,Type,Label";
+							}
+							{ IProperty 
+								- _Name = "ShowOperations";
+								- _Value = "All";
+								- _Type = Enum;
+								- _ExtraTypeInfo = "All,None,Public,Explicit";
+							}
+						}
+					}
+				}
+			}
 		}
 	}
 	- _name = "DesignSynthesisProfile";
-	- _modifiedTimeWeak = 7.25.2016::11:51:40;
-	- weakCGTime = 7.25.2016::11:51:40;
-	- strongCGTime = 7.25.2016::11:51:40;
+	- _modifiedTimeWeak = 8.23.2016::8:30:2;
+	- _lastID = 4;
+	- Declaratives = { IRPYRawContainer 
+		- size = 4;
+		- value = 
+		{ IStereotype 
+			- _id = GUID a620cee3-6b39-41b9-87c5-3de74f969894;
+			- _myState = 8192;
+			- _properties = { IPropertyContainer 
+				- Subjects = { IRPYRawContainer 
+					- size = 1;
+					- value = 
+					{ IPropertySubject 
+						- _Name = "Format";
+						- Metaclasses = { IRPYRawContainer 
+							- size = 2;
+							- value = 
+							{ IPropertyMetaclass 
+								- _Name = "Class";
+								- Properties = { IRPYRawContainer 
+									- size = 1;
+									- value = 
+									{ IProperty 
+										- _Name = "Line.LineColor";
+										- _Value = "128,0,0";
+										- _Type = Color;
+									}
+								}
+							}
+							{ IPropertyMetaclass 
+								- _Name = "Object";
+								- Properties = { IRPYRawContainer 
+									- size = 1;
+									- value = 
+									{ IProperty 
+										- _Name = "Line.LineColor";
+										- _Value = "128,0,0";
+										- _Type = Color;
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			- _name = "Actuator";
+			- _modifiedTimeWeak = 8.23.2016::7:24:3;
+			- _m2Classes = { IRPYRawContainer 
+				- size = 2;
+				- value = "Class"; "Object"; 
+			}
+		}
+		{ IStereotype 
+			- _id = GUID b2a22dfc-eac8-4e06-ae01-41ed5e1b7fe1;
+			- _myState = 8192;
+			- _properties = { IPropertyContainer 
+				- Subjects = { IRPYRawContainer 
+					- size = 1;
+					- value = 
+					{ IPropertySubject 
+						- _Name = "Format";
+						- Metaclasses = { IRPYRawContainer 
+							- size = 2;
+							- value = 
+							{ IPropertyMetaclass 
+								- _Name = "Class";
+								- Properties = { IRPYRawContainer 
+									- size = 1;
+									- value = 
+									{ IProperty 
+										- _Name = "Line.LineColor";
+										- _Value = "128,128,0";
+										- _Type = Color;
+									}
+								}
+							}
+							{ IPropertyMetaclass 
+								- _Name = "Object";
+								- Properties = { IRPYRawContainer 
+									- size = 1;
+									- value = 
+									{ IProperty 
+										- _Name = "Line.LineColor";
+										- _Value = "128,128,0";
+										- _Type = Color;
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			- _name = "Component";
+			- _modifiedTimeWeak = 8.23.2016::7:25:33;
+			- _m2Classes = { IRPYRawContainer 
+				- size = 2;
+				- value = "Class"; "Object"; 
+			}
+		}
+		{ IStereotype 
+			- _id = GUID 9917a249-fa76-4e56-8fe9-13a3a96d42f1;
+			- _myState = 8192;
+			- _properties = { IPropertyContainer 
+				- Subjects = { IRPYRawContainer 
+					- size = 1;
+					- value = 
+					{ IPropertySubject 
+						- _Name = "Format";
+						- Metaclasses = { IRPYRawContainer 
+							- size = 2;
+							- value = 
+							{ IPropertyMetaclass 
+								- _Name = "Class";
+								- Properties = { IRPYRawContainer 
+									- size = 1;
+									- value = 
+									{ IProperty 
+										- _Name = "Line.LineColor";
+										- _Value = "255,0,255";
+										- _Type = Color;
+									}
+								}
+							}
+							{ IPropertyMetaclass 
+								- _Name = "Object";
+								- Properties = { IRPYRawContainer 
+									- size = 1;
+									- value = 
+									{ IProperty 
+										- _Name = "Line.LineColor";
+										- _Value = "255,0,255";
+										- _Type = Color;
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			- _name = "ExternalSystem";
+			- _modifiedTimeWeak = 8.23.2016::8:30:2;
+			- Tags = { IRPYRawContainer 
+				- size = 0;
+			}
+			- _lastID = 1;
+			- _m2Classes = { IRPYRawContainer 
+				- size = 2;
+				- value = "Class"; "Object"; 
+			}
+		}
+		{ IStereotype 
+			- _id = GUID 2bdaf91a-8eb2-4010-ac66-a269fd07f953;
+			- _myState = 8192;
+			- _properties = { IPropertyContainer 
+				- Subjects = { IRPYRawContainer 
+					- size = 1;
+					- value = 
+					{ IPropertySubject 
+						- _Name = "Format";
+						- Metaclasses = { IRPYRawContainer 
+							- size = 2;
+							- value = 
+							{ IPropertyMetaclass 
+								- _Name = "Class";
+								- Properties = { IRPYRawContainer 
+									- size = 1;
+									- value = 
+									{ IProperty 
+										- _Name = "Line.LineColor";
+										- _Value = "0,0,0";
+										- _Type = Color;
+									}
+								}
+							}
+							{ IPropertyMetaclass 
+								- _Name = "Object";
+								- Properties = { IRPYRawContainer 
+									- size = 1;
+									- value = 
+									{ IProperty 
+										- _Name = "Line.LineColor";
+										- _Value = "0,0,0";
+										- _Type = Color;
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			- _name = "Sensor";
+			- _modifiedTimeWeak = 8.23.2016::7:29:25;
+			- _m2Classes = { IRPYRawContainer 
+				- size = 2;
+				- value = "Class"; "Object"; 
+			}
+		}
+	}
+	- weakCGTime = 8.23.2016::8:30:2;
+	- strongCGTime = 8.23.2016::7:22:6;
 	- _defaultComposite = GUID 44661a52-2513-44fc-ab8c-2012103b2418;
 	- _eventsBaseID = -1;
 	- Classes = { IRPYRawContainer 
@@ -45,9 +286,9 @@ I-Logix-RPY-Archive version 8.11.0 C++ 9499822
 			- _id = GUID 44661a52-2513-44fc-ab8c-2012103b2418;
 			- _myState = 40960;
 			- _name = "TopLevel";
-			- _modifiedTimeWeak = 1.2.1990::0:0:0;
-			- weakCGTime = 1.2.1990::0:0:0;
-			- strongCGTime = 1.2.1990::0:0:0;
+			- _modifiedTimeWeak = 8.23.2016::7:29:25;
+			- weakCGTime = 8.23.2016::7:29:25;
+			- strongCGTime = 8.23.2016::7:22:6;
 			- _multiplicity = "";
 			- _itsStateChart = { IHandle 
 				- _m2Class = "";
@@ -55,6 +296,6 @@ I-Logix-RPY-Archive version 8.11.0 C++ 9499822
 			- _classModifier = Unspecified;
 		}
 	}
-	- _configurationRelatedTime = 1.1.1970::0:0:0;
+	- _configurationRelatedTime = 1.2.1990::0:0:0;
 }
 
