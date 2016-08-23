@@ -129,8 +129,13 @@ public class CopyActivityDiagramsPanel extends CreateStructuralElementPanel {
 			theBox.add( theRadioButtonTable );
 		}
 		
+		boolean isPopulateOptionHidden = 
+				FunctionalAnalysisSettings.getIsPopulateOptionHidden(
+						m_ToElement.getProject() );
+		
 		m_ApplyMoreDetailedADCheckBox = new JCheckBox("Switch toolbars and formatting to more detailed AD ready for conversion?");
-		m_ApplyMoreDetailedADCheckBox.setSelected(true);
+		m_ApplyMoreDetailedADCheckBox.setSelected( !isPopulateOptionHidden );
+		m_ApplyMoreDetailedADCheckBox.setVisible( !isPopulateOptionHidden );
 		
 		if( !m_RadioButtonMap.isEmpty() ){
 			theBox.add( m_ApplyMoreDetailedADCheckBox );			
@@ -328,6 +333,7 @@ public class CopyActivityDiagramsPanel extends CreateStructuralElementPanel {
     #045 03-JUL-2016: Fix CopyActivityDiagramsPanel capability (F.J.Chadburn)
     #047 06-JUL-2016: Tweaked properties and added options to switch to MoreDetailedAD automatically (F.J.Chadburn)
     #057 13-JUL-2016: Enhanced Copy AD panel to list use cases and give a create new option (F.J.Chadburn)
+    #093 23-AUG-2016: Added isPopulateOptionHidden tag to allow hiding of the populate check-box on dialogs (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

@@ -12,6 +12,7 @@ public class FunctionalAnalysisSettings {
 	
 	public static final String tagNameForPackageUnderDev = "packageUnderDev";
 	public static final String tagNameForDependency = "traceabilityTypeToUseForFunctions";	
+	public static final String tagNameForIsPopulateOptionHidden = "isPopulateOptionHidden";
 	public static final String tagNameForPopulateWantedByDefault = "isPopulateWantedByDefault";
 	public static final String tagNameForPackageForEventsAndInterfaces = "packageForEventsAndInterfaces";
 	public static final String tagNameForIsUserBlockChoiceEnabled = "isUserBlockChoiceEnabled";
@@ -424,6 +425,14 @@ public class FunctionalAnalysisSettings {
 		return result;
 	}
 	
+	public static boolean getIsPopulateOptionHidden(
+			IRPProject inTheProject ){
+		
+		boolean result = getTagBooleanValue(
+				inTheProject, tagNameForIsPopulateOptionHidden );
+		
+		return result;
+	}
 	
 	public static boolean getIsEnableBlockSelectionByUser(
 			IRPProject inTheProject ){
@@ -448,7 +457,8 @@ public class FunctionalAnalysisSettings {
     #079 28-JUL-2016: Improved robustness of post add CallOp behaviour to prevent Rhapsody hanging (F.J.Chadburn)
     #087 09-AUG-2016: Added packageForEventsAndInterfaces tag to give user flexibility to change (F.J.Chadburn)
     #089 15-AUG-2016: Add a pull-down list to select Block when adding events/ops in white box (F.J.Chadburn)
-    
+    #093 23-AUG-2016: Added isPopulateOptionHidden tag to allow hiding of the populate check-box on dialogs (F.J.Chadburn)
+
     This file is part of SysMLHelperPlugin.
 
     SysMLHelperPlugin is free software: you can redistribute it and/or modify

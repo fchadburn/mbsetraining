@@ -35,6 +35,10 @@ public class CreateOperationPanel extends CreateTracedElementPanel {
 		// cast to IRPRequirement
 		@SuppressWarnings("unchecked")
 		Set<IRPRequirement> theSelectedReqts = (Set<IRPRequirement>)(Set<?>) theMatchingEls;
+
+		boolean isPopulateOptionHidden = 
+				FunctionalAnalysisSettings.getIsPopulateOptionHidden(
+						theActiveProject );
 		
 		boolean isPopulate = 
 				FunctionalAnalysisSettings.getIsPopulateWantedByDefault(
@@ -43,7 +47,12 @@ public class CreateOperationPanel extends CreateTracedElementPanel {
 		if (GeneralHelpers.doUnderlyingModelElementsIn( theSelectedGraphEls, "Requirement" )){
 			
 			// only requirements are selected hence assume only a single operation is needed
-			launchThePanel(	theSelectedGraphEls.get(0), theSelectedReqts, theActiveProject, isPopulate );
+			launchThePanel(	
+					theSelectedGraphEls.get(0), 
+					theSelectedReqts, 
+					theActiveProject, 
+					isPopulate, 
+					isPopulateOptionHidden );
 		} else {
 			
 			// launch a dialog for each selected element that is not a requirement
@@ -54,7 +63,12 @@ public class CreateOperationPanel extends CreateTracedElementPanel {
 				if (theModelObject != null && !(theModelObject instanceof IRPRequirement)){
 					
 					// only launch a dialog for non requirement elements
-					launchThePanel(	theGraphEl, theSelectedReqts, theActiveProject, isPopulate );
+					launchThePanel(	
+							theGraphEl, 
+							theSelectedReqts, 
+							theActiveProject, 
+							isPopulate, 
+							isPopulateOptionHidden );
 				}		
 			}
 		}
@@ -64,7 +78,8 @@ public class CreateOperationPanel extends CreateTracedElementPanel {
 			final IRPGraphElement selectedDiagramEl, 
 			final Set<IRPRequirement> withReqtsAlsoAdded,
 			final IRPProject inProject,
-			final boolean isPopulateSelected ){
+			final boolean isPopulateSelected,
+			final boolean isPopulateOptionHidden ){
 	
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 
@@ -86,7 +101,8 @@ public class CreateOperationPanel extends CreateTracedElementPanel {
 						selectedDiagramEl,
 						withReqtsAlsoAdded,
 						theLogicalSystemBlock,
-						isPopulateSelected );
+						isPopulateSelected,
+						isPopulateOptionHidden );
 
 				frame.setContentPane( thePanel );
 				frame.pack();
@@ -100,7 +116,8 @@ public class CreateOperationPanel extends CreateTracedElementPanel {
 			IRPGraphElement forSourceGraphElement, 
 			Set<IRPRequirement> withReqtsAlsoAdded,
 			IRPClassifier onTargetBlock,
-			boolean isPopulateSelected ) {
+			boolean isPopulateSelected,
+			boolean isPopulateOptionHidden ) {
 		
 		super(forSourceGraphElement, withReqtsAlsoAdded, onTargetBlock);
 		 
@@ -131,6 +148,7 @@ public class CreateOperationPanel extends CreateTracedElementPanel {
 		
 		m_CallOperationIsNeededCheckBox = new JCheckBox("Populate on diagram?");
 		m_CallOperationIsNeededCheckBox.setSelected( isPopulateSelected );
+		m_CallOperationIsNeededCheckBox.setVisible( !isPopulateOptionHidden );
 		
 		JPanel thePageStartPanel = new JPanel();
 		thePageStartPanel.setLayout( new BoxLayout( thePageStartPanel, BoxLayout.X_AXIS ) );
@@ -203,6 +221,7 @@ public class CreateOperationPanel extends CreateTracedElementPanel {
     #058 13-JUL-2016: Dropping CallOp on diagram now gives option to create Op on block (F.J.Chadburn)
 	#078 28-JUL-2016: Added isPopulateWantedByDefault tag to FunctionalAnalysisPkg to give user option (F.J.Chadburn)
     #089 15-AUG-2016: Add a pull-down list to select Block when adding events/ops in white box (F.J.Chadburn)
+    #093 23-AUG-2016: Added isPopulateOptionHidden tag to allow hiding of the populate check-box on dialogs (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

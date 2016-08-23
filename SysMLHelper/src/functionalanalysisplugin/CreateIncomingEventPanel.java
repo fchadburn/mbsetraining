@@ -103,11 +103,16 @@ public class CreateIncomingEventPanel extends CreateTracedElementPanel {
 		setBorder( BorderFactory.createEmptyBorder( 10, 10, 10, 10 ) );
 		
 		m_EventActionIsNeededCheckBox = new JCheckBox("Populate on diagram?");
+
+		boolean isPopulateOptionHidden = 
+				FunctionalAnalysisSettings.getIsPopulateOptionHidden(
+						thePackageForEvent.getProject() );
 		
 		boolean isPopulate = 
 				FunctionalAnalysisSettings.getIsPopulateWantedByDefault(
 						thePackageForEvent.getProject() );
 		
+		m_EventActionIsNeededCheckBox.setVisible( !isPopulateOptionHidden );
 		m_EventActionIsNeededCheckBox.setSelected( isPopulate );
 		
 		JPanel thePageStartPanel = new JPanel();
@@ -1049,6 +1054,7 @@ public class CreateIncomingEventPanel extends CreateTracedElementPanel {
     #088 09-AUG-2016: Added a create send event via Panel to the incoming event dialog (F.J.Chadburn)
     #089 15-AUG-2016: Add a pull-down list to select Block when adding events/ops in white box (F.J.Chadburn)
     #090 15-AUG-2016: Fix check operation name issue introduced in fixes #083 and #084 (F.J.Chadburn)
+    #093 23-AUG-2016: Added isPopulateOptionHidden tag to allow hiding of the populate check-box on dialogs (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

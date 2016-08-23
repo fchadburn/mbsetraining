@@ -110,6 +110,8 @@ public class PopulateFunctionalAnalysisPkg extends PopulatePkg {
 	    	setProperty( forProject, "General.Model.HighlightElementsInActiveComponentScope", "True" );
 	    	setProperty( forProject, "General.Model.ShowModelTooltipInGE", "Enhanced" );
 	    	setProperty( forProject, "General.Model.BackUps", "One" );
+	    	setProperty (forProject, "General.Model.RenameUnusedFiles", "True");
+	    	setProperty( forProject, "Activity.General.AutoSelectControlOrObjectFlow", "False" );
 	    	
 	    	createFunctionalBlockPackageHierarchy( theFunctionalAnalysisPkg );
 		}
@@ -270,6 +272,7 @@ public class PopulateFunctionalAnalysisPkg extends PopulatePkg {
     #059 13-JUL-2016: Improvements so ADs in FunctionalAnalysisPkg now include full tools/menus (F.J.Chadburn)
 	#061 17-JUL-2016: Ensure BasePkg is added by reference from profile to aid future integration (F.J.Chadburn)
     #089 15-AUG-2016: Add a pull-down list to select Block when adding events/ops in white box (F.J.Chadburn)
+    #091 23-AUG-2016: Turn off the Activity::General::AutoSelectControlOrObjectFlow property by default (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

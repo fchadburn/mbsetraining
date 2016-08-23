@@ -104,12 +104,17 @@ public class CreateOutgoingEventPanel extends CreateTracedElementPanel {
 		setBorder( BorderFactory.createEmptyBorder( 10, 10, 10, 10 ) );
 
 		m_ActionOnDiagramIsNeededCheckBox = new JCheckBox("Populate on diagram?");
+	
+		boolean isPopulateOptionHidden = 
+				FunctionalAnalysisSettings.getIsPopulateOptionHidden(
+						thePackageForEvent.getProject() );
 		
 		boolean isPopulate = 
 				FunctionalAnalysisSettings.getIsPopulateWantedByDefault(
 						thePackageForEvent.getProject() );
 		
 		m_ActionOnDiagramIsNeededCheckBox.setSelected( isPopulate );
+		m_ActionOnDiagramIsNeededCheckBox.setVisible( !isPopulateOptionHidden );
 		
 		JPanel thePageStartPanel = new JPanel();
 		thePageStartPanel.setLayout( new BoxLayout( thePageStartPanel, BoxLayout.X_AXIS ) );
@@ -446,6 +451,7 @@ public class CreateOutgoingEventPanel extends CreateTracedElementPanel {
     #069 20-JUL-2016: Fix population of events/ops on diagram when creating from a transition (F.J.Chadburn)
     #078 28-JUL-2016: Added isPopulateWantedByDefault tag to FunctionalAnalysisPkg to give user option (F.J.Chadburn)
     #089 15-AUG-2016: Add a pull-down list to select Block when adding events/ops in white box (F.J.Chadburn)
+    #093 23-AUG-2016: Added isPopulateOptionHidden tag to allow hiding of the populate check-box on dialogs (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 
