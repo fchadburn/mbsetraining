@@ -96,6 +96,7 @@ public class PopulateRequirementsAnalysisPkg extends PopulatePkg {
 			setProperty( forProject, "General.Model.ShowModelTooltipInGE", "Enhanced" );			
 			setProperty( forProject, "General.Model.BackUps", "One" );
 			setProperty (forProject, "General.Model.RenameUnusedFiles", "True");
+			setProperty( forProject, "Activity.General.AutoSelectControlOrObjectFlow", "False" );
 			
 			forProject.save();
 			
@@ -136,7 +137,8 @@ public class PopulateRequirementsAnalysisPkg extends PopulatePkg {
     #035 15-JUN-2016: New panel to configure requirements package naming and gateway set-up (F.J.Chadburn)
     #051 06-JUL-2016: Re-factored the GW panel to allow it to incrementally add to previous setup (F.J.Chadburn)
     #061 17-JUL-2016: Ensure BasePkg is added by reference from profile to aid future integration (F.J.Chadburn)
-    
+    #091 23-AUG-2016: Turn off the Activity::General::AutoSelectControlOrObjectFlow property by default (F.J.Chadburn)
+
     This file is part of SysMLHelperPlugin.
 
     SysMLHelperPlugin is free software: you can redistribute it and/or modify
