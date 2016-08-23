@@ -160,3 +160,13 @@ BETA TEST RELEASE 2.0.22 (09-AUG-2016)
 ----------------------------------------------------------------------------------
 BETA TEST RELEASE 2.0.23 (15-AUG-2016)
 ----------------------------------------------------------------------------------
+#091 23-AUG-2016: Turn off the Activity::General::AutoSelectControlOrObjectFlow property by default (F.J.Chadburn)
+#092 23-AUG-2016: Added Component,Actuator,SensorExternalSystem stereotypes to the DesignSynthesisProfile (F.J.Chadburn)
+#093 23-AUG-2016: Added isPopulateOptionHidden tag to allow hiding of the populate check-box on dialogs (F.J.Chadburn)
+#094 23-AUG-2016: Removed _s from name and extended ElapsedTime to improve TestDriver options (F.J.Chadburn)
+#095 23-AUG-2016: Turned off the "Do you want to add subscribe ports to other Blocks?" question (F.J.Chadburn)
+#096 23-AUG-2016: New display property settings added to the DesignSynthesisProfile based on experience (F.J.Chadburn)
+#097 23-AUG-2016: Added message attribute to the TestDriverBlock to make Panels more interesting (F.J.Chadburn)
+----------------------------------------------------------------------------------
+BETA TEST RELEASE 2.0.24 (23-AUG-2016)
+----------------------------------------------------------------------------------
