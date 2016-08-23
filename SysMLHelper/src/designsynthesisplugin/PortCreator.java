@@ -112,10 +112,12 @@ public class PortCreator {
 		IRPClassifier theOwner = (IRPClassifier) theAttribute.getOwner();
 		
 	    JDialog.setDefaultLookAndFeelDecorated(true);
-	    
+	    /*
 	    int response = JOptionPane.showConfirmDialog(null, 
 	    		"Do you want to add subscribe ports to other Blocks?\n", "Confirm",
 	        JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+	    */
+	    int response = JOptionPane.NO_OPTION;
 	    
 	    if (response == JOptionPane.YES_OPTION) {
 	    	IRPModelElement thePartOwner = getPartOwnerOf(theOwner);
@@ -266,6 +268,7 @@ public class PortCreator {
 
     Change history:
     #006 02-MAY-2016: Add FunctionalAnalysisPkg helper support (F.J.Chadburn)
+    #095 23-AUG-2016: Turned off the "Do you want to add subscribe ports to other Blocks?" question (F.J.Chadburn)
     
     This file is part of SysMLHelperPlugin.
 
