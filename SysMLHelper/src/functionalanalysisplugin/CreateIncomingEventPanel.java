@@ -160,7 +160,10 @@ public class CreateIncomingEventPanel extends CreateTracedElementPanel {
 		theCenterPanel.add( m_AttributeCheckBox );
 		
 		m_AttributeNamePanel = createAttributeNamePanel( 
-				determineBestAttributeName( onTargetBlock, theSourceText ) );
+				GeneralHelpers.determineUniqueNameBasedOn( 
+						GeneralHelpers.toMethodName( theSourceText ), 
+						"Attribute", 
+						onTargetBlock ) );
 		
 		m_AttributeNamePanel.setAlignmentX(LEFT_ALIGNMENT);
 	
@@ -177,45 +180,29 @@ public class CreateIncomingEventPanel extends CreateTracedElementPanel {
 		theCenterPanel.add( m_CreateSendEventViaPanel );	
 		
 		add( theCenterPanel, BorderLayout.WEST );
-		add( createOKCancelPanel(), BorderLayout.PAGE_END );
 
-		m_ChosenNameTextField.getDocument().addDocumentListener(
-				new DocumentListener() {
-
-					@Override
-					public void changedUpdate(DocumentEvent arg0) {
-						updateNames();					
-					}
-
-					@Override
-					public void insertUpdate(DocumentEvent arg0) {
-						updateNames();
-					}
-
-					@Override
-					public void removeUpdate(DocumentEvent arg0) {
-						updateNames();
-					}	
-				});
-		
-		updateNames();
+		commonPanelSetup();
 	}
 
 	public CreateIncomingEventPanel(
-			IRPAttribute forSelectedAttribute, 
+			IRPModelElement forModelElement, 
 			IRPClassifier onTargetBlock,
 			Set<IRPRequirement> withReqtsAlsoAdded,
 			IRPActor theSourceActor, 
 			IRPPort theSourceActorPort,
 			IRPPackage thePackageForEvent ){
 		
-		super( forSelectedAttribute, withReqtsAlsoAdded, onTargetBlock );
+		super( forModelElement, withReqtsAlsoAdded, onTargetBlock );
 		
 		m_SourceActor = theSourceActor;
 		m_SourceActorPort = theSourceActorPort;
 		m_PackageForEvent = thePackageForEvent;
 		
-		final String theSourceText = forSelectedAttribute.getName();
+		String theSourceText = "Tbd";
+		
+		if( forModelElement instanceof IRPAttribute ){
+			theSourceText = forModelElement.getName();
+		}
 		
 		Logger.writeLine("CreateIncomingEventPanel constructor called with text '" + theSourceText + "'");
 		
@@ -226,15 +213,34 @@ public class CreateIncomingEventPanel extends CreateTracedElementPanel {
 		setLayout( new BorderLayout(10,10) );
 		setBorder( BorderFactory.createEmptyBorder( 10, 10, 10, 10 ) );
 		
-		m_EventActionIsNeededCheckBox = new JCheckBox("Populate on diagram?");
-		m_EventActionIsNeededCheckBox.setSelected( false );
-		m_EventActionIsNeededCheckBox.setVisible( false );
-		
 		JPanel thePageStartPanel = new JPanel();
 		thePageStartPanel.setLayout( new BoxLayout( thePageStartPanel, BoxLayout.X_AXIS ) );
 		thePageStartPanel.add( createChosenNamePanelWith( "Create an event called:  ", theProposedName ) );
-		thePageStartPanel.add( m_EventActionIsNeededCheckBox );
-				
+
+		if( forModelElement instanceof IRPAttribute  || 
+			FunctionalAnalysisSettings.getIsPopulateOptionHidden( thePackageForEvent.getProject() ) ){
+			
+			m_EventActionIsNeededCheckBox = new JCheckBox("Populate on diagram?");
+			m_EventActionIsNeededCheckBox.setSelected( false );
+			m_EventActionIsNeededCheckBox.setVisible( false );
+			
+			JLabel filler = new JLabel("                                                  ");
+		
+			thePageStartPanel.add( filler );
+			
+		} else {			
+			
+			boolean isPopulate = 
+					FunctionalAnalysisSettings.getIsPopulateWantedByDefault(
+							thePackageForEvent.getProject() );
+			
+			m_EventActionIsNeededCheckBox = new JCheckBox("Populate on diagram?");
+			m_EventActionIsNeededCheckBox.setVisible( true );
+			m_EventActionIsNeededCheckBox.setSelected( isPopulate );
+			
+			thePageStartPanel.add( m_EventActionIsNeededCheckBox );
+		}
+		
 		add( thePageStartPanel, BorderLayout.PAGE_START );
 		
 		JPanel theCenterPanel = new JPanel();
@@ -245,41 +251,98 @@ public class CreateIncomingEventPanel extends CreateTracedElementPanel {
 		
 		m_CreateSendEvent = new JCheckBox();
 		m_CreateSendEvent.setSelected(true);
+		m_CreateSendEvent.setEnabled(true);
+		
 		theCenterPanel.add( m_CreateSendEvent );
-
-		m_CreateSendEventViaPanel = new JCheckBox();
-		m_CreateSendEventViaPanel.setSelected(true);
-		theCenterPanel.add( m_CreateSendEventViaPanel );
 		
 		m_AttributeCheckBox = new JCheckBox("Add a value argument to change a corresponding attribute on the block");
-		m_AttributeCheckBox.setSelected(true);
-		m_AttributeCheckBox.setEnabled(false);
-			   
+		
+		if( forModelElement instanceof IRPAttribute ){
+
+			m_AttributeCheckBox.setSelected(true);
+			m_AttributeCheckBox.setEnabled(false);
+		} else {
+			m_AttributeCheckBox.setSelected(false);
+			m_AttributeCheckBox.setEnabled(true);
+			
+			m_AttributeCheckBox.addActionListener( new ActionListener() {
+				
+			      public void actionPerformed(ActionEvent actionEvent) {
+			    	  
+				        AbstractButton abstractButton = (AbstractButton) actionEvent.getSource();
+				        
+				        boolean selected = abstractButton.getModel().isSelected();
+				        
+				        m_CheckOperationCheckBox.setEnabled(selected);
+				        m_CreateAttributeLabel.setEnabled(selected);
+				        m_AttributeNameTextField.setEnabled(selected);
+				        m_CreateSendEventViaPanel.setEnabled(selected);
+				        
+				        m_CheckOperationCheckBox.setSelected(selected);
+				        
+				        if( selected==false ){
+					        m_CreateSendEventViaPanel.setSelected(false);			        	
+				        }
+				        
+				        updateNames();
+				        
+				      }} );
+		}
+		
 		theCenterPanel.add( m_AttributeCheckBox );
 		
-		m_AttributeNamePanel = new JPanel();
-		m_AttributeNamePanel.setLayout( new BoxLayout(m_AttributeNamePanel, BoxLayout.X_AXIS ) );	
+		if ( forModelElement instanceof IRPAttribute ){
+			m_AttributeNamePanel = new JPanel();
+			m_AttributeNamePanel.setLayout( new BoxLayout(m_AttributeNamePanel, BoxLayout.X_AXIS ) );	
+
+			m_CreateAttributeLabel = new JLabel("Use the attribute called:  ");
+			m_CreateAttributeLabel.setEnabled(false);
+			
+			m_AttributeNamePanel.add( m_CreateAttributeLabel );
+			
+			m_AttributeNameTextField = new JTextField( theSourceText );
+			m_AttributeNameTextField.setMaximumSize( new Dimension( 300,20 ) );
+			
+			if (forModelElement instanceof IRPAttribute){
+				m_AttributeNameTextField.setEnabled(false);
+			} else {
+				m_AttributeNameTextField.setEnabled(true);
+			}
+			
+			m_AttributeNamePanel.add( m_AttributeNameTextField );
+			m_AttributeNamePanel.setAlignmentX(LEFT_ALIGNMENT);
+			
+		} else {
+			
+			m_AttributeNamePanel = createAttributeNamePanel( 
+					GeneralHelpers.determineUniqueNameBasedOn( 
+							GeneralHelpers.toMethodName( theSourceText ), 
+							"Attribute", 
+							onTargetBlock ) );
+			
+			m_AttributeNamePanel.setAlignmentX(LEFT_ALIGNMENT);
+		}
 		
-		m_CreateAttributeLabel = new JLabel("Use the attribute called:  ");
-		m_CreateAttributeLabel.setEnabled(false);
-		m_AttributeNamePanel.add( m_CreateAttributeLabel );
-		
-		m_AttributeNameTextField = new JTextField( forSelectedAttribute.getName() );
-		m_AttributeNameTextField.setMaximumSize( new Dimension( 300,20 ) );
-		m_AttributeNameTextField.setEnabled(false);
-		
-		m_AttributeNamePanel.add( m_AttributeNameTextField );
-		m_AttributeNamePanel.setAlignmentX(LEFT_ALIGNMENT);
-	
 		theCenterPanel.add( m_AttributeNamePanel );
+
+		m_CreateSendEventViaPanel = new JCheckBox();
+		m_CreateSendEventViaPanel.setSelected(false);
+		m_CreateSendEventViaPanel.setEnabled(true);	
+
+		theCenterPanel.add( m_CreateSendEventViaPanel );
 		
 		m_CheckOperationCheckBox = new JCheckBox();
 		m_CheckOperationCheckBox.setSelected(false);
 		m_CheckOperationCheckBox.setVisible(false);
 		
 		theCenterPanel.add( m_CheckOperationCheckBox );
-		
+
 		add( theCenterPanel, BorderLayout.WEST );
+
+		commonPanelSetup();
+	}
+	
+	private void commonPanelSetup(){
 		add( createOKCancelPanel(), BorderLayout.PAGE_END );
 
 		m_ChosenNameTextField.getDocument().addDocumentListener(
@@ -381,9 +444,9 @@ public class CreateIncomingEventPanel extends CreateTracedElementPanel {
 	}
 
 	public static void launchThePanel(
-			final IRPAttribute forSelectedAttribute,
+			final IRPModelElement forModelElement,
 			final Set<IRPRequirement> withReqtsAlsoAdded,
-			final IRPProject inProject){
+			final IRPProject inProject ){
 		
 		IRPPackage thePackageUnderDev =
 				FunctionalAnalysisSettings.getPackageUnderDev( inProject );
@@ -408,18 +471,25 @@ public class CreateIncomingEventPanel extends CreateTracedElementPanel {
 							GeneralHelpers.getNonActorOrTestingClassifiersConnectedTo( 
 									(IRPActor)theActor, theBuildingBlock );
 					
-					final IRPModelElement theChosenBlockEl = 
-							forSelectedAttribute.getOwner();
+					final IRPClass theChosenBlock;
 					
-					if( !theCandidates.contains(theChosenBlockEl) ){
+					if (forModelElement instanceof IRPAttribute){
+						theChosenBlock = (IRPClass) forModelElement.getOwner();
+					} else {
+						theChosenBlock = selectBlockBasedOn(
+								(IRPActor) theActor,
+								theBuildingBlock,
+								"Select Block to send event to:",
+								true );
+					}
+							
+					if( !theCandidates.contains(theChosenBlock) ){
 					
-						UserInterfaceHelpers.showWarningDialog("The " + Logger.elementInfo( theChosenBlockEl ) + 
+						UserInterfaceHelpers.showWarningDialog("The " + Logger.elementInfo( theChosenBlock ) + 
 								" does not have a port that connects with " + Logger.elementInfo(theActor) + "\n\n" +
 								"Fix this and then try again");
 						
-					} else if( theChosenBlockEl != null && theChosenBlockEl instanceof IRPClassifier ){
-										
-						final IRPClassifier theChosenBlock = (IRPClassifier)theChosenBlockEl;
+					} else if( theChosenBlock != null ){
 						
 						IRPPort thePort = GeneralHelpers.getPortThatConnects(
 								(IRPActor)theActor, 
@@ -443,15 +513,14 @@ public class CreateIncomingEventPanel extends CreateTracedElementPanel {
 
 									CreateIncomingEventPanel thePanel = 
 											new CreateIncomingEventPanel(
-													forSelectedAttribute, 
+													forModelElement, 
 													theChosenBlock, 
 													withReqtsAlsoAdded,
 													(IRPActor)theActor,
 													theSourceActorPort,
 													thePackageForEvent );
-										
-									frame.setContentPane( thePanel );
 
+									frame.setContentPane( thePanel );
 									frame.pack();
 									frame.setLocationRelativeTo( null );
 									frame.setVisible( true );
@@ -480,18 +549,6 @@ public class CreateIncomingEventPanel extends CreateTracedElementPanel {
 		return theProposedName;
 	}
 	
-	private String determineBestAttributeName(
-			IRPClassifier onTargetBlock,
-			final String theSourceText) {
-		
-		String theProposedName = GeneralHelpers.determineUniqueNameBasedOn( 
-				GeneralHelpers.toMethodName( theSourceText ), 
-				"Attribute", 
-				onTargetBlock );
-		
-		return theProposedName;
-	}
-		
 	private void updateNames(){
 		
 		if( m_AttributeCheckBox.isSelected() ){
@@ -994,8 +1051,15 @@ public class CreateIncomingEventPanel extends CreateTracedElementPanel {
 		
 		IRPApplication theRhpApp = FunctionalAnalysisPlugin.getRhapsodyApp();		
 
-		IRPDiagram theDiagram = m_SourceGraphElement.getDiagram();
-
+		IRPDiagram theDiagram = null;
+		
+		if( m_SourceModelElement instanceof IRPDiagram){
+			
+			theDiagram = (IRPDiagram) m_SourceModelElement;
+		} else {
+			theDiagram = m_SourceGraphElement.getDiagram();
+		}
+		
 		if( theDiagram instanceof IRPActivityDiagram ){
 
 			IRPActivityDiagram theAD = (IRPActivityDiagram)theDiagram;
@@ -1017,11 +1081,13 @@ public class CreateIncomingEventPanel extends CreateTracedElementPanel {
 
 			IRPGraphNode theEventNode = theOMD.addNewNodeForElement(theEvent, getSourceElementX() + 50, getSourceElementY() + 50, 300, 40);	
 
-			IRPCollection theGraphElsToDraw = theRhpApp.createNewCollection();
-			theGraphElsToDraw.addGraphicalItem( m_SourceGraphElement );
-			theGraphElsToDraw.addGraphicalItem( theEventNode );
+			if( m_SourceGraphElement != null ){
+				IRPCollection theGraphElsToDraw = theRhpApp.createNewCollection();
+				theGraphElsToDraw.addGraphicalItem( m_SourceGraphElement );
+				theGraphElsToDraw.addGraphicalItem( theEventNode );
 
-			theOMD.completeRelations( theGraphElsToDraw, 1 );
+				theOMD.completeRelations( theGraphElsToDraw, 1 );
+			}
 
 			theRhpApp.highLightElement( theEvent );
 
@@ -1055,6 +1121,7 @@ public class CreateIncomingEventPanel extends CreateTracedElementPanel {
     #089 15-AUG-2016: Add a pull-down list to select Block when adding events/ops in white box (F.J.Chadburn)
     #090 15-AUG-2016: Fix check operation name issue introduced in fixes #083 and #084 (F.J.Chadburn)
     #093 23-AUG-2016: Added isPopulateOptionHidden tag to allow hiding of the populate check-box on dialogs (F.J.Chadburn)
+    #099 14-SEP-2016: Allow event and operation creation from right-click on AD and RD diagram canvas (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

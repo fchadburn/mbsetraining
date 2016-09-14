@@ -3,6 +3,7 @@ package functionalanalysisplugin;
 import generalhelpers.Logger;
 import generalhelpers.TraceabilityHelper;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -75,7 +76,15 @@ public class FunctionalAnalysisPlugin extends RPUserPlugin {
 
 			} else if (menuItem.equals("MBSE Method: Functional Analysis\\Create an incoming event sent by an actor")){
 
-				if (!theSelectedGraphEls.isEmpty()){
+				if (theSelectedEl instanceof IRPDiagram){
+					Set<IRPRequirement> theReqts = new HashSet<IRPRequirement>();
+					
+					CreateIncomingEventPanel.launchThePanel( 
+							(IRPDiagram)theSelectedEl, 
+							theReqts, 
+							theActiveProject );
+				
+				} else if (!theSelectedGraphEls.isEmpty()){
 					try {
 						CreateIncomingEventPanel.createIncomingEventsFor( theActiveProject, theSelectedGraphEls );
 
@@ -86,7 +95,15 @@ public class FunctionalAnalysisPlugin extends RPUserPlugin {
 
 			} else if (menuItem.equals("MBSE Method: Functional Analysis\\Create an operation that the system does")){
 
-				if (!theSelectedGraphEls.isEmpty()){
+				if (theSelectedEl instanceof IRPDiagram){
+					
+					Set<IRPRequirement> theReqts = new HashSet<IRPRequirement>();
+					
+					CreateOperationPanel.createSystemOperationFor(
+							(IRPDiagram) theSelectedEl, 
+							theReqts);
+					
+				} else if (!theSelectedGraphEls.isEmpty()){
 					try {
 						CreateOperationPanel.createSystemOperationsFor( theActiveProject, theSelectedGraphEls );
 
@@ -97,7 +114,17 @@ public class FunctionalAnalysisPlugin extends RPUserPlugin {
 				
 			} else if (menuItem.equals("MBSE Method: Functional Analysis\\Create an outgoing event sent to an actor")){
 
-				if (!theSelectedGraphEls.isEmpty()){
+				if (theSelectedEl instanceof IRPDiagram){
+					
+					Set<IRPRequirement> theReqts = new HashSet<IRPRequirement>();
+					
+					CreateOutgoingEventPanel.launchThePanel(	
+							null, 
+							(IRPDiagram) theSelectedEl,
+							theReqts,
+							theActiveProject );
+							
+				} else if (!theSelectedGraphEls.isEmpty()){
 					try {
 						CreateOutgoingEventPanel.createOutgoingEventsFor( theActiveProject, theSelectedGraphEls );
 						
@@ -275,6 +302,7 @@ public class FunctionalAnalysisPlugin extends RPUserPlugin {
     #047 06-JUL-2016: Tweaked properties and added options to switch to MoreDetailedAD automatically (F.J.Chadburn)
     #083 09-AUG-2016: Add an Update attribute menu option and panel with add check operation option (F.J.Chadburn)
     #084 09-AUG-2016: Add new right-click menu to create an incoming event for an attribute (F.J.Chadburn)
+    #099 14-SEP-2016: Allow event and operation creation from right-click on AD and RD diagram canvas (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

@@ -46,7 +46,11 @@ public class CreateOutgoingEventPanel extends CreateTracedElementPanel {
 		if (GeneralHelpers.doUnderlyingModelElementsIn( theSelectedGraphEls, "Requirement" )){
 			
 			// only requirements are selected hence assume only a single operation is needed
-			launchThePanel(	theSelectedGraphEls.get(0), theSelectedReqts, theActiveProject );
+			launchThePanel(	
+					theSelectedGraphEls.get(0), 
+					theSelectedGraphEls.get(0).getModelObject(), 
+					theSelectedReqts, 
+					theActiveProject );
 		} else {
 			
 			// launch a dialog for each selected element that is not a requirement
@@ -57,7 +61,11 @@ public class CreateOutgoingEventPanel extends CreateTracedElementPanel {
 				if (theModelObject != null && !(theModelObject instanceof IRPRequirement)){
 					
 					// only launch a dialog for non requirement elements
-					launchThePanel(	theGraphEl, theSelectedReqts, theActiveProject );
+					launchThePanel(	
+							theGraphEl, 
+							theModelObject,
+							theSelectedReqts,
+							theActiveProject );
 				}		
 			}
 		}
@@ -72,14 +80,54 @@ public class CreateOutgoingEventPanel extends CreateTracedElementPanel {
 			IRPPackage thePackageForEvent ) {
 		
 		super( forSourceGraphElement, withReqtsAlsoAdded, onTargetBlock );
+
+		Logger.writeLine("CreateOutgoingEventPanel constructor called for " + Logger.elementInfo( forSourceGraphElement.getModelObject() ) );
+		
+		String theSourceText = GeneralHelpers.getActionTextFrom( forSourceGraphElement.getModelObject() );		
+		
+		createCommonContent(
+				theSourceText, 
+				onTargetBlock, 
+				withReqtsAlsoAdded, 
+				toDestinationActor, 
+				toDestinationActorPort,
+				thePackageForEvent );
+	}
+	
+	public CreateOutgoingEventPanel(
+			IRPModelElement forSourceModelElement,
+			IRPClassifier onTargetBlock,
+			Set<IRPRequirement> withReqtsAlsoAdded,
+			IRPActor toDestinationActor,
+			IRPPort toDestinationActorPort,
+			IRPPackage thePackageForEvent ) {
+		
+		super( forSourceModelElement, withReqtsAlsoAdded, onTargetBlock );
+		
+		String theSourceText = "Tbd";		
+		
+		Logger.writeLine("CreateOutgoingEventPanel constructor called for " + Logger.elementInfo( forSourceModelElement ));
+		
+		createCommonContent(
+				theSourceText, 
+				onTargetBlock, 
+				withReqtsAlsoAdded, 
+				toDestinationActor, 
+				toDestinationActorPort,
+				thePackageForEvent );
+	}
+	
+	private void createCommonContent(
+			String theSourceText,
+			IRPClassifier onTargetBlock,
+			Set<IRPRequirement> withReqtsAlsoAdded,
+			IRPActor toDestinationActor,
+			IRPPort toDestinationActorPort,
+			IRPPackage thePackageForEvent ) {	
 		
 		m_DestinationActor = toDestinationActor;
 		m_DestinationActorPort = toDestinationActorPort;
 		m_PackageForEvent = thePackageForEvent;
-		
-		String theSourceText = GeneralHelpers.getActionTextFrom( forSourceGraphElement.getModelObject() );		
-		
-		Logger.writeLine("CreateOutgoingEventPanel constructor called with text '" + theSourceText + "'");
 		
 		String[] splitActorName = m_DestinationActor.getName().split("_");
 		String theActorName = splitActorName[0];
@@ -155,8 +203,9 @@ public class CreateOutgoingEventPanel extends CreateTracedElementPanel {
 		add( createOKCancelPanel(), BorderLayout.PAGE_END );
 	}
 
-	private static void launchThePanel(
+	static void launchThePanel(
 			final IRPGraphElement theSourceGraphElement, 
+			final IRPModelElement orTheModelElement,
 			final Set<IRPRequirement> withReqtsAlsoAdded,
 			final IRPProject inProject){
 		
@@ -215,19 +264,37 @@ public class CreateOutgoingEventPanel extends CreateTracedElementPanel {
 										JFrame frame = new JFrame("Create an outgoing event to " + Logger.elementInfo( theActor ) );
 										
 										frame.setDefaultCloseOperation( JFrame.DISPOSE_ON_CLOSE );
-
-										CreateOutgoingEventPanel thePanel = new CreateOutgoingEventPanel(
-												theSourceGraphElement, 
-												theChosenBlock, 
-												withReqtsAlsoAdded,
-												(IRPActor)theActor, 
-												thePort,
-												thePackageForEvent );
-
-										frame.setContentPane( thePanel );
-										frame.pack();
-										frame.setLocationRelativeTo( null );
-										frame.setVisible( true );
+										
+										if (theSourceGraphElement != null){
+											
+											CreateOutgoingEventPanel thePanel = new CreateOutgoingEventPanel(
+													theSourceGraphElement, 
+													theChosenBlock, 
+													withReqtsAlsoAdded,
+													(IRPActor)theActor, 
+													thePort,
+													thePackageForEvent );
+											
+											frame.setContentPane( thePanel );
+											frame.pack();
+											frame.setLocationRelativeTo( null );
+											frame.setVisible( true );
+											
+										} else if (orTheModelElement != null){
+											
+											CreateOutgoingEventPanel thePanel = new CreateOutgoingEventPanel(
+													orTheModelElement, 
+													theChosenBlock, 
+													withReqtsAlsoAdded,
+													(IRPActor)theActor, 
+													thePort,
+													thePackageForEvent );
+											
+											frame.setContentPane( thePanel );
+											frame.pack();
+											frame.setLocationRelativeTo( null );
+											frame.setVisible( true );
+										}
 									}
 								});
 							}
@@ -262,7 +329,14 @@ public class CreateOutgoingEventPanel extends CreateTracedElementPanel {
 		
 		IRPApplication theRhpApp = FunctionalAnalysisPlugin.getRhapsodyApp();
 
-		IRPDiagram theDiagram = m_SourceGraphElement.getDiagram();
+		IRPDiagram theDiagram = null;
+		
+		if( m_SourceModelElement instanceof IRPDiagram){
+			
+			theDiagram = (IRPDiagram) m_SourceModelElement;
+		} else {
+			theDiagram = m_SourceGraphElement.getDiagram();
+		}
 
 		if( theDiagram instanceof IRPActivityDiagram ){
 
@@ -294,12 +368,14 @@ public class CreateOutgoingEventPanel extends CreateTracedElementPanel {
 			IRPGraphNode theEventNode = theOMD.addNewNodeForElement(
 					theEvent, getSourceElementX() + 50, getSourceElementY() + 50, 300, 40 );	
 
-			IRPCollection theGraphElsToDraw = theRhpApp.createNewCollection();
-			theGraphElsToDraw.addGraphicalItem( m_SourceGraphElement );
-			theGraphElsToDraw.addGraphicalItem( theEventNode );
+			if( m_SourceGraphElement != null ){
+				IRPCollection theGraphElsToDraw = theRhpApp.createNewCollection();
+				theGraphElsToDraw.addGraphicalItem( m_SourceGraphElement );
+				theGraphElsToDraw.addGraphicalItem( theEventNode );
 
-			theOMD.completeRelations( theGraphElsToDraw, 1 );
-
+				theOMD.completeRelations( theGraphElsToDraw, 1 );
+			}
+			
 			theRhpApp.highLightElement( theEvent );
 
 		} else {
@@ -419,7 +495,9 @@ public class CreateOutgoingEventPanel extends CreateTracedElementPanel {
 						populateSendActionOnDiagram( theEvent );
 					}
 
-					bleedColorToElementsRelatedTo( m_SourceGraphElement );
+					if( m_SourceGraphElement != null ){
+						bleedColorToElementsRelatedTo( m_SourceGraphElement );
+					}
 				}
 
 			} else {
@@ -452,6 +530,7 @@ public class CreateOutgoingEventPanel extends CreateTracedElementPanel {
     #078 28-JUL-2016: Added isPopulateWantedByDefault tag to FunctionalAnalysisPkg to give user option (F.J.Chadburn)
     #089 15-AUG-2016: Add a pull-down list to select Block when adding events/ops in white box (F.J.Chadburn)
     #093 23-AUG-2016: Added isPopulateOptionHidden tag to allow hiding of the populate check-box on dialogs (F.J.Chadburn)
+    #099 14-SEP-2016: Allow event and operation creation from right-click on AD and RD diagram canvas (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

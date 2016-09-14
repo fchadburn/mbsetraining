@@ -1,12 +1,13 @@
 package functionalanalysisplugin;
 
+import generalhelpers.CreateGatewayProjectPanel;
 import generalhelpers.GeneralHelpers;
 import generalhelpers.PopulatePkg;
-
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
+import requirementsanalysisplugin.PopulateRequirementsAnalysisPkg;
 import generalhelpers.Logger;
 
 import com.telelogic.rhapsody.core.*;
@@ -45,7 +46,8 @@ public class PopulateFunctionalAnalysisPkg extends PopulatePkg {
 		    		"This SysML-Toolkit helper is designed to set up a new Rhapsody project for executable MBSE. \n" +
 		    		"It creates a nested package structure for executable 'interaction-based functional analysis',  \n" +
 		    		"imports the appropriate profiles if not present, and sets default display and other options \n" +
-		    		"to appropriate values for the task using Rhapsody profile and property settings.\n\n" +
+		    		"to appropriate values for the task using Rhapsody profile and property settings. \n" +
+		    		"This will remove the SimpleMenu stereotype if applied.\n\n" +
 		    		"Do you want to proceed?", "Confirm",
 		        JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 		    
@@ -53,30 +55,50 @@ public class PopulateFunctionalAnalysisPkg extends PopulatePkg {
 		    	
 		    	IRPModelElement theRequirementsAnalysisPkg = forProject.findElementsByFullName("RequirementsAnalysisPkg", "Package");
 		    	
-		    	if (theRequirementsAnalysisPkg==null){
+		    	if (theRequirementsAnalysisPkg != null){
+		    		
+			    	populateFunctionalAnalysisPkg(forProject);
+			    	removeSimpleMenuStereotypeIfPresent(forProject);
+			    	
+			    	forProject.save();
+			    	
+		    	} else { // theRequirementsanalysisPkg == null
 		    		
 				    int confirm = JOptionPane.showConfirmDialog(null, 
 				    		"The project does not contain a root RequirementsAnalysisPkg. This package is used by the\n" +
-				    		"plugin to populate the Actors for functional analysis simulation purposes.\n\n" +
+				    		"plugin/method to populate the Actors for functional analysis simulation purposes.\n\n" +
 				    		"Do you want to add a RequirementsAnalysisPkg.sbs from another model by reference?\n\n" + 
 				    		"NOTE:\n" +
 				    		"The recommendation is to create a folder that will contain both this project and its\n" +
 				    		"referenced projects to treat them as a consistent project set. If you haven't done this\n" +
-				    		"yet then consider cancelling and doing this first.\n\n" + 
-				    		"The unit will be added by relative path, hence locating the models in a common root folder\n" +
-				    		"is recommended to enable sharing across file systems as a consistent set of projects.\n\n",
-				    		"Confirm",
-				        JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+				    		"yet then consider cancelling and doing this first. The unit will be added by relative \n"+
+				    		"path, hence locating the models in a common root folder is recommended to enable \n"+
+				    		"sharing across file systems as a consistent set of projects.\n\n " + 
+				    		"Clicking 'Yes' will allow you to select a RequirementsAnalysisPkg by reference.\n\n" +
+				    		"Clicking 'No' will create a RequirementsAnalysisPkg structure as the starting point in \n" + 
+				    		"this project (so you can import higher-level requirements and define actors). You will \n" +
+				    		"then be able to re-run FunctionalAnalysisPkg creation once the actors and use case \n" +
+				    		"context have been defined. \n\n"+
+				    		"Clicking 'Cancel' will do nothing.\n\n",
+				    		"Confirm choice",
+				        JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
 				    
 				    if (confirm == JOptionPane.YES_OPTION){
 				    	browseAndAddByReferenceIfNotPresent("RequirementsAnalysisPkg", forProject, true);
+				    	
+				    	populateFunctionalAnalysisPkg(forProject);
+				    	removeSimpleMenuStereotypeIfPresent(forProject);
+				    	forProject.save();
+				    	
+				    } else if (confirm == JOptionPane.NO_OPTION){
+					    
+				    	PopulateRequirementsAnalysisPkg.populateRequirementsAnalysisPkg(forProject);		
+						CreateGatewayProjectPanel.launchThePanel( forProject, "^RequirementsAnalysisPkg.rqtf$" );
+							    
+				    } else {
+				    	Logger.writeLine("Cancelled by user");
 				    }
 		    	}
-		    	
-		    	populateFunctionalAnalysisPkg(forProject);
-		    	removeSimpleMenuStereotypeIfPresent(forProject);
-		    	
-		    	forProject.save();
 
 		    } else {
 		    	Logger.writeLine("Cancelled by user");
@@ -273,6 +295,7 @@ public class PopulateFunctionalAnalysisPkg extends PopulatePkg {
 	#061 17-JUL-2016: Ensure BasePkg is added by reference from profile to aid future integration (F.J.Chadburn)
     #089 15-AUG-2016: Add a pull-down list to select Block when adding events/ops in white box (F.J.Chadburn)
     #091 23-AUG-2016: Turn off the Activity::General::AutoSelectControlOrObjectFlow property by default (F.J.Chadburn)
+    #100 14-SEP-2016: Add option to create RequirementsAnalysisPkg if FunctionalAnalysisPkg not possible (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

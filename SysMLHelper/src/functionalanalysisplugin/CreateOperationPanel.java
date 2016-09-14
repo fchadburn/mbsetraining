@@ -74,6 +74,29 @@ public class CreateOperationPanel extends CreateTracedElementPanel {
 		}
 	}
 	
+	public static void createSystemOperationFor(
+			IRPDiagram theDiagram, 
+			final Set<IRPRequirement> withReqtsAlsoAdded ){
+		
+		IRPProject theActiveProject = theDiagram.getProject();
+		
+		boolean isPopulateOptionHidden = 
+				FunctionalAnalysisSettings.getIsPopulateOptionHidden(
+						theActiveProject );
+		
+		boolean isPopulate = 
+				FunctionalAnalysisSettings.getIsPopulateWantedByDefault(
+						theActiveProject );
+		
+		// only launch a dialog for non requirement elements
+		launchThePanel(	
+				theDiagram, 
+				withReqtsAlsoAdded, 
+				theActiveProject, 
+				isPopulate, 
+				isPopulateOptionHidden );
+	}
+	
 	public static void launchThePanel(
 			final IRPGraphElement selectedDiagramEl, 
 			final Set<IRPRequirement> withReqtsAlsoAdded,
@@ -112,6 +135,44 @@ public class CreateOperationPanel extends CreateTracedElementPanel {
 		});
 	}
 	
+	public static void launchThePanel(
+			final IRPModelElement theModelElement, 
+			final Set<IRPRequirement> withReqtsAlsoAdded,
+			final IRPProject inProject,
+			final boolean isPopulateSelected,
+			final boolean isPopulateOptionHidden ){
+	
+		javax.swing.SwingUtilities.invokeLater(new Runnable() {
+
+			@Override
+			public void run() {
+				IRPClassifier theLogicalSystemBlock = 
+						FunctionalAnalysisSettings.getBlockUnderDev( 
+								inProject, 
+								FunctionalAnalysisSettings.getIsEnableBlockSelectionByUser(inProject) );
+				
+				JFrame.setDefaultLookAndFeelDecorated( true );
+				
+				JFrame frame = new JFrame(
+						"Create an operation on " + Logger.elementInfo( theLogicalSystemBlock ) );
+				
+				frame.setDefaultCloseOperation( JFrame.DISPOSE_ON_CLOSE );
+				
+				CreateOperationPanel thePanel = new CreateOperationPanel(
+						theModelElement,
+						withReqtsAlsoAdded,
+						theLogicalSystemBlock,
+						isPopulateSelected,
+						isPopulateOptionHidden );
+
+				frame.setContentPane( thePanel );
+				frame.pack();
+				frame.setLocationRelativeTo( null );
+				frame.setVisible( true );
+			}
+		});
+	}
+	
 	public CreateOperationPanel(
 			IRPGraphElement forSourceGraphElement, 
 			Set<IRPRequirement> withReqtsAlsoAdded,
@@ -123,7 +184,39 @@ public class CreateOperationPanel extends CreateTracedElementPanel {
 		 
 		IRPModelElement theModelObject = m_SourceGraphElement.getModelObject();
 		
-		String theSourceText = GeneralHelpers.getActionTextFrom( theModelObject );	
+		createCommonContent(
+				theModelObject, 
+				withReqtsAlsoAdded, 
+				onTargetBlock, 
+				isPopulateSelected, 
+				isPopulateOptionHidden);
+	}
+	
+	public CreateOperationPanel(
+			IRPModelElement forSourceModelElement, 
+			Set<IRPRequirement> withReqtsAlsoAdded,
+			IRPClassifier onTargetBlock,
+			boolean isPopulateSelected,
+			boolean isPopulateOptionHidden ) {
+		
+		super(forSourceModelElement, withReqtsAlsoAdded, onTargetBlock);
+		
+		createCommonContent(
+				forSourceModelElement, 
+				withReqtsAlsoAdded, 
+				onTargetBlock, 
+				isPopulateSelected, 
+				isPopulateOptionHidden);
+	}
+	
+	private void createCommonContent(
+			IRPModelElement forSourceModelElement,
+			Set<IRPRequirement> withReqtsAlsoAdded,
+			IRPClassifier onTargetBlock,
+			boolean isPopulateSelected,
+			boolean isPopulateOptionHidden ){
+		
+		String theSourceText = GeneralHelpers.getActionTextFrom( forSourceModelElement );	
 		
 		if( theSourceText == null ){
 			theSourceText = "function_name";
@@ -193,7 +286,7 @@ public class CreateOperationPanel extends CreateTracedElementPanel {
 			
 			theOperation.highLightElement();
 			
-			if( !(m_SourceGraphElement.getModelObject() instanceof IRPCallOperation) ){
+			if( m_SourceGraphElement != null && !(m_SourceGraphElement.getModelObject() instanceof IRPCallOperation) ){
 				addTraceabilityDependenciesTo( theOperation, m_RequirementsPanel.getSelectedRequirementsList() );
 				bleedColorToElementsRelatedTo( m_SourceGraphElement );
 			}
@@ -222,6 +315,7 @@ public class CreateOperationPanel extends CreateTracedElementPanel {
 	#078 28-JUL-2016: Added isPopulateWantedByDefault tag to FunctionalAnalysisPkg to give user option (F.J.Chadburn)
     #089 15-AUG-2016: Add a pull-down list to select Block when adding events/ops in white box (F.J.Chadburn)
     #093 23-AUG-2016: Added isPopulateOptionHidden tag to allow hiding of the populate check-box on dialogs (F.J.Chadburn)
+    #099 14-SEP-2016: Allow event and operation creation from right-click on AD and RD diagram canvas (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

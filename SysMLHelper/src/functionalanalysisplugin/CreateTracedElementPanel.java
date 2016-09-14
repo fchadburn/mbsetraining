@@ -354,6 +354,8 @@ public abstract class CreateTracedElementPanel extends JPanel {
 				
 				x = theNodeInfo.getMidX();
 			}
+		} else {
+			x = 20; // default is top right
 		}
 		
 		return x;
@@ -375,6 +377,8 @@ public abstract class CreateTracedElementPanel extends JPanel {
 				
 				y = theNodeInfo.getMidY();
 			}
+		} else {
+			y = 20; // default is top right
 		}
 		
 		return y;
@@ -385,8 +389,17 @@ public abstract class CreateTracedElementPanel extends JPanel {
 
 		try {
 			IRPApplication theRhpApp = FunctionalAnalysisPlugin.getRhapsodyApp();
+			
+			IRPDiagram theDiagram = null;
 
-			IRPDiagram theDiagram = m_SourceGraphElement.getDiagram();
+			if( m_SourceModelElement instanceof IRPDiagram ){
+				
+				theDiagram = (IRPDiagram) m_SourceModelElement;
+			} else {
+				theDiagram = m_SourceGraphElement.getDiagram();
+			}
+			
+			Logger.writeLine("Got here2");
 
 			if (theDiagram instanceof IRPActivityDiagram){
 
@@ -394,7 +407,8 @@ public abstract class CreateTracedElementPanel extends JPanel {
 
 				IRPFlowchart theFlowchart = theAD.getFlowchart();
 
-				if( m_SourceGraphElement.getModelObject() instanceof IRPCallOperation ){
+				if( m_SourceGraphElement != null && 
+					m_SourceGraphElement.getModelObject() instanceof IRPCallOperation ){
 
 					IRPCallOperation theCallOp = (IRPCallOperation) m_SourceGraphElement.getModelObject();
 					theCallOp.setOperation(theOperation);
@@ -419,12 +433,14 @@ public abstract class CreateTracedElementPanel extends JPanel {
 				IRPGraphNode theEventNode = theOMD.addNewNodeForElement( 
 						theOperation, getSourceElementX() + 50, getSourceElementY() + 50, 300, 40 );	
 
-				IRPCollection theGraphElsToDraw = theRhpApp.createNewCollection();
-				theGraphElsToDraw.addGraphicalItem( m_SourceGraphElement );
-				theGraphElsToDraw.addGraphicalItem( theEventNode );
+				if( m_SourceGraphElement != null ){
+					IRPCollection theGraphElsToDraw = theRhpApp.createNewCollection();
+					theGraphElsToDraw.addGraphicalItem( m_SourceGraphElement );
+					theGraphElsToDraw.addGraphicalItem( theEventNode );
 
-				theOMD.completeRelations( theGraphElsToDraw, 1 );
-
+					theOMD.completeRelations( theGraphElsToDraw, 1 );
+				}
+				
 				theRhpApp.highLightElement( theOperation );
 
 			} else {
@@ -519,6 +535,7 @@ public abstract class CreateTracedElementPanel extends JPanel {
     #083 09-AUG-2016: Add an Update attribute menu option and panel with add check operation option (F.J.Chadburn)
     #089 15-AUG-2016: Add a pull-down list to select Block when adding events/ops in white box (F.J.Chadburn)
     #090 15-AUG-2016: Fix check operation name issue introduced in fixes #083 and #084 (F.J.Chadburn)
+    #099 14-SEP-2016: Allow event and operation creation from right-click on AD and RD diagram canvas (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 
