@@ -10,6 +10,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.swing.JDialog;
+import javax.swing.JOptionPane;
+
 import requirementsanalysisplugin.NestedActivityDiagram;
 
 import com.telelogic.rhapsody.core.*;
@@ -295,18 +298,28 @@ public class SysMLHelperTriggers extends RPApplicationListener {
 						theName = theDiagramToOpen.getOwner().getName();	
 					}
 					
-					boolean theAnswer = UserInterfaceHelpers.askAQuestion(
-						"The " + relatedToModelEl.getUserDefinedMetaClass() + " called '" +
-								relatedToModelEl.getName() + "' has an \nassociated " + theType + " called '" + theName + "'.\n" +
-						"Do you want to open it?");
+					JDialog.setDefaultLookAndFeelDecorated(true);
 					
-					if (theAnswer==true){
+					int confirm = JOptionPane.showConfirmDialog(null, 
+							"The " + relatedToModelEl.getUserDefinedMetaClass() + " called '" +
+							relatedToModelEl.getName() + "' has an associated " + theType + "\n" +
+							"called '" + theName + "'.\n\n" +
+							"Do you want to open it? (Click 'No' to open the Features dialog instead)\n\n",
+				    		"Confirm choice",
+				        JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+				    
+				    if (confirm == JOptionPane.YES_OPTION){
 						
 						theDiagramToOpen.openDiagram();	
 						theReturn = true; // don't launch the Features  window
 						
-					} else {
+					} else if (confirm == JOptionPane.NO_OPTION){
+						
 						theReturn = false; // open the features dialog
+						
+					} else { // Cancel
+						
+						theReturn = true; // don't open the features dialog
 					}
 				}
 				
@@ -315,8 +328,8 @@ public class SysMLHelperTriggers extends RPApplicationListener {
 				IRPModelElement theSelection = UserInterfaceHelpers.launchDialogToSelectElement(
 						theListOfDiagrams, 
 						"The " + relatedToModelEl.getUserDefinedMetaClass() + " called '" +
-								relatedToModelEl.getName() + "' has " + numberOfDiagrams + " associated diagrams.\n" +
-						"Which one do you want to open?",
+						relatedToModelEl.getName() + "' has " + numberOfDiagrams + " associated diagrams.\n\n" +
+						"Which one do you want to open? (Click 'Cancel' to open Features dialog instead)\n",
 						true);
 				
 				if (theSelection != null && theSelection instanceof IRPDiagram){
@@ -370,6 +383,7 @@ public class SysMLHelperTriggers extends RPApplicationListener {
     #081 28-JUL-2016: Dragging a CallOp on to diagram should not ask to add a new one (F.J.Chadburn)
     #089 15-AUG-2016: Add a pull-down list to select Block when adding events/ops in white box (F.J.Chadburn)
     #093 23-AUG-2016: Added isPopulateOptionHidden tag to allow hiding of the populate check-box on dialogs (F.J.Chadburn)
+    #098 14-SEP-2016: Improve dialog for double-click to clarify cancelling gets the Features dialog (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 
