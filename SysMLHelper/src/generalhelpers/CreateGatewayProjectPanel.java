@@ -279,6 +279,10 @@ public class CreateGatewayProjectPanel extends CreateStructuralElementPanel {
 		thePanel.setLayout( new BoxLayout(thePanel, BoxLayout.Y_AXIS ) );	
 		thePanel.setAlignmentX(CENTER_ALIGNMENT);
 		thePanel.add( theLabel );
+		
+		thePanel.add( createPanelWithTextCentered(
+				"If you click Cancel then this done be done later using the 'Setup Gateway based on rqtf template' menu") );
+				
 		thePanel.add( createOKCancelPanel() );
 		
 		return thePanel;
@@ -643,7 +647,7 @@ public class CreateGatewayProjectPanel extends CreateStructuralElementPanel {
 				}
 				
 				createDesignatedReqtPackagesInTheModel();
-			
+				
 			} else {
 				Logger.writeLine("Error in CreateGatewayProjectPanel.performAction, checkValidity returned false");
 			}	
@@ -663,6 +667,7 @@ public class CreateGatewayProjectPanel extends CreateStructuralElementPanel {
     #051 06-JUL-2016: Re-factored the GW panel to allow it to incrementally add to previous setup (F.J.Chadburn)
     #063 17-JUL-2016: Gateway project creator now mimics GatewayProjectFiles pkg creation if necessary (F.J.Chadburn)
     #066 19-JUL-2016: Added optional baseline box to the fast Gateway setup panel (F.J.Chadburn)
+    #101 14-SEP-2016: Provide hint on dialog that 'Setup Gateway based on rqtf template' menu is available (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 
