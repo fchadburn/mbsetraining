@@ -71,7 +71,7 @@ public class PopulateRequirementsAnalysisPkg extends PopulatePkg {
 		}
 	}
 	
-	static IRPPackage populateRequirementsAnalysisPkg(IRPProject forProject) {
+	static public IRPPackage populateRequirementsAnalysisPkg(IRPProject forProject) {
 		
 		addProfileIfNotPresent("SysML", forProject);		
 		addProfileIfNotPresent("GlobalPreferencesProfile", forProject);
@@ -138,6 +138,7 @@ public class PopulateRequirementsAnalysisPkg extends PopulatePkg {
     #051 06-JUL-2016: Re-factored the GW panel to allow it to incrementally add to previous setup (F.J.Chadburn)
     #061 17-JUL-2016: Ensure BasePkg is added by reference from profile to aid future integration (F.J.Chadburn)
     #091 23-AUG-2016: Turn off the Activity::General::AutoSelectControlOrObjectFlow property by default (F.J.Chadburn)
+    #100 14-SEP-2016: Add option to create RequirementsAnalysisPkg if FunctionalAnalysisPkg not possible (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 
