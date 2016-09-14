@@ -37,7 +37,7 @@ DLLServerCompatible4=1
 name5=MBSE Method: Functional Analysis\Create an incoming event sent by an actor
 isPluginCommand5=1
 command5=InvokeFunctionalAnalysisHelper
-applicableTo5=State,Transition,Comment,AcceptEventAction,SendAction,AcceptTimeEvent,Constraint,Precondition,Postcondition,ControlFlow,Requirement
+applicableTo5=ActivityDiagram,ObjectModelDiagram,Requirements Diagram,State,Transition,Comment,AcceptEventAction,SendAction,AcceptTimeEvent,Constraint,Precondition,Postcondition,ControlFlow,Requirement
 isVisible5=1
 DLLServerCompatible5=1
 
@@ -45,7 +45,7 @@ DLLServerCompatible5=1
 name6=MBSE Method: Functional Analysis\Create an outgoing event sent to an actor
 isPluginCommand6=1
 command6=InvokeFunctionalAnalysisHelper
-applicableTo6=State,Transition,Comment,AcceptEventAction,SendAction,AcceptTimeEvent,Constraint,Precondition,Postcondition,ControlFlow,Requirement
+applicableTo6=ActivityDiagram,ObjectModelDiagram,Requirements Diagram,State,Transition,Comment,AcceptEventAction,SendAction,AcceptTimeEvent,Constraint,Precondition,Postcondition,ControlFlow,Requirement
 isVisible6=1
 DLLServerCompatible6=1
 
@@ -53,7 +53,7 @@ DLLServerCompatible6=1
 name7=MBSE Method: Functional Analysis\Create an operation that the system does
 isPluginCommand7=1
 command7=InvokeFunctionalAnalysisHelper
-applicableTo7=State,Transition,Comment,AcceptEventAction,SendAction,AcceptTimeEvent,Constraint,Precondition,Postcondition,ControlFlow,Requirement
+applicableTo7=ActivityDiagram,ObjectModelDiagram,Requirements Diagram,State,Transition,Comment,AcceptEventAction,SendAction,AcceptTimeEvent,Constraint,Precondition,Postcondition,ControlFlow,Requirement
 isVisible7=1
 DLLServerCompatible7=1
 

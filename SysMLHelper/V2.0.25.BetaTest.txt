@@ -1,0 +1,20 @@
+#098 14-SEP-2016: Improve dialog for double-click to clarify cancelling gets the Features dialog (F.J.Chadburn)
+#099 14-SEP-2016: Allow event and operation creation from right-click on AD and RD diagram canvas (F.J.Chadburn)
+#100 14-SEP-2016: Add option to create RequirementsAnalysisPkg if FunctionalAnalysisPkg not possible (F.J.Chadburn)
+#101 14-SEP-2016: Provide hint on dialog that 'Setup Gateway based on rqtf template' menu is available (F.J.Chadburn)
+
+TODO:
+#XXX DD-MTH-YEAR: Avoid port proliferation in inheritance tree for actors/system (F.J.Chadburn)
+#XXX DD-MTH-YEAR: Allow rippling updates (F.J.Chadburn)
+#XXX DD-MTH-YEAR: Populate test case script from a sequence diagram (F.J.Chadburn)
+#XXX DD-MTH-YEAR: Improve warning/working when multiple Rhapsody instances are open (F.J.Chadburn)
+#XXX DD-MTH-YEAR: Improve general SysML by adding better Start link/End link dialog (F.J.Chadburn)
+#XXX DD-MTH-YEAR: Ensure requirement creation menus are safe or disabled across all diagrams (F.J.Chadburn) 
+#XXX DD-MTH-YEAR: Add improved population of requirement relations on existing diagrams (F.J.Chadburn)
+#XXX DD-MTH-YEAR: Create new requirement directly in fromX package using a dialog (F.J.Chadburn)
+#XXX DD-MTH-YEAR: Create without test package, add later (F.J.Chadburn)
+#XXX DD-MTH-YEAR: Add support to Panels for keyboard presses, e.g., OK/Cancel (F.J.Chadburn)
+#XXX DD-MTH-YEAR: Drawing a relationship on a call op ask to add same relationship to Op? (F.J.Chadburn)
+#XXX DD-MTH-YEAR: Only bleed to requirements checked for coverage (F.J.Chadburn)
+#XXX DD-MTH-YEAR: Allow derivation of requirements with trace-ability from attribute (F.J.Chadburn) 
+#XXX DD-MTH-YEAR: Add tag to enable/disable extended double-click functionality

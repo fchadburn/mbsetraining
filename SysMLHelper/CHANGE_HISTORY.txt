@@ -170,3 +170,10 @@ BETA TEST RELEASE 2.0.23 (15-AUG-2016)
 ----------------------------------------------------------------------------------
 BETA TEST RELEASE 2.0.24 (23-AUG-2016)
 ----------------------------------------------------------------------------------
+#098 14-SEP-2016: Improve dialog for double-click to clarify cancelling gets the Features dialog (F.J.Chadburn)
+#099 14-SEP-2016: Allow event and operation creation from right-click on AD and RD diagram canvas (F.J.Chadburn)
+#100 14-SEP-2016: Add option to create RequirementsAnalysisPkg if FunctionalAnalysisPkg not possible (F.J.Chadburn)
+#101 14-SEP-2016: Provide hint on dialog that 'Setup Gateway based on rqtf template' menu is available (F.J.Chadburn)
+----------------------------------------------------------------------------------
+BETA TEST RELEASE 2.0.25 (14-SEP-2016)
+----------------------------------------------------------------------------------
