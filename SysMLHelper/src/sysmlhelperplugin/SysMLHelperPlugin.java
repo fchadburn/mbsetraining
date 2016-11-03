@@ -15,7 +15,7 @@ public class SysMLHelperPlugin extends RPUserPlugin {
 	static protected IRPApplication m_rhpApplication = null;
 	static protected IRPProject m_rhpProject = null;
 
-	static protected String m_version = "2.0.25 (Beta Test)";
+	static protected String m_version = "2.0.26 (Beta Test)";
 	
 	final String legalNotice = 
 			"Copyright (C) 2015-2016  MBSE Training and Consulting Limited (www.executablembse.com)"
