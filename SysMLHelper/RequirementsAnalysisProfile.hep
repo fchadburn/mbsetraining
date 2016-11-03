@@ -1,5 +1,5 @@
 [Helpers]
-numberOfElements=6
+numberOfElements=7
 
 #REM: Definition of the plug-in
 name1=InvokeRequirementsAnalysisHelper
@@ -49,6 +49,14 @@ applicableTo6=UseCase,Project,SysML,Package,ActivityDiagram,UseCaseDiagram
 isVisible6=1
 DLLServerCompatible6=1
 
+#REM: Add pop-up menu
+name7=MBSE Method: Requirements Analysis\Update nested activity diagram name(s) to reflect use case name(s)
+isPluginCommand7=1
+command7=InvokeRequirementsAnalysisHelper
+applicableTo7=UseCase,Project,SysML,Package,ActivityDiagram,UseCaseDiagram
+isVisible7=1
+DLLServerCompatible7=1
+
 #REM Copyright (C) 2016  MBSE Training and Consulting Limited (www.executablembse.com)
 #REM
 #REM Change history:
@@ -56,6 +64,7 @@ DLLServerCompatible6=1
 #REM #041 29-JUN-2016: Derive downstream requirement menu added for reqts on diagrams (F.J.Chadburn)
 #REM #043 03-JUL-2016: Add Derive new requirement to CallOperations and Event Actions (F.J.Chadburn)
 #REM #049 06-JUL-2016: Derive new requirement now under Functional Analysis not Requirements Analysis menu (F.J.Chadburn)
+#REM #102 03-NOV-2016: Add right-click menu to auto update names of ADs from UC names (F.J.Chadburn)
 #REM
 #REM This file is part of SysMLHelperPlugin.
 #REM

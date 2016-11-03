@@ -69,7 +69,7 @@ DLLServerCompatible8=1
 name9=MBSE Method: Functional Analysis\Derive downstream requirement
 isPluginCommand9=1
 command9=InvokeFunctionalAnalysisHelper
-applicableTo9=Requirement,CallOperation,AcceptEventAction,State,Operation,Event
+applicableTo9=Requirement,CallOperation,AcceptEventAction,State,Operation,Event,Attribute
 isVisible9=1
 DLLServerCompatible9=1
 
@@ -141,6 +141,7 @@ DLLServerCompatible16=1
 #REM #049 06-JUL-2016: Derive new requirement now under Functional Analysis not Requirements Analysis menu (F.J.Chadburn)
 #REM #083 09-AUG-2016: Add an Update attribute menu option and panel with add check operation option (F.J.Chadburn)
 #REM #084 09-AUG-2016: Add new right-click menu to create an incoming event for an attribute (F.J.Chadburn)
+#REM #103 03-NOV-2016: Allow derivation of requirements with trace-ability from attribute (F.J.Chadburn)
 #REM
 #REM This file is part of SysMLHelperPlugin.
 #REM
