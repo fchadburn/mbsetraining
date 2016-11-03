@@ -177,3 +177,13 @@ BETA TEST RELEASE 2.0.24 (23-AUG-2016)
 ----------------------------------------------------------------------------------
 BETA TEST RELEASE 2.0.25 (14-SEP-2016)
 ----------------------------------------------------------------------------------
+#102 03-NOV-2016: Add right-click menu to auto update names of ADs from UC names (F.J.Chadburn)
+#103 03-NOV-2016: Allow derivation of requirements with trace-ability from attribute (F.J.Chadburn) 
+#104 03-NOV-2016: Minor tweak to copy ADs panel to do nothing if upstream AD doesn't exist (F.J.Chadburn)
+#105 03-NOV-2016: Only bleed to requirements checked for coverage (F.J.Chadburn)
+#106 03-NOV-2016: Ease usage by renaming UsageDomain block to SystemAssembly and moving up one package (F.J.Chadburn)
+#107 03-NOV-2016: Compile against Java 1.7 JRE (F.J.Chadburn)
+#108 03-NOV-2016: Added tag for packageForActorsAndTest to FunctionalAnalysisPkg settings (F.J.Chadburn)
+----------------------------------------------------------------------------------
+BETA TEST RELEASE 2.0.26 (03-NOV-2016)
+----------------------------------------------------------------------------------
