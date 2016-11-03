@@ -138,7 +138,16 @@ public class RequirementsAnalysisPlugin extends RPUserPlugin {
 				} catch (Exception e) {
 					Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking RenameActions.performRenamesFor");
 				}
+				
+			} else if (menuItem.equals("MBSE Method: Requirements Analysis\\Update nested activity diagram name(s) to reflect use case name(s)")){
 
+				try {				
+					NestedActivityDiagram.renameNestedActivityDiagramsFor( theSelectedEls );
+
+				} catch (Exception e) {
+					Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking RenameActions.performRenamesFor");
+				}
+				
 			} else {
 				Logger.writeLine(theSelectedEl, " was invoked with menuItem='" + menuItem + "'");
 			}
@@ -175,6 +184,7 @@ public class RequirementsAnalysisPlugin extends RPUserPlugin {
     #041 29-JUN-2016: Derive downstream requirement menu added for reqts on diagrams (F.J.Chadburn) 
     #043 03-JUL-2016: Add Derive downstream reqt for CallOps, InterfaceItems and Event Actions (F.J.Chadburn)
     #049 06-JUL-2016: Derive new requirement now under Functional Analysis not Requirements Analysis menu (F.J.Chadburn)
+    #102 03-NOV-2016: Add right-click menu to auto update names of ADs from UC names (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 
