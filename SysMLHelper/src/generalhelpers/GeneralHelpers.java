@@ -536,7 +536,7 @@ public class GeneralHelpers {
 					
 					if (theCandidate.isReadOnly()==0){
 						theADs.add(theCandidate);			
-						Logger.writeLine("Adding " + Logger.elementInfo(theCandidate.getOwner()) + " to the list to check");
+						Logger.writeLine("Adding " + Logger.elementInfo(theCandidate.getOwner()) + " to the list");
 					} else {
 						Logger.writeLine("Skipping " + Logger.elementInfo(theCandidate.getOwner()) + " as it is read-only");
 					}
@@ -883,6 +883,7 @@ public class GeneralHelpers {
 	#074 25-JUL-2016: Support creation of requirements from AcceptTimeEvents (F.J.Chadburn)
 	#085 09-AUG-2016: Add helper to findElementsWithMetaClassStereotypeAndName (F.J.Chadburn)
 	#089 15-AUG-2016: Add a pull-down list to select Block when adding events/ops in white box (F.J.Chadburn)
+	#102 03-NOV-2016: Add right-click menu to auto update names of ADs from UC names (F.J.Chadburn)
 	
     This file is part of SysMLHelperPlugin.
 

@@ -18,10 +18,7 @@ import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 
-import com.telelogic.rhapsody.core.IRPClassifier;
-import com.telelogic.rhapsody.core.IRPInstance;
-import com.telelogic.rhapsody.core.IRPModelElement;
-import com.telelogic.rhapsody.core.IRPPackage;
+import com.telelogic.rhapsody.core.*;
 
 public abstract class CreateStructuralElementPanel extends JPanel {
 
@@ -111,16 +108,6 @@ public abstract class CreateStructuralElementPanel extends JPanel {
 		return thePanel;
 	}
 	
-	protected static IRPInstance addPartTo(
-			IRPClassifier theElement, 
-			IRPClassifier typedByElement){
-		
-		IRPInstance thePart = (IRPInstance) theElement.addNewAggr("Part", "its" + typedByElement.getName());
-		thePart.setOtherClass(typedByElement);
-		
-		return thePart;
-	}
-	
 	protected static void addGeneralization(
 			IRPClassifier fromElement, 
 			String toBlockWithName, 
@@ -145,6 +132,7 @@ public abstract class CreateStructuralElementPanel extends JPanel {
     #026 31-MAY-2016: Add dialog to allow user to choose which Activity Diagrams to synch (F.J.Chadburn)
     #030 01-JUN-2016: Improve legal name checking across helpers (F.J.Chadburn)
     #035 15-JUN-2016: New panel to configure requirements package naming and gateway set-up (F.J.Chadburn)
+    #106 03-NOV-2016: Ease usage by renaming UsageDomain block to SystemAssembly and moving up one package (F.J.Chadburn)
     
     This file is part of SysMLHelperPlugin.
 
