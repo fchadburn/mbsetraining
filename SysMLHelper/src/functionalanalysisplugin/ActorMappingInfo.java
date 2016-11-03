@@ -74,13 +74,16 @@ public class ActorMappingInfo {
 		m_ActorNameTextField.setText( theProposedActorName );
 	}
 	
-	public IRPInstance addActorPartTo(IRPClass theUsageBlock, String withNameForActor){
+	public IRPInstance addActorAndAssociatedPartTo(
+			IRPClass theAssemblyBlock, 
+			String withNameForActor){
 		
 		IRPInstance theActorPart = null;
 		
 		// get the logical system part and block
 		@SuppressWarnings("unchecked")
-		List<IRPInstance> theParts = theUsageBlock.getNestedElementsByMetaClass("Part", 0).toList();
+		List<IRPInstance> theParts = 
+			theAssemblyBlock.getNestedElementsByMetaClass("Part", 0).toList();
 		
 		IRPClassifier theLogicalSystemBlock = null;
 		IRPInstance theLogicalSystemPart = null;
@@ -105,30 +108,39 @@ public class ActorMappingInfo {
 		}
 		
 		if (theLogicalSystemBlock != null && theTesterBlock != null){
-			IRPActor theTestActor = ((IRPPackage) theUsageBlock.getOwner()).addActor( withNameForActor );
+		
+			IRPPackage thePackageForActor = 
+					FunctionalAnalysisSettings.getPackageForActorsAndTest(theAssemblyBlock.getProject());
 			
-			IRPActor theTestbench = (IRPActor) theTestActor.getProject().findNestedElementRecursive("Testbench", "Actor");
+			IRPActor theActor = thePackageForActor.addActor( withNameForActor );
+			
+			IRPActor theTestbench = 
+					(IRPActor) theActor.getProject().findNestedElementRecursive(
+							"Testbench", "Actor");
 			
 			if (theTestbench != null){
-				theTestActor.addGeneralization( theTestbench );
+				theActor.addGeneralization( theTestbench );
 			} else {
 				Logger.writeLine("Error: Unable to find Actor with name Testbench");
 			}
 			
-			// Make each of the actors a part of the UsageDomain block
-			theActorPart = addPartTo(theUsageBlock, theTestActor);
+			// Make each of the actors a part of the SystemAssembly block
+			theActorPart = (IRPInstance) theAssemblyBlock.addNewAggr(
+					"Part", "its" + theActor.getName() );
+			
+			theActorPart.setOtherClass( theActor );
 			
 			// and connect actor to the LogicalSystem block
-	    	IRPPort theActorToSystemPort = (IRPPort) theTestActor.addNewAggr("Port", "pLogicalSystem");
-			IRPPort theSystemToActorPort = (IRPPort) theLogicalSystemBlock.addNewAggr("Port", "p" + theTestActor.getName());
-			IRPLink theLogicalSystemLink = (IRPLink) theUsageBlock.addLink(
+	    	IRPPort theActorToSystemPort = (IRPPort) theActor.addNewAggr("Port", "pLogicalSystem");
+			IRPPort theSystemToActorPort = (IRPPort) theLogicalSystemBlock.addNewAggr("Port", "p" + theActor.getName());
+			IRPLink theLogicalSystemLink = (IRPLink) theAssemblyBlock.addLink(
 					theActorPart, theLogicalSystemPart, null, theActorToSystemPort, theSystemToActorPort);
 			theLogicalSystemLink.changeTo("connector");
 			
 			// and connect actor to the TestDriver block
-	    	IRPPort theActorToTesterPort = (IRPPort) theTestActor.addNewAggr("Port", "pTester");
-			IRPPort theTesterToActorPort = (IRPPort) theTesterBlock.addNewAggr("Port", "p" + theTestActor.getName());
-			IRPLink theTesterLink = (IRPLink) theUsageBlock.addLink(
+	    	IRPPort theActorToTesterPort = (IRPPort) theActor.addNewAggr("Port", "pTester");
+			IRPPort theTesterToActorPort = (IRPPort) theTesterBlock.addNewAggr("Port", "p" + theActor.getName());
+			IRPLink theTesterLink = (IRPLink) theAssemblyBlock.addLink(
 					theActorPart, theTesterPart, null, theActorToTesterPort, theTesterToActorPort);
 			theTesterLink.changeTo("connector");
 		}
@@ -136,23 +148,13 @@ public class ActorMappingInfo {
 		return theActorPart;
 	}
 	
-	private static IRPInstance addPartTo(
-			IRPClassifier theElement, 
-			IRPClassifier typedByElement){
-		
-		IRPInstance thePart = (IRPInstance) theElement.addNewAggr("Part", "its" + typedByElement.getName());
-		thePart.setOtherClass(typedByElement);
-		
-		return thePart;
-	}
-	
 	public void performActorPartCreationIfSelectedTo(
-			IRPClass theUsageDomainBlock){
+			IRPClass theAssemblyBlock ){
 		
 		if (isSelected()){
 
 			String theLegalActorName = getName().replaceAll(" ", "");
-			IRPInstance theActorPart = addActorPartTo(theUsageDomainBlock, theLegalActorName);	
+			IRPInstance theActorPart = addActorAndAssociatedPartTo(theAssemblyBlock, theLegalActorName);	
 			theActorPart.highLightElement();
 
 			String theText = "Create actor called " + m_ActorNameTextField.getText();
@@ -183,6 +185,8 @@ public class ActorMappingInfo {
     #006 02-MAY-2016: Add FunctionalAnalysisPkg helper support (F.J.Chadburn)
     #023 30-MAY-2016: Added form to support validation checks for analysis block hierarchy creation (F.J.Chadburn) 
     #025 31-MAY-2016: Add new menu and dialog to add a new actor to package under development (F.J.Chadburn)
+    #106 03-NOV-2016: Ease usage by renaming UsageDomain block to SystemAssembly and moving up one package (F.J.Chadburn)
+    #108 03-NOV-2016: Added tag for packageForActorsAndTest to FunctionalAnalysisPkg settings (F.J.Chadburn)
     
     This file is part of SysMLHelperPlugin.
 

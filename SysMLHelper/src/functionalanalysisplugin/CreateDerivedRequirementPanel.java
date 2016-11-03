@@ -162,7 +162,9 @@ public class CreateDerivedRequirementPanel extends CreateTracedElementPanel {
 					Logger.writeLine("Warning in deriveDownstreamRequirement, this operation is not supported for theState.getStateType()=" + theState.getStateType());
 				}
 
-			} else if (theModelObject instanceof IRPOperation || (theModelObject instanceof IRPEvent)){
+			} else if (theModelObject instanceof IRPOperation || 
+					  (theModelObject instanceof IRPEvent) ||
+					  (theModelObject instanceof IRPAttribute) ){
 				
 				Set<IRPRequirement> theReqts = 
 						TraceabilityHelper.getRequirementsThatTraceFromWithStereotype(
@@ -541,7 +543,8 @@ public class CreateDerivedRequirementPanel extends CreateTracedElementPanel {
 			}
 	
 		} else if ( theSourceModelObject instanceof IRPOperation || 
-				    theSourceModelObject instanceof IRPEvent ){
+				    theSourceModelObject instanceof IRPEvent ||
+				    theSourceModelObject instanceof IRPAttribute ){
 
 			TraceabilityHelper.addStereotypedDependencyIfOneDoesntExist(
 					theSourceModelObject, theRequirement, "derive");
@@ -606,6 +609,7 @@ public class CreateDerivedRequirementPanel extends CreateTracedElementPanel {
     #043 03-JUL-2016: Add Derive downstream reqt for CallOps, InterfaceItems and Event Actions (F.J.Chadburn)
     #049 06-JUL-2016: Derive new requirement now under Functional Analysis not Requirements Analysis menu (F.J.Chadburn)
     #055 13-JUL-2016: Support requirement derivation from simplified AD elements (F.J.Chadburn)
+    #103 03-NOV-2016: Allow derivation of requirements with trace-ability from attribute (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

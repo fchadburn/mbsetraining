@@ -334,60 +334,54 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
 	}
 
 	private static void createSequenceDiagramFor(
-			IRPClass theUsageDomainBlock, 
+			IRPClass theAssemblyBlock, 
+			IRPPackage inPackage,
 			String withName){
-		
-		IRPModelElement theOwner = theUsageDomainBlock.getOwner();
-		
-		if (theOwner instanceof IRPPackage){
-			IRPPackage thePackage = (IRPPackage)theOwner;
-			
-			IRPSequenceDiagram theSD = thePackage.addSequenceDiagram(withName);
-			
-			@SuppressWarnings("unchecked")
-			List<IRPInstance> theParts = theUsageDomainBlock.getNestedElementsByMetaClass("Part", 0).toList();
-			
-			int xPos = 30;
-			int yPos = 0;
-			int nWidth = 100;
-			int nHeight = 1000;
-			int xGap = 30;
-			
-			for (IRPInstance thePart : theParts) {
-				
-				if (GeneralHelpers.hasStereotypeCalled("TestDriver", thePart)){;
-					
-					IRPClassifier theType = thePart.getOtherClass();
-					theSD.addNewNodeForElement(theType, xPos, yPos, nWidth, nHeight);
-					xPos=xPos+nWidth+xGap;
-				}
+
+		IRPSequenceDiagram theSD = inPackage.addSequenceDiagram(withName);
+
+		@SuppressWarnings("unchecked")
+		List<IRPInstance> theParts = 
+		theAssemblyBlock.getNestedElementsByMetaClass("Part", 0).toList();
+
+		int xPos = 30;
+		int yPos = 0;
+		int nWidth = 100;
+		int nHeight = 1000;
+		int xGap = 30;
+
+		for (IRPInstance thePart : theParts) {
+
+			if (GeneralHelpers.hasStereotypeCalled("TestDriver", thePart)){
+
+			IRPClassifier theType = thePart.getOtherClass();
+			theSD.addNewNodeForElement(theType, xPos, yPos, nWidth, nHeight);
+			xPos=xPos+nWidth+xGap;
 			}
-			
-			for (IRPInstance thePart : theParts) {
-				
-				if (!GeneralHelpers.hasStereotypeCalled("TestDriver", thePart) && !GeneralHelpers.hasStereotypeCalled("LogicalSystem", thePart)){;
-					
-					IRPClassifier theType = thePart.getOtherClass();
-					theSD.addNewNodeForElement(theType, xPos, yPos, nWidth, nHeight);
-					xPos=xPos+nWidth+xGap;
-				}
-			}
-			
-			for (IRPInstance thePart : theParts) {
-				
-				if (GeneralHelpers.hasStereotypeCalled("LogicalSystem", thePart)){;
-					
-					IRPClassifier theType = thePart.getOtherClass();
-					theSD.addNewNodeForElement(theType, xPos, yPos, nWidth, nHeight);
-					xPos=xPos+nWidth+xGap;
-				}
-			}
-			
-			GeneralHelpers.applyExistingStereotype("AutoShow", theSD);
-			
-		} else {
-			Logger.writeLine("Error in createSequenceDiagramFor: Expected owner to be a Package");
 		}
+
+		for (IRPInstance thePart : theParts) {
+
+			if (!GeneralHelpers.hasStereotypeCalled("TestDriver", thePart) && !GeneralHelpers.hasStereotypeCalled("LogicalSystem", thePart)){;
+
+			IRPClassifier theType = thePart.getOtherClass();
+			theSD.addNewNodeForElement(theType, xPos, yPos, nWidth, nHeight);
+			xPos=xPos+nWidth+xGap;
+			}
+		}
+
+		for (IRPInstance thePart : theParts) {
+
+			if (GeneralHelpers.hasStereotypeCalled("LogicalSystem", thePart)){;
+
+			IRPClassifier theType = thePart.getOtherClass();
+			theSD.addNewNodeForElement(theType, xPos, yPos, nWidth, nHeight);
+			xPos=xPos+nWidth+xGap;
+			}
+		}
+
+		GeneralHelpers.applyExistingStereotype("AutoShow", theSD);
+
 	}
 
 	@Override
@@ -426,49 +420,67 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
 			theBlocksUsageDep.addStereotype( "Usage", "Dependency" );
 			
 			// Create nested package with components necessary for wiring up a simulation
-			IRPPackage theBlockTestPackage = theFunctionalBlockPkg.addNestedPackage(theName + "Test" + "Pkg");
-			
+			IRPPackage theTestPackage = theFunctionalBlockPkg.addNestedPackage(theName + "Test" + "Pkg");
+
+			// Update tag to point to the nested package
+			setTagOn( m_RootPackage, FunctionalAnalysisSettings.tagNameForPackageForActorsAndTest, theTestPackage );
+
 			// Add Usage dependency to the interfaces package that will contain the events
-			IRPDependency theUsageDep = theBlockTestPackage.addDependencyTo( theInterfacesPkg );
+			IRPDependency theUsageDep = theTestPackage.addDependencyTo( theInterfacesPkg );
 			theUsageDep.addStereotype( "Usage", "Dependency" );
 
-			IRPClass theUsageDomainBlock = theBlockTestPackage.addClass(theName + "_UsageDomain");
-			theUsageDomainBlock.changeTo("Block");
+			IRPClass theSystemAssemblyBlock = theFunctionalBlockPkg.addClass(theName + "_SystemAssembly");
+			theSystemAssemblyBlock.changeTo("Block");
 
 			IRPObjectModelDiagram theBDD = 
-					theBlockTestPackage.addObjectModelDiagram("BDD - " + theUsageDomainBlock.getName());
+					theFunctionalBlockPkg.addObjectModelDiagram(
+							"BDD - " + theSystemAssemblyBlock.getName());
 			
 			theBDD.changeTo("Block Definition Diagram");
 
 			IRPStructureDiagram theIBD = 
-					(IRPStructureDiagram) theUsageDomainBlock.addNewAggr(
-							"StructureDiagram", "IBD - " + theUsageDomainBlock.getName());
+					(IRPStructureDiagram) theSystemAssemblyBlock.addNewAggr(
+							"StructureDiagram", "IBD - " + theSystemAssemblyBlock.getName());
 			
 			theIBD.changeTo("Internal Block Diagram");					    	
 
-			// Make the LogicalSystem a part of the UsageDomain block
-			IRPInstance theLogicalSystemPart = addPartTo(theUsageDomainBlock, theLogicalSystemBlock);
+			// Make the LogicalSystem a part of the SystemAssembly block
+			IRPInstance theLogicalSystemPart = 
+					(IRPInstance) theSystemAssemblyBlock.addNewAggr(
+							"Part", "its" + theLogicalSystemBlock.getName());
+			
+			theLogicalSystemPart.setOtherClass(theLogicalSystemBlock);
+			
 			GeneralHelpers.applyExistingStereotype("LogicalSystem", theLogicalSystemPart);	
 
-			IRPClass theTesterBlock = theBlockTestPackage.addClass(theName + "_Tester");
+			IRPClass theTesterBlock = theTestPackage.addClass(theName + "_Tester");
 			GeneralHelpers.applyExistingStereotype("TestDriver", theTesterBlock);
 			theTesterBlock.changeTo("Block");
 			addGeneralization(theTesterBlock, "TestDriverBlock", theProject);
 
 			// Make the TestDriver a part of the UsageDomain block
-			IRPInstance theTestDriverPart = addPartTo(theUsageDomainBlock, theTesterBlock);
+			IRPInstance theTestDriverPart = 
+					(IRPInstance) theSystemAssemblyBlock.addNewAggr(
+							"Part", "its" + theTesterBlock.getName());
+			
+			theTestDriverPart.setOtherClass(theTesterBlock);
+			
 			GeneralHelpers.applyExistingStereotype("TestDriver", theTestDriverPart);
 
 			for (ActorMappingInfo theInfo : m_ActorChoices) {
-				theInfo.performActorPartCreationIfSelectedTo( theUsageDomainBlock );
+				theInfo.performActorPartCreationIfSelectedTo( theSystemAssemblyBlock );
 			}
 
 			// Add a sequence diagram
-			createSequenceDiagramFor(theUsageDomainBlock, "SD - " + theName);
+			createSequenceDiagramFor(
+					theSystemAssemblyBlock, 
+					theTestPackage, 
+					"SD - " + theName);
 	
 			setTagOn( m_RootPackage, FunctionalAnalysisSettings.tagNameForPackageUnderDev, theFunctionalBlockPkg );
 								
-			IRPStatechartDiagram theStatechart = theLogicalSystemBlock.getStatechart().getStatechartDiagram();
+			IRPStatechartDiagram theStatechart = 
+					theLogicalSystemBlock.getStatechart().getStatechartDiagram();
 
 			if (theStatechart != null){
 				theStatechart.highLightElement();
@@ -476,6 +488,8 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
 			}
 			
 			// Create nested package for housing the ADs
+			
+			
 			IRPPackage theWorkingPackage = theFunctionalBlockPkg.addNestedPackage(theName + "Working" + "Pkg");
 			
 			// This dependency is also used to locate the working package
@@ -485,7 +499,7 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
 			theRAProfileDependency.addStereotype("AppliedProfile", "Dependency");
 			
 			// Add a component
-			addAComponentWith(theName, theBlockTestPackage, theUsageDomainBlock);
+			addAComponentWith(theName, theTestPackage, theSystemAssemblyBlock);
 			
 			CreateGatewayProjectPanel.launchThePanel( 
 					theProject, 
@@ -539,6 +553,7 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
     #054 13-JUL-2016: Create a nested BlockPkg package to contain the Block and events (F.J.Chadburn)
     #062 17-JUL-2016: Create InterfacesPkg and correct build issues by adding a Usage dependency (F.J.Chadburn)
     #087 09-AUG-2016: Added packageForEventsAndInterfaces tag to give user flexibility to change (F.J.Chadburn)
+    #106 03-NOV-2016: Ease usage by renaming UsageDomain block to SystemAssembly and moving up one package (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

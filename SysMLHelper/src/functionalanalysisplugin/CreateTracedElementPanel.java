@@ -223,7 +223,7 @@ public abstract class CreateTracedElementPanel extends JPanel {
 		return thePanel;
 	}
 	
-	protected static void bleedColorToElementsRelatedTo( 
+	protected void bleedColorToElementsRelatedTo( 
 			IRPGraphElement theGraphEl ){
 		
 		// only bleed on activity diagrams		
@@ -235,6 +235,8 @@ public abstract class CreateTracedElementPanel extends JPanel {
 			
 			if (theEl != null){
 				
+				List<IRPRequirement> theSelectedReqts = m_RequirementsPanel.getSelectedRequirementsList();
+				
 				Logger.writeLine("Setting color to red for " + theEl.getName());
 				theGraphEl.setGraphicalProperty("ForegroundColor", theColorSetting);
 				
@@ -245,7 +247,10 @@ public abstract class CreateTracedElementPanel extends JPanel {
 					
 					IRPModelElement theDependsOn = theDependency.getDependsOn();
 					
-					if (theDependsOn != null && theDependsOn instanceof IRPRequirement){					
+					if (theDependsOn != null && 
+						theDependsOn instanceof IRPRequirement && 
+						theSelectedReqts.contains( theDependsOn )){	
+						
 						bleedColorToGraphElsRelatedTo( theDependsOn, theColorSetting, theDiagram );
 						bleedColorToGraphElsRelatedTo( theDependency, theColorSetting, theDiagram );
 					}
@@ -512,10 +517,9 @@ public abstract class CreateTracedElementPanel extends JPanel {
 				}
 			}
 		}
-
+		
 		return theBlock;
 	}
-
 }
 
 /**
@@ -536,6 +540,7 @@ public abstract class CreateTracedElementPanel extends JPanel {
     #089 15-AUG-2016: Add a pull-down list to select Block when adding events/ops in white box (F.J.Chadburn)
     #090 15-AUG-2016: Fix check operation name issue introduced in fixes #083 and #084 (F.J.Chadburn)
     #099 14-SEP-2016: Allow event and operation creation from right-click on AD and RD diagram canvas (F.J.Chadburn)
+    #105 03-NOV-2016: Only bleed to requirements checked for coverage (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

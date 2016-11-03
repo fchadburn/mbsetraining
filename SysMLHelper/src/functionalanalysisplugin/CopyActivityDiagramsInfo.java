@@ -32,8 +32,8 @@ public class CopyActivityDiagramsInfo {
 		if (m_NestedFlowcharts.isEmpty()){
 			
 			m_CopyExistingButton.setSelected(false);
-			m_CreateNewButton.setSelected(true);
-			m_DoNothingButton.setSelected(false);
+			m_CreateNewButton.setSelected(false);
+			m_DoNothingButton.setSelected(true);
 			
 			m_CopyExistingButton.setEnabled(false);
 			
@@ -76,7 +76,8 @@ public class CopyActivityDiagramsInfo {
 
     Change history:
     #057 13-JUL-2016: Enhanced Copy AD panel to list use cases and give a create new option (F.J.Chadburn)
-    
+    #104 03-NOV-2016: Minor tweak to copy ADs panel to do nothing if upstream AD doesn't exist (F.J.Chadburn)
+        
     This file is part of SysMLHelperPlugin.
 
     SysMLHelperPlugin is free software: you can redistribute it and/or modify

@@ -15,6 +15,7 @@ public class FunctionalAnalysisSettings {
 	public static final String tagNameForIsPopulateOptionHidden = "isPopulateOptionHidden";
 	public static final String tagNameForPopulateWantedByDefault = "isPopulateWantedByDefault";
 	public static final String tagNameForPackageForEventsAndInterfaces = "packageForEventsAndInterfaces";
+	public static final String tagNameForPackageForActorsAndTest = "packageForActorsAndTest";
 	public static final String tagNameForIsUserBlockChoiceEnabled = "isUserBlockChoiceEnabled";
 
 	public static IRPPackage getPackageUnderDev(IRPProject inTheProject){
@@ -124,6 +125,52 @@ public class FunctionalAnalysisSettings {
 		}
 		
 		return theBuildingBlock;
+	}
+	
+	public static IRPPackage getPackageForActorsAndTest(
+			IRPProject inTheProject ){
+		
+		IRPPackage thePackage = null;
+
+		IRPModelElement theRootPackage = inTheProject.findNestedElementRecursive(
+				"FunctionalAnalysisPkg", "Package");
+		
+		if (theRootPackage != null){
+			IRPTag theTag = theRootPackage.getTag( tagNameForPackageForActorsAndTest );
+			
+			if( theTag != null ){
+				String thePackageName = theTag.getValue();
+				
+				thePackage = (IRPPackage) inTheProject.findNestedElementRecursive(
+						thePackageName, "Package");
+				
+				if( thePackage==null){
+					Logger.writeLine("Error in getPackageForActorsAndTest, unable to find package called " + thePackageName);
+				}
+			} else {
+				Logger.writeLine("Error in getPackageForActorsAndTest, unable to find tag called " + tagNameForPackageForActorsAndTest + 
+						" underneath " + Logger.elementInfo( theRootPackage ) );
+			}
+		} else {
+			Logger.writeLine("Error in getPackageForActorsAndTest, unable to find FunctionalAnalysisPkg");
+		}
+		
+		if (thePackage==null){
+			Logger.writeLine("Error in getPackageForActorsAndTest, unable to determine package from the tag value");
+		
+			IRPClass theLogicalBlock = getBlockUnderDev( inTheProject, false );
+			
+			// old projects may not have an test package hence use the package the block is in
+			IRPModelElement theOwner = theLogicalBlock.getOwner();
+			
+			if( theOwner instanceof IRPPackage ){
+				thePackage = (IRPPackage)theOwner;
+			} else {
+				Logger.writeLine( "Error in getPackageForActorsAndTest: Can't find pkg for " + Logger.elementInfo( theLogicalBlock ) );
+			}
+		}
+		
+		return thePackage;
 	}
 	
 	public static IRPPackage getPkgThatOwnsEventsAndInterfaces(
@@ -309,9 +356,7 @@ public class FunctionalAnalysisSettings {
 							
 						}
 					}
-					
 				}
-
 			}
 		}
 
@@ -458,7 +503,9 @@ public class FunctionalAnalysisSettings {
     #087 09-AUG-2016: Added packageForEventsAndInterfaces tag to give user flexibility to change (F.J.Chadburn)
     #089 15-AUG-2016: Add a pull-down list to select Block when adding events/ops in white box (F.J.Chadburn)
     #093 23-AUG-2016: Added isPopulateOptionHidden tag to allow hiding of the populate check-box on dialogs (F.J.Chadburn)
-
+    #106 03-NOV-2016: Ease usage by renaming UsageDomain block to SystemAssembly and moving up one package (F.J.Chadburn)
+    #108 03-NOV-2016: Added tag for packageForActorsAndTest to FunctionalAnalysisPkg settings (F.J.Chadburn)
+    
     This file is part of SysMLHelperPlugin.
 
     SysMLHelperPlugin is free software: you can redistribute it and/or modify
