@@ -14,8 +14,7 @@ public class SysMLHelperPlugin extends RPUserPlugin {
 
 	static protected IRPApplication m_rhpApplication = null;
 	static protected IRPProject m_rhpProject = null;
-
-	static protected String m_version = "2.0.26 (Beta Test)";
+	static protected ConfigurationSettings m_configSettings = null;
 	
 	final String legalNotice = 
 			"Copyright (C) 2015-2016  MBSE Training and Consulting Limited (www.executablembse.com)"
@@ -38,9 +37,12 @@ public class SysMLHelperPlugin extends RPUserPlugin {
 		 
 		// keep the application interface for later use
 		m_rhpApplication = theRhapsodyApp;
+		
+		m_configSettings = ConfigurationSettings.getInstance();
 
-		String msg = "The SysMLHelperProfile plugin V" + getVersion() + " was loaded successfully.\n" + legalNotice +
+		String msg = "The SysMLHelperProfile plugin V" + m_configSettings.getProperty("PluginVersion") + " was loaded successfully.\n" + legalNotice +
 				"\nNew right-click 'MBSE Method' commands have been added.";
+		
 		Logger.writeLine(msg);
 		
 		// Added by F.J.Chadburn #001
@@ -66,10 +68,6 @@ public class SysMLHelperPlugin extends RPUserPlugin {
 		return m_rhpProject;
 	} 
 	
-	public static String getVersion(){
-		return m_version;
-	}
-	
 	// called when the plug-in pop-up menu  is selected
 	public void OnMenuItemSelect(String menuItem) {
 		
@@ -82,7 +80,7 @@ public class SysMLHelperPlugin extends RPUserPlugin {
 
 		if( !theSelectedEls.isEmpty() ){
 
-			if (menuItem.equals("MBSE Method: Requirements Analysis\\Create the RequirementsAnalysisPkg package structure")){
+			if (menuItem.equals(m_configSettings.getString("sysmlhelperplugin.CreateRAStructureMenu"))){
 
 				if (theSelectedEl instanceof IRPProject){
 					try { 
@@ -92,7 +90,7 @@ public class SysMLHelperPlugin extends RPUserPlugin {
 						Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking PopulateRequirementsAnalysisPkg.createRequirementsAnalysisPkg");
 					}
 				}
-			} else if (menuItem.equals("MBSE Method: Functional Analysis\\Create the FunctionalAnalysisPkg package structure")){
+			} else if (menuItem.equals(m_configSettings.getString("sysmlhelperplugin.CreateFAStructureMenu"))){
 
 				if (theSelectedEl instanceof IRPProject){
 					try { 
@@ -103,7 +101,7 @@ public class SysMLHelperPlugin extends RPUserPlugin {
 					}
 				}
 
-			} else if (menuItem.equals("MBSE Method: Design Synthesis\\Create the DesignSynthesisPkg package structure")){
+			} else if (menuItem.equals(m_configSettings.getString("sysmlhelperplugin.CreateDSStructureMenu"))){
 
 				if (theSelectedEl instanceof IRPProject){
 					try { 
@@ -113,7 +111,7 @@ public class SysMLHelperPlugin extends RPUserPlugin {
 						Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking PopulateDesignSynthesisPkg.createDesignSynthesisPkg");
 					}
 				}
-			} else if (menuItem.equals("MBSE Method: General Utilities\\Quick hyperlink")){
+			} else if (menuItem.equals(m_configSettings.getString("sysmlhelperplugin.QuickHyperlinkMenu"))){
 
 				try { 
 					IRPHyperLink theHyperLink = (IRPHyperLink) theSelectedEl.addNewAggr("HyperLink", "");
@@ -124,7 +122,7 @@ public class SysMLHelperPlugin extends RPUserPlugin {
 				} catch (Exception e) {
 					Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking MBSE Method: General\\Quick hyperlink");
 				}
-			} else if (menuItem.equals("MBSE Method: General Utilities\\Setup Gateway project based on rqtf template")){
+			} else if (menuItem.equals(m_configSettings.getString("sysmlhelperplugin.SetupGatewayProjectMenu"))){
 
 				if (theSelectedEl instanceof IRPProject){
 					try { 
@@ -247,7 +245,9 @@ public class SysMLHelperPlugin extends RPUserPlugin {
     #017 11-MAY-2016: Double-click now works with both nested and hyper-linked diagrams (F.J.Chadburn)
     #035 15-JUN-2016: New panel to configure requirements package naming and gateway set-up (F.J.Chadburn)
     #050 06-JUL-2016: Setup Gateway project based on rqtf template option now under General Utilities menu (F.J.Chadburn)
-        
+    #109 06-NOV-2016: Added .properties support for localisation of menus (F.J.Chadburn)
+    #110 06-NOV-2016: PluginVersion now comes from Config.properties file, rather than hard wired (F.J.Chadburn)
+    
     This file is part of SysMLHelperPlugin.
 
     SysMLHelperPlugin is free software: you can redistribute it and/or modify
