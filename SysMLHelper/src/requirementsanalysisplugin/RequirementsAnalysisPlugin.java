@@ -1,10 +1,9 @@
 package requirementsanalysisplugin;
 
+import generalhelpers.ConfigurationSettings;
 import generalhelpers.Logger;
 
 import java.util.List;
-
-import sysmlhelperplugin.SysMLHelperPlugin;
 
 import com.telelogic.rhapsody.core.*;
  
@@ -12,13 +11,15 @@ public class RequirementsAnalysisPlugin extends RPUserPlugin {
   
 	protected static IRPApplication m_rhpApplication = null;
 	protected static IRPProject m_rhpProject = null;
+	protected static ConfigurationSettings m_configSettings = null;
 	
 	// plug-in is loaded
 	public void RhpPluginInit(final IRPApplication theRhapsodyApp) {
 		
-		m_rhpApplication = theRhapsodyApp;
+		m_rhpApplication = theRhapsodyApp;	
+		m_configSettings = ConfigurationSettings.getInstance();
 		
-		String msg = "The RequirementsAnalysisPlugin component of the SysMLHelperPlugin V" + SysMLHelperPlugin.getVersion() + " was loaded successfully. New right-click 'MBSE Method' commands have been added.";		
+		String msg = "The RequirementsAnalysisPlugin component of the SysMLHelperPlugin V" + m_configSettings.getProperty("PluginVersion") + " was loaded successfully. New right-click 'MBSE Method' commands have been added.";		
 		Logger.writeLine(msg); 
 	}
 
@@ -91,7 +92,7 @@ public class RequirementsAnalysisPlugin extends RPUserPlugin {
 		if( !theSelectedEls.isEmpty() ){
 			//selElemName = theSelectedEl.getName();	
 						
-			if (menuItem.equals("MBSE Method: Requirements Analysis\\Create nested Activity Diagram for this use case")){
+			if (menuItem.equals(m_configSettings.getString( "requirementsanalysisplugin.CreateNestedADMenu" ))){
 
 				try {
 					NestedActivityDiagram.createNestedActivityDiagramsFor( theSelectedEls );
@@ -100,7 +101,7 @@ public class RequirementsAnalysisPlugin extends RPUserPlugin {
 					Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking NestedActivityDiagram.createNestedActivityDiagramsFor");
 				}
 
-			} else if (menuItem.equals("MBSE Method: Requirements Analysis\\Report on naming and traceability checks for elements on Activity Diagram")){
+			} else if (menuItem.equals(m_configSettings.getString( "requirementsanalysisplugin.ReportOnNamingAndTraceabilityMenu" ))){
 
 				try {
 					ActivityDiagramChecker.createActivityDiagramCheckersFor( theSelectedEls );
@@ -110,7 +111,7 @@ public class RequirementsAnalysisPlugin extends RPUserPlugin {
 				}
 
 				
-			} else if (menuItem.equals("MBSE Method: Requirements Analysis\\Move unclaimed requirements ready for Gateway sync back to DOORS")){
+			} else if (menuItem.equals(m_configSettings.getString( "requirementsanalysisplugin.MoveUnclaimedReqtsMenu" ))){
 
 				try {
 					MoveRequirements.moveUnclaimedRequirementsReadyForGatewaySync( theSelectedEls, theActiveProject );
@@ -120,7 +121,7 @@ public class RequirementsAnalysisPlugin extends RPUserPlugin {
 				}
 
 				
-			} else if (menuItem.equals("MBSE Method: Requirements Analysis\\Create a new requirement")){
+			} else if (menuItem.equals(m_configSettings.getString( "requirementsanalysisplugin.CreateNewRequirementMenu" ))){
 
 				try {
 					Logger.writeLine("Creating new requirements");
@@ -130,7 +131,7 @@ public class RequirementsAnalysisPlugin extends RPUserPlugin {
 					Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking RequirementsHelper.createNewRequirementsFor");
 				}
 
-			} else if (menuItem.equals("MBSE Method: Requirements Analysis\\Perform rename in browser for elements on Activity Diagrams")){
+			} else if (menuItem.equals(m_configSettings.getString( "requirementsanalysisplugin.PerformRenameInBrowserMenu" ))){
 
 				try {				
 					RenameActions.performRenamesFor( theSelectedEls );
@@ -139,7 +140,7 @@ public class RequirementsAnalysisPlugin extends RPUserPlugin {
 					Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking RenameActions.performRenamesFor");
 				}
 				
-			} else if (menuItem.equals("MBSE Method: Requirements Analysis\\Update nested activity diagram name(s) to reflect use case name(s)")){
+			} else if (menuItem.equals(m_configSettings.getString( "requirementsanalysisplugin.UpdateNestedADNamesMenu" ))){
 
 				try {				
 					NestedActivityDiagram.renameNestedActivityDiagramsFor( theSelectedEls );
@@ -185,7 +186,9 @@ public class RequirementsAnalysisPlugin extends RPUserPlugin {
     #043 03-JUL-2016: Add Derive downstream reqt for CallOps, InterfaceItems and Event Actions (F.J.Chadburn)
     #049 06-JUL-2016: Derive new requirement now under Functional Analysis not Requirements Analysis menu (F.J.Chadburn)
     #102 03-NOV-2016: Add right-click menu to auto update names of ADs from UC names (F.J.Chadburn)
-
+    #109 06-NOV-2016: Added .properties support for localisation of menus (F.J.Chadburn)
+    #110 06-NOV-2016: PluginVersion now comes from Config.properties file, rather than hard wired (F.J.Chadburn)
+    
     This file is part of SysMLHelperPlugin.
 
     SysMLHelperPlugin is free software: you can redistribute it and/or modify
