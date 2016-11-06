@@ -1,0 +1,17 @@
+#109 06-NOV-2016: Added .properties support for localisation of menus (F.J.Chadburn)
+#110 06-NOV-2016: PluginVersion now comes from Config.properties file, rather than hard wired (F.J.Chadburn)
+
+TODO:
+#XXX DD-MTH-YEAR: Avoid port proliferation in inheritance tree for actors/system (F.J.Chadburn)
+#XXX DD-MTH-YEAR: Allow rippling updates (F.J.Chadburn)
+#XXX DD-MTH-YEAR: Populate test case script from a sequence diagram (F.J.Chadburn)
+#XXX DD-MTH-YEAR: Improve warning/working when multiple Rhapsody instances are open (F.J.Chadburn)
+#XXX DD-MTH-YEAR: Improve general SysML by adding better Start link/End link dialog (F.J.Chadburn)
+#XXX DD-MTH-YEAR: Ensure requirement creation menus are safe or disabled across all diagrams (F.J.Chadburn) 
+#XXX DD-MTH-YEAR: Add improved population of requirement relations on existing diagrams (F.J.Chadburn)
+#XXX DD-MTH-YEAR: Create new requirement directly in fromX package using a dialog (F.J.Chadburn)
+#XXX DD-MTH-YEAR: Get move unclaimed requirements menu to work with duplicate names (F.J.Chadburn)
+#XXX DD-MTH-YEAR: Create without test package, add later (F.J.Chadburn)
+#XXX DD-MTH-YEAR: Add support to Panels for keyboard presses, e.g., OK/Cancel (F.J.Chadburn)
+#XXX DD-MTH-YEAR: Drawing a relationship on a call op ask to add same relationship to Op? (F.J.Chadburn)
+#XXX DD-MTH-YEAR: Add tag to enable/disable extended double-click functionality

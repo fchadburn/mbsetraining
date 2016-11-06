@@ -187,3 +187,8 @@ BETA TEST RELEASE 2.0.25 (14-SEP-2016)
 ----------------------------------------------------------------------------------
 BETA TEST RELEASE 2.0.26 (03-NOV-2016)
 ----------------------------------------------------------------------------------
+#109 06-NOV-2016: Added .properties support for localisation of menus (F.J.Chadburn)
+#110 06-NOV-2016: PluginVersion now comes from Config.properties file, rather than hard wired (F.J.Chadburn)
+----------------------------------------------------------------------------------
+BETA TEST RELEASE 2.0.27 (06-NOV-2016)
+----------------------------------------------------------------------------------
