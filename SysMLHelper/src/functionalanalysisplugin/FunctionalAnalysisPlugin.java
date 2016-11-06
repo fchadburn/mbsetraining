@@ -1,5 +1,6 @@
 package functionalanalysisplugin;
 
+import generalhelpers.ConfigurationSettings;
 import generalhelpers.Logger;
 import generalhelpers.TraceabilityHelper;
 
@@ -7,21 +8,21 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import sysmlhelperplugin.SysMLHelperPlugin;
-
 import com.telelogic.rhapsody.core.*;
  
 public class FunctionalAnalysisPlugin extends RPUserPlugin {
   
 	protected static IRPApplication m_rhpApplication = null;
 	protected static IRPProject m_rhpProject = null;
-
+	protected static ConfigurationSettings m_configSettings = null;
+	
 	// plug-in is loaded
 	public void RhpPluginInit(final IRPApplication theRhapsodyApp) {
 		
 		m_rhpApplication = theRhapsodyApp;
+		m_configSettings = ConfigurationSettings.getInstance();
 		
-		String msg = "The FunctionalAnalysisPlugin component of the SysMLHelperPlugin V" + SysMLHelperPlugin.getVersion() 
+		String msg = "The FunctionalAnalysisPlugin component of the SysMLHelperPlugin V" + m_configSettings.getProperty("PluginVersion") 
 				+ " was loaded successfully. New right-click 'MBSE Method' commands have been added.";		
 		
 		Logger.writeLine(msg); 
@@ -63,7 +64,7 @@ public class FunctionalAnalysisPlugin extends RPUserPlugin {
 		if( !theSelectedEls.isEmpty() ){
 			//selElemName = theSelectedEl.getName();	
 						
-			if (menuItem.equals("MBSE Method: Functional Analysis\\Populate package hierarchy for an analysis block")){
+			if (menuItem.equals(m_configSettings.getString("functionalanalysisplugin.PopulatePackageHierarchyForAnalysisBlockMenu"))){
 
 				try {
 					if (theSelectedEl instanceof IRPPackage){
@@ -74,7 +75,7 @@ public class FunctionalAnalysisPlugin extends RPUserPlugin {
 					Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking NestedActivityDiagram.createNestedActivityDiagramsFor");
 				}
 
-			} else if (menuItem.equals("MBSE Method: Functional Analysis\\Create an incoming event sent by an actor")){
+			} else if (menuItem.equals(m_configSettings.getString("functionalanalysisplugin.CreateIncomingEventMenu"))){
 
 				if (theSelectedEl instanceof IRPDiagram){
 					Set<IRPRequirement> theReqts = new HashSet<IRPRequirement>();
@@ -93,7 +94,7 @@ public class FunctionalAnalysisPlugin extends RPUserPlugin {
 					}
 				}
 
-			} else if (menuItem.equals("MBSE Method: Functional Analysis\\Create an operation that the system does")){
+			} else if (menuItem.equals(m_configSettings.getString("functionalanalysisplugin.CreateAnOperationMenu"))){
 
 				if (theSelectedEl instanceof IRPDiagram){
 					
@@ -112,7 +113,7 @@ public class FunctionalAnalysisPlugin extends RPUserPlugin {
 					}
 				}
 				
-			} else if (menuItem.equals("MBSE Method: Functional Analysis\\Create an outgoing event sent to an actor")){
+			} else if (menuItem.equals(m_configSettings.getString("functionalanalysisplugin.CreateOutgoingEventMenu"))){
 
 				if (theSelectedEl instanceof IRPDiagram){
 					
@@ -133,7 +134,7 @@ public class FunctionalAnalysisPlugin extends RPUserPlugin {
 					}
 				}
 
-			} else if (menuItem.equals("MBSE Method: Functional Analysis\\Create stand-alone attribute owned by the system")){
+			} else if (menuItem.equals(m_configSettings.getString("functionalanalysisplugin.CreateAttributeMenu"))){
 
 				if (!theSelectedGraphEls.isEmpty()){
 					try {
@@ -144,7 +145,7 @@ public class FunctionalAnalysisPlugin extends RPUserPlugin {
 					}
 				}
 
-			} else if (menuItem.equals("MBSE Method: Functional Analysis\\Update attribute and/or check operation owned by the system")){
+			} else if (menuItem.equals(m_configSettings.getString("functionalanalysisplugin.UpdateAttributeOrCheckOpMenu"))){
 
 				if ( theSelectedEl instanceof IRPAttribute ){
 					try {
@@ -159,7 +160,7 @@ public class FunctionalAnalysisPlugin extends RPUserPlugin {
 					}
 				}
 
-			} else if (menuItem.equals("MBSE Method: Functional Analysis\\Create an incoming event sent by an actor to change this attribute")){
+			} else if (menuItem.equals(m_configSettings.getString("functionalanalysisplugin.CreateEventForAttributeMenu"))){
 
 				if ( theSelectedEl instanceof IRPAttribute ){
 					try {
@@ -174,7 +175,7 @@ public class FunctionalAnalysisPlugin extends RPUserPlugin {
 					}
 				}				
 
-			} else if (menuItem.equals("MBSE Method: Functional Analysis\\Derive downstream requirement")){
+			} else if (menuItem.equals(m_configSettings.getString("functionalanalysisplugin.DeriveDownstreamRequirementMenu"))){
 				
 				if (!theSelectedGraphEls.isEmpty()){
 					try {
@@ -185,7 +186,7 @@ public class FunctionalAnalysisPlugin extends RPUserPlugin {
 					}
 				}
 
-			} else if (menuItem.equals("MBSE Method: Functional Analysis\\Create new TestCase for «TestDriver»")){
+			} else if (menuItem.equals(m_configSettings.getString("functionalanalysisplugin.CreateNewTestCaseForTestDriverMenu"))){
 
 				if (theSelectedEl instanceof IRPClass){
 					try {
@@ -196,7 +197,7 @@ public class FunctionalAnalysisPlugin extends RPUserPlugin {
 					}
 				} 
 
-			} else if (menuItem.equals("MBSE Method: Functional Analysis\\Add new actor to package under development")){
+			} else if (menuItem.equals(m_configSettings.getString("functionalanalysisplugin.AddNewActorToPackageMenu"))){
 
 				if (theSelectedEl instanceof IRPPackage){
 					try {
@@ -207,7 +208,7 @@ public class FunctionalAnalysisPlugin extends RPUserPlugin {
 					}
 				}
 				
-			} else if (menuItem.equals("MBSE Method: Functional Analysis\\Copy activity diagrams to package under development")){
+			} else if (menuItem.equals(m_configSettings.getString("functionalanalysisplugin.CopyActivityDiagramsMenu"))){
 
 				if (theSelectedEl instanceof IRPPackage){
 					try {
@@ -218,7 +219,7 @@ public class FunctionalAnalysisPlugin extends RPUserPlugin {
 					}
 				}							
 
-			} else if (menuItem.equals("MBSE Method: Functional Analysis\\Populate requirements for SD(s) based on messages")){
+			} else if (menuItem.equals(m_configSettings.getString("functionalanalysisplugin.PopulateRequirementsForSDsMenu"))){
 
 				if (!theSelectedEls.isEmpty()){
 					try {
@@ -229,7 +230,7 @@ public class FunctionalAnalysisPlugin extends RPUserPlugin {
 					}
 				}
 				
-			} else if (menuItem.equals("MBSE Method: Functional Analysis\\Update Verification dependencies for SD(s) based on populated requirements")){
+			} else if (menuItem.equals(m_configSettings.getString("functionalanalysisplugin.UpdateVerificationDependenciesForSDsMenu"))){
 
 				if (!theSelectedEls.isEmpty()){
 					try {
@@ -239,7 +240,7 @@ public class FunctionalAnalysisPlugin extends RPUserPlugin {
 						Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking SequenceDiagramHelper.updateVerificationsForSequenceDiagramsBasedOn");
 					}
 				}				
-			} else if (menuItem.equals("MBSE Method: Delete Event and related elements from Model")){
+			} else if (menuItem.equals(m_configSettings.getString("functionalanalysisplugin.DeleteEventsAndRelatedElementsMenu"))){
 
 				try {
 					EventDeletion.deleteEventAndRelatedElementsFor( theSelectedEls );
@@ -248,7 +249,7 @@ public class FunctionalAnalysisPlugin extends RPUserPlugin {
 					Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking EventDeletion.deleteEventAndRelatedElementsFor");
 				}
 
-			} else if (menuItem.equals("MBSE Method: Functional Analysis\\Switch menus to «MoreDetailedAD»")){
+			} else if (menuItem.equals(m_configSettings.getString("functionalanalysisplugin.SwitchMenusToMoreDetailedADMenu"))){
 
 				try {
 					if( theSelectedEl instanceof IRPActivityDiagram ){
@@ -303,7 +304,9 @@ public class FunctionalAnalysisPlugin extends RPUserPlugin {
     #083 09-AUG-2016: Add an Update attribute menu option and panel with add check operation option (F.J.Chadburn)
     #084 09-AUG-2016: Add new right-click menu to create an incoming event for an attribute (F.J.Chadburn)
     #099 14-SEP-2016: Allow event and operation creation from right-click on AD and RD diagram canvas (F.J.Chadburn)
-
+    #109 06-NOV-2016: Added .properties support for localisation of menus (F.J.Chadburn)
+    #110 06-NOV-2016: PluginVersion now comes from Config.properties file, rather than hard wired (F.J.Chadburn)
+    
     This file is part of SysMLHelperPlugin.
 
     SysMLHelperPlugin is free software: you can redistribute it and/or modify
