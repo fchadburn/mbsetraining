@@ -1,10 +1,9 @@
 package designsynthesisplugin;
 
+import generalhelpers.ConfigurationSettings;
 import generalhelpers.Logger;
 
 import java.util.List;
-
-import sysmlhelperplugin.SysMLHelperPlugin;
 
 import com.telelogic.rhapsody.core.*;
  
@@ -12,13 +11,15 @@ public class DesignSynthesisPlugin extends RPUserPlugin {
   
 	protected static IRPApplication m_rhpApplication = null;
 	protected static IRPProject m_rhpProject = null;
+	protected static ConfigurationSettings m_configSettings = null;
 	
 	// plug-in is loaded
 	public void RhpPluginInit(final IRPApplication theRhapsodyApp) {
 		
 		m_rhpApplication = theRhapsodyApp;
+		m_configSettings = ConfigurationSettings.getInstance();
 		
-		String msg = "The DesignSynthesisPlugin component of the SysMLHelperPlugin V" + SysMLHelperPlugin.getVersion() + " was loaded successfully. New right-click 'MBSE Method' commands have been added.";		
+		String msg = "The DesignSynthesisPlugin component of the SysMLHelperPlugin V" + m_configSettings.getProperty("PluginVersion") + " was loaded successfully. New right-click 'MBSE Method' commands have been added.";		
 		Logger.writeLine(msg); 
 	}
 
@@ -54,7 +55,7 @@ public class DesignSynthesisPlugin extends RPUserPlugin {
 		if( !theSelectedEls.isEmpty() ){
 			//selElemName = theSelectedEl.getName();	
 						
-			if (menuItem.equals("MBSE Method: Design Synthesis\\Make attribute a «publish» flowport")){
+			if (menuItem.equals(m_configSettings.getString("designsynthesisplugin.MakeAttributeAPublishFlowportMenu"))){
 				
 				if (theSelectedEl instanceof IRPAttribute){
 					try {
@@ -65,7 +66,7 @@ public class DesignSynthesisPlugin extends RPUserPlugin {
 					}
 				}
 				
-			} else if (menuItem.equals("MBSE Method: Design Synthesis\\Make attribute a «subscribe» flowport")){
+			} else if (menuItem.equals(m_configSettings.getString("designsynthesisplugin.MakeAttributeASubscribeFlowportMenu"))){
 				
 				if (theSelectedEl instanceof IRPAttribute){
 					try {
@@ -109,6 +110,8 @@ public class DesignSynthesisPlugin extends RPUserPlugin {
     #006 02-MAY-2016: Add FunctionalAnalysisPkg helper support (F.J.Chadburn)
     #011 08-MAY-2016: Simplify version numbering mechanism (F.J.Chadburn)
     #016 11-MAY-2016: Add GPL advisory to the Log window (F.J.Chadburn)
+    #109 06-NOV-2016: Added .properties support for localisation of menus (F.J.Chadburn)
+    #110 06-NOV-2016: PluginVersion now comes from Config.properties file, rather than hard wired (F.J.Chadburn)
     
     This file is part of SysMLHelperPlugin.
 
