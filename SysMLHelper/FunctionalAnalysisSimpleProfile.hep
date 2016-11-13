@@ -14,7 +14,7 @@ name2=MBSE Method: Functional Analysis\Populate functional block package hierarc
 isPluginCommand2=1
 command2=InvokeFunctionalAnalysisHelper
 applicableTo2=Package
-isVisible2=1
+isVisible2=0
 DLLServerCompatible2=1
 
 #REM: Add pop-up menu
@@ -38,7 +38,7 @@ name5=MBSE Method: Functional Analysis\Add new actor to package under developmen
 isPluginCommand5=1
 command5=InvokeFunctionalAnalysisHelper
 applicableTo5=Package
-isVisible5=1
+isVisible5=0
 DLLServerCompatible5=1
 
 #REM: Add pop-up menu
@@ -54,7 +54,7 @@ name7=MBSE Method: Functional Analysis\Create an incoming event sent by an actor
 isPluginCommand7=1
 command7=InvokeFunctionalAnalysisHelper
 applicableTo7=ActivityDiagram,ObjectModelDiagram,Requirements Diagram,State,Transition,Comment,AcceptEventAction,SendAction,AcceptTimeEvent,Constraint,Precondition,Postcondition,ControlFlow,Requirement
-isVisible7=1
+isVisible7=0
 DLLServerCompatible7=1
 
 #REM: Add pop-up menu
@@ -62,7 +62,7 @@ name8=MBSE Method: Functional Analysis\Create an outgoing event sent to an actor
 isPluginCommand8=1
 command8=InvokeFunctionalAnalysisHelper
 applicableTo8=ActivityDiagram,ObjectModelDiagram,Requirements Diagram,State,Transition,Comment,AcceptEventAction,SendAction,AcceptTimeEvent,Constraint,Precondition,Postcondition,ControlFlow,Requirement
-isVisible8=1
+isVisible8=0
 DLLServerCompatible8=1
 
 #REM: Add pop-up menu
@@ -94,7 +94,7 @@ name12=MBSE Method: Functional Analysis\Create new TestCase for «TestDriver»
 isPluginCommand12=1
 command12=InvokeFunctionalAnalysisHelper
 applicableTo12=Block
-isVisible12=1
+isVisible12=0
 DLLServerCompatible12=1
 
 #REM: Add pop-up menu
@@ -142,7 +142,7 @@ name18=MBSE Method: Functional Analysis\Create an incoming event sent by an acto
 isPluginCommand18=1
 command18=InvokeFunctionalAnalysisHelper
 applicableTo18=Attribute
-isVisible18=1
+isVisible18=0
 DLLServerCompatible18=1
 
 #REM: Add pop-up menu
@@ -150,7 +150,7 @@ name19=MBSE Method: Functional Analysis\Switch menus to Full Sim
 isPluginCommand19=1
 command19=InvokeFunctionalAnalysisHelper
 applicableTo19=Project,SysML
-isVisible19=0
+isVisible19=1
 DLLServerCompatible19=1
 
 #REM: Add pop-up menu
@@ -158,7 +158,7 @@ name20=MBSE Method: Functional Analysis\Switch menus to Simple Sim
 isPluginCommand20=1
 command20=InvokeFunctionalAnalysisHelper
 applicableTo20=Project,SysML
-isVisible20=1
+isVisible20=0
 DLLServerCompatible20=1
 
 #REM Copyright (C) 2016  MBSE Training and Consulting Limited (www.executablembse.com)
@@ -191,4 +191,4 @@ DLLServerCompatible20=1
 #REM GNU General Public License for more details.
 #REM
 #REM You should have received a copy of the GNU General Public License
-#REM along with SysMLHelperPlugin.  If not, see <http://www.gnu.org/licenses/>.w.gnu.org/licenses/>.
+#REM along with SysMLHelperPlugin.  If not, see <http://www.gnu.org/licenses/>.

@@ -1,5 +1,5 @@
 [Helpers]
-numberOfElements=7
+numberOfElements=9
 
 #REM: Definition of the plug-in
 name1=InvokeSysMLHelper
@@ -18,48 +18,64 @@ isVisible2=1
 DLLServerCompatible2=1
 
 #REM: Add pop-up menu
-name3=MBSE Method: Functional Analysis\Create the FunctionalAnalysisPkg package structure
+name3=MBSE Method: Functional Analysis\Create the FunctionalAnalysisPkg package structure\Full Sim
 isPluginCommand3=1
 command3=InvokeSysMLHelper
 applicableTo3=Project,SysML
 isVisible3=1
 DLLServerCompatible3=1
 
-#REM: Add pop-up menu 
-name4=MBSE Method: Design Synthesis\Create the DesignSynthesisPkg package structure
+#REM: Add pop-up menu
+name4=MBSE Method: Functional Analysis\Create the FunctionalAnalysisPkg package structure\Simple Sim
 isPluginCommand4=1
 command4=InvokeSysMLHelper
-applicableTo4=
+applicableTo4=Project,SysML
 isVisible4=1
 DLLServerCompatible4=1
 
-#REM: Add pop-up menu 
-name5=MBSE Method: General Utilities\Quick hyperlink
+#REM: Add pop-up menu
+name5=MBSE Method: Functional Analysis\Create the FunctionalAnalysisPkg package structure\No Sim
 isPluginCommand5=1
 command5=InvokeSysMLHelper
-applicableTo5=State,Block,Instance,UseCase
+applicableTo5=Project,SysML
 isVisible5=1
 DLLServerCompatible5=1
 
 #REM: Add pop-up menu 
-name6=MBSE Method: General Utilities\Setup Gateway project based on rqtf template
+name6=MBSE Method: Design Synthesis\Create the DesignSynthesisPkg package structure
 isPluginCommand6=1
 command6=InvokeSysMLHelper
-applicableTo6=Project,SysML
+applicableTo6=
 isVisible6=1
 DLLServerCompatible6=1
 
-#REM : NOTE: Harmony Toolbox Entry runs outside Rhapsody to workaround API Defect wrt Plugins and Diagram Focus
-name7=SE-Toolkit\Modeling Toolbox
-command7=javaw
-isSynced7=0
+#REM: Add pop-up menu 
+name7=MBSE Method: General Utilities\Quick hyperlink
+isPluginCommand7=1
+command7=InvokeSysMLHelper
+applicableTo7=State,Block,Instance,UseCase
 isVisible7=1
-applicableTo7=
-arguments7="-Djava.library.path="$OMROOT/JavaAPI" -classpath "$OMROOT/JavaAPI/rhapsody.jar$PathDelimiter$OMROOT/Profiles/HarmonySE/SE Toolkit/ModelingToolbox.jar$PathDelimiter$OMROOT/Profiles/HarmonySE/SE Toolkit/Common/CommonGUITools.jar$PathDelimiter$OMROOT/Profiles/HarmonySE/SE Toolkit/Common/CommonRhapsodyTools.jar$PathDelimiter$OMROOT/Profiles/HarmonySE/SE Toolkit/Common/miglayout-4.0.jar$PathDelimiter$OMROOT/Profiles/HarmonySE/SE Toolkit/Common/balloontip-1.2.1.jar" com.ibm.rhapsody.setoolkit.ModelingToolbox_Launcher"
-initialDir7=$JavaLocation/bin
-isMacro7=0
-applicableToProfile7=
-Triggers7=
+DLLServerCompatible7=1
+
+#REM: Add pop-up menu 
+name8MBSE Method: General Utilities\Setup Gateway project based on rqtf template
+isPluginCommand8=1
+command8=InvokeSysMLHelper
+applicableTo8=Project,SysML,Package
+isVisible8=1
+DLLServerCompatible8=1
+
+#REM : NOTE: Harmony Toolbox Entry runs outside Rhapsody to workaround API Defect wrt Plugins and Diagram Focus
+name9=SE-Toolkit\Modeling Toolbox
+command9=javaw
+isSynced9=0
+isVisible9=1
+applicableTo9=
+arguments9="-Djava.library.path="$OMROOT/JavaAPI" -classpath "$OMROOT/JavaAPI/rhapsody.jar$PathDelimiter$OMROOT/Profiles/HarmonySE/SE Toolkit/ModelingToolbox.jar$PathDelimiter$OMROOT/Profiles/HarmonySE/SE Toolkit/Common/CommonGUITools.jar$PathDelimiter$OMROOT/Profiles/HarmonySE/SE Toolkit/Common/CommonRhapsodyTools.jar$PathDelimiter$OMROOT/Profiles/HarmonySE/SE Toolkit/Common/miglayout-4.0.jar$PathDelimiter$OMROOT/Profiles/HarmonySE/SE Toolkit/Common/balloontip-1.2.1.jar" com.ibm.rhapsody.setoolkit.ModelingToolbox_Launcher"
+initialDir8=$JavaLocation/bin
+isMacro9=0
+applicableToProfile9=
+Triggers9=
 
 #REM Copyright (C) 2016  MBSE Training and Consulting Limited (www.executablembse.com)
 #REM
@@ -69,6 +85,8 @@ Triggers7=
 #REM #050 06-JUL-2016: Setup Gateway project based on rqtf template option now under General Utilities menu (F.J.Chadburn)
 #REM #052 06-JUL-2016: DesignSynthesisPkg creation menus now hidden until more complete (F.J.Chadburn)
 #REM #109 06-NOV-2016: Added .properties support for localisation of menus (F.J.Chadburn)
+#REM #111 13-NOV-2016: Added new Simple Sim (Guard only) functional analysis structure option (F.J.Chadburn)
+#REM #112 13-NOV-2016: Added new No Sim functional analysis structure option (F.J.Chadburn)
 #REM
 #REM This file is part of SysMLHelperPlugin.
 #REM

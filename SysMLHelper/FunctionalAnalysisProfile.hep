@@ -1,5 +1,5 @@
 [Helpers]
-numberOfElements=16
+numberOfElements=20
 
 #REM: Definition of the plug-in
 name1=InvokeFunctionalAnalysisHelper
@@ -10,7 +10,7 @@ isVisible1=0
 DLLServerCompatible1=1
 
 #REM: Add pop-up menu
-name2=MBSE Method: Functional Analysis\Populate package hierarchy for an analysis block
+name2=MBSE Method: Functional Analysis\Populate functional block package hierarchy\Full Sim
 isPluginCommand2=1
 command2=InvokeFunctionalAnalysisHelper
 applicableTo2=Package
@@ -18,7 +18,7 @@ isVisible2=1
 DLLServerCompatible2=1
 
 #REM: Add pop-up menu
-name3=MBSE Method: Functional Analysis\Add new actor to package under development
+name3=MBSE Method: Functional Analysis\Populate functional block package hierarchy\Simple Sim
 isPluginCommand3=1
 command3=InvokeFunctionalAnalysisHelper
 applicableTo3=Package
@@ -26,7 +26,7 @@ isVisible3=1
 DLLServerCompatible3=1
 
 #REM: Add pop-up menu
-name4=MBSE Method: Functional Analysis\Copy activity diagrams to package under development
+name4=MBSE Method: Functional Analysis\Populate functional block package hierarchy\No Sim
 isPluginCommand4=1
 command4=InvokeFunctionalAnalysisHelper
 applicableTo4=Package
@@ -34,23 +34,23 @@ isVisible4=1
 DLLServerCompatible4=1
 
 #REM: Add pop-up menu
-name5=MBSE Method: Functional Analysis\Create an incoming event sent by an actor
+name5=MBSE Method: Functional Analysis\Add new actor to package under development
 isPluginCommand5=1
 command5=InvokeFunctionalAnalysisHelper
-applicableTo5=ActivityDiagram,ObjectModelDiagram,Requirements Diagram,State,Transition,Comment,AcceptEventAction,SendAction,AcceptTimeEvent,Constraint,Precondition,Postcondition,ControlFlow,Requirement
+applicableTo5=Package
 isVisible5=1
 DLLServerCompatible5=1
 
 #REM: Add pop-up menu
-name6=MBSE Method: Functional Analysis\Create an outgoing event sent to an actor
+name6=MBSE Method: Functional Analysis\Copy activity diagrams to package under development
 isPluginCommand6=1
 command6=InvokeFunctionalAnalysisHelper
-applicableTo6=ActivityDiagram,ObjectModelDiagram,Requirements Diagram,State,Transition,Comment,AcceptEventAction,SendAction,AcceptTimeEvent,Constraint,Precondition,Postcondition,ControlFlow,Requirement
+applicableTo6=Package
 isVisible6=1
 DLLServerCompatible6=1
 
 #REM: Add pop-up menu
-name7=MBSE Method: Functional Analysis\Create an operation that the system does
+name7=MBSE Method: Functional Analysis\Create an incoming event sent by an actor
 isPluginCommand7=1
 command7=InvokeFunctionalAnalysisHelper
 applicableTo7=ActivityDiagram,ObjectModelDiagram,Requirements Diagram,State,Transition,Comment,AcceptEventAction,SendAction,AcceptTimeEvent,Constraint,Precondition,Postcondition,ControlFlow,Requirement
@@ -58,76 +58,108 @@ isVisible7=1
 DLLServerCompatible7=1
 
 #REM: Add pop-up menu
-name8=MBSE Method: Functional Analysis\Create stand-alone attribute owned by the system
+name8=MBSE Method: Functional Analysis\Create an outgoing event sent to an actor
 isPluginCommand8=1
 command8=InvokeFunctionalAnalysisHelper
-applicableTo8=State,Transition,Comment,AcceptEventAction,SendAction,AcceptTimeEvent,Constraint,Precondition,Postcondition,ControlFlow,Requirement
+applicableTo8=ActivityDiagram,ObjectModelDiagram,Requirements Diagram,State,Transition,Comment,AcceptEventAction,SendAction,AcceptTimeEvent,Constraint,Precondition,Postcondition,ControlFlow,Requirement
 isVisible8=1
 DLLServerCompatible8=1
 
 #REM: Add pop-up menu
-name9=MBSE Method: Functional Analysis\Derive downstream requirement
+name9=MBSE Method: Functional Analysis\Create an operation that the system does
 isPluginCommand9=1
 command9=InvokeFunctionalAnalysisHelper
-applicableTo9=Requirement,CallOperation,AcceptEventAction,State,Operation,Event,Attribute
+applicableTo9=ActivityDiagram,ObjectModelDiagram,Requirements Diagram,State,Transition,Comment,AcceptEventAction,SendAction,AcceptTimeEvent,Constraint,Precondition,Postcondition,ControlFlow,Requirement
 isVisible9=1
 DLLServerCompatible9=1
 
 #REM: Add pop-up menu
-name10=MBSE Method: Functional Analysis\Create new TestCase for «TestDriver»
+name10=MBSE Method: Functional Analysis\Create stand-alone attribute owned by the system
 isPluginCommand10=1
 command10=InvokeFunctionalAnalysisHelper
-applicableTo10=Block
+applicableTo10=State,Transition,Comment,AcceptEventAction,SendAction,AcceptTimeEvent,Constraint,Precondition,Postcondition,ControlFlow,Requirement
 isVisible10=1
 DLLServerCompatible10=1
 
 #REM: Add pop-up menu
-name11=MBSE Method: Delete Event and related elements from Model
+name11=MBSE Method: Functional Analysis\Derive downstream requirement
 isPluginCommand11=1
 command11=InvokeFunctionalAnalysisHelper
-applicableTo11=Event,Reception
+applicableTo11=Requirement,CallOperation,AcceptEventAction,State,Operation,Event,Attribute
 isVisible11=1
 DLLServerCompatible11=1
 
 #REM: Add pop-up menu
-name12=MBSE Method: Functional Analysis\Populate requirements for SD(s) based on messages
+name12=MBSE Method: Functional Analysis\Create new TestCase for «TestDriver»
 isPluginCommand12=1
 command12=InvokeFunctionalAnalysisHelper
-applicableTo12=SequenceDiagram,Package
+applicableTo12=Block
 isVisible12=1
 DLLServerCompatible12=1
 
 #REM: Add pop-up menu
-name13=MBSE Method: Functional Analysis\Update Verification dependencies for SD(s) based on populated requirements
+name13=MBSE Method: Delete Event and related elements from Model
 isPluginCommand13=1
 command13=InvokeFunctionalAnalysisHelper
-applicableTo13=SequenceDiagram,Package
+applicableTo13=Event,Reception
 isVisible13=1
 DLLServerCompatible13=1
 
 #REM: Add pop-up menu
-name14=MBSE Method: Functional Analysis\Switch menus to «MoreDetailedAD»
+name14=MBSE Method: Functional Analysis\Populate requirements for SD(s) based on messages
 isPluginCommand14=1
 command14=InvokeFunctionalAnalysisHelper
-applicableTo14=ActivityDiagram
+applicableTo14=SequenceDiagram,Package
 isVisible14=1
 DLLServerCompatible14=1
 
 #REM: Add pop-up menu
-name15=MBSE Method: Functional Analysis\Update attribute and/or check operation owned by the system
+name15=MBSE Method: Functional Analysis\Update Verification dependencies for SD(s) based on populated requirements
 isPluginCommand15=1
 command15=InvokeFunctionalAnalysisHelper
-applicableTo15=Attribute
+applicableTo15=SequenceDiagram,Package
 isVisible15=1
 DLLServerCompatible15=1
 
 #REM: Add pop-up menu
-name16=MBSE Method: Functional Analysis\Create an incoming event sent by an actor to change this attribute
+name16=MBSE Method: Functional Analysis\Switch menus to «MoreDetailedAD»
 isPluginCommand16=1
 command16=InvokeFunctionalAnalysisHelper
-applicableTo16=Attribute
+applicableTo16=ActivityDiagram
 isVisible16=1
 DLLServerCompatible16=1
+
+#REM: Add pop-up menu
+name17=MBSE Method: Functional Analysis\Update attribute and/or check operation owned by the system
+isPluginCommand17=1
+command17=InvokeFunctionalAnalysisHelper
+applicableTo17=Attribute
+isVisible17=1
+DLLServerCompatible17=1
+
+#REM: Add pop-up menu
+name18=MBSE Method: Functional Analysis\Create an incoming event sent by an actor to change this attribute
+isPluginCommand18=1
+command18=InvokeFunctionalAnalysisHelper
+applicableTo18=Attribute
+isVisible18=1
+DLLServerCompatible18=1
+
+#REM: Add pop-up menu
+name19=MBSE Method: Functional Analysis\Switch menus to Full Sim
+isPluginCommand19=1
+command19=InvokeFunctionalAnalysisHelper
+applicableTo19=Project,SysML
+isVisible19=0
+DLLServerCompatible19=1
+
+#REM: Add pop-up menu
+name20=MBSE Method: Functional Analysis\Switch menus to Simple Sim
+isPluginCommand20=1
+command20=InvokeFunctionalAnalysisHelper
+applicableTo20=Project,SysML
+isVisible20=1
+DLLServerCompatible20=1
 
 #REM Copyright (C) 2016  MBSE Training and Consulting Limited (www.executablembse.com)
 #REM
@@ -143,6 +175,8 @@ DLLServerCompatible16=1
 #REM #084 09-AUG-2016: Add new right-click menu to create an incoming event for an attribute (F.J.Chadburn)
 #REM #103 03-NOV-2016: Allow derivation of requirements with trace-ability from attribute (F.J.Chadburn)
 #REM #109 06-NOV-2016: Added .properties support for localisation of menus (F.J.Chadburn)
+#REM #111 13-NOV-2016: Added new Simple Sim (Guard only) functional analysis structure option (F.J.Chadburn)
+#REM #112 13-NOV-2016: Added new No Sim functional analysis structure option (F.J.Chadburn)
 #REM
 #REM This file is part of SysMLHelperPlugin.
 #REM
