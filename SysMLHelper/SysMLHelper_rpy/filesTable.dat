@@ -1,13 +1,14 @@
 I-Logix-RPY-Archive version 8.11.0 * 9499822
 
 - filesTable = { IRPYRawContainer 
-	- size = 15;
+	- size = 16;
 	- value = "SysMLHelper.rpy" ""
 	"SysMLHelper_rpy\\BasePkg.sbs" "BasePkg"
 	"SysMLHelper_rpy\\DesignSynthesisPkg.sbs" "DesignSynthesisPkg"
 	"SysMLHelper_rpy\\DesignSynthesisProfile.sbs" "DesignSynthesisProfile"
 	"SysMLHelper_rpy\\FunctionalAnalysisPkg.sbs" "FunctionalAnalysisPkg"
 	"SysMLHelper_rpy\\FunctionalAnalysisProfile.sbs" "FunctionalAnalysisProfile"
+	"SysMLHelper_rpy\\FunctionalAnalysisSimpleProfile.sbs" "FunctionalAnalysisSimpleProfile"
 	"SysMLHelper_rpy\\GatewayProjectFiles.sbs" "GatewayProjectFiles"
 	"SysMLHelper_rpy\\GlobalPreferencesProfile.sbs" "GlobalPreferencesProfile"
 	"SysMLHelper_rpy\\NotUsedCmp.cmp" "NotUsedCmp"

@@ -110,8 +110,14 @@ I-Logix-RPY-Archive version 8.11.0 C++ 9499822
 					{ IPropertyMetaclass 
 						- _Name = "CallOperation";
 						- Properties = { IRPYRawContainer 
-							- size = 1;
+							- size = 2;
 							- value = 
+							{ IProperty 
+								- _Name = "ShowAction";
+								- _Value = "Description";
+								- _Type = Enum;
+								- _ExtraTypeInfo = "Action,Description,Label";
+							}
 							{ IProperty 
 								- _Name = "ShowStereotype";
 								- _Value = "Bitmap";
@@ -1214,10 +1220,10 @@ I-Logix-RPY-Archive version 8.11.0 C++ 9499822
 		}
 	}
 	- _name = "GlobalPreferencesProfile";
-	- _modifiedTimeWeak = 7.17.2016::8:38:1;
+	- _modifiedTimeWeak = 11.10.2016::10:29:18;
 	- _lastID = 1;
 	- Declaratives = { IRPYRawContainer 
-		- size = 5;
+		- size = 21;
 		- value = 
 		{ IStereotype 
 			- _id = GUID d2bf8f28-ec11-4096-86a8-11e063c79c32;
@@ -1496,9 +1502,540 @@ I-Logix-RPY-Archive version 8.11.0 C++ 9499822
 				- value = "ActivityDiagram"; 
 			}
 		}
+		{ IStereotype 
+			- _id = GUID 42cc719f-8c1b-40a0-be49-9fe5ee4e400e;
+			- _myState = 8192;
+			- _name = "AutoRipple";
+			- _modifiedTimeWeak = 11.9.2016::7:6:29;
+			- _m2Classes = { IRPYRawContainer 
+				- size = 1;
+				- value = "Dependency"; 
+			}
+		}
+		{ IStereotype 
+			- _id = GUID 005740ce-2a04-43fa-ad81-ba53c5a2a494;
+			- _myState = 8192;
+			- _properties = { IPropertyContainer 
+				- Subjects = { IRPYRawContainer 
+					- size = 2;
+					- value = 
+					{ IPropertySubject 
+						- _Name = "PanelDiagram";
+						- Metaclasses = { IRPYRawContainer 
+							- size = 1;
+							- value = 
+							{ IPropertyMetaclass 
+								- _Name = "General";
+								- Properties = { IRPYRawContainer 
+									- size = 1;
+									- value = 
+									{ IProperty 
+										- _Name = "AutoLaunchAnimation";
+										- _Value = "Always";
+										- _Type = Enum;
+										- _ExtraTypeInfo = "Never, IfInScope, Always";
+									}
+								}
+							}
+						}
+					}
+					{ IPropertySubject 
+						- _Name = "SequenceDiagram";
+						- Metaclasses = { IRPYRawContainer 
+							- size = 1;
+							- value = 
+							{ IPropertyMetaclass 
+								- _Name = "General";
+								- Properties = { IRPYRawContainer 
+									- size = 1;
+									- value = 
+									{ IProperty 
+										- _Name = "AutoLaunchAnimation";
+										- _Value = "Always";
+										- _Type = Enum;
+										- _ExtraTypeInfo = "Never, If_Open, Always";
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			- _name = "AutoShow";
+			- _modifiedTimeWeak = 11.10.2016::10:23:58;
+			- _m2Classes = { IRPYRawContainer 
+				- size = 2;
+				- value = "SequenceDiagram"; "PanelDiagram"; 
+			}
+		}
+		{ IStereotype 
+			- _id = GUID 4dfbc937-a87c-439a-8ea8-a6a78d02705d;
+			- _myState = 8192;
+			- _name = "Context";
+			- _modifiedTimeWeak = 11.9.2016::7:6:29;
+			- _m2Classes = { IRPYRawContainer 
+				- size = 1;
+				- value = "Class"; 
+			}
+		}
+		{ IStereotype 
+			- _id = GUID ad980204-d3b7-4cbe-8faf-61ecaaaa0605;
+			- _myState = 8192;
+			- _properties = { IPropertyContainer 
+				- Subjects = { IRPYRawContainer 
+					- size = 2;
+					- value = 
+					{ IPropertySubject 
+						- _Name = "PanelDiagram";
+						- Metaclasses = { IRPYRawContainer 
+							- size = 1;
+							- value = 
+							{ IPropertyMetaclass 
+								- _Name = "General";
+								- Properties = { IRPYRawContainer 
+									- size = 1;
+									- value = 
+									{ IProperty 
+										- _Name = "AutoLaunchAnimation";
+										- _Value = "Always";
+										- _Type = Enum;
+										- _ExtraTypeInfo = "Never, IfInScope, Always";
+									}
+								}
+							}
+						}
+					}
+					{ IPropertySubject 
+						- _Name = "SequenceDiagram";
+						- Metaclasses = { IRPYRawContainer 
+							- size = 1;
+							- value = 
+							{ IPropertyMetaclass 
+								- _Name = "General";
+								- Properties = { IRPYRawContainer 
+									- size = 1;
+									- value = 
+									{ IProperty 
+										- _Name = "AutoLaunchAnimation";
+										- _Value = "Never";
+										- _Type = Enum;
+										- _ExtraTypeInfo = "Never, If_Open, Always";
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			- _name = "DontShow";
+			- _modifiedTimeWeak = 11.10.2016::10:29:18;
+			- _m2Classes = { IRPYRawContainer 
+				- size = 2;
+				- value = "Event"; "SequenceDiagram"; 
+			}
+		}
+		{ IStereotype 
+			- _id = GUID 95c8e146-8a56-46cd-ad46-884d54fb2dd3;
+			- _myState = 8192;
+			- _name = "HLTrace";
+			- _modifiedTimeWeak = 11.9.2016::7:6:29;
+			- _m2Classes = { IRPYRawContainer 
+				- size = 1;
+				- value = "Dependency"; 
+			}
+			- _newTerm = 1;
+		}
+		{ IStereotype 
+			- _id = GUID bfec6e0f-1e07-4d69-a9ec-6c6d0d5dab18;
+			- _myState = 8192;
+			- _properties = { IPropertyContainer 
+				- Subjects = { IRPYRawContainer 
+					- size = 1;
+					- value = 
+					{ IPropertySubject 
+						- _Name = "Format";
+						- Metaclasses = { IRPYRawContainer 
+							- size = 3;
+							- value = 
+							{ IPropertyMetaclass 
+								- _Name = "AssociationEnd";
+								- Properties = { IRPYRawContainer 
+									- size = 1;
+									- value = 
+									{ IProperty 
+										- _Name = "Line.LineColor";
+										- _Value = "0,128,0";
+										- _Type = Color;
+									}
+								}
+							}
+							{ IPropertyMetaclass 
+								- _Name = "Class";
+								- Properties = { IRPYRawContainer 
+									- size = 1;
+									- value = 
+									{ IProperty 
+										- _Name = "Line.LineColor";
+										- _Value = "0,128,0";
+										- _Type = Color;
+									}
+								}
+							}
+							{ IPropertyMetaclass 
+								- _Name = "Object";
+								- Properties = { IRPYRawContainer 
+									- size = 1;
+									- value = 
+									{ IProperty 
+										- _Name = "Line.LineColor";
+										- _Value = "0,128,0";
+										- _Type = Color;
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			- _name = "LogicalSystem";
+			- _modifiedTimeWeak = 11.9.2016::7:6:29;
+			- _m2Classes = { IRPYRawContainer 
+				- size = 3;
+				- value = "Class"; "ClassifierRole"; "Object"; 
+			}
+		}
+		{ IStereotype 
+			- _id = GUID eceae9c2-3822-407c-8166-33fb3c564609;
+			- _myState = 8192;
+			- _name = "publish";
+			- _modifiedTimeWeak = 11.9.2016::7:6:29;
+			- _m2Classes = { IRPYRawContainer 
+				- size = 1;
+				- value = "Attribute"; 
+			}
+		}
+		{ IStereotype 
+			- _id = GUID 8f0ca601-ee0d-4d8a-9682-7f6ab41916e4;
+			- _myState = 8192;
+			- _properties = { IPropertyContainer 
+				- Subjects = { IRPYRawContainer 
+					- size = 1;
+					- value = 
+					{ IPropertySubject 
+						- _Name = "Model";
+						- Metaclasses = { IRPYRawContainer 
+							- size = 1;
+							- value = 
+							{ IPropertyMetaclass 
+								- _Name = "Stereotype";
+								- Properties = { IRPYRawContainer 
+									- size = 1;
+									- value = 
+									{ IProperty 
+										- _Name = "DrawingToolbar";
+										- _Value = "Requirement, Problem, Rationale, Package, RpySeparator, Derivation, Satisfaction, Verification, Dependency, RpySeparator, UseCase, RpySeparator,Allocation,hltrace";
+										- _Type = String;
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			- _name = "RequirementsDiagramHL";
+			- _modifiedTimeWeak = 11.9.2016::7:6:29;
+			- _m2Classes = { IRPYRawContainer 
+				- size = 1;
+				- value = "ObjectModelDiagram"; 
+			}
+			- _newTerm = 1;
+		}
+		{ IStereotype 
+			- _id = GUID a4223559-32c4-4e89-9465-cfd4ce717990;
+			- _myState = 8192;
+			- _name = "subscribe";
+			- _modifiedTimeWeak = 11.9.2016::7:6:29;
+			- _m2Classes = { IRPYRawContainer 
+				- size = 1;
+				- value = "Attribute"; 
+			}
+		}
+		{ IStereotype 
+			- _id = GUID 47f804ea-8363-4da9-96ce-cd278c9f4f13;
+			- _myState = 8192;
+			- _name = "TestDriver";
+			- _modifiedTimeWeak = 11.9.2016::7:6:29;
+			- _m2Classes = { IRPYRawContainer 
+				- size = 3;
+				- value = "Class"; "Object"; "ClassifierRole"; 
+			}
+		}
+		{ IStereotype 
+			- _id = GUID 8d2ff742-0459-4aad-b4f7-82047a2330e5;
+			- _myState = 8192;
+			- _properties = { IPropertyContainer 
+				- Subjects = { IRPYRawContainer 
+					- size = 1;
+					- value = 
+					{ IPropertySubject 
+						- _Name = "Format";
+						- Metaclasses = { IRPYRawContainer 
+							- size = 1;
+							- value = 
+							{ IPropertyMetaclass 
+								- _Name = "Requirement";
+								- Properties = { IRPYRawContainer 
+									- size = 1;
+									- value = 
+									{ IProperty 
+										- _Name = "Line.LineColor";
+										- _Value = "255,0,255";
+										- _Type = Color;
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			- _name = "HigherLevelGoal";
+			- _modifiedTimeWeak = 11.10.2016::10:23:22;
+			- _m2Classes = { IRPYRawContainer 
+				- size = 1;
+				- value = "Requirement"; 
+			}
+		}
+		{ IStereotype 
+			- _id = GUID 47f1a7be-3b10-4ec3-9b4b-45b40969ee9b;
+			- _myState = 8192;
+			- _properties = { IPropertyContainer 
+				- Subjects = { IRPYRawContainer 
+					- size = 1;
+					- value = 
+					{ IPropertySubject 
+						- _Name = "General";
+						- Metaclasses = { IRPYRawContainer 
+							- size = 1;
+							- value = 
+							{ IPropertyMetaclass 
+								- _Name = "Model";
+								- Properties = { IRPYRawContainer 
+									- size = 1;
+									- value = 
+									{ IProperty 
+										- _Name = "AddNewMenuStructure";
+										- _Value = "Diagrams/Requirements Diagram, Diagrams/UseCaseDiagram, Diagrams/Package Diagram, Diagrams/rpy_separator,General Elements/Comment,General Elements/Constraint,General Elements/Package,General Elements/Problem,General Elements/Rationale,General Elements/rpy_separator,General Elements/Dependency,General Elements/Refinement, Requirements/Requirement,Requirements/RequirementsTable,Requirements/Derivation,Requirements/Satisfaction,Requirements/TestCase,Requirements/Validation,Requirements/Derive Requirement,Use C
+ases/UseCase,Use Cases/Actor, Allocations/Allocation,Allocations/AllocationsTable,Extensions/Profile,Extensions/Stereotype,Extensions/Tag,Extensions/rpy_separator,Extensions/ControlledFile,Extensions/HyperLink,Views and Layouts/TableLayout,Views and Layouts/TableView,Views and Layouts/MatrixLayout,Views and Layouts/MatrixView,Views and Layouts/Metrics Layout,Views and Layouts/Metrics View,Views and Layouts/CSVImporter, Views and Layouts/ExtendedTableLayout, Views and Layouts/ExtendedTableView, General Elemen
+ts/TestObjective,TestingProfile/TestPackage,TestingProfile/TestRequirementMatrix,TestingProfile/TestResultTable,TestingProfile/TestCase,TestingProfile/TestContext,TestingProfile/SUT,TestingProfile/TestComponent,TestingProfile/TestActor,TestingProfile/TestComponentInstance/,TestingProfile/TestConfiguration,TestingProfile/TestContext Diagram,TestingProfile/TestObjective,TestingProfile/TestScenario,TestingProfile/ScenarioRequirementFull,TestingProfile/ScenarioRequirementPartial,TestingProfile/ScenarioRequiremen
+tTable, DDS/dataReader, DDS/dataWriter, DDS/deadlineQosPolicy, DDS/domainParticipant, DDS/doQosPolicy, DDS/dsQosPolicy, DDS/durabilityQosPolicy, DDS/efQosPolicy, DDS/gdQosPolicy, DDS/historyQosPolicy, DDS/key, DDS/lbQosPolicy, DDS/lifespanQosPolicy, DDS/livelinessQosPolicy, DDS/osQosPolicy, DDS/ownershipQosPolicy, DDS/partitionQosPolicy, DDS/presentationQosPolicy, DDS/publisher, DDS/rdlQosPolicy, DDS/reliabilityQoSPolicy, DDS/rlQosPolicy, DDS/subscriber, DDS/tbfQosPolicy, DDS/tdQoSPolicy, DDS/topic, DDS/topi
+cStruct, DDS/tpQosPolicy, DDS/udQosPolicy, DDS/wdlQosPolicy, DDS/ddsDiagram, DDS/guardCondition, DDS/guardConditionLink, DDS/idlType, DDS/listener, DDS/qualityOfService, DDS/queryCondition, DDS/readCondition, DDS/statusCondition, DDS/waitSet, rpy_separator,Query";
+										- _Type = String;
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			- _name = "SimpleMenu";
+			- _modifiedTimeWeak = 11.10.2016::10:23:22;
+			- _m2Classes = { IRPYRawContainer 
+				- size = 1;
+				- value = "Project"; 
+			}
+		}
+		{ IStereotype 
+			- _id = GUID a620cee3-6b39-41b9-87c5-3de74f969894;
+			- _myState = 8192;
+			- _properties = { IPropertyContainer 
+				- Subjects = { IRPYRawContainer 
+					- size = 1;
+					- value = 
+					{ IPropertySubject 
+						- _Name = "Format";
+						- Metaclasses = { IRPYRawContainer 
+							- size = 2;
+							- value = 
+							{ IPropertyMetaclass 
+								- _Name = "Class";
+								- Properties = { IRPYRawContainer 
+									- size = 1;
+									- value = 
+									{ IProperty 
+										- _Name = "Line.LineColor";
+										- _Value = "128,0,0";
+										- _Type = Color;
+									}
+								}
+							}
+							{ IPropertyMetaclass 
+								- _Name = "Object";
+								- Properties = { IRPYRawContainer 
+									- size = 1;
+									- value = 
+									{ IProperty 
+										- _Name = "Line.LineColor";
+										- _Value = "128,0,0";
+										- _Type = Color;
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			- _name = "Actuator";
+			- _modifiedTimeWeak = 11.10.2016::10:24:20;
+			- _m2Classes = { IRPYRawContainer 
+				- size = 2;
+				- value = "Class"; "Object"; 
+			}
+		}
+		{ IStereotype 
+			- _id = GUID b2a22dfc-eac8-4e06-ae01-41ed5e1b7fe1;
+			- _myState = 8192;
+			- _properties = { IPropertyContainer 
+				- Subjects = { IRPYRawContainer 
+					- size = 1;
+					- value = 
+					{ IPropertySubject 
+						- _Name = "Format";
+						- Metaclasses = { IRPYRawContainer 
+							- size = 2;
+							- value = 
+							{ IPropertyMetaclass 
+								- _Name = "Class";
+								- Properties = { IRPYRawContainer 
+									- size = 1;
+									- value = 
+									{ IProperty 
+										- _Name = "Line.LineColor";
+										- _Value = "128,128,0";
+										- _Type = Color;
+									}
+								}
+							}
+							{ IPropertyMetaclass 
+								- _Name = "Object";
+								- Properties = { IRPYRawContainer 
+									- size = 1;
+									- value = 
+									{ IProperty 
+										- _Name = "Line.LineColor";
+										- _Value = "128,128,0";
+										- _Type = Color;
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			- _name = "Component";
+			- _modifiedTimeWeak = 11.10.2016::10:24:20;
+			- _m2Classes = { IRPYRawContainer 
+				- size = 2;
+				- value = "Class"; "Object"; 
+			}
+		}
+		{ IStereotype 
+			- _id = GUID 9917a249-fa76-4e56-8fe9-13a3a96d42f1;
+			- _myState = 8192;
+			- _properties = { IPropertyContainer 
+				- Subjects = { IRPYRawContainer 
+					- size = 1;
+					- value = 
+					{ IPropertySubject 
+						- _Name = "Format";
+						- Metaclasses = { IRPYRawContainer 
+							- size = 2;
+							- value = 
+							{ IPropertyMetaclass 
+								- _Name = "Class";
+								- Properties = { IRPYRawContainer 
+									- size = 1;
+									- value = 
+									{ IProperty 
+										- _Name = "Line.LineColor";
+										- _Value = "255,0,255";
+										- _Type = Color;
+									}
+								}
+							}
+							{ IPropertyMetaclass 
+								- _Name = "Object";
+								- Properties = { IRPYRawContainer 
+									- size = 1;
+									- value = 
+									{ IProperty 
+										- _Name = "Line.LineColor";
+										- _Value = "255,0,255";
+										- _Type = Color;
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			- _name = "ExternalSystem";
+			- _modifiedTimeWeak = 11.10.2016::10:24:20;
+			- _lastID = 1;
+			- _m2Classes = { IRPYRawContainer 
+				- size = 2;
+				- value = "Class"; "Object"; 
+			}
+		}
+		{ IStereotype 
+			- _id = GUID 2bdaf91a-8eb2-4010-ac66-a269fd07f953;
+			- _myState = 8192;
+			- _properties = { IPropertyContainer 
+				- Subjects = { IRPYRawContainer 
+					- size = 1;
+					- value = 
+					{ IPropertySubject 
+						- _Name = "Format";
+						- Metaclasses = { IRPYRawContainer 
+							- size = 2;
+							- value = 
+							{ IPropertyMetaclass 
+								- _Name = "Class";
+								- Properties = { IRPYRawContainer 
+									- size = 1;
+									- value = 
+									{ IProperty 
+										- _Name = "Line.LineColor";
+										- _Value = "0,0,0";
+										- _Type = Color;
+									}
+								}
+							}
+							{ IPropertyMetaclass 
+								- _Name = "Object";
+								- Properties = { IRPYRawContainer 
+									- size = 1;
+									- value = 
+									{ IProperty 
+										- _Name = "Line.LineColor";
+										- _Value = "0,0,0";
+										- _Type = Color;
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			- _name = "Sensor";
+			- _modifiedTimeWeak = 11.10.2016::10:24:20;
+			- _m2Classes = { IRPYRawContainer 
+				- size = 2;
+				- value = "Class"; "Object"; 
+			}
+		}
 	}
-	- weakCGTime = 7.17.2016::8:38:1;
-	- strongCGTime = 7.17.2016::8:38:1;
+	- weakCGTime = 11.10.2016::10:29:18;
+	- strongCGTime = 11.9.2016::7:13:32;
 	- _defaultComposite = GUID d99cf07a-d91b-4fe7-8454-c53a4512e0b1;
 	- _eventsBaseID = -1;
 	- Classes = { IRPYRawContainer 
@@ -1508,9 +2045,9 @@ I-Logix-RPY-Archive version 8.11.0 C++ 9499822
 			- _id = GUID d99cf07a-d91b-4fe7-8454-c53a4512e0b1;
 			- _myState = 40960;
 			- _name = "TopLevel";
-			- _modifiedTimeWeak = 7.4.2016::10:24:49;
-			- weakCGTime = 7.4.2016::10:24:49;
-			- strongCGTime = 11.8.2015::16:53:3;
+			- _modifiedTimeWeak = 11.10.2016::10:24:20;
+			- weakCGTime = 11.10.2016::10:24:20;
+			- strongCGTime = 11.9.2016::7:13:32;
 			- _multiplicity = "";
 			- _itsStateChart = { IHandle 
 				- _m2Class = "";
