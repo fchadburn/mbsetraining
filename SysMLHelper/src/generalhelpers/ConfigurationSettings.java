@@ -75,6 +75,12 @@ public class ConfigurationSettings {
 		return value;
 	}
 	
+	public String getProperty(String key, String defaultValue){
+		
+		String value = m_properties.getProperty( key, defaultValue );
+		return value;
+	}
+	
 	public String getString(String key){
 		
 		String value = m_resources.getString( key );
@@ -88,7 +94,8 @@ public class ConfigurationSettings {
     Change history:
     #109 06-NOV-2016: Added .properties support for localisation of menus (F.J.Chadburn)
     #110 06-NOV-2016: PluginVersion now comes from Config.properties file, rather than hard wired (F.J.Chadburn)
-        
+    #118 13-NOV-2016: Default FunctionalAnalysisPkg tags now set in Config.properties file (F.J.Chadburn)
+    
     This file is part of SysMLHelperPlugin.
 
     SysMLHelperPlugin is free software: you can redistribute it and/or modify

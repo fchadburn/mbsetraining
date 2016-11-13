@@ -303,6 +303,7 @@ public class GeneralHelpers {
 		
 		if (theStereotype != null){
 			toTheEl.setStereotype(theStereotype);
+			Logger.writeLine(theStereotype, "was applied to " + Logger.elementInfo(toTheEl));
 		} else {
 			Logger.writeLine("Warning: Unable to find a stereotype with name " + withTheName + " in applyExistingStereotype");
 		}
@@ -884,7 +885,8 @@ public class GeneralHelpers {
 	#085 09-AUG-2016: Add helper to findElementsWithMetaClassStereotypeAndName (F.J.Chadburn)
 	#089 15-AUG-2016: Add a pull-down list to select Block when adding events/ops in white box (F.J.Chadburn)
 	#102 03-NOV-2016: Add right-click menu to auto update names of ADs from UC names (F.J.Chadburn)
-	
+	#113 13-NOV-2016: Stereotypes moved to GlobalPreferencesProfile to simplify/remove orphaned ownership issues (F.J.Chadburn)
+
     This file is part of SysMLHelperPlugin.
 
     SysMLHelperPlugin is free software: you can redistribute it and/or modify

@@ -15,6 +15,8 @@ import com.telelogic.rhapsody.core.*;
 
 public class PopulatePkg {
 
+	final private static String m_SimpleMenuStereotypeName = "SimpleMenu";
+
 	public static IRPProfile addProfileIfNotPresent(String theProfileName, IRPProject toTheProject){
 		
 		IRPProfile theProfile = (IRPProfile) toTheProject.findNestedElement(theProfileName, "Profile");
@@ -40,7 +42,9 @@ public class PopulatePkg {
 	}
 	
 	
-	public static IRPProfile addProfileIfNotPresentAndMakeItApplied(String theProfileName, IRPPackage appliedToPackage){
+	public static IRPProfile addProfileIfNotPresentAndMakeItApplied(
+			String theProfileName, 
+			IRPPackage appliedToPackage){
 		
 		IRPProject addToProject = appliedToPackage.getProject();
 		
@@ -175,9 +179,7 @@ public class PopulatePkg {
 	
 	protected static void applySimpleMenuStereotype(IRPProject toTheProject) {
 		
-		String theName = "RequirementsAnalysisProfile::SimpleMenu";
-		
-		IRPModelElement theEl = toTheProject.findElementsByFullName(theName, "Stereotype");
+		IRPModelElement theEl = toTheProject.findAllByName(m_SimpleMenuStereotypeName, "Stereotype");
 		
 		if (theEl != null && theEl instanceof IRPStereotype){
 			IRPStereotype theStereotype = (IRPStereotype)theEl;
@@ -185,19 +187,18 @@ public class PopulatePkg {
 			toTheProject.setStereotype( theStereotype );
 			toTheProject.changeTo("SysML");
 			
-			Logger.writeLine(toTheProject, "was changed to " + theName);
-			Logger.writeLine("Remove the «SimpleMenu» stereotype to return the 'Add New' menu");
+			Logger.writeLine( toTheProject, "was changed to " + m_SimpleMenuStereotypeName );
+			Logger.writeLine("Remove the «" + m_SimpleMenuStereotypeName + "» stereotype to return the 'Add New' menu");
 
 		} else {
-			Logger.writeLine("Error in applySimpleMenuStereotype, unable to find stereotype called " + theName);
+			Logger.writeLine("Error in applySimpleMenuStereotype, unable to find stereotype called " + m_SimpleMenuStereotypeName);
 		}	
 	}
 	
 	protected static void removeSimpleMenuStereotypeIfPresent(IRPProject onTheProject){
 		
-		String theName = "RequirementsAnalysisProfile::SimpleMenu";
 		
-		IRPModelElement theEl = onTheProject.findElementsByFullName(theName, "Stereotype");
+		IRPModelElement theEl = onTheProject.findAllByName(m_SimpleMenuStereotypeName, "Stereotype");
 		
 		if (theEl != null && theEl instanceof IRPStereotype){
 			IRPStereotype theStereotype = (IRPStereotype)theEl;
@@ -205,10 +206,10 @@ public class PopulatePkg {
 			onTheProject.removeStereotype(theStereotype);
 			onTheProject.changeTo("SysML");
 			
-			Logger.writeLine("«SimpleMenu» stereotype removed from project to return the full 'Add New' menu to Rhapsody");
+			Logger.writeLine("«" + m_SimpleMenuStereotypeName + "» stereotype removed from project to return the full 'Add New' menu to Rhapsody");
 
 		} else {
-			Logger.writeLine("Error in applySimpleMenuStereotype, unable to find stereotype called " + theName);
+			Logger.writeLine("Error in removeSimpleMenuStereotypeIfPresent, unable to find stereotype called " + m_SimpleMenuStereotypeName);
 		}		
 	}
 }
@@ -221,7 +222,8 @@ public class PopulatePkg {
     #046 06-JUL-2016: Fix external RequirementsAnalysisPkg reference to be created with relative path (F.J.Chadburn)
     #053 13-JUL-2016: Fix #046 issues in calc of relative path when adding RequirementsAnalysisPkg (F.J.Chadburn)
     #061 17-JUL-2016: Ensure BasePkg is added by reference from profile to aid future integration (F.J.Chadburn)
-    
+    #113 13-NOV-2016: Stereotypes moved to GlobalPreferencesProfile to simplify/remove orphaned ownership issues (F.J.Chadburn)
+
     This file is part of SysMLHelperPlugin.
 
     SysMLHelperPlugin is free software: you can redistribute it and/or modify
