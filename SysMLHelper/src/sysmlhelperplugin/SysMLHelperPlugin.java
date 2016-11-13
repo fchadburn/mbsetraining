@@ -5,6 +5,7 @@ import java.util.List;
 
 import requirementsanalysisplugin.PopulateRequirementsAnalysisPkg;
 import functionalanalysisplugin.PopulateFunctionalAnalysisPkg;
+import functionalanalysisplugin.PopulateFunctionalAnalysisPkg.SimulationType;
 import designsynthesisplugin.PopulateDesignSynthesisPkg;
 import generalhelpers.*; 
 
@@ -90,17 +91,36 @@ public class SysMLHelperPlugin extends RPUserPlugin {
 						Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking PopulateRequirementsAnalysisPkg.createRequirementsAnalysisPkg");
 					}
 				}
-			} else if (menuItem.equals(m_configSettings.getString("sysmlhelperplugin.CreateFAStructureMenu"))){
+			} else if (menuItem.equals(m_configSettings.getString("sysmlhelperplugin.CreateFullSimFAStructureMenu"))){
 
 				if (theSelectedEl instanceof IRPProject){
 					try { 
-						PopulateFunctionalAnalysisPkg.createFunctionalAnalysisPkg( (IRPProject) theSelectedEl ); 
+						PopulateFunctionalAnalysisPkg.createFunctionalAnalysisPkg( (IRPProject) theSelectedEl, SimulationType.FullSim ); 
 
 					} catch (Exception e) {
 						Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking PopulateFunctionalAnalysisPkg.createFunctionalAnalysisPkg");
 					}
 				}
+			} else if (menuItem.equals(m_configSettings.getString("sysmlhelperplugin.CreateSimpleSimFAStructureMenu"))){
 
+				if (theSelectedEl instanceof IRPProject){
+					try { 
+						PopulateFunctionalAnalysisPkg.createFunctionalAnalysisPkg( (IRPProject) theSelectedEl, SimulationType.SimpleSim ); 
+
+					} catch (Exception e) {
+						Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking PopulateFunctionalAnalysisPkg.createFunctionalAnalysisPkg");
+					}
+				}
+			} else if (menuItem.equals(m_configSettings.getString("sysmlhelperplugin.CreateNoSimFAStructureMenu"))){
+
+				if (theSelectedEl instanceof IRPProject){
+					try { 
+						PopulateFunctionalAnalysisPkg.createFunctionalAnalysisPkg( (IRPProject) theSelectedEl, SimulationType.NoSim ); 
+
+					} catch (Exception e) {
+						Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking PopulateFunctionalAnalysisPkg.createFunctionalAnalysisPkg");
+					}
+				}
 			} else if (menuItem.equals(m_configSettings.getString("sysmlhelperplugin.CreateDSStructureMenu"))){
 
 				if (theSelectedEl instanceof IRPProject){
@@ -247,7 +267,9 @@ public class SysMLHelperPlugin extends RPUserPlugin {
     #050 06-JUL-2016: Setup Gateway project based on rqtf template option now under General Utilities menu (F.J.Chadburn)
     #109 06-NOV-2016: Added .properties support for localisation of menus (F.J.Chadburn)
     #110 06-NOV-2016: PluginVersion now comes from Config.properties file, rather than hard wired (F.J.Chadburn)
-    
+    #111 13-NOV-2016: Added new Simple Sim (Guard only) functional analysis structure option (F.J.Chadburn)
+    #112 13-NOV-2016: Added new No Sim functional analysis structure option (F.J.Chadburn)
+
     This file is part of SysMLHelperPlugin.
 
     SysMLHelperPlugin is free software: you can redistribute it and/or modify

@@ -63,7 +63,7 @@ public class SysMLHelperTriggers extends RPApplicationListener {
 				
 				if( theOp==null ){
 					IRPClass theBlock = FunctionalAnalysisSettings.getBlockUnderDev(
-							modelElement.getProject(), true );
+							modelElement.getProject() );
 					
 					if (theBlock != null){
 						boolean answer = UserInterfaceHelpers.askAQuestion(
@@ -384,6 +384,7 @@ public class SysMLHelperTriggers extends RPApplicationListener {
     #089 15-AUG-2016: Add a pull-down list to select Block when adding events/ops in white box (F.J.Chadburn)
     #093 23-AUG-2016: Added isPopulateOptionHidden tag to allow hiding of the populate check-box on dialogs (F.J.Chadburn)
     #098 14-SEP-2016: Improve dialog for double-click to clarify cancelling gets the Features dialog (F.J.Chadburn)
+    #115 13-NOV-2016: Removed use of isEnableBlockSelectionByUser tag and <<LogicalSystem>> by helper (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 
