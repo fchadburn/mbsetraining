@@ -1,5 +1,6 @@
 package functionalanalysisplugin;
 
+import functionalanalysisplugin.PopulateFunctionalAnalysisPkg.SimulationType;
 import generalhelpers.CreateGatewayProjectPanel;
 import generalhelpers.CreateStructuralElementPanel;
 import generalhelpers.GeneralHelpers;
@@ -38,6 +39,7 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
 	private List<ActorMappingInfo> m_ActorChoices;
 	private RhapsodyComboBox m_BlockInheritanceChoice;
 	private JTextField m_BlockNameTextField;
+	private SimulationType m_SimulationType;
 	
 	/**
 	 * 
@@ -46,23 +48,41 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
 
 	public static void launchThePanel(
 			final IRPPackage theRootPackage,
-			final IRPPackage theRequirementsAnalysisPkg) {
+			final IRPPackage theRequirementsAnalysisPkg,
+			final SimulationType withSimulationType ) {
 		
-		@SuppressWarnings("unchecked")
-		List<IRPModelElement> theActors = 
-			theRequirementsAnalysisPkg.getNestedElementsByMetaClass("Actor", 1).toList();
+		String introText = null;
 		
-		JDialog.setDefaultLookAndFeelDecorated(true);
-		
-		String introText = "This SysML-Toolkit helper sets up a nested package hierarchy for the functional analysis\n" +
-				"of a block from the perspective of the actors in the system. The initial structure will be\n" +
-				"created based on the " + theActors.size() + " actor(s) identified in the RequirementsAnalysisPkg called: " +
-				"\n";
-		
-		for (IRPModelElement theActor : theActors) {
-			introText = "\t" + introText + theActor.getName() + "\n";
+		if( withSimulationType==SimulationType.FullSim ){
+			
+			@SuppressWarnings("unchecked")
+			List<IRPModelElement> theActors = 
+				theRequirementsAnalysisPkg.getNestedElementsByMetaClass("Actor", 1).toList();
+			
+			JDialog.setDefaultLookAndFeelDecorated(true);
+			
+			introText = "This SysML-Toolkit helper sets up a nested package hierarchy for the functional analysis\n" +
+					    "of a block from the perspective of the actors in the system. The initial structure will be\n" +
+					    "created based on the " + theActors.size() + " actor(s) identified in the RequirementsAnalysisPkg called: " +
+					    "\n";
+			
+			for (IRPModelElement theActor : theActors) {
+				introText = "\t" + introText + theActor.getName() + "\n";
+			}
+			
+		} else if ( withSimulationType==SimulationType.SimpleSim ){
+			introText = "This SysML-Toolkit helper sets up a nested package hierarchy for the functional analysis of a block. \n" +
+						"This 'Simple Sim' option supports guard-based state-machine logic simulation but does not support \n" +
+						"injecting events via actors or test case creation. This can be added later, if necessary.\n";
+
+		} else if ( withSimulationType==SimulationType.NoSim ){
+			introText = "This SysML-Toolkit helper sets up a nested package hierarchy for the functional analysis of a block. \n" +
+						"This 'No Sim' option supports activity-based analysis without simulation using state-machines.\n";
+
+		} else {
+			introText = "Error";
 		}
-		
+
 		int response = JOptionPane.showConfirmDialog(null, 
 				 introText +
 				"\nDo you want to proceed?", "Confirm",
@@ -77,13 +97,15 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
 					
 					JFrame.setDefaultLookAndFeelDecorated( true );
 
-					JFrame frame = new JFrame("Populate package hierarchy for an analysis block");
+					JFrame frame = new JFrame("Populate a 'system' block package hierarchy");
 					
 					frame.setDefaultCloseOperation( JFrame.DISPOSE_ON_CLOSE );
 
 					CreateFunctionalBlockPackagePanel thePanel = 
 							new CreateFunctionalBlockPackagePanel(
-									theRootPackage, theRequirementsAnalysisPkg);
+									theRootPackage, 
+									theRequirementsAnalysisPkg, 
+									withSimulationType );
 
 					frame.setContentPane( thePanel );
 					frame.pack();
@@ -96,18 +118,20 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
 
 	CreateFunctionalBlockPackagePanel(
 			IRPPackage theRootPackage,
-			IRPPackage theRequirementsAnalysisPkg){
+			IRPPackage theRequirementsAnalysisPkg,
+			final SimulationType withSimulationType ){
 		super();
 		
 		m_RootPackage = theRootPackage;
 		m_RequirementsAnalysisPkg = theRequirementsAnalysisPkg;
+		m_SimulationType = withSimulationType;
 		
 		setLayout( new BorderLayout() );
 		
 		String theBlockName = GeneralHelpers.determineUniqueNameBasedOn(
-				theBlankName, "Class", m_RootPackage.getProject());
+				theBlankName, "Class", m_RootPackage.getProject() );
 		
-		add( createTheNameTheBlockPanel( theBlockName ), BorderLayout.PAGE_START);
+		add( createTheNameTheBlockPanel( theBlockName ), BorderLayout.PAGE_START );
 		add( createContent( theBlockName ), BorderLayout.CENTER );
 		add( createOKCancelPanel(), BorderLayout.PAGE_END );
 	}
@@ -228,7 +252,8 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
 		return isValid;
 	}
 	
-	private JPanel createContent(String theBlockName){
+	private JPanel createContent(
+			String theBlockName ){
 	
 	    JPanel thePanel = new JPanel();
 	    thePanel.setBorder( BorderFactory.createEmptyBorder( 10, 10, 10, 10 ) );
@@ -236,16 +261,6 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
 	    GroupLayout theGroupLayout = new GroupLayout( thePanel );
 	    thePanel.setLayout( theGroupLayout );
 	    theGroupLayout.setAutoCreateGaps( true );
-	    
-		@SuppressWarnings("unchecked")
-		List<IRPModelElement> theRequirementsAnalysisActors = 
-			m_RequirementsAnalysisPkg.getNestedElementsByMetaClass("Actor", 1).toList();
-
-		@SuppressWarnings("unchecked")
-		List<IRPModelElement> theExistingActors = 
-				m_RootPackage.getNestedElementsByMetaClass("Actor", 1).toList();
-		
-		m_ActorChoices = new ArrayList<ActorMappingInfo>();
 
 		SequentialGroup theHorizSequenceGroup = theGroupLayout.createSequentialGroup();
 		SequentialGroup theVerticalSequenceGroup = theGroupLayout.createSequentialGroup();
@@ -259,56 +274,69 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
 	    theHorizSequenceGroup.addGroup( theColumn2ParallelGroup );
 	    theHorizSequenceGroup.addGroup( theColumn3ParallelGroup );
 	    theHorizSequenceGroup.addGroup( theColumn4ParallelGroup ); 
+	    
+	    m_ActorChoices = new ArrayList<ActorMappingInfo>();
+	    
+	    if( m_SimulationType==SimulationType.FullSim ){
+	    	
+			@SuppressWarnings("unchecked")
+			List<IRPModelElement> theRequirementsAnalysisActors = 
+				m_RequirementsAnalysisPkg.getNestedElementsByMetaClass("Actor", 1).toList();
 
-		for (IRPModelElement theActor : theRequirementsAnalysisActors) {
+			@SuppressWarnings("unchecked")
+			List<IRPModelElement> theExistingActors = 
+					m_RootPackage.getNestedElementsByMetaClass("Actor", 1).toList();
 			
-			Logger.writeLine("Creating actor '"+ theActor.getName() + "'");
-			
-		    JCheckBox theActorCheckBox = new JCheckBox("Create actor called:");
-		    
-			theActorCheckBox.setSelected(true);
-						    
-			theActorCheckBox.addActionListener( new ActionListener() {
+			for (IRPModelElement theActor : theRequirementsAnalysisActors) {
 				
-				@Override
-				public void actionPerformed(ActionEvent e) {
-			        clearActorNamesIfNeeded();		
-				}
-			});
-			
-			JTextField theActorNameTextField = new JTextField();
-			theActorNameTextField.setPreferredSize( new Dimension( 200, 20 ));
-			
-			RhapsodyComboBox theInheritedActorComboBox = new RhapsodyComboBox(theExistingActors, false);			
-			theInheritedActorComboBox.setPreferredSize(new Dimension(100, 20));
-			
-			ActorMappingInfo theMappingInfo = 
-					new ActorMappingInfo(
-							theInheritedActorComboBox, 
-							theActorCheckBox, 
-							theActorNameTextField, 
-							(IRPActor)theActor,
-							theActor.getProject() );
-			
-			theMappingInfo.updateToBestActorNamesBasedOn( theBlockName );
-			
-			m_ActorChoices.add( theMappingInfo );
-		    
-		    JLabel theLabel = new JLabel("Inherit from:");
-		    
-		    theColumn1ParallelGroup.addComponent( theActorCheckBox );   
-		    theColumn2ParallelGroup.addComponent( theActorNameTextField );    
-		    theColumn3ParallelGroup.addComponent( theLabel ); 
-		    theColumn4ParallelGroup.addComponent( theInheritedActorComboBox  );
-    
-		    ParallelGroup theVertical1ParallelGroup = theGroupLayout.createParallelGroup( GroupLayout.Alignment.BASELINE);
-		    theVertical1ParallelGroup.addComponent( theActorCheckBox );
-		    theVertical1ParallelGroup.addComponent( theActorNameTextField );
-		    theVertical1ParallelGroup.addComponent( theLabel  );	    
-		    theVertical1ParallelGroup.addComponent( theInheritedActorComboBox );
-		    
-		    theVerticalSequenceGroup.addGroup( theVertical1ParallelGroup );		    		    
-		}
+				Logger.writeLine("Creating actor '"+ theActor.getName() + "'");
+				
+			    JCheckBox theActorCheckBox = new JCheckBox("Create actor called:");
+			    
+				theActorCheckBox.setSelected(true);
+							    
+				theActorCheckBox.addActionListener( new ActionListener() {
+					
+					@Override
+					public void actionPerformed(ActionEvent e) {
+				        clearActorNamesIfNeeded();		
+					}
+				});
+				
+				JTextField theActorNameTextField = new JTextField();
+				theActorNameTextField.setPreferredSize( new Dimension( 200, 20 ));
+				
+				RhapsodyComboBox theInheritedActorComboBox = new RhapsodyComboBox(theExistingActors, false);			
+				theInheritedActorComboBox.setPreferredSize(new Dimension(100, 20));
+				
+				ActorMappingInfo theMappingInfo = 
+						new ActorMappingInfo(
+								theInheritedActorComboBox, 
+								theActorCheckBox, 
+								theActorNameTextField, 
+								(IRPActor)theActor,
+								theActor.getProject() );
+				
+				theMappingInfo.updateToBestActorNamesBasedOn( theBlockName );
+				
+				m_ActorChoices.add( theMappingInfo );
+			    
+			    JLabel theLabel = new JLabel("Inherit from:");
+			    
+			    theColumn1ParallelGroup.addComponent( theActorCheckBox );   
+			    theColumn2ParallelGroup.addComponent( theActorNameTextField );    
+			    theColumn3ParallelGroup.addComponent( theLabel ); 
+			    theColumn4ParallelGroup.addComponent( theInheritedActorComboBox  );
+	    
+			    ParallelGroup theVertical1ParallelGroup = theGroupLayout.createParallelGroup( GroupLayout.Alignment.BASELINE);
+			    theVertical1ParallelGroup.addComponent( theActorCheckBox );
+			    theVertical1ParallelGroup.addComponent( theActorNameTextField );
+			    theVertical1ParallelGroup.addComponent( theLabel  );	    
+			    theVertical1ParallelGroup.addComponent( theInheritedActorComboBox );
+			    
+			    theVerticalSequenceGroup.addGroup( theVertical1ParallelGroup );		    		    
+			}
+	    }
 		
 		theGroupLayout.setHorizontalGroup( theHorizSequenceGroup );
 		theGroupLayout.setVerticalGroup( theVerticalSequenceGroup );
@@ -321,7 +349,10 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
 			IRPPackage theBlockTestPackage, 
 			IRPClass theUsageDomainBlock) {
 		
-		IRPComponent theComponent = (IRPComponent) theBlockTestPackage.addNewAggr("Component", theName + "_EXE");
+		IRPComponent theComponent = 
+				(IRPComponent) theBlockTestPackage.addNewAggr(
+						"Component", theName + "_EXE");
+		
 		theComponent.setPropertyValue("Activity.General.SimulationMode", "StateOriented");
 
 		IRPConfiguration theConfiguration = (IRPConfiguration) theComponent.findConfiguration("DefaultConfig");
@@ -337,12 +368,12 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
 			IRPClass theAssemblyBlock, 
 			IRPPackage inPackage,
 			String withName){
-
-		IRPSequenceDiagram theSD = inPackage.addSequenceDiagram(withName);
-
+		
+		IRPSequenceDiagram theSD = inPackage.addSequenceDiagram( withName );
+		
 		@SuppressWarnings("unchecked")
-		List<IRPInstance> theParts = 
-		theAssemblyBlock.getNestedElementsByMetaClass("Part", 0).toList();
+		List<IRPInstance> theParts =
+		    theAssemblyBlock.getNestedElementsByMetaClass("Part", 0).toList();
 
 		int xPos = 30;
 		int yPos = 0;
@@ -350,156 +381,233 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
 		int nHeight = 1000;
 		int xGap = 30;
 
-		for (IRPInstance thePart : theParts) {
+		// Do Test Driver first
+		for( IRPInstance thePart : theParts ) {
 
-			if (GeneralHelpers.hasStereotypeCalled("TestDriver", thePart)){
+			if( GeneralHelpers.hasStereotypeCalled( "TestDriver", thePart ) ){
+
+				IRPClassifier theType = thePart.getOtherClass();
+				theSD.addNewNodeForElement( theType, xPos, yPos, nWidth, nHeight );
+				xPos=xPos+nWidth+xGap;
+			}
+		}
+		
+		// Then actors
+		for( IRPInstance thePart : theParts ) {
 
 			IRPClassifier theType = thePart.getOtherClass();
-			theSD.addNewNodeForElement(theType, xPos, yPos, nWidth, nHeight);
-			xPos=xPos+nWidth+xGap;
+
+			if( theType instanceof IRPActor ){
+				theSD.addNewNodeForElement( theType, xPos, yPos, nWidth, nHeight );
+				xPos=xPos+nWidth+xGap;
 			}
 		}
 
-		for (IRPInstance thePart : theParts) {
-
-			if (!GeneralHelpers.hasStereotypeCalled("TestDriver", thePart) && !GeneralHelpers.hasStereotypeCalled("LogicalSystem", thePart)){;
+		// Then components
+		for( IRPInstance thePart : theParts ) {
 
 			IRPClassifier theType = thePart.getOtherClass();
-			theSD.addNewNodeForElement(theType, xPos, yPos, nWidth, nHeight);
-			xPos=xPos+nWidth+xGap;
+
+			if( !( theType instanceof IRPActor ) &&
+				!GeneralHelpers.hasStereotypeCalled( "TestDriver", thePart ) ){
+
+				theSD.addNewNodeForElement( theType, xPos, yPos, nWidth, nHeight );
+				xPos=xPos+nWidth+xGap;
 			}
 		}
 
-		for (IRPInstance thePart : theParts) {
-
-			if (GeneralHelpers.hasStereotypeCalled("LogicalSystem", thePart)){;
-
-			IRPClassifier theType = thePart.getOtherClass();
-			theSD.addNewNodeForElement(theType, xPos, yPos, nWidth, nHeight);
-			xPos=xPos+nWidth+xGap;
-			}
-		}
-
-		GeneralHelpers.applyExistingStereotype("AutoShow", theSD);
-
+		GeneralHelpers.applyExistingStereotype( "AutoShow", theSD );
 	}
 
 	@Override
 	protected void performAction(){
 		
-		if (checkValidity( false )){
+		if( checkValidity( false ) ){
+			
 			String theName = m_BlockNameTextField.getText();
 			
+			// Create packages first
 			IRPPackage theFunctionalBlockPkg = m_RootPackage.addNestedPackage( theName + "Pkg" );  
 			
 			// Create nested package for block
-			IRPPackage theBlockPackage = theFunctionalBlockPkg.addNestedPackage(theName + "Block" + "Pkg");
+			IRPPackage theBlockPackage = 
+					theFunctionalBlockPkg.addNestedPackage(
+							theName + "Block" + "Pkg" );
+			
+			// Create nested RequirementsPkg
+			IRPModelElement theReqtsPkg =
+					m_RootPackage.findNestedElement( "RequirementsPkg", "Package" );
+			
+			if( theReqtsPkg == null ){	
+				// Create nested package for requirements & RD
+				theReqtsPkg = m_RootPackage.addNestedPackage( "RequirementsPkg" );
+			}
+			
+			// Create nested package for events and interfaces
+			IRPPackage theInterfacesPkg = 
+					theFunctionalBlockPkg.addNestedPackage( theName + "Interfaces" + "Pkg" );
+			
+			// Create nested TestPkg package with components necessary for wiring up a simulation
+			IRPPackage theTestPackage = 
+					theFunctionalBlockPkg.addNestedPackage( theName + "Test" + "Pkg" );
+			
+			// Create nested package for housing the ADs
+			IRPPackage theWorkingPackage = 
+					theFunctionalBlockPkg.addNestedPackage(
+							theName + "Working" + "Pkg" );
+			
+			// Apply the same profile as the source ADs so that same rules apply
+			IRPDependency theRAProfileDependency = 
+					theWorkingPackage.addDependency(
+							"RequirementsAnalysisProfile", "Profile" );
+		
+			theRAProfileDependency.addStereotype( "AppliedProfile", "Dependency" );
+			
+			FunctionalAnalysisSettings.setupFunctionalAnalysisTagsFor( 
+					m_RootPackage.getProject(), 
+					theFunctionalBlockPkg,
+					theInterfacesPkg,
+					theTestPackage );
+			
+			// Populate content for the BlockPkg
 			IRPClass theLogicalSystemBlock = theBlockPackage.addClass( theName );
-			GeneralHelpers.applyExistingStereotype("LogicalSystem", theLogicalSystemBlock);
-			theLogicalSystemBlock.changeTo("Block");
+			GeneralHelpers.applyExistingStereotype( "LogicalSystem", theLogicalSystemBlock );
+			theLogicalSystemBlock.changeTo( "Block" );
 
 			IRPModelElement theChosenOne = m_BlockInheritanceChoice.getSelectedRhapsodyItem();
 
 			IRPProject theProject = theLogicalSystemBlock.getProject();
 			
-			if (theChosenOne==null){
-				addGeneralization(theLogicalSystemBlock, "TimeElapsedBlock", theProject);
-			} else {
-				theLogicalSystemBlock.addGeneralization( (IRPClassifier) theChosenOne );
-				Logger.writeLine(theChosenOne, "was the chosen one");
+			
+			// only apply generalisation to create the state chart if simulation applies
+			if( m_SimulationType==SimulationType.FullSim || 
+			    m_SimulationType==SimulationType.SimpleSim ){
+				
+				if (theChosenOne==null ){
+					addGeneralization( theLogicalSystemBlock, "TimeElapsedBlock", theProject );
+					
+				} else {
+					theLogicalSystemBlock.addGeneralization( (IRPClassifier) theChosenOne );
+					Logger.writeLine( theChosenOne, "was the chosen one" );
+				}
 			}
 			
-			// Create nested package for events and interfaces
-			IRPPackage theInterfacesPkg = theFunctionalBlockPkg.addNestedPackage(theName + "Interfaces" + "Pkg");
-
-			// Update tag to point to the nested package
-			setTagOn( m_RootPackage, FunctionalAnalysisSettings.tagNameForPackageForEventsAndInterfaces, theInterfacesPkg );
-								
-			// Add Usage dependency to the interfaces package that will contain the events
-			IRPDependency theBlocksUsageDep = theBlockPackage.addDependencyTo( theInterfacesPkg );
-			theBlocksUsageDep.addStereotype( "Usage", "Dependency" );
+			if( theReqtsPkg != null && theReqtsPkg instanceof IRPPackage ){
+				
+				IRPObjectModelDiagram theRD = 
+						((IRPPackage) theReqtsPkg).addObjectModelDiagram( "RD - " + theName );
+				
+				theRD.changeTo( "Requirements Diagram" );
+			}
 			
-			// Create nested package with components necessary for wiring up a simulation
-			IRPPackage theTestPackage = theFunctionalBlockPkg.addNestedPackage(theName + "Test" + "Pkg");
+			if( m_SimulationType==SimulationType.FullSim || 
+			    m_SimulationType==SimulationType.SimpleSim ){
+				
+				// Add Usage dependency to the interfaces package that will contain the system events
+				IRPDependency theBlocksUsageDep = theBlockPackage.addDependencyTo( theInterfacesPkg );
+				theBlocksUsageDep.addStereotype( "Usage", "Dependency" );
+				
+				// Add Usage dependency to the interfaces package that will contain the events
+				IRPDependency theUsageDep = theTestPackage.addDependencyTo( theInterfacesPkg );
+				theUsageDep.addStereotype( "Usage", "Dependency" );
+			}	
 
-			// Update tag to point to the nested package
-			setTagOn( m_RootPackage, FunctionalAnalysisSettings.tagNameForPackageForActorsAndTest, theTestPackage );
-
-			// Add Usage dependency to the interfaces package that will contain the events
-			IRPDependency theUsageDep = theTestPackage.addDependencyTo( theInterfacesPkg );
-			theUsageDep.addStereotype( "Usage", "Dependency" );
-
-			IRPClass theSystemAssemblyBlock = theFunctionalBlockPkg.addClass(theName + "_SystemAssembly");
+			IRPClass theSystemAssemblyBlock = 
+					theFunctionalBlockPkg.addClass( theName + "_SystemAssembly" );
+			
 			theSystemAssemblyBlock.changeTo("Block");
 
+			// Make the LogicalSystem a part of the SystemAssembly block
+			IRPInstance theLogicalSystemPart = 
+					(IRPInstance) theSystemAssemblyBlock.addNewAggr(
+							"Part", "its" + theLogicalSystemBlock.getName() );
+			
+			theLogicalSystemPart.setOtherClass( theLogicalSystemBlock );
+			
+			GeneralHelpers.applyExistingStereotype( "LogicalSystem", theLogicalSystemPart );	
+			
+			// Populate nested TestPkg package with components necessary for wiring up a simulation
+
+			if( m_SimulationType==SimulationType.FullSim ||
+				m_SimulationType==SimulationType.SimpleSim ){
+				
+				// Make ElapsedTime actor part of the SystemAssembly block
+				IRPModelElement theElapsedTimeActor = 
+						theProject.findNestedElementRecursive( "ElapsedTime", "Actor" );
+				
+				if( theElapsedTimeActor != null ){
+					
+					IRPInstance theElapsedTimePart = 
+							(IRPInstance) theSystemAssemblyBlock.addNewAggr(
+									"Part", "");
+					
+					theElapsedTimePart.setOtherClass( (IRPClassifier) theElapsedTimeActor );
+				} else {
+					Logger.writeLine("Error in CreateFunctionalBlockPackagePanel.performAction: Unable to find ElapsedTime actor in project. You may be missing the BasePkg");
+				}
+			}
+			
 			IRPObjectModelDiagram theBDD = 
 					theFunctionalBlockPkg.addObjectModelDiagram(
-							"BDD - " + theSystemAssemblyBlock.getName());
+							"BDD - " + theSystemAssemblyBlock.getName() );
 			
 			theBDD.changeTo("Block Definition Diagram");
 
 			IRPStructureDiagram theIBD = 
 					(IRPStructureDiagram) theSystemAssemblyBlock.addNewAggr(
-							"StructureDiagram", "IBD - " + theSystemAssemblyBlock.getName());
+							"StructureDiagram", "IBD - " + theSystemAssemblyBlock.getName() );
 			
-			theIBD.changeTo("Internal Block Diagram");					    	
+			theIBD.changeTo("Internal Block Diagram");
+			
+			if( m_SimulationType==SimulationType.FullSim ||
+				m_SimulationType==SimulationType.SimpleSim ){			
 
-			// Make the LogicalSystem a part of the SystemAssembly block
-			IRPInstance theLogicalSystemPart = 
-					(IRPInstance) theSystemAssemblyBlock.addNewAggr(
-							"Part", "its" + theLogicalSystemBlock.getName());
-			
-			theLogicalSystemPart.setOtherClass(theLogicalSystemBlock);
-			
-			GeneralHelpers.applyExistingStereotype("LogicalSystem", theLogicalSystemPart);	
+				IRPPanelDiagram thePD = 
+						theTestPackage.addPanelDiagram(
+								"PD - " + theLogicalSystemBlock.getName());
+				
+				if( m_SimulationType==SimulationType.FullSim ){
+					
+					IRPClass theTesterBlock = theTestPackage.addClass( theName + "_Tester" );
+					GeneralHelpers.applyExistingStereotype( "TestDriver", theTesterBlock );
+					theTesterBlock.changeTo( "Block" );
+					addGeneralization( theTesterBlock, "TestDriverBlock", theProject );
 
-			IRPClass theTesterBlock = theTestPackage.addClass(theName + "_Tester");
-			GeneralHelpers.applyExistingStereotype("TestDriver", theTesterBlock);
-			theTesterBlock.changeTo("Block");
-			addGeneralization(theTesterBlock, "TestDriverBlock", theProject);
+					// Make the TestDriver a part of the UsageDomain block
+					IRPInstance theTestDriverPart = 
+							(IRPInstance) theSystemAssemblyBlock.addNewAggr(
+									"Part", "its" + theTesterBlock.getName() );
+					
+					theTestDriverPart.setOtherClass( theTesterBlock );
+					
+					GeneralHelpers.applyExistingStereotype( "TestDriver", theTestDriverPart );
 
-			// Make the TestDriver a part of the UsageDomain block
-			IRPInstance theTestDriverPart = 
-					(IRPInstance) theSystemAssemblyBlock.addNewAggr(
-							"Part", "its" + theTesterBlock.getName());
-			
-			theTestDriverPart.setOtherClass(theTesterBlock);
-			
-			GeneralHelpers.applyExistingStereotype("TestDriver", theTestDriverPart);
+					for( ActorMappingInfo theInfo : m_ActorChoices ){
+						theInfo.performActorPartCreationIfSelectedTo( theSystemAssemblyBlock );
+					}
 
-			for (ActorMappingInfo theInfo : m_ActorChoices) {
-				theInfo.performActorPartCreationIfSelectedTo( theSystemAssemblyBlock );
+				} else {
+					// assume panel diagram simulation will be used (esp. for simple sim)
+					GeneralHelpers.applyExistingStereotype("AutoShow", thePD);
+				}
+
+				// Add a sequence diagram
+				createSequenceDiagramFor(
+						theSystemAssemblyBlock, 
+						theTestPackage, 
+						"SD - " + theName);
+				
+				IRPStatechartDiagram theStatechart = 
+						theLogicalSystemBlock.getStatechart().getStatechartDiagram();
+
+				if( theStatechart != null ){
+					theStatechart.highLightElement();
+					theStatechart.openDiagram();
+				}
+				
+				// Add a component
+				addAComponentWith( theName, theTestPackage, theSystemAssemblyBlock );
 			}
-
-			// Add a sequence diagram
-			createSequenceDiagramFor(
-					theSystemAssemblyBlock, 
-					theTestPackage, 
-					"SD - " + theName);
-	
-			setTagOn( m_RootPackage, FunctionalAnalysisSettings.tagNameForPackageUnderDev, theFunctionalBlockPkg );
-								
-			IRPStatechartDiagram theStatechart = 
-					theLogicalSystemBlock.getStatechart().getStatechartDiagram();
-
-			if (theStatechart != null){
-				theStatechart.highLightElement();
-				theStatechart.openDiagram();
-			}
-			
-			// Create nested package for housing the ADs
-			
-			
-			IRPPackage theWorkingPackage = theFunctionalBlockPkg.addNestedPackage(theName + "Working" + "Pkg");
-			
-			// This dependency is also used to locate the working package
-			IRPDependency theRAProfileDependency = 
-					theWorkingPackage.addDependency("RequirementsAnalysisProfile", "Profile");
-		
-			theRAProfileDependency.addStereotype("AppliedProfile", "Dependency");
-			
-			// Add a component
-			addAComponentWith(theName, theTestPackage, theSystemAssemblyBlock);
 			
 			CreateGatewayProjectPanel.launchThePanel( 
 					theProject, 
@@ -509,31 +617,9 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
 					m_RequirementsAnalysisPkg, 
 					theWorkingPackage);
 			
-			
 		} else {
 			Logger.writeLine("Error in CreateFunctionalBlockPackagePanel.performAction, checkValidity returned false");
 		}	
-	}
-
-	private void setTagOn(
-			IRPPackage theRootPackage,
-			final String withTagName,
-			IRPPackage toPackage ) {
-		
-		// Set up the settings
-		IRPTag theTag = m_RootPackage.getTag( withTagName );
-		
-		if( theTag == null ){
-			Logger.writeLine( "Error in setTagOn " + Logger.elementInfo( theRootPackage ) + 
-					", unable to find tag called " + withTagName );
-			
-		} else {
-			Logger.writeLine( "Setting " + withTagName + 
-					" tag owned by " + Logger.elementInfo( theRootPackage ) + " to " + 
-					Logger.elementInfo( toPackage ));
-			
-			m_RootPackage.setTagElementValue( theTag, toPackage );
-		}
 	}
 }
 
@@ -554,6 +640,9 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
     #062 17-JUL-2016: Create InterfacesPkg and correct build issues by adding a Usage dependency (F.J.Chadburn)
     #087 09-AUG-2016: Added packageForEventsAndInterfaces tag to give user flexibility to change (F.J.Chadburn)
     #106 03-NOV-2016: Ease usage by renaming UsageDomain block to SystemAssembly and moving up one package (F.J.Chadburn)
+    #111 13-NOV-2016: Added new Simple Sim (Guard only) functional analysis structure option (F.J.Chadburn)
+    #112 13-NOV-2016: Added new No Sim functional analysis structure option (F.J.Chadburn)
+    #118 13-NOV-2016: Default FunctionalAnalysisPkg tags now set in Config.properties file (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

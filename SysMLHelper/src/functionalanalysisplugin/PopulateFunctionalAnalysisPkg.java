@@ -3,6 +3,8 @@ package functionalanalysisplugin;
 import generalhelpers.CreateGatewayProjectPanel;
 import generalhelpers.GeneralHelpers;
 import generalhelpers.PopulatePkg;
+import generalhelpers.UserInterfaceHelpers;
+
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -13,7 +15,11 @@ import generalhelpers.Logger;
 import com.telelogic.rhapsody.core.*;
 
 public class PopulateFunctionalAnalysisPkg extends PopulatePkg {
-	 
+	
+	public enum SimulationType {
+	    FullSim, SimpleSim, NoSim
+	}
+	
 	public static void main(String[] args) {
 	
 		IRPApplication theApp = RhapsodyAppServer.getActiveRhapsodyApplication();
@@ -26,7 +32,9 @@ public class PopulateFunctionalAnalysisPkg extends PopulatePkg {
 		}
 	}
 	
-	public static void createFunctionalAnalysisPkg(IRPProject forProject){
+	public static void createFunctionalAnalysisPkg(
+			IRPProject forProject, 
+			final SimulationType withSimulationType ){
 		 
 		final String rootPackageName = "FunctionalAnalysisPkg";
 		Boolean ok = true;
@@ -42,22 +50,41 @@ public class PopulateFunctionalAnalysisPkg extends PopulatePkg {
 			
 		    JDialog.setDefaultLookAndFeelDecorated(true);
 		    
-		    int response = JOptionPane.showConfirmDialog(null, 
-		    		"This SysML-Toolkit helper is designed to set up a new Rhapsody project for executable MBSE. \n" +
-		    		"It creates a nested package structure for executable 'interaction-based functional analysis',  \n" +
-		    		"imports the appropriate profiles if not present, and sets default display and other options \n" +
-		    		"to appropriate values for the task using Rhapsody profile and property settings. \n" +
-		    		"This will remove the SimpleMenu stereotype if applied.\n\n" +
-		    		"Do you want to proceed?", "Confirm",
-		        JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+		    String introText;
+		    
+		    if( withSimulationType==SimulationType.NoSim){
+			    introText = 
+			    		"This SysML-Toolkit helper is designed to set up a new Rhapsody project for MBSE. \n" +
+			    		"It creates a nested package structure for simple functional analysis, imports the \n" +
+			    		"appropriate profiles if not present, and sets default display and other options \n" +
+			    		"to appropriate values for the task using Rhapsody profile and property settings. \n" +
+			    		"This will remove the SimpleMenu stereotype if applied.\n\n" +
+			    		"Do you want to proceed?";		    	
+		    } else {
+			    introText = 
+			    		"This SysML-Toolkit helper is designed to set up a new Rhapsody project for executable MBSE. \n" +
+			    		"It creates a nested package structure for executable 'state-based functional analysis',  \n" +
+			    		"imports the appropriate profiles if not present, and sets default display and other options \n" +
+			    		"to appropriate values for the task using Rhapsody profile and property settings. \n" +
+			    		"This will remove the SimpleMenu stereotype if applied.\n\n" +
+			    		"Do you want to proceed?";
+		    }
+		    
+		    int response = JOptionPane.showConfirmDialog(
+		    		null, 
+		    		introText, 
+		    		"Confirm",
+		    		JOptionPane.YES_NO_OPTION,
+		    		JOptionPane.QUESTION_MESSAGE);
 		    
 		    if (response == JOptionPane.YES_OPTION) {
 		    	
-		    	IRPModelElement theRequirementsAnalysisPkg = forProject.findElementsByFullName("RequirementsAnalysisPkg", "Package");
+		    	IRPModelElement theRequirementsAnalysisPkg = 
+		    			forProject.findElementsByFullName("RequirementsAnalysisPkg", "Package");
 		    	
 		    	if (theRequirementsAnalysisPkg != null){
 		    		
-			    	populateFunctionalAnalysisPkg(forProject);
+			    	populateFunctionalAnalysisPkg(forProject, withSimulationType);
 			    	removeSimpleMenuStereotypeIfPresent(forProject);
 			    	
 			    	forProject.save();
@@ -66,7 +93,8 @@ public class PopulateFunctionalAnalysisPkg extends PopulatePkg {
 		    		
 				    int confirm = JOptionPane.showConfirmDialog(null, 
 				    		"The project does not contain a root RequirementsAnalysisPkg. This package is used by the\n" +
-				    		"plugin/method to populate the Actors for functional analysis simulation purposes.\n\n" +
+				    		"plugin/method to populate the actors for functional analysis simulation purposes and/or \n" +
+				    	    "higher-level requirements for traceability purposes. \n\n" +
 				    		"Do you want to add a RequirementsAnalysisPkg.sbs from another model by reference?\n\n" + 
 				    		"NOTE:\n" +
 				    		"The recommendation is to create a folder that will contain both this project and its\n" +
@@ -86,7 +114,7 @@ public class PopulateFunctionalAnalysisPkg extends PopulatePkg {
 				    if (confirm == JOptionPane.YES_OPTION){
 				    	browseAndAddByReferenceIfNotPresent("RequirementsAnalysisPkg", forProject, true);
 				    	
-				    	populateFunctionalAnalysisPkg(forProject);
+				    	populateFunctionalAnalysisPkg(forProject, withSimulationType);
 				    	removeSimpleMenuStereotypeIfPresent(forProject);
 				    	forProject.save();
 				    	
@@ -107,18 +135,24 @@ public class PopulateFunctionalAnalysisPkg extends PopulatePkg {
 	}
 		
 	static void populateFunctionalAnalysisPkg(
-			IRPProject forProject ) {
+			IRPProject forProject, final SimulationType withSimulationType ) {
 		
 		addProfileIfNotPresent("SysML", forProject);		
 		addProfileIfNotPresent("GlobalPreferencesProfile", forProject);
 		addProfileIfNotPresent("RequirementsAnalysisProfile", forProject);
-		addProfileIfNotPresent("FunctionalAnalysisProfile", forProject);
 		
-		forProject.changeTo("SysML");
+		IRPPackage theFunctionalAnalysisPkg = forProject.addPackage( "FunctionalAnalysisPkg" );
 		
-		IRPPackage theFunctionalAnalysisPkg = 
-				addPackageFromProfileRpyFolder(
-						"FunctionalAnalysisPkg", forProject, false );
+		if( withSimulationType==SimulationType.FullSim ){		
+
+			addProfileIfNotPresentAndMakeItApplied("FunctionalAnalysisProfile", theFunctionalAnalysisPkg);
+			addProfileIfNotPresentAndMakeItApplied("DesignSynthesisProfile", theFunctionalAnalysisPkg);
+		
+		} else { // withSimulationType==SimulationType.SimpleSim || withSimulationType==SimulationType.NoSim
+			
+			addProfileIfNotPresentAndMakeItApplied("FunctionalAnalysisSimpleProfile", theFunctionalAnalysisPkg);
+			addProfileIfNotPresentAndMakeItApplied("DesignSynthesisProfile", theFunctionalAnalysisPkg);
+		}
 		
 		if( theFunctionalAnalysisPkg != null ){
 			
@@ -135,17 +169,19 @@ public class PopulateFunctionalAnalysisPkg extends PopulatePkg {
 	    	setProperty (forProject, "General.Model.RenameUnusedFiles", "True");
 	    	setProperty( forProject, "Activity.General.AutoSelectControlOrObjectFlow", "False" );
 	    	
-	    	createFunctionalBlockPackageHierarchy( theFunctionalAnalysisPkg );
+	    	createFunctionalBlockPackageHierarchy( theFunctionalAnalysisPkg, withSimulationType );
 		}
 	}
 	
-	public static void createFunctionalBlockPackageHierarchy(IRPPackage theRootPackage){
+	public static void createFunctionalBlockPackageHierarchy(
+			IRPPackage theRootPackage, 
+			final SimulationType withSimulationType ){
 		
 		if (theRootPackage.getName().equals("FunctionalAnalysisPkg")){
 			
 			IRPPackage theRequirementsAnalysisPkg = (IRPPackage) theRootPackage.getProject().findElementsByFullName("RequirementsAnalysisPkg", "Package");
 			
-			if (theRequirementsAnalysisPkg == null){
+			if (theRequirementsAnalysisPkg == null && withSimulationType==SimulationType.FullSim){
 				
 				JDialog.setDefaultLookAndFeelDecorated(true);
 				
@@ -157,7 +193,9 @@ public class PopulateFunctionalAnalysisPkg extends PopulatePkg {
 			} else {
 				
 				CreateFunctionalBlockPackagePanel.launchThePanel(
-						theRootPackage, theRequirementsAnalysisPkg);
+						theRootPackage, 
+						theRequirementsAnalysisPkg, 
+						withSimulationType );
 			}
 		    
 		} else {
@@ -187,8 +225,7 @@ public class PopulateFunctionalAnalysisPkg extends PopulatePkg {
 
 		final IRPClass theBlockUnderDev = 
 				FunctionalAnalysisSettings.getBlockUnderDev( 
-						theProject, 
-						FunctionalAnalysisSettings.getIsEnableBlockSelectionByUser( theProject ) );
+						theProject );
 		
 		Logger.writeLine("Add new actor part to " + Logger.elementInfo( thePackageUnderDev ) + " was invoked");
 		
@@ -245,6 +282,42 @@ public class PopulateFunctionalAnalysisPkg extends PopulatePkg {
     	}
 	}
 	
+	public static void switchFunctionalAnalysisPkgProfileFrom(
+			String theProfileName,
+			String toTheProfileName,
+			IRPProject forProject ) {
+		
+		final String rootPackageName = "FunctionalAnalysisPkg";
+
+		IRPModelElement theFunctionalAnalysisPkg = 
+				forProject.findElementsByFullName( rootPackageName, "Package" );
+		
+		if( theFunctionalAnalysisPkg==null ){
+			
+			Logger.writeLine( "Doing nothing: " + Logger.elementInfo( forProject ) + " does not have a " + rootPackageName );
+		} else {
+
+			String infoMsg =  "Do you want to change the menus by replacing the profile called '" + theProfileName + "' \n " +
+					 		  "with the profile called '" + toTheProfileName + "'?" + "\n\n" +
+					          "Note: After running this you will need to close Rhapsody completely and re-open the project for the new menus to appear.";
+			
+			boolean result = UserInterfaceHelpers.askAQuestion( infoMsg );
+			
+			if( result==true ){
+				addProfileIfNotPresentAndMakeItApplied( toTheProfileName, (IRPPackage)theFunctionalAnalysisPkg );
+				
+				IRPModelElement theProfileToDelete = forProject.findAllByName( theProfileName, "Profile" );
+				
+				if( theProfileToDelete==null ){
+					
+					Logger.writeLine("Unable to find a profile called " + theProfileName + " to delete");
+				} else {
+					theProfileToDelete.deleteFromProject();
+				}
+			}
+		}
+	}
+	
 	public static void switchToMoreDetailedAD(
 			IRPActivityDiagram theDiagram) {
 		
@@ -269,11 +342,9 @@ public class PopulateFunctionalAnalysisPkg extends PopulatePkg {
 					Logger.elementInfo( theDiagram ) + " to add additional tools to the toolbar" );
 			
 			setProperty( theDiagram.getFlowchart(), "Activity_diagram.AcceptEventAction.ShowNotation", "Event" );
-			setProperty( theDiagram.getFlowchart(), "Activity_diagram.SendAction.ShowNotation", "Event" );
-			
+			setProperty( theDiagram.getFlowchart(), "Activity_diagram.SendAction.ShowNotation", "Event" );		
 		}
 	}
-
 }
 
 /**
@@ -296,6 +367,10 @@ public class PopulateFunctionalAnalysisPkg extends PopulatePkg {
     #089 15-AUG-2016: Add a pull-down list to select Block when adding events/ops in white box (F.J.Chadburn)
     #091 23-AUG-2016: Turn off the Activity::General::AutoSelectControlOrObjectFlow property by default (F.J.Chadburn)
     #100 14-SEP-2016: Add option to create RequirementsAnalysisPkg if FunctionalAnalysisPkg not possible (F.J.Chadburn)
+    #111 13-NOV-2016: Added new Simple Sim (Guard only) functional analysis structure option (F.J.Chadburn)
+    #112 13-NOV-2016: Added new No Sim functional analysis structure option (F.J.Chadburn)
+    #114 13-NOV-2016: DesignSynthesisProfile to create publish/subscribe flow ports now added by default (F.J.Chadburn)
+    #115 13-NOV-2016: Removed use of isEnableBlockSelectionByUser tag and <<LogicalSystem>> by helper (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

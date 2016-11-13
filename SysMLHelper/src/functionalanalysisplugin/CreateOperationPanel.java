@@ -110,8 +110,7 @@ public class CreateOperationPanel extends CreateTracedElementPanel {
 			public void run() {
 				IRPClassifier theLogicalSystemBlock = 
 						FunctionalAnalysisSettings.getBlockUnderDev( 
-								inProject, 
-								FunctionalAnalysisSettings.getIsEnableBlockSelectionByUser(inProject) );
+								inProject );
 				
 				JFrame.setDefaultLookAndFeelDecorated( true );
 				
@@ -148,8 +147,7 @@ public class CreateOperationPanel extends CreateTracedElementPanel {
 			public void run() {
 				IRPClassifier theLogicalSystemBlock = 
 						FunctionalAnalysisSettings.getBlockUnderDev( 
-								inProject, 
-								FunctionalAnalysisSettings.getIsEnableBlockSelectionByUser(inProject) );
+								inProject );
 				
 				JFrame.setDefaultLookAndFeelDecorated( true );
 				
@@ -316,6 +314,7 @@ public class CreateOperationPanel extends CreateTracedElementPanel {
     #089 15-AUG-2016: Add a pull-down list to select Block when adding events/ops in white box (F.J.Chadburn)
     #093 23-AUG-2016: Added isPopulateOptionHidden tag to allow hiding of the populate check-box on dialogs (F.J.Chadburn)
     #099 14-SEP-2016: Allow event and operation creation from right-click on AD and RD diagram canvas (F.J.Chadburn)
+    #115 13-NOV-2016: Removed use of isEnableBlockSelectionByUser tag and <<LogicalSystem>> by helper (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

@@ -6,9 +6,12 @@ import generalhelpers.UserInterfaceHelpers;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.List;
 import java.util.Set;
 
+import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JCheckBox;
@@ -31,6 +34,7 @@ public class CreateTracedAttributePanel extends CreateTracedElementPanel {
 	protected JTextField m_InitialValueTextField = null;
 	private JCheckBox m_CheckOperationCheckBox;
 	private String m_CheckOpName;
+	private JCheckBox m_CallOperationIsNeededCheckBox;
 	
 	public static void createSystemAttributesFor(
 			IRPProject theActiveProject,
@@ -100,6 +104,23 @@ public class CreateTracedAttributePanel extends CreateTracedElementPanel {
 		m_CheckOperationCheckBox = new JCheckBox();
 		m_CheckOperationCheckBox.setBorder( BorderFactory.createEmptyBorder( 0, 0, 10, 0 ) );
 
+		m_CheckOperationCheckBox.addActionListener( new ActionListener() {
+			
+		      public void actionPerformed(ActionEvent actionEvent) {
+		    	  
+			        AbstractButton abstractButton = (AbstractButton) actionEvent.getSource();
+			        
+			        boolean selected = abstractButton.getModel().isSelected();
+					
+					boolean isPopulate = 
+							FunctionalAnalysisSettings.getIsPopulateWantedByDefault(
+									m_TargetOwningElement.getProject() );
+					
+			        m_CallOperationIsNeededCheckBox.setEnabled(selected);
+			        m_CallOperationIsNeededCheckBox.setSelected(selected && isPopulate);
+			        			        
+			      }} );
+		
 		m_ChosenNameTextField.getDocument().addDocumentListener(
 				new DocumentListener() {
 
@@ -119,11 +140,26 @@ public class CreateTracedAttributePanel extends CreateTracedElementPanel {
 					}	
 				});
 		
-		updateNames();
-		
 		m_CheckOperationCheckBox.setSelected(true);
 		m_CheckOperationCheckBox.setEnabled(true);
+
+		boolean isPopulateOptionHidden = 
+				FunctionalAnalysisSettings.getIsPopulateOptionHidden(
+						onTargetBlock.getProject() );
+		
+		boolean isPopulate = 
+				FunctionalAnalysisSettings.getIsPopulateWantedByDefault(
+						onTargetBlock.getProject() );
+
+		m_CallOperationIsNeededCheckBox = new JCheckBox("Populate the '" + m_CheckOpName + "' operation on diagram?");
+		m_CallOperationIsNeededCheckBox.setBorder( BorderFactory.createEmptyBorder( 0, 0, 10, 0 ) );
+		m_CallOperationIsNeededCheckBox.setSelected( isPopulate );
+		m_CallOperationIsNeededCheckBox.setVisible( !isPopulateOptionHidden );
+		
+		updateNames();
+		
 		theCenterPanel.add( m_CheckOperationCheckBox );
+		theCenterPanel.add( m_CallOperationIsNeededCheckBox );
 
 		setLayout( new BorderLayout(10,10) );
 		setBorder( BorderFactory.createEmptyBorder( 10, 10, 10, 10 ) );
@@ -165,8 +201,7 @@ public class CreateTracedAttributePanel extends CreateTracedElementPanel {
 			public void run() {
 				IRPClassifier theLogicalSystemBlock = 
 						FunctionalAnalysisSettings.getBlockUnderDev( 
-								inProject, 
-								FunctionalAnalysisSettings.getIsEnableBlockSelectionByUser( inProject ) );
+								inProject );
 
 				JFrame.setDefaultLookAndFeelDecorated( true );
 
@@ -198,6 +233,9 @@ public class CreateTracedAttributePanel extends CreateTracedElementPanel {
 		m_CheckOperationCheckBox.setText(
 				"Add a '" + m_CheckOpName + 
 				"' operation to the block that returns the attribute value" );
+		
+		m_CallOperationIsNeededCheckBox.setText(
+				"Populate the '" + m_CheckOpName + "' operation on diagram?");
 	}
 	
 	@Override
@@ -285,6 +323,11 @@ public class CreateTracedAttributePanel extends CreateTracedElementPanel {
 			if( m_CheckOperationCheckBox.isSelected() ){
 				IRPOperation theCheckOp = addCheckOperationFor( theAttribute, m_CheckOpName );
 				addTraceabilityDependenciesTo( theCheckOp, selectedReqtsList );	
+				
+				if( m_CallOperationIsNeededCheckBox.isSelected() ){
+					populateCallOperationActionOnDiagram( theCheckOp );
+				}
+				
 				theCheckOp.highLightElement();
 			}
 			
@@ -311,7 +354,9 @@ public class CreateTracedAttributePanel extends CreateTracedElementPanel {
     #082 09-AUG-2016: Add a check operation check box added to the create attribute dialog (F.J.Chadburn)
     #089 15-AUG-2016: Add a pull-down list to select Block when adding events/ops in white box (F.J.Chadburn)
     #090 15-AUG-2016: Fix check operation name issue introduced in fixes #083 and #084 (F.J.Chadburn)
-
+    #115 13-NOV-2016: Removed use of isEnableBlockSelectionByUser tag and <<LogicalSystem>> by helper (F.J.Chadburn)
+    #119 13-NOV-2016: Add a populate check operation option to the add new attribute panel (F.J.Chadburn)
+    
     This file is part of SysMLHelperPlugin.
 
     SysMLHelperPlugin is free software: you can redistribute it and/or modify

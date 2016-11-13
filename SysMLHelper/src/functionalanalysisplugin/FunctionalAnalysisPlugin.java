@@ -1,5 +1,6 @@
 package functionalanalysisplugin;
 
+import functionalanalysisplugin.PopulateFunctionalAnalysisPkg.SimulationType;
 import generalhelpers.ConfigurationSettings;
 import generalhelpers.Logger;
 import generalhelpers.TraceabilityHelper;
@@ -62,17 +63,38 @@ public class FunctionalAnalysisPlugin extends RPUserPlugin {
 		Logger.writeLine("Starting ("+ theSelectedEls.size() + " elements were selected) ...");
 		
 		if( !theSelectedEls.isEmpty() ){
-			//selElemName = theSelectedEl.getName();	
-						
-			if (menuItem.equals(m_configSettings.getString("functionalanalysisplugin.PopulatePackageHierarchyForAnalysisBlockMenu"))){
+			
+			if (menuItem.equals(m_configSettings.getString("functionalanalysisplugin.PopulateFullSimPackageHierarchyForAnalysisBlockMenu"))){
 
 				try {
 					if (theSelectedEl instanceof IRPPackage){
-						PopulateFunctionalAnalysisPkg.createFunctionalBlockPackageHierarchy( (IRPPackage)theSelectedEl );
+						PopulateFunctionalAnalysisPkg.createFunctionalBlockPackageHierarchy( (IRPPackage)theSelectedEl, SimulationType.FullSim );
 					}
 
 				} catch (Exception e) {
-					Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking NestedActivityDiagram.createNestedActivityDiagramsFor");
+					Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking PopulateFunctionalAnalysisPkg.createFunctionalBlockPackageHierarchy (FullSim)");
+				}
+
+			} else if (menuItem.equals(m_configSettings.getString("functionalanalysisplugin.PopulateSimpleSimPackageHierarchyForAnalysisBlockMenu"))){
+
+				try {
+					if (theSelectedEl instanceof IRPPackage){
+						PopulateFunctionalAnalysisPkg.createFunctionalBlockPackageHierarchy( (IRPPackage)theSelectedEl, SimulationType.SimpleSim );
+					}
+
+				} catch (Exception e) {
+					Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking PopulateFunctionalAnalysisPkg.createFunctionalBlockPackageHierarchy (SimpleSim)");
+				}
+
+			} else if (menuItem.equals(m_configSettings.getString("functionalanalysisplugin.PopulateNoSimPackageHierarchyForAnalysisBlockMenu"))){
+
+				try {
+					if (theSelectedEl instanceof IRPPackage){
+						PopulateFunctionalAnalysisPkg.createFunctionalBlockPackageHierarchy( (IRPPackage)theSelectedEl, SimulationType.NoSim );
+					}
+
+				} catch (Exception e) {
+					Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking PopulateFunctionalAnalysisPkg.createFunctionalBlockPackageHierarchy (NoSim)");
 				}
 
 			} else if (menuItem.equals(m_configSettings.getString("functionalanalysisplugin.CreateIncomingEventMenu"))){
@@ -81,6 +103,7 @@ public class FunctionalAnalysisPlugin extends RPUserPlugin {
 					Set<IRPRequirement> theReqts = new HashSet<IRPRequirement>();
 					
 					CreateIncomingEventPanel.launchThePanel( 
+							null,
 							(IRPDiagram)theSelectedEl, 
 							theReqts, 
 							theActiveProject );
@@ -168,7 +191,7 @@ public class FunctionalAnalysisPlugin extends RPUserPlugin {
 								TraceabilityHelper.getRequirementsThatTraceFrom( theSelectedEl, false );
 						
 						CreateIncomingEventPanel.launchThePanel( 
-								(IRPAttribute)theSelectedEl, theReqts, theActiveProject );
+								null, (IRPAttribute)theSelectedEl, theReqts, theActiveProject );
 						
 					} catch (Exception e) {
 						Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking UpdateTracedAttributePanel.launchThePanel");
@@ -261,6 +284,27 @@ public class FunctionalAnalysisPlugin extends RPUserPlugin {
 				} catch (Exception e) {
 					Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking MBSE Method: Functional Analysis\\Switch menus to «MoreDetailedAD»");
 				}
+				
+			} else if (menuItem.equals(m_configSettings.getString("functionalanalysisplugin.SwitchMenusToFullSim"))){
+
+				try {
+					PopulateFunctionalAnalysisPkg.switchFunctionalAnalysisPkgProfileFrom(
+							"FunctionalAnalysisSimpleProfile", "FunctionalAnalysisProfile", theActiveProject );
+					
+				} catch (Exception e) {
+					Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking MBSE Method: Functional Analysis\\Switch menus to full sim");
+				}
+				
+			} else if (menuItem.equals(m_configSettings.getString("functionalanalysisplugin.SwitchMenusToSimpleSim"))){
+
+				try {
+					PopulateFunctionalAnalysisPkg.switchFunctionalAnalysisPkgProfileFrom(
+							"FunctionalAnalysisProfile", "FunctionalAnalysisSimpleProfile", theActiveProject );
+					
+				} catch (Exception e) {
+					Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking MBSE Method: Functional Analysis\\Switch menus to full sim");
+				}
+				
 			} else {
 				Logger.writeLine(theSelectedEl, " was invoked with menuItem='" + menuItem + "'");
 			}
@@ -306,7 +350,10 @@ public class FunctionalAnalysisPlugin extends RPUserPlugin {
     #099 14-SEP-2016: Allow event and operation creation from right-click on AD and RD diagram canvas (F.J.Chadburn)
     #109 06-NOV-2016: Added .properties support for localisation of menus (F.J.Chadburn)
     #110 06-NOV-2016: PluginVersion now comes from Config.properties file, rather than hard wired (F.J.Chadburn)
-    
+    #111 13-NOV-2016: Added new Simple Sim (Guard only) functional analysis structure option (F.J.Chadburn)
+    #112 13-NOV-2016: Added new No Sim functional analysis structure option (F.J.Chadburn)
+    #117 13-NOV-2016: Get incoming and outgoing event dialogs to work without actors in the context (F.J.Chadburn)
+
     This file is part of SysMLHelperPlugin.
 
     SysMLHelperPlugin is free software: you can redistribute it and/or modify

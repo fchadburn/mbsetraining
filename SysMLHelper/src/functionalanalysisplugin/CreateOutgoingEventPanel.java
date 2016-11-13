@@ -222,84 +222,86 @@ public class CreateOutgoingEventPanel extends CreateTracedElementPanel {
 				final IRPPackage thePackageForEvent = 
 						FunctionalAnalysisSettings.getPkgThatOwnsEventsAndInterfaces( inProject );
 				
-				final IRPModelElement theActor = 
-						GeneralHelpers.launchDialogToSelectElement(
-								getActorsRelatedTo( theBuildingBlock ), "Select Actor to send Event to", true);
-	
-				if( theActor != null && theActor instanceof IRPActor ){
+				List<IRPModelElement> theCandidateActors = getNonElapsedTimeActorsRelatedTo( theBuildingBlock );
+				
+				if( !theCandidateActors.isEmpty() ){
 					
-					List<IRPModelElement> theCandidates = 
-							GeneralHelpers.getNonActorOrTestingClassifiersConnectedTo( 
-									(IRPActor)theActor, theBuildingBlock );
+					final IRPModelElement theActor = 
+							GeneralHelpers.launchDialogToSelectElement(
+									theCandidateActors, "Select Actor to send Event to", true);
+		
+					if( theActor != null && theActor instanceof IRPActor ){
 						
-					if( theCandidates.isEmpty() ){
-						
-						UserInterfaceHelpers.showWarningDialog("The " + Logger.elementInfo( theBuildingBlock ) + 
-								" does not have any connectors that connect the " + Logger.elementInfo(theActor) + " with Blocks.\n\n" +
-								"Fix this and then try again");
-						
-					} else {
-						
-						final IRPClass theChosenBlock = selectBlockBasedOn(
-								(IRPActor) theActor,
-								theBuildingBlock,
-								"Select Block to send event from:",
-								true );
-						
-						if( theChosenBlock != null ){
+						List<IRPModelElement> theCandidates = 
+								GeneralHelpers.getNonActorOrTestingClassifiersConnectedTo( 
+										(IRPActor)theActor, theBuildingBlock );
 							
-							final IRPPort thePort = GeneralHelpers.getPortThatConnects(
-									(IRPClassifier)theChosenBlock,
-									(IRPActor)theActor, 
-									theBuildingBlock );
+						if( theCandidates.isEmpty() ){
 							
-							if( thePort != null ){
+							UserInterfaceHelpers.showWarningDialog("The " + Logger.elementInfo( theBuildingBlock ) + 
+									" does not have any connectors that connect the " + Logger.elementInfo(theActor) + " with Blocks.\n\n" +
+									"Fix this and then try again");
+							
+						} else {
+							
+							final IRPClass theChosenBlock = 
+									FunctionalAnalysisSettings.getBlockUnderDev( inProject );
+						
+							if( theChosenBlock != null ){
 								
-								javax.swing.SwingUtilities.invokeLater(new Runnable() {
+								final IRPPort thePort = GeneralHelpers.getPortThatConnects(
+										(IRPClassifier)theChosenBlock,
+										(IRPActor)theActor, 
+										theBuildingBlock );
+								
+								if( thePort != null ){
+									
+									javax.swing.SwingUtilities.invokeLater(new Runnable() {
 
-									@Override
-									public void run() {
-										
-										JFrame.setDefaultLookAndFeelDecorated( true );
-										JFrame frame = new JFrame("Create an outgoing event to " + Logger.elementInfo( theActor ) );
-										
-										frame.setDefaultCloseOperation( JFrame.DISPOSE_ON_CLOSE );
-										
-										if (theSourceGraphElement != null){
+										@Override
+										public void run() {
 											
-											CreateOutgoingEventPanel thePanel = new CreateOutgoingEventPanel(
-													theSourceGraphElement, 
-													theChosenBlock, 
-													withReqtsAlsoAdded,
-													(IRPActor)theActor, 
-													thePort,
-													thePackageForEvent );
+											JFrame.setDefaultLookAndFeelDecorated( true );
+											JFrame frame = new JFrame("Create an outgoing event to " + Logger.elementInfo( theActor ) );
 											
-											frame.setContentPane( thePanel );
-											frame.pack();
-											frame.setLocationRelativeTo( null );
-											frame.setVisible( true );
+											frame.setDefaultCloseOperation( JFrame.DISPOSE_ON_CLOSE );
 											
-										} else if (orTheModelElement != null){
-											
-											CreateOutgoingEventPanel thePanel = new CreateOutgoingEventPanel(
-													orTheModelElement, 
-													theChosenBlock, 
-													withReqtsAlsoAdded,
-													(IRPActor)theActor, 
-													thePort,
-													thePackageForEvent );
-											
-											frame.setContentPane( thePanel );
-											frame.pack();
-											frame.setLocationRelativeTo( null );
-											frame.setVisible( true );
+											if (theSourceGraphElement != null){
+												
+												CreateOutgoingEventPanel thePanel = new CreateOutgoingEventPanel(
+														theSourceGraphElement, 
+														theChosenBlock, 
+														withReqtsAlsoAdded,
+														(IRPActor)theActor, 
+														thePort,
+														thePackageForEvent );
+												
+												frame.setContentPane( thePanel );
+												frame.pack();
+												frame.setLocationRelativeTo( null );
+												frame.setVisible( true );
+												
+											} else if (orTheModelElement != null){
+												
+												CreateOutgoingEventPanel thePanel = new CreateOutgoingEventPanel(
+														orTheModelElement, 
+														theChosenBlock, 
+														withReqtsAlsoAdded,
+														(IRPActor)theActor, 
+														thePort,
+														thePackageForEvent );
+												
+												frame.setContentPane( thePanel );
+												frame.pack();
+												frame.setLocationRelativeTo( null );
+												frame.setVisible( true );
+											}
 										}
-									}
-								});
+									});
+								}
 							}
-						}
-					}			
+						}			
+					}
 				}
 			}
 		}
@@ -531,6 +533,7 @@ public class CreateOutgoingEventPanel extends CreateTracedElementPanel {
     #089 15-AUG-2016: Add a pull-down list to select Block when adding events/ops in white box (F.J.Chadburn)
     #093 23-AUG-2016: Added isPopulateOptionHidden tag to allow hiding of the populate check-box on dialogs (F.J.Chadburn)
     #099 14-SEP-2016: Allow event and operation creation from right-click on AD and RD diagram canvas (F.J.Chadburn)
+    #117 13-NOV-2016: Get incoming and outgoing event dialogs to work without actors in the context (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

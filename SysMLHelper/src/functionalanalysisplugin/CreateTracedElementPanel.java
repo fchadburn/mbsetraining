@@ -298,30 +298,8 @@ public abstract class CreateTracedElementPanel extends JPanel {
 			Logger.writeLine("Error in addTraceabilityDependenciesTo, unable to find stereotype to apply to dependencies");
 		}
 	}
-	
-	protected static List<IRPModelElement> getActorsRelatedTo(
-			IRPInstance theLogicalSystemPart){
-		
-		List<IRPModelElement> theActors = new ArrayList<IRPModelElement>();
-		
-		// get the logical system part and block
-		@SuppressWarnings("unchecked")
-		List<IRPInstance> theParts = 
-				theLogicalSystemPart.getOwner().getNestedElementsByMetaClass("Part", 0).toList();
-		
-		for (IRPInstance thePart : theParts) {
-			
-			IRPClassifier theOtherClass = thePart.getOtherClass();
-			
-			if (theOtherClass instanceof IRPActor){
-				theActors.add((IRPActor) theOtherClass);
-			}
-		}
-		
-		return theActors;
-	}
-	
-	protected static List<IRPModelElement> getActorsRelatedTo(
+
+	protected static List<IRPModelElement> getNonElapsedTimeActorsRelatedTo(
 			 IRPClassifier theBuildingBlock ){
 		
 		List<IRPModelElement> theActors = new ArrayList<IRPModelElement>();
@@ -335,8 +313,10 @@ public abstract class CreateTracedElementPanel extends JPanel {
 			
 			IRPClassifier theOtherClass = thePart.getOtherClass();
 			
-			if (theOtherClass instanceof IRPActor){
-				theActors.add((IRPActor) theOtherClass);
+			if (theOtherClass instanceof IRPActor && 
+					!theOtherClass.getName().equals("ElapsedTime") ){
+				
+				theActors.add((IRPActor) theOtherClass);					
 			}
 		}
 		
@@ -403,8 +383,6 @@ public abstract class CreateTracedElementPanel extends JPanel {
 			} else {
 				theDiagram = m_SourceGraphElement.getDiagram();
 			}
-			
-			Logger.writeLine("Got here2");
 
 			if (theDiagram instanceof IRPActivityDiagram){
 
@@ -468,58 +446,6 @@ public abstract class CreateTracedElementPanel extends JPanel {
 		
 		return theProposedName;
 	}
-	
-	protected static IRPClass selectBlockBasedOn(
-			IRPActor theActor,
-			IRPClass inTheBuildingBlock,
-			String withMsg,
-			boolean withSelection ){
-	
-		IRPClass theBlock = null;
-
-		List<IRPModelElement> theCandidates = 
-				GeneralHelpers.getNonActorOrTestingClassifiersConnectedTo( 
-						(IRPActor)theActor, inTheBuildingBlock );
-
-		if( theCandidates.isEmpty() ){
-
-			Logger.writeLine("Error in launchDialogsToSelectBlockBasedOn, no parts typed by Blocks were found underneath " + 
-					Logger.elementInfo( inTheBuildingBlock ) );
-
-		} else if ( theCandidates.size() == 1 ){
-
-			theBlock = (IRPClass) theCandidates.get( 0 );
-
-		} else { // theCandidates.size() > 1
-
-			if( withSelection ){
-
-				IRPModelElement theUserSelectedEl = GeneralHelpers.launchDialogToSelectElement(
-						theCandidates, withMsg, true );
-
-				if( theUserSelectedEl != null && theUserSelectedEl instanceof IRPClass ){
-
-					theBlock = (IRPClass)theUserSelectedEl;
-
-				} else {
-
-					Logger.writeLine("Error in launchDialogsToSelectBlockBasedOn, no user selection");
-				}
-
-			} else {
-
-				for( IRPModelElement theCandidate : theCandidates ) {
-
-					if( theCandidate instanceof IRPClass && 
-							GeneralHelpers.hasStereotypeCalled( "LogicalSystem", theCandidate )){
-						theBlock = (IRPClass) theCandidate;
-					}
-				}
-			}
-		}
-		
-		return theBlock;
-	}
 }
 
 /**
@@ -541,6 +467,7 @@ public abstract class CreateTracedElementPanel extends JPanel {
     #090 15-AUG-2016: Fix check operation name issue introduced in fixes #083 and #084 (F.J.Chadburn)
     #099 14-SEP-2016: Allow event and operation creation from right-click on AD and RD diagram canvas (F.J.Chadburn)
     #105 03-NOV-2016: Only bleed to requirements checked for coverage (F.J.Chadburn)
+    #115 13-NOV-2016: Removed use of isEnableBlockSelectionByUser tag and <<LogicalSystem>> by helper (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 
