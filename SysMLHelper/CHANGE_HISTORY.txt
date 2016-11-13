@@ -192,3 +192,15 @@ BETA TEST RELEASE 2.0.26 (03-NOV-2016)
 ----------------------------------------------------------------------------------
 BETA TEST RELEASE 2.0.27 (06-NOV-2016)
 ----------------------------------------------------------------------------------
+#111 13-NOV-2016: Added new Simple Sim (Guard only) functional analysis structure option (F.J.Chadburn)
+#112 13-NOV-2016: Added new No Sim functional analysis structure option (F.J.Chadburn)
+#113 13-NOV-2016: Stereotypes moved to GlobalPreferencesProfile to simplify/remove orphaned ownership issues (F.J.Chadburn)
+#114 13-NOV-2016: DesignSynthesisProfile to create publish/subscribe flow ports now added by default (F.J.Chadburn)
+#115 13-NOV-2016: Removed use of isEnableBlockSelectionByUser tag and <<LogicalSystem>> by helper (F.J.Chadburn)
+#116 13-NOV-2016: FunctionalAnalysisPkg tags now set programmatically to ease helper use in existing models (F.J.Chadburn)
+#117 13-NOV-2016: Get incoming and outgoing event dialogs to work without actors in the context (F.J.Chadburn)
+#118 13-NOV-2016: Default FunctionalAnalysisPkg tags now set in Config.properties file (F.J.Chadburn)
+#119 13-NOV-2016: Add a populate check operation option to the add new attribute panel (F.J.Chadburn)
+----------------------------------------------------------------------------------
+BETA TEST RELEASE 2.0.28 (13-NOV-2016)
+----------------------------------------------------------------------------------
