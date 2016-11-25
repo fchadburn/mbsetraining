@@ -204,3 +204,20 @@ BETA TEST RELEASE 2.0.27 (06-NOV-2016)
 ----------------------------------------------------------------------------------
 BETA TEST RELEASE 2.0.28 (13-NOV-2016)
 ----------------------------------------------------------------------------------
+#120 25-NOV-2016: Enable TestDriver inheritance in the FullSim block creation dialog (F.J.Chadburn)
+#121 25-NOV-2016: Move unclaimed requirements ready for Gateway synch now copes with duplicate names (F.J.Chadburn)
+#122 25-NOV-2016: Scroll-bar added to Copy AD dialog to enable it to scale to large number of ADs (F.J.Chadburn)
+#123 25-NOV-2016: Improved Publish/Subscribe ports to clean up AutoRipple dependencies when doing copy/paste (F.J.Chadburn)
+#124 25-NOV-2016: Cleaned up unused code from PortCreator (F.J.Chadburn)
+#125 25-NOV-2016: AutoRipple used in UpdateTracedAttributePanel to keep check and FlowPort name updated (F.J.Chadburn)
+#126 25-NOV-2016: Fixes to CreateNewActorPanel to cope better when multiple blocks are in play (F.J.Chadburn)
+#127 25-NOV-2016: Improved usability of ViaPanel event creation by enabling default selection via tags (F.J.Chadburn)
+#128 25-NOV-2016: Improved usability/speed of Copy AD dialog by providing user choice to open diagrams (F.J.Chadburn)
+#129 25-NOV-2016: Fixed addTraceabilityDependenciesTo to avoid creation of duplicate dependencies (F.J.Chadburn)
+#130 25-NOV-2016: Improved consistency in handling of isPopulateOptionHidden and isPopulateWantedByDefault tags (F.J.Chadburn)
+#131 25-NOV-2016: Added initial auto-populate of IBD/BDD (F.J.Chadburn)
+#132 25-NOV-2016: Added "Unable to find a port that connects" warning to CreateIncomingEventPanel (F.J.Chadburn)
+#133 25-NOV-2016: Fixed typo/missing= in SysMLHelper.hep preventing Gateway menu from showing (F.J.Chadburn)
+----------------------------------------------------------------------------------
+BETA TEST RELEASE 2.0.29 (25-NOV-2016)
+----------------------------------------------------------------------------------
