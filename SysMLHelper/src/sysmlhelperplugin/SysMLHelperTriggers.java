@@ -77,9 +77,7 @@ public class SysMLHelperTriggers extends RPApplicationListener {
 							CreateOperationPanel.launchThePanel( 
 									theSelectedGraphEls.get(0), 
 									theReqts, 
-									theApp.activeProject(),
-									true,
-									true );
+									theApp.activeProject() );
 						}
 					}
 				} // Operation already exists, i.e. element was dragged on so do nothing
@@ -385,7 +383,8 @@ public class SysMLHelperTriggers extends RPApplicationListener {
     #093 23-AUG-2016: Added isPopulateOptionHidden tag to allow hiding of the populate check-box on dialogs (F.J.Chadburn)
     #098 14-SEP-2016: Improve dialog for double-click to clarify cancelling gets the Features dialog (F.J.Chadburn)
     #115 13-NOV-2016: Removed use of isEnableBlockSelectionByUser tag and <<LogicalSystem>> by helper (F.J.Chadburn)
-
+    #130 25-NOV-2016: Improved consistency in handling of isPopulateOptionHidden and isPopulateWantedByDefault tags (F.J.Chadburn)
+    
     This file is part of SysMLHelperPlugin.
 
     SysMLHelperPlugin is free software: you can redistribute it and/or modify
