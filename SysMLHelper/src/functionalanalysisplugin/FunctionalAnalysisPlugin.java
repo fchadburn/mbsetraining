@@ -277,8 +277,16 @@ public class FunctionalAnalysisPlugin extends RPUserPlugin {
 				try {
 					if( theSelectedEl instanceof IRPActivityDiagram ){
 						
+						IRPActivityDiagram theAD = (IRPActivityDiagram)theSelectedEl;
+						
+						int isOpen = theAD.isOpen();
+						
 						PopulateFunctionalAnalysisPkg.switchToMoreDetailedAD( 
 								(IRPActivityDiagram)theSelectedEl );
+						
+						if( isOpen==1 ){
+							theAD.highLightElement();
+						}
 					}
 					
 				} catch (Exception e) {
@@ -353,6 +361,7 @@ public class FunctionalAnalysisPlugin extends RPUserPlugin {
     #111 13-NOV-2016: Added new Simple Sim (Guard only) functional analysis structure option (F.J.Chadburn)
     #112 13-NOV-2016: Added new No Sim functional analysis structure option (F.J.Chadburn)
     #117 13-NOV-2016: Get incoming and outgoing event dialogs to work without actors in the context (F.J.Chadburn)
+    #128 25-NOV-2016: Improved usability/speed of Copy AD dialog by providing user choice to open diagrams (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

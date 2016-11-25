@@ -37,7 +37,6 @@ public class CreateDerivedRequirementPanel extends CreateTracedElementPanel {
 	NamedElementMap m_NamedElementMap;
 	private JComboBox<Object> m_FromPackageComboBox = null;
 	private JTextArea m_Specification = null;
-	private IRPProject m_Project;
 	private IRPGraphElement m_SourceGraphElement;
 	private RequirementSelectionPanel m_RequirementSelectionPanel;
 	private JCheckBox m_PopulateOnDiagramCheckBox; 
@@ -216,10 +215,7 @@ public class CreateDerivedRequirementPanel extends CreateTracedElementPanel {
 			final Set<IRPRequirement> forHigherLevelReqts,
 			final IRPProject inTheProject ){
 		
-		super(theSourceGraphElement, forHigherLevelReqts, null);
-		
-		m_Project = inTheProject;
-		m_SourceGraphElement = theSourceGraphElement;
+		super(theSourceGraphElement, forHigherLevelReqts, null, inTheProject);
 		
 		final String preferredRootPackageName = "FunctionalAnalysisPkg";
 		
@@ -610,6 +606,7 @@ public class CreateDerivedRequirementPanel extends CreateTracedElementPanel {
     #049 06-JUL-2016: Derive new requirement now under Functional Analysis not Requirements Analysis menu (F.J.Chadburn)
     #055 13-JUL-2016: Support requirement derivation from simplified AD elements (F.J.Chadburn)
     #103 03-NOV-2016: Allow derivation of requirements with trace-ability from attribute (F.J.Chadburn)
+    #126 25-NOV-2016: Fixes to CreateNewActorPanel to cope better when multiple blocks are in play (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

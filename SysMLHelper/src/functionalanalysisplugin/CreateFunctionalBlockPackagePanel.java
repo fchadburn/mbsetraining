@@ -13,7 +13,9 @@ import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.swing.BorderFactory;
 import javax.swing.GroupLayout;
@@ -39,6 +41,9 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
 	private List<ActorMappingInfo> m_ActorChoices;
 	private RhapsodyComboBox m_BlockInheritanceChoice;
 	private JTextField m_BlockNameTextField;
+	private RhapsodyComboBox m_TestDriverInheritanceChoice;
+	private JTextField m_TestDriverNameTextField;
+	private JCheckBox m_TestDriverCheckBox;
 	private SimulationType m_SimulationType;
 	
 	/**
@@ -144,11 +149,27 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
 		}		
 		
 	}
-	private void updateActorName(){
+	private void updateRelatedElementNames(){
 		
-		for (ActorMappingInfo theInfo : m_ActorChoices) {
-			theInfo.updateToBestActorNamesBasedOn( m_BlockNameTextField.getText() );			
+		String theBlockName = m_BlockNameTextField.getText();
+		
+		for( ActorMappingInfo theInfo : m_ActorChoices ){
+			theInfo.updateToBestActorNamesBasedOn( theBlockName );			
 		}		
+		
+		m_TestDriverNameTextField.setText( 
+				determineTestDriverName( theBlockName ) );
+	}
+	
+	private String determineTestDriverName(
+			String basedOnBlockName ){
+		
+		String theProposedName = GeneralHelpers.determineUniqueNameBasedOn( 
+				GeneralHelpers.toLegalClassName( basedOnBlockName ) + "_TestDriver", 
+				"Class", 
+				m_RootPackage.getProject() );
+		
+		return theProposedName;
 	}
 	
 	private JPanel createTheNameTheBlockPanel(String theBlockName){
@@ -168,17 +189,17 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
 
 					@Override
 					public void changedUpdate(DocumentEvent arg0) {
-						updateActorName();					
+						updateRelatedElementNames();					
 					}
 
 					@Override
 					public void insertUpdate(DocumentEvent arg0) {
-						updateActorName();
+						updateRelatedElementNames();
 					}
 
 					@Override
 					public void removeUpdate(DocumentEvent arg0) {
-						updateActorName();
+						updateRelatedElementNames();
 					}	
 				});
 		
@@ -281,11 +302,11 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
 	    	
 			@SuppressWarnings("unchecked")
 			List<IRPModelElement> theRequirementsAnalysisActors = 
-				m_RequirementsAnalysisPkg.getNestedElementsByMetaClass("Actor", 1).toList();
+				m_RequirementsAnalysisPkg.getNestedElementsByMetaClass( "Actor", 1 ).toList();
 
 			@SuppressWarnings("unchecked")
 			List<IRPModelElement> theExistingActors = 
-					m_RootPackage.getNestedElementsByMetaClass("Actor", 1).toList();
+					m_RootPackage.getNestedElementsByMetaClass( "Actor", 1 ).toList();
 			
 			for (IRPModelElement theActor : theRequirementsAnalysisActors) {
 				
@@ -315,6 +336,7 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
 								theActorCheckBox, 
 								theActorNameTextField, 
 								(IRPActor)theActor,
+								
 								theActor.getProject() );
 				
 				theMappingInfo.updateToBestActorNamesBasedOn( theBlockName );
@@ -336,11 +358,42 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
 			    
 			    theVerticalSequenceGroup.addGroup( theVertical1ParallelGroup );		    		    
 			}
+			
+			m_TestDriverCheckBox = new JCheckBox("Create TestDriver called:");
+			m_TestDriverCheckBox.setEnabled( false );
+			m_TestDriverCheckBox.setSelected( true );
+			
+			m_TestDriverNameTextField = new JTextField( determineTestDriverName( theBlockName ) );
+			m_TestDriverNameTextField.setPreferredSize( new Dimension( 200, 20 ));
+			m_TestDriverNameTextField.setEnabled( false );
+			m_TestDriverNameTextField.setEditable( false );
+			
+			List<IRPModelElement> theExistingBlocks = 
+					GeneralHelpers.findElementsWithMetaClassAndStereotype(
+							"Class", "TestDriver", m_RootPackage);
+			
+			m_TestDriverInheritanceChoice = new RhapsodyComboBox( theExistingBlocks, false );			
+			m_TestDriverInheritanceChoice.setPreferredSize( new Dimension(100, 20) );
+			
+			JLabel theLabel = new JLabel("Inherit from:");
+			
+			theColumn1ParallelGroup.addComponent( m_TestDriverCheckBox );   
+		    theColumn2ParallelGroup.addComponent( m_TestDriverNameTextField );    
+		    theColumn3ParallelGroup.addComponent( theLabel ); 
+		    theColumn4ParallelGroup.addComponent( m_TestDriverInheritanceChoice );
+    
+		    ParallelGroup theVertical1ParallelGroup = theGroupLayout.createParallelGroup( GroupLayout.Alignment.BASELINE);
+		    theVertical1ParallelGroup.addComponent( m_TestDriverCheckBox );
+		    theVertical1ParallelGroup.addComponent( m_TestDriverNameTextField );
+		    theVertical1ParallelGroup.addComponent( theLabel  );	    
+		    theVertical1ParallelGroup.addComponent( m_TestDriverInheritanceChoice );
+		    
+		    theVerticalSequenceGroup.addGroup( theVertical1ParallelGroup );	
 	    }
 		
 		theGroupLayout.setHorizontalGroup( theHorizSequenceGroup );
 		theGroupLayout.setVerticalGroup( theVerticalSequenceGroup );
-
+		
 	    return thePanel;
 	}
 	
@@ -419,6 +472,263 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
 		GeneralHelpers.applyExistingStereotype( "AutoShow", theSD );
 	}
 
+	private static Set<IRPClassifier> getBaseClassesOf( 
+			Set<IRPClassifier> theClassifiers ){
+		
+		Set<IRPClassifier> theBaseClasses = new HashSet<IRPClassifier>();
+		
+		for (IRPModelElement theEl : theClassifiers ){
+			
+			@SuppressWarnings("unchecked")
+			List<IRPModelElement> theGeneralizations = 
+					theEl.getNestedElementsByMetaClass("Generalization", 0).toList();
+			
+			for (IRPModelElement theGenEl : theGeneralizations) {
+				IRPGeneralization theGeneralization = (IRPGeneralization)theGenEl;
+				
+				IRPClassifier theBaseClass = theGeneralization.getBaseClass();
+				theBaseClasses.add( theBaseClass );
+			}
+		}
+		
+		return theBaseClasses;
+	}
+	
+	private static void createBDDFor(
+			IRPClass theAssemblyBlock, 
+			String withName){
+		
+		IRPObjectModelDiagram theBDD = 
+				(IRPObjectModelDiagram) theAssemblyBlock.getOwner().addNewAggr(
+						"ObjectModelDiagram", withName );
+		
+		theBDD.changeTo("Block Definition Diagram");
+		
+		String[] theClassFormatComponent = theBDD.getPropertyValue("Format.Class.DefaultSize").split(",");	
+		
+		int theClassWidth = 400; //Integer.parseInt( theClassFormatComponent[2] );
+		int theClassHeight = Integer.parseInt( theClassFormatComponent[3] );
+		
+		String[] theActorFormatComponent = theBDD.getPropertyValue("Format.Actor.DefaultSize").split(",");	
+		
+		int theActorWidth = Integer.parseInt( theActorFormatComponent[2] );
+		int theActorHeight = Integer.parseInt( theActorFormatComponent[3] );
+		
+		IRPCollection theGraphElsToDraw = FunctionalAnalysisPlugin.getRhapsodyApp().createNewCollection();
+		
+		@SuppressWarnings("unchecked")
+		List<IRPRelation> theRelations = theAssemblyBlock.getRelations().toList();
+		
+		Set<IRPClassifier> theActors = new HashSet<IRPClassifier>();
+		Set<IRPClassifier> theBlocks = new HashSet<IRPClassifier>();
+		
+		boolean toggle = false;
+		
+		for( IRPRelation theRelation : theRelations ){
+			IRPClassifier theOtherClass = theRelation.getOtherClass();
+			
+			if( theOtherClass instanceof IRPActor ){
+				theActors.add( theOtherClass );
+			} else {
+				theBlocks.add( theOtherClass );
+			}
+		}
+		
+		int xPos = 30;
+		int yPos = 40;
+		int xGapActors = 50;
+		int xGapBlocks = -150;
+		int yGap = 70;
+		int yOffset = 180;
+
+		float theActorsWidth = (float) ((theActors.size()*(xGapActors+theActorWidth))/2.0);
+		float theClassesWidth = (float) ((theBlocks.size()*(xGapBlocks+theClassWidth))/2.0);
+		
+		IRPGraphNode theAssemblyNode = theBDD.addNewNodeForElement( 
+				theAssemblyBlock, xPos, yPos, (int) (theActorsWidth + theClassesWidth)*2, theClassHeight);
+		
+		theGraphElsToDraw.addGraphicalItem( theAssemblyNode );
+		
+		yPos = yPos + theClassHeight + yGap;
+
+		for( IRPClassifier theActor : theActors ) {
+			
+			IRPGraphNode theNode;
+			
+			if( toggle ){
+				theNode = theBDD.addNewNodeForElement(
+						theActor, xPos, yPos, theActorWidth, theActorHeight);
+			} else {
+				theNode = theBDD.addNewNodeForElement(
+						theActor, xPos, yPos+yOffset, theActorWidth, theActorHeight);
+			}
+			
+			toggle = !toggle;
+			
+			theGraphElsToDraw.addGraphicalItem( theNode );
+			xPos = xPos + theActorWidth + xGapActors;
+		}
+		
+		for( IRPClassifier theBlock : theBlocks ) {
+			
+			IRPGraphNode theNode;
+			
+			if( toggle ){
+				theNode = theBDD.addNewNodeForElement(
+						theBlock, xPos, yPos, theClassWidth, theClassHeight );
+			} else {
+				theNode = theBDD.addNewNodeForElement(
+						theBlock, xPos, yPos+yOffset, theClassWidth, theClassHeight );
+			}
+			
+			toggle = !toggle;
+			
+			theGraphElsToDraw.addGraphicalItem( theNode );
+			xPos = xPos + theClassWidth + xGapBlocks;
+		}
+		
+		IRPGraphElement theLastEl = 
+				(IRPGraphElement) theGraphElsToDraw.getItem( theGraphElsToDraw.getCount() );
+		
+		int maxX = 1000;
+		
+		if( theLastEl != null && theLastEl instanceof IRPGraphNode ){
+			GraphNodeInfo theNodeInfo = new GraphNodeInfo( (IRPGraphNode) theLastEl );
+			maxX = theNodeInfo.getBottomRightX();
+		}
+
+		Set<IRPClassifier> theBaseClassifiers = getBaseClassesOf( theActors );
+		theBaseClassifiers.addAll( getBaseClassesOf( theBlocks ) );
+		
+		if( !theBaseClassifiers.isEmpty() ){
+			
+			int xGap = (maxX-30)/theBaseClassifiers.size();
+			xPos = 30 + xGap/2;
+			
+			if( toggle ){
+				yPos = yPos + theClassHeight + yGap*2;
+			} else {
+				yPos = yPos + (theClassHeight + yGap*2) + yOffset;
+			}
+			
+			for( IRPClassifier theBaseClassifier : theBaseClassifiers ) {
+				
+
+				IRPGraphNode theNode;
+				
+				theNode = theBDD.addNewNodeForElement(
+						theBaseClassifier, xPos, yPos, theActorWidth, theActorHeight);
+
+				theGraphElsToDraw.addGraphicalItem( theNode );
+				xPos = xPos + xGap;
+			}
+		}
+		
+		theBDD.completeRelations( theGraphElsToDraw, 1 );
+	}
+	
+	private static void createIBDFor(
+			IRPClass theAssemblyBlock, 
+			String withName){
+		
+		IRPStructureDiagram theIBD = (IRPStructureDiagram) theAssemblyBlock.addNewAggr(
+						"StructureDiagram", withName );
+		
+		theIBD.changeTo("Internal Block Diagram");
+		
+		IRPCollection theGraphElsToDraw = FunctionalAnalysisPlugin.getRhapsodyApp().createNewCollection();
+		
+		@SuppressWarnings("unchecked")
+		List<IRPInstance> theParts =
+		    theAssemblyBlock.getNestedElementsByMetaClass("Part", 0).toList();
+
+		int countTestDrivers = 0;
+		int countActors = 0;
+		int countBlocks = 0;
+		int maxCount = 0;
+		
+		// Count actors vs. internal parts vs test drivers
+		for( IRPInstance thePart : theParts ) {
+
+			IRPClassifier theType = thePart.getOtherClass();
+	
+			if( GeneralHelpers.hasStereotypeCalled( "TestDriver", thePart ) ){
+				countTestDrivers++;
+			} else if( theType instanceof IRPActor ){
+				countActors++;
+			} else {
+				countBlocks++;
+			}
+		}
+		
+		if( countBlocks > countActors ){
+			maxCount = countBlocks;
+		} else {
+			maxCount = countActors;
+		}
+		
+		int xPos = 30;
+		int yPos = 40;
+		int nWidth = 400;
+		int nHeight = 120;
+		int xGap = 30;
+		int yGap = 200;
+
+		float xMiddle = (float) ((float) ((float)(maxCount*(xGap+nWidth))/2.0)+(xGap/2.0));
+		
+		xPos = (int) (xMiddle - nWidth/2);
+		
+		if( countTestDrivers>0 ){
+			// Do Test Driver first
+			for( IRPInstance thePart : theParts ) {
+
+				if( GeneralHelpers.hasStereotypeCalled( "TestDriver", thePart ) ){
+					IRPGraphNode theNode = theIBD.addNewNodeForElement( thePart, xPos, yPos, nWidth, nHeight );
+					theGraphElsToDraw.addGraphicalItem( theNode );
+					xPos = xPos + nWidth + xGap;
+				}
+			}
+
+			xPos = 30;
+			yPos = yPos + yGap;
+		}
+
+		if( countActors>0 ){
+			// Now do actors
+			for( IRPInstance thePart : theParts ) {
+
+				IRPClassifier theType = thePart.getOtherClass();
+				
+				if( theType instanceof IRPActor ){			
+					IRPGraphNode theNode = theIBD.addNewNodeForElement( thePart, xPos, yPos, nWidth, nHeight );
+					theGraphElsToDraw.addGraphicalItem( theNode );
+					xPos = xPos + nWidth + xGap;
+				}
+			}
+		
+			xPos = 30 + (maxCount/2)*(nWidth+xGap);	
+			
+		}
+
+		xPos = (int) (xMiddle - nWidth/2);
+		yPos = yPos + yGap;
+		
+		if( countBlocks>0 ){
+			// Do normal blocks last
+			for( IRPInstance thePart : theParts ) {
+
+				IRPClassifier theType = thePart.getOtherClass();
+				
+				if( !GeneralHelpers.hasStereotypeCalled( "TestDriver", thePart ) && !( theType instanceof IRPActor )){	
+					theIBD.addNewNodeForElement( thePart, xPos, yPos, nWidth, nHeight );
+					xPos = xPos + nWidth + xGap;
+				}
+			}
+		}
+		
+		theIBD.completeRelations( theGraphElsToDraw, 1 );
+	}
+	
 	@Override
 	protected void performAction(){
 		
@@ -474,14 +784,13 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
 			GeneralHelpers.applyExistingStereotype( "LogicalSystem", theLogicalSystemBlock );
 			theLogicalSystemBlock.changeTo( "Block" );
 
-			IRPModelElement theChosenOne = m_BlockInheritanceChoice.getSelectedRhapsodyItem();
-
 			IRPProject theProject = theLogicalSystemBlock.getProject();
-			
 			
 			// only apply generalisation to create the state chart if simulation applies
 			if( m_SimulationType==SimulationType.FullSim || 
 			    m_SimulationType==SimulationType.SimpleSim ){
+				
+				IRPModelElement theChosenOne = m_BlockInheritanceChoice.getSelectedRhapsodyItem();
 				
 				if (theChosenOne==null ){
 					addGeneralization( theLogicalSystemBlock, "TimeElapsedBlock", theProject );
@@ -547,31 +856,34 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
 				}
 			}
 			
-			IRPObjectModelDiagram theBDD = 
-					theFunctionalBlockPkg.addObjectModelDiagram(
-							"BDD - " + theSystemAssemblyBlock.getName() );
-			
-			theBDD.changeTo("Block Definition Diagram");
-
-			IRPStructureDiagram theIBD = 
-					(IRPStructureDiagram) theSystemAssemblyBlock.addNewAggr(
-							"StructureDiagram", "IBD - " + theSystemAssemblyBlock.getName() );
-			
-			theIBD.changeTo("Internal Block Diagram");
-			
 			if( m_SimulationType==SimulationType.FullSim ||
 				m_SimulationType==SimulationType.SimpleSim ){			
 
 				IRPPanelDiagram thePD = 
 						theTestPackage.addPanelDiagram(
-								"PD - " + theLogicalSystemBlock.getName());
+								"PD - " + theLogicalSystemBlock.getName() );
 				
 				if( m_SimulationType==SimulationType.FullSim ){
 					
-					IRPClass theTesterBlock = theTestPackage.addClass( theName + "_Tester" );
+					IRPClass theTesterBlock = 
+							theTestPackage.addClass( m_TestDriverNameTextField.getText() );
+					
 					GeneralHelpers.applyExistingStereotype( "TestDriver", theTesterBlock );
+					
 					theTesterBlock.changeTo( "Block" );
-					addGeneralization( theTesterBlock, "TestDriverBlock", theProject );
+					
+					IRPModelElement theTestDriverBase = 
+							m_TestDriverInheritanceChoice.getSelectedRhapsodyItem();
+					
+					if (theTestDriverBase==null ){
+						addGeneralization( theTesterBlock, "TestDriverBlock", theProject );
+						
+					} else {
+						theTesterBlock.addGeneralization( 
+								(IRPClassifier) theTestDriverBase );
+						
+						Logger.writeLine( theTestDriverBase, "was the chosen test driver base" );
+					}
 
 					// Make the TestDriver a part of the UsageDomain block
 					IRPInstance theTestDriverPart = 
@@ -583,14 +895,17 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
 					GeneralHelpers.applyExistingStereotype( "TestDriver", theTestDriverPart );
 
 					for( ActorMappingInfo theInfo : m_ActorChoices ){
-						theInfo.performActorPartCreationIfSelectedTo( theSystemAssemblyBlock );
+						
+						theInfo.performActorPartCreationIfSelectedIn( 
+								theSystemAssemblyBlock,
+								theLogicalSystemBlock );		
 					}
 
 				} else {
 					// assume panel diagram simulation will be used (esp. for simple sim)
 					GeneralHelpers.applyExistingStereotype("AutoShow", thePD);
-				}
-
+				}				
+				
 				// Add a sequence diagram
 				createSequenceDiagramFor(
 						theSystemAssemblyBlock, 
@@ -608,6 +923,14 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
 				// Add a component
 				addAComponentWith( theName, theTestPackage, theSystemAssemblyBlock );
 			}
+			
+			createBDDFor(
+					theSystemAssemblyBlock,
+					"BDD - " + theSystemAssemblyBlock.getName() );
+
+			createIBDFor( 
+					theSystemAssemblyBlock, 
+					"IBD - " + theSystemAssemblyBlock.getName() );
 			
 			CreateGatewayProjectPanel.launchThePanel( 
 					theProject, 
@@ -643,6 +966,8 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
     #111 13-NOV-2016: Added new Simple Sim (Guard only) functional analysis structure option (F.J.Chadburn)
     #112 13-NOV-2016: Added new No Sim functional analysis structure option (F.J.Chadburn)
     #118 13-NOV-2016: Default FunctionalAnalysisPkg tags now set in Config.properties file (F.J.Chadburn)
+    #120 25-NOV-2016: Enable TestDriver inheritance in the FullSim block creation dialog (F.J.Chadburn)
+    #131 25-NOV-2016: Added initial auto-populate of IBD/BDD (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

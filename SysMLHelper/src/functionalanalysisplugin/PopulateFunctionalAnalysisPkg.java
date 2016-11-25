@@ -6,7 +6,6 @@ import generalhelpers.PopulatePkg;
 import generalhelpers.UserInterfaceHelpers;
 
 import javax.swing.JDialog;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 import requirementsanalysisplugin.PopulateRequirementsAnalysisPkg;
@@ -209,7 +208,6 @@ public class PopulateFunctionalAnalysisPkg extends PopulatePkg {
 		}
 	}
 	
-	
 	public static void addNewActorToPackageUnderDevelopement(
 			IRPModelElement theSelectedEl ){
 		
@@ -220,36 +218,9 @@ public class PopulateFunctionalAnalysisPkg extends PopulatePkg {
 		final IRPModelElement theRootPackage = 
 				theProject.findElementsByFullName( rootPackageName, "Package" );
 		
-		final IRPPackage thePackageUnderDev = 
-				FunctionalAnalysisSettings.getPackageUnderDev( theProject );
-
-		final IRPClass theBlockUnderDev = 
-				FunctionalAnalysisSettings.getBlockUnderDev( 
-						theProject );
-		
-		Logger.writeLine("Add new actor part to " + Logger.elementInfo( thePackageUnderDev ) + " was invoked");
-		
-		javax.swing.SwingUtilities.invokeLater(new Runnable() {
-
-			@Override
-			public void run() {
-				
-				JFrame.setDefaultLookAndFeelDecorated( true );
-
-				JFrame frame = new JFrame("Create new actor connected to " 
-						+ theBlockUnderDev.getUserDefinedMetaClass() + " called " + theBlockUnderDev.getName());
-				
-				frame.setDefaultCloseOperation( JFrame.DISPOSE_ON_CLOSE );
-
-				CreateNewActorPanel thePanel = 
-						new CreateNewActorPanel( theBlockUnderDev.getName(), (IRPPackage)theRootPackage);
-
-				frame.setContentPane( thePanel );
-				frame.pack();
-				frame.setLocationRelativeTo( null );
-				frame.setVisible( true );
-			}
-		});
+		if( theRootPackage != null ){
+			CreateNewActorPanel.launchThePanel( theProject, theRootPackage );
+		}
 	}
 	
 	public static void copyActivityDiagrams(IRPProject forProject){
@@ -304,6 +275,7 @@ public class PopulateFunctionalAnalysisPkg extends PopulatePkg {
 			boolean result = UserInterfaceHelpers.askAQuestion( infoMsg );
 			
 			if( result==true ){
+				
 				addProfileIfNotPresentAndMakeItApplied( toTheProfileName, (IRPPackage)theFunctionalAnalysisPkg );
 				
 				IRPModelElement theProfileToDelete = forProject.findAllByName( theProfileName, "Profile" );
@@ -319,7 +291,7 @@ public class PopulateFunctionalAnalysisPkg extends PopulatePkg {
 	}
 	
 	public static void switchToMoreDetailedAD(
-			IRPActivityDiagram theDiagram) {
+			IRPActivityDiagram theDiagram ) {
 		
 		final String theStereotypeName = "MoreDetailedAD";
 		
@@ -333,9 +305,8 @@ public class PopulateFunctionalAnalysisPkg extends PopulatePkg {
 			IRPFlowchart theFC = theDiagram.getFlowchart();
 			theFC.setIsAnalysisOnly( 1 );
 			
-			if (theDiagram.isOpen()==1){
+			if( theDiagram.isOpen()==1 ){
 				theDiagram.closeDiagram();
-				theDiagram.highLightElement();
 			}
 			
 			Logger.writeLine( "Applied stereotype «" + theStereotypeName + "» to " + 
@@ -371,7 +342,9 @@ public class PopulateFunctionalAnalysisPkg extends PopulatePkg {
     #112 13-NOV-2016: Added new No Sim functional analysis structure option (F.J.Chadburn)
     #114 13-NOV-2016: DesignSynthesisProfile to create publish/subscribe flow ports now added by default (F.J.Chadburn)
     #115 13-NOV-2016: Removed use of isEnableBlockSelectionByUser tag and <<LogicalSystem>> by helper (F.J.Chadburn)
-
+    #126 25-NOV-2016: Fixes to CreateNewActorPanel to cope better when multiple blocks are in play (F.J.Chadburn)
+    #128 25-NOV-2016: Improved usability/speed of Copy AD dialog by providing user choice to open diagrams (F.J.Chadburn)
+    
     This file is part of SysMLHelperPlugin.
 
     SysMLHelperPlugin is free software: you can redistribute it and/or modify

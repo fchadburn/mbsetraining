@@ -35,14 +35,6 @@ public class CreateOperationPanel extends CreateTracedElementPanel {
 		// cast to IRPRequirement
 		@SuppressWarnings("unchecked")
 		Set<IRPRequirement> theSelectedReqts = (Set<IRPRequirement>)(Set<?>) theMatchingEls;
-
-		boolean isPopulateOptionHidden = 
-				FunctionalAnalysisSettings.getIsPopulateOptionHidden(
-						theActiveProject );
-		
-		boolean isPopulate = 
-				FunctionalAnalysisSettings.getIsPopulateWantedByDefault(
-						theActiveProject );
 		
 		if (GeneralHelpers.doUnderlyingModelElementsIn( theSelectedGraphEls, "Requirement" )){
 			
@@ -50,9 +42,7 @@ public class CreateOperationPanel extends CreateTracedElementPanel {
 			launchThePanel(	
 					theSelectedGraphEls.get(0), 
 					theSelectedReqts, 
-					theActiveProject, 
-					isPopulate, 
-					isPopulateOptionHidden );
+					theActiveProject );
 		} else {
 			
 			// launch a dialog for each selected element that is not a requirement
@@ -66,9 +56,7 @@ public class CreateOperationPanel extends CreateTracedElementPanel {
 					launchThePanel(	
 							theGraphEl, 
 							theSelectedReqts, 
-							theActiveProject, 
-							isPopulate, 
-							isPopulateOptionHidden );
+							theActiveProject );
 				}		
 			}
 		}
@@ -80,29 +68,17 @@ public class CreateOperationPanel extends CreateTracedElementPanel {
 		
 		IRPProject theActiveProject = theDiagram.getProject();
 		
-		boolean isPopulateOptionHidden = 
-				FunctionalAnalysisSettings.getIsPopulateOptionHidden(
-						theActiveProject );
-		
-		boolean isPopulate = 
-				FunctionalAnalysisSettings.getIsPopulateWantedByDefault(
-						theActiveProject );
-		
 		// only launch a dialog for non requirement elements
 		launchThePanel(	
 				theDiagram, 
 				withReqtsAlsoAdded, 
-				theActiveProject, 
-				isPopulate, 
-				isPopulateOptionHidden );
+				theActiveProject );
 	}
 	
 	public static void launchThePanel(
 			final IRPGraphElement selectedDiagramEl, 
 			final Set<IRPRequirement> withReqtsAlsoAdded,
-			final IRPProject inProject,
-			final boolean isPopulateSelected,
-			final boolean isPopulateOptionHidden ){
+			final IRPProject inProject ){
 	
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 
@@ -122,9 +98,7 @@ public class CreateOperationPanel extends CreateTracedElementPanel {
 				CreateOperationPanel thePanel = new CreateOperationPanel(
 						selectedDiagramEl,
 						withReqtsAlsoAdded,
-						theLogicalSystemBlock,
-						isPopulateSelected,
-						isPopulateOptionHidden );
+						theLogicalSystemBlock );
 
 				frame.setContentPane( thePanel );
 				frame.pack();
@@ -137,9 +111,7 @@ public class CreateOperationPanel extends CreateTracedElementPanel {
 	public static void launchThePanel(
 			final IRPModelElement theModelElement, 
 			final Set<IRPRequirement> withReqtsAlsoAdded,
-			final IRPProject inProject,
-			final boolean isPopulateSelected,
-			final boolean isPopulateOptionHidden ){
+			final IRPProject inProject ){
 	
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 
@@ -159,9 +131,7 @@ public class CreateOperationPanel extends CreateTracedElementPanel {
 				CreateOperationPanel thePanel = new CreateOperationPanel(
 						theModelElement,
 						withReqtsAlsoAdded,
-						theLogicalSystemBlock,
-						isPopulateSelected,
-						isPopulateOptionHidden );
+						theLogicalSystemBlock );
 
 				frame.setContentPane( thePanel );
 				frame.pack();
@@ -174,45 +144,35 @@ public class CreateOperationPanel extends CreateTracedElementPanel {
 	public CreateOperationPanel(
 			IRPGraphElement forSourceGraphElement, 
 			Set<IRPRequirement> withReqtsAlsoAdded,
-			IRPClassifier onTargetBlock,
-			boolean isPopulateSelected,
-			boolean isPopulateOptionHidden ) {
+			IRPClassifier onTargetBlock ) {
 		
-		super(forSourceGraphElement, withReqtsAlsoAdded, onTargetBlock);
+		super(forSourceGraphElement, withReqtsAlsoAdded, onTargetBlock, onTargetBlock.getProject());
 		 
 		IRPModelElement theModelObject = m_SourceGraphElement.getModelObject();
 		
 		createCommonContent(
 				theModelObject, 
 				withReqtsAlsoAdded, 
-				onTargetBlock, 
-				isPopulateSelected, 
-				isPopulateOptionHidden);
+				onTargetBlock );
 	}
 	
 	public CreateOperationPanel(
 			IRPModelElement forSourceModelElement, 
 			Set<IRPRequirement> withReqtsAlsoAdded,
-			IRPClassifier onTargetBlock,
-			boolean isPopulateSelected,
-			boolean isPopulateOptionHidden ) {
+			IRPClassifier onTargetBlock ) {
 		
-		super(forSourceModelElement, withReqtsAlsoAdded, onTargetBlock);
+		super(forSourceModelElement, withReqtsAlsoAdded, onTargetBlock, onTargetBlock.getProject());
 		
 		createCommonContent(
 				forSourceModelElement, 
 				withReqtsAlsoAdded, 
-				onTargetBlock, 
-				isPopulateSelected, 
-				isPopulateOptionHidden);
+				onTargetBlock );
 	}
 	
 	private void createCommonContent(
 			IRPModelElement forSourceModelElement,
 			Set<IRPRequirement> withReqtsAlsoAdded,
-			IRPClassifier onTargetBlock,
-			boolean isPopulateSelected,
-			boolean isPopulateOptionHidden ){
+			IRPClassifier onTargetBlock ){
 		
 		String theSourceText = GeneralHelpers.getActionTextFrom( forSourceModelElement );	
 		
@@ -238,9 +198,8 @@ public class CreateOperationPanel extends CreateTracedElementPanel {
 		theNamePanel.setAlignmentX(LEFT_ALIGNMENT);
 		
 		m_CallOperationIsNeededCheckBox = new JCheckBox("Populate on diagram?");
-		m_CallOperationIsNeededCheckBox.setSelected( isPopulateSelected );
-		m_CallOperationIsNeededCheckBox.setVisible( !isPopulateOptionHidden );
-		
+		setupPopulateCheckbox( m_CallOperationIsNeededCheckBox );
+				
 		JPanel thePageStartPanel = new JPanel();
 		thePageStartPanel.setLayout( new BoxLayout( thePageStartPanel, BoxLayout.X_AXIS ) );
 		thePageStartPanel.add( theNamePanel );
@@ -315,6 +274,8 @@ public class CreateOperationPanel extends CreateTracedElementPanel {
     #093 23-AUG-2016: Added isPopulateOptionHidden tag to allow hiding of the populate check-box on dialogs (F.J.Chadburn)
     #099 14-SEP-2016: Allow event and operation creation from right-click on AD and RD diagram canvas (F.J.Chadburn)
     #115 13-NOV-2016: Removed use of isEnableBlockSelectionByUser tag and <<LogicalSystem>> by helper (F.J.Chadburn)
+    #125 25-NOV-2016: AutoRipple used in UpdateTracedAttributePanel to keep check and FlowPort name updated (F.J.Chadburn)
+    #130 25-NOV-2016: Improved consistency in handling of isPopulateOptionHidden and isPopulateWantedByDefault tags (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

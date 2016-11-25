@@ -2,7 +2,6 @@ package functionalanalysisplugin;
 
 import generalhelpers.GeneralHelpers;
 import generalhelpers.Logger;
-import generalhelpers.TraceabilityHelper;
 import generalhelpers.UserInterfaceHelpers;
 
 import java.awt.BorderLayout;
@@ -32,13 +31,15 @@ public class UpdateTracedAttributePanel extends CreateTracedElementPanel {
 	protected JTextField m_InitialValueTextField = null;
 	private JCheckBox m_CheckOperationCheckBox;
 	private String m_CheckOpName;
+	private IRPOperation m_ExistingCheckOp = null;
+	private IRPSysMLPort m_ExistingFlowPort = null;
 		
-	public UpdateTracedAttributePanel(
+	private UpdateTracedAttributePanel(
 			IRPAttribute forExistingAttribute, 
 			final Set<IRPRequirement> withReqtsAlsoAdded,
 			IRPClassifier onTargetBlock) {
 		
-		super( forExistingAttribute, withReqtsAlsoAdded, onTargetBlock );
+		super( forExistingAttribute, withReqtsAlsoAdded, onTargetBlock, onTargetBlock.getProject() );
 		
 		String theProposedName = forExistingAttribute.getName();
 			
@@ -79,6 +80,9 @@ public class UpdateTracedAttributePanel extends CreateTracedElementPanel {
 						updateNames();
 					}	
 				});
+		
+		m_ExistingCheckOp = GeneralHelpers.getExistingCheckOp( forExistingAttribute );
+		m_ExistingFlowPort = GeneralHelpers.getExistingFlowPort( forExistingAttribute );
 		
 		updateNames();
 		
@@ -150,12 +154,17 @@ public class UpdateTracedAttributePanel extends CreateTracedElementPanel {
 	
 	private void updateNames(){
 		
-		m_CheckOpName = determineBestCheckOperationNameFor(
+		m_CheckOpName = GeneralHelpers.determineBestCheckOperationNameFor(
 				(IRPClassifier)m_TargetOwningElement, 
 				m_ChosenNameTextField.getText() );
 		
-		m_CheckOperationCheckBox.setText(
-				"Add a '" +  m_CheckOpName + "' operation to the block that returns the attribute value");
+		if( m_ExistingCheckOp==null ){
+			m_CheckOperationCheckBox.setText(
+					"Add a new '" +  m_CheckOpName + "' operation to the block that returns the attribute value");			
+		} else {
+			m_CheckOperationCheckBox.setText(
+					"Update existing '" +  m_CheckOpName + "' operation on the block that returns the attribute value");			
+		}
 	}
 	
 	@Override
@@ -214,63 +223,66 @@ public class UpdateTracedAttributePanel extends CreateTracedElementPanel {
 	    return true;
 	}
 	
-
-	private IRPOperation getExistingCheckOp( 
-			IRPAttribute forTheAttribute ){
-	
-		IRPOperation theExistingCheckOp = null;
-		
-		Set<IRPModelElement> theEls = 
-				TraceabilityHelper.getElementsThatHaveStereotypedDependencyRelationsFrom(
-						forTheAttribute, "AutoRipple" );
-		
-		for( IRPModelElement theEl : theEls ) {
-			
-			if( (theEl instanceof IRPOperation) && theEl.getName().contains("check") ){
-				theExistingCheckOp = (IRPOperation)theEl;
-			}
-		}
-		return theExistingCheckOp;
-		
-	}
-	
 	@Override
 	protected void performAction() {
 		
 		// do silent check first
 		if( checkValidity( false ) ){
 
-			if( m_SourceModelElement instanceof IRPAttribute ){
+			IRPAttribute theExistingAttribute = (IRPAttribute)m_SourceModelElement;
 
-				IRPAttribute theExistingAttribute = (IRPAttribute)m_SourceModelElement;
+			theExistingAttribute.setName( m_ChosenNameTextField.getText() );				
+			theExistingAttribute.highLightElement();
+			theExistingAttribute.setDefaultValue( m_InitialValueTextField.getText() );
 
-				theExistingAttribute.setName( m_ChosenNameTextField.getText() );				
+			// check if flow requires renaming
+			if( m_ExistingFlowPort != null ){
 				
-				theExistingAttribute.highLightElement();
-				theExistingAttribute.setDefaultValue( m_InitialValueTextField.getText() );
-				
-				if( m_CheckOperationCheckBox.isSelected() ){
-					IRPOperation theExistingCheckOp = getExistingCheckOp( theExistingAttribute );
+				String theDesiredFlowPortName = theExistingAttribute.getName();
+			
+				if( !m_ExistingFlowPort.getName().equals( theDesiredFlowPortName ) ){
 					
-					if( theExistingCheckOp==null ){
-						
-						List<IRPRequirement> selectedReqtsList = 
-								m_RequirementsPanel.getSelectedRequirementsList();
-						
-						addTraceabilityDependenciesTo( theExistingAttribute, selectedReqtsList );
-						
-						if( m_CheckOperationCheckBox.isSelected() ){
-							IRPOperation theCheckOp = addCheckOperationFor( theExistingAttribute, m_CheckOpName );
-							addTraceabilityDependenciesTo( theCheckOp, selectedReqtsList );	
-							theCheckOp.highLightElement();
-						}
-					}
+					Logger.writeLine( "Renaming " + Logger.elementInfo( m_ExistingFlowPort ) + 
+							" to " + theDesiredFlowPortName );
+					
+					m_ExistingFlowPort.setName( theDesiredFlowPortName );
+				} else {
+					Logger.writeLine( "Existing " + Logger.elementInfo( m_ExistingFlowPort ) + 
+							" is already correctly named" );					
 				}
-			}			
-		} else {
-			Logger.writeLine("Error in CreateOperationPanel.performAction, checkValidity returned false");
-		}	
-		
+			}
+			
+			if( m_CheckOperationCheckBox.isSelected() ){
+
+				List<IRPRequirement> selectedReqtsList = 
+						m_RequirementsPanel.getSelectedRequirementsList();
+
+				Logger.writeLine(theExistingAttribute, "is the existing attribute");
+
+				if( m_ExistingCheckOp == null ){
+
+					addTraceabilityDependenciesTo( theExistingAttribute, selectedReqtsList );
+
+					if( m_CheckOperationCheckBox.isSelected() ){
+
+						IRPOperation theCheckOp = addCheckOperationFor( theExistingAttribute, m_CheckOpName );
+						addTraceabilityDependenciesTo( theCheckOp, selectedReqtsList );	
+						theCheckOp.highLightElement();
+					}
+
+				} else { // m_ExistingCheckOp != null
+
+					if( !m_ExistingCheckOp.getName().equals( m_CheckOpName ) ){
+
+						Logger.writeLine( "Changed the name of " + Logger.elementInfo( m_ExistingCheckOp ) + " to " + m_CheckOpName );
+						m_ExistingCheckOp.setName( m_CheckOpName );
+						m_ExistingCheckOp.setBody("OM_RETURN( " + m_ChosenNameTextField.getText() + " );");
+					}
+
+					addTraceabilityDependenciesTo( m_ExistingCheckOp, selectedReqtsList );
+				}
+			}
+		}			
 	}
 }
 
@@ -280,7 +292,8 @@ public class UpdateTracedAttributePanel extends CreateTracedElementPanel {
     Change history:
     #083 09-AUG-2016: (new) Add an Update attribute menu option and panel with add check operation option (F.J.Chadburn)
     #090 15-AUG-2016: Fix check operation name issue introduced in fixes #083 and #084 (F.J.Chadburn)
-    
+    #125 25-NOV-2016: AutoRipple used in UpdateTracedAttributePanel to keep check and FlowPort name updated (F.J.Chadburn)
+
     This file is part of SysMLHelperPlugin.
 
     SysMLHelperPlugin is free software: you can redistribute it and/or modify

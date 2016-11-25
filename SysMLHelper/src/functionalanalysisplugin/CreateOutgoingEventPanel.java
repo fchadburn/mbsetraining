@@ -79,7 +79,7 @@ public class CreateOutgoingEventPanel extends CreateTracedElementPanel {
 			IRPPort toDestinationActorPort,
 			IRPPackage thePackageForEvent ) {
 		
-		super( forSourceGraphElement, withReqtsAlsoAdded, onTargetBlock );
+		super( forSourceGraphElement, withReqtsAlsoAdded, onTargetBlock, onTargetBlock.getProject() );
 
 		Logger.writeLine("CreateOutgoingEventPanel constructor called for " + Logger.elementInfo( forSourceGraphElement.getModelObject() ) );
 		
@@ -102,7 +102,7 @@ public class CreateOutgoingEventPanel extends CreateTracedElementPanel {
 			IRPPort toDestinationActorPort,
 			IRPPackage thePackageForEvent ) {
 		
-		super( forSourceModelElement, withReqtsAlsoAdded, onTargetBlock );
+		super( forSourceModelElement, withReqtsAlsoAdded, onTargetBlock, onTargetBlock.getProject() );
 		
 		String theSourceText = "Tbd";		
 		
@@ -152,17 +152,7 @@ public class CreateOutgoingEventPanel extends CreateTracedElementPanel {
 		setBorder( BorderFactory.createEmptyBorder( 10, 10, 10, 10 ) );
 
 		m_ActionOnDiagramIsNeededCheckBox = new JCheckBox("Populate on diagram?");
-	
-		boolean isPopulateOptionHidden = 
-				FunctionalAnalysisSettings.getIsPopulateOptionHidden(
-						thePackageForEvent.getProject() );
-		
-		boolean isPopulate = 
-				FunctionalAnalysisSettings.getIsPopulateWantedByDefault(
-						thePackageForEvent.getProject() );
-		
-		m_ActionOnDiagramIsNeededCheckBox.setSelected( isPopulate );
-		m_ActionOnDiagramIsNeededCheckBox.setVisible( !isPopulateOptionHidden );
+		setupPopulateCheckbox( m_ActionOnDiagramIsNeededCheckBox );
 		
 		JPanel thePageStartPanel = new JPanel();
 		thePageStartPanel.setLayout( new BoxLayout( thePageStartPanel, BoxLayout.X_AXIS ) );
@@ -534,6 +524,8 @@ public class CreateOutgoingEventPanel extends CreateTracedElementPanel {
     #093 23-AUG-2016: Added isPopulateOptionHidden tag to allow hiding of the populate check-box on dialogs (F.J.Chadburn)
     #099 14-SEP-2016: Allow event and operation creation from right-click on AD and RD diagram canvas (F.J.Chadburn)
     #117 13-NOV-2016: Get incoming and outgoing event dialogs to work without actors in the context (F.J.Chadburn)
+    #125 25-NOV-2016: AutoRipple used in UpdateTracedAttributePanel to keep check and FlowPort name updated (F.J.Chadburn)
+    #130 25-NOV-2016: Improved consistency in handling of isPopulateOptionHidden and isPopulateWantedByDefault tags (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

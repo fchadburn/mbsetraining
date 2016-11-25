@@ -8,10 +8,10 @@ import generalhelpers.UserInterfaceHelpers;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.util.List;
-
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JCheckBox;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -28,17 +28,59 @@ public class CreateNewActorPanel extends CreateStructuralElementPanel {
 	private IRPPackage m_RootPackage;
 	protected JTextField m_ChosenNameTextField = null;
 	private ActorMappingInfo m_ClassifierMappingInfo;
+	private IRPClass m_BlockToConnectTo = null;
 	
-	public CreateNewActorPanel(String forBlockName, IRPPackage theRootPackage) {
+	public static void launchThePanel(
+			IRPProject theProject,
+			final IRPModelElement theRootPackage ){
+		
+		final IRPPackage thePackageUnderDev = 
+				FunctionalAnalysisSettings.getPackageUnderDev( 
+						theProject );
+
+		final IRPClass theBlockUnderDev = 
+				FunctionalAnalysisSettings.getBlockUnderDev( 
+						theProject );
+		
+		Logger.writeLine("Add new actor part to " + Logger.elementInfo( thePackageUnderDev ) + " was invoked");
+		
+		javax.swing.SwingUtilities.invokeLater(new Runnable() {
+
+			@Override
+			public void run() {
+				
+				JFrame.setDefaultLookAndFeelDecorated( true );
+
+				JFrame frame = new JFrame("Create new actor connected to " 
+						+ theBlockUnderDev.getUserDefinedMetaClass() + " called " + theBlockUnderDev.getName());
+				
+				frame.setDefaultCloseOperation( JFrame.DISPOSE_ON_CLOSE );
+
+				CreateNewActorPanel thePanel = 
+						new CreateNewActorPanel( 
+								theBlockUnderDev, (IRPPackage)theRootPackage );
+
+				frame.setContentPane( thePanel );
+				frame.pack();
+				frame.setLocationRelativeTo( null );
+				frame.setVisible( true );
+			}
+		});
+	}
+	
+	public CreateNewActorPanel(
+			IRPClass forBlockToConnectTo, 
+			IRPPackage theRootPackage ){
 		
 		super();
 
 		m_RootPackage = theRootPackage;
+		m_BlockToConnectTo = forBlockToConnectTo;
 		
 		setLayout( new BorderLayout(10,10) );
 		setBorder( BorderFactory.createEmptyBorder( 10, 10, 10, 10 ) );
 		
-		add( createActorChoicePanel( forBlockName ), BorderLayout.PAGE_START );
+		add( createActorChoicePanel( m_BlockToConnectTo.getName() ), BorderLayout.PAGE_START );
 		add( createOKCancelPanel(), BorderLayout.PAGE_END );
 	}
 
@@ -48,19 +90,18 @@ public class CreateNewActorPanel extends CreateStructuralElementPanel {
 		thePanel.setLayout( new BoxLayout(thePanel, BoxLayout.X_AXIS ) );	
 		
 		m_ChosenNameTextField = new JTextField();
-		m_ChosenNameTextField.setPreferredSize( new Dimension( 300,20 ) );
+		m_ChosenNameTextField.setPreferredSize( new Dimension( 300, 20 ) );
 
 		@SuppressWarnings("unchecked")
 		List<IRPModelElement> theExistingActors = 
-				m_RootPackage.getNestedElementsByMetaClass("Actor", 1).toList();
+				m_RootPackage.getNestedElementsByMetaClass( "Actor", 1 ).toList();
 		
-		RhapsodyComboBox theInheritedActorComboBox = new RhapsodyComboBox(theExistingActors, false);
+		RhapsodyComboBox theInheritedActorComboBox = 
+				new RhapsodyComboBox( theExistingActors, false );
 		
-		//theInheritedActorComboBox.setPreferredSize(new Dimension(100, 20));
-		
-		JCheckBox theActorCheckBox = new JCheckBox("Create actor called:");
+		JCheckBox theActorCheckBox = new JCheckBox( "Create actor called:" );
 		    
-		theActorCheckBox.setSelected(true);
+		theActorCheckBox.setSelected( true );
 			
 		m_ClassifierMappingInfo = 
 				new ActorMappingInfo(
@@ -72,7 +113,7 @@ public class CreateNewActorPanel extends CreateStructuralElementPanel {
 		
 		m_ClassifierMappingInfo.updateToBestActorNamesBasedOn( theBlockName );
 		
-	    JLabel theLabel = new JLabel("Inherit from:");
+	    JLabel theLabel = new JLabel( "Inherit from:" );
 	    
 	    thePanel.add( theActorCheckBox );
 	    thePanel.add( m_ChosenNameTextField );
@@ -124,15 +165,18 @@ public class CreateNewActorPanel extends CreateStructuralElementPanel {
 	@Override
 	protected void performAction() {
 		
-		if (checkValidity( false )){
+		if( checkValidity( false ) ){
 			
-			IRPInstance partUnderDev = 
-					FunctionalAnalysisSettings.getPartUnderDev(
-							m_RootPackage.getProject() );
+			IRPClass theAssemblyBlock = 
+					FunctionalAnalysisSettings.getBuildingBlock( m_RootPackage );
 			
-			if (partUnderDev != null){
-				IRPClass theUsageBlock = (IRPClass)partUnderDev.getOwner();
-				m_ClassifierMappingInfo.performActorPartCreationIfSelectedTo( theUsageBlock );
+			if( m_RootPackage != null ){
+				
+				m_ClassifierMappingInfo.performActorPartCreationIfSelectedIn( 
+						theAssemblyBlock, m_BlockToConnectTo );
+			
+			} else {
+				Logger.writeLine("Error in CreateNewActorPanel.performAction, unable to find " + Logger.elementInfo( m_RootPackage ) );
 			}
 						
 		} else {
@@ -149,6 +193,7 @@ public class CreateNewActorPanel extends CreateStructuralElementPanel {
     #029 01-JUN-2016: Add Warning Dialog helper to UserInterfaceHelpers (F.J.Chadburn)
     #030 01-JUN-2016: Improve legal name checking across helpers (F.J.Chadburn)
     #035 15-JUN-2016: New panel to configure requirements package naming and gateway set-up (F.J.Chadburn)
+    #126 25-NOV-2016: Fixes to CreateNewActorPanel to cope better when multiple blocks are in play (F.J.Chadburn)
     
     This file is part of SysMLHelperPlugin.
 

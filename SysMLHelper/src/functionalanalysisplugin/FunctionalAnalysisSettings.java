@@ -17,7 +17,9 @@ public class FunctionalAnalysisSettings {
 	private static final String tagNameForIsPopulateWantedByDefault = "isPopulateWantedByDefault";
 	private static final String tagNameForPackageForEventsAndInterfaces = "packageForEventsAndInterfaces";
 	private static final String tagNameForPackageForActorsAndTest = "packageForActorsAndTest";
-
+	private static final String tagNameForIsSendEventViaPanelOptionEnabled = "isSendEventViaPanelOptionEnabled";
+	private static final String tagNameForIsSendEventViaPanelWantedByDefault = "isSendEventViaPanelWantedByDefault";
+	
 	public static IRPPackage getPackageUnderDev(IRPProject inTheProject){
 		
 		IRPPackage thePackage = null;
@@ -262,42 +264,6 @@ public class FunctionalAnalysisSettings {
 		return theWorkingPkg;
 	}
 	
-	private static IRPClass launchDialogToSelectBlock(
-			IRPPackage underPackage ){
-		
-		IRPClass theBlock = null;
-		
-		@SuppressWarnings("unchecked")
-		List<IRPModelElement> theCandidateParts = 
-				underPackage.getNestedElementsByMetaClass( "Instance", 1 ).toList();
-					
-		List<IRPModelElement> theBlocks = new ArrayList<IRPModelElement>();
-		
-		for( IRPModelElement theCandidatePart : theCandidateParts ) {
-			
-			IRPInstance theInstance = (IRPInstance)theCandidatePart;
-			IRPClassifier theClassifier = theInstance.getOtherClass();
-			
-			// don't add actors or test driver
-			if( theClassifier != null && 
-				theClassifier instanceof IRPClass &&
-				!GeneralHelpers.hasStereotypeCalled("TestDriver", theClassifier) &&
-				!theBlocks.contains( theClassifier ) ){
-				
-				theBlocks.add( theClassifier );
-			}
-		}
-
-		theBlock = (IRPClass) GeneralHelpers.launchDialogToSelectElement(
-				theBlocks, "Select Block to add the element to:", true );
-		
-		if( theBlock == null ){
-			Logger.writeLine("Warning in launchDialogToSelectBlock, user did not select a block");
-		}
-		
-		return theBlock;
-	}
-	
 	public static IRPClass getBlockUnderDev(
 			IRPProject inTheProject ){
 		
@@ -348,42 +314,6 @@ public class FunctionalAnalysisSettings {
 		return theBlockUnderDev;
 	}
 	
-	public static IRPInstance getPartUnderDev(
-			IRPProject inTheProject ){
-		
-		IRPInstance thePart = null;
-		
-		IRPPackage thePackageUnderDev = getPackageUnderDev( inTheProject );
-		
-		if( thePackageUnderDev != null ){
-
-			@SuppressWarnings("unchecked")
-			List<IRPModelElement> theCandidateParts = 
-			thePackageUnderDev.getNestedElementsByMetaClass( "Instance", 1 ).toList();
-
-			IRPModelElement theSelectedBlock =
-					launchDialogToSelectBlock( thePackageUnderDev );
-
-			for( IRPModelElement theCandidatePart : theCandidateParts ) {
-
-				IRPInstance theInstance = (IRPInstance)theCandidatePart;
-				IRPClassifier theClassifier = theInstance.getOtherClass();
-
-				if( theClassifier != null && theClassifier.equals(theSelectedBlock)){
-					thePart = (IRPInstance) theCandidatePart;
-				}
-			}
-
-		} else {
-			Logger.writeLine( "Error in getPartUnderDev for " + Logger.elementInfo(inTheProject) + 
-					", unable to determine package under development");
-		}
-
-		Logger.writeLine(thePart,"is the part under dev");
-
-		return thePart;
-	}
-	
 	public static IRPStereotype getStereotypeForFunctionTracing(IRPProject inTheProject){
 		
 		IRPStereotype theStereotype = null;
@@ -430,6 +360,24 @@ public class FunctionalAnalysisSettings {
 		} else {
 			Logger.writeLine( "Error in getTagBooleanValue, unable to find FunctionalAnalysisPkg" );
 		}
+		
+		return result;
+	}
+	
+	public static boolean getIsSendEventViaPanelOptionEnabled(
+			IRPProject inTheProject ){
+		
+		boolean result = getTagBooleanValue(
+				inTheProject, tagNameForIsSendEventViaPanelOptionEnabled );
+		
+		return result;
+	}
+	
+	public static boolean getIsSendEventViaPanelWantedByDefault(
+			IRPProject inTheProject ){
+		
+		boolean result = getTagBooleanValue(
+				inTheProject, tagNameForIsSendEventViaPanelWantedByDefault );
 		
 		return result;
 	}
@@ -485,6 +433,16 @@ public class FunctionalAnalysisSettings {
 					theRootPackage, 
 					tagNameForIsPopulateWantedByDefault, 
 					theSettings.getProperty( tagNameForIsPopulateWantedByDefault, "false" ) );
+
+			setStringTagValueOn( 
+					theRootPackage, 
+					tagNameForIsSendEventViaPanelOptionEnabled, 
+					theSettings.getProperty( tagNameForIsSendEventViaPanelOptionEnabled, "true" ) );
+			
+			setStringTagValueOn( 
+					theRootPackage, 
+					tagNameForIsSendEventViaPanelWantedByDefault, 
+					theSettings.getProperty( tagNameForIsSendEventViaPanelWantedByDefault, "false" ) );
 			
 			setPackageTagValueOn( 
 					theRootPackage, 
@@ -562,6 +520,8 @@ public class FunctionalAnalysisSettings {
     #115 13-NOV-2016: Removed use of isEnableBlockSelectionByUser tag and <<LogicalSystem>> by helper (F.J.Chadburn)
     #116 13-NOV-2016: FunctionalAnalysisPkg tags now set programmatically to ease helper use in existing models (F.J.Chadburn)
     #118 13-NOV-2016: Default FunctionalAnalysisPkg tags now set in Config.properties file (F.J.Chadburn)
+    #126 25-NOV-2016: Fixes to CreateNewActorPanel to cope better when multiple blocks are in play (F.J.Chadburn)
+    #127 25-NOV-2016: Improved usability of ViaPanel event creation by enabling default selection via tags (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

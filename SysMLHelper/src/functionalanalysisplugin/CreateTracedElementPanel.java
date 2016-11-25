@@ -1,6 +1,5 @@
 package functionalanalysisplugin;
 
-import generalhelpers.GeneralHelpers;
 import generalhelpers.Logger;
 import generalhelpers.TraceabilityHelper;
 
@@ -17,6 +16,7 @@ import java.util.Set;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -35,17 +35,20 @@ public abstract class CreateTracedElementPanel extends JPanel {
 	protected JTextField m_ChosenNameTextField = null;
 	protected IRPGraphElement m_SourceGraphElement = null;
 	protected IRPModelElement m_SourceModelElement = null;
+	protected IRPProject m_Project = null;
 	
 	public CreateTracedElementPanel(
 			IRPGraphElement forSourceGraphElement, 
 			Set<IRPRequirement> withReqtsAlsoAdded,
-			IRPClassifier onTargetClassifier) {
+			IRPClassifier onTargetClassifier,
+		    IRPProject inProject ) {
 		
 		super();
 
 		m_TargetOwningElement = onTargetClassifier;		
 		m_SourceGraphElement = forSourceGraphElement;
 		m_SourceModelElement = m_SourceGraphElement.getModelObject();
+		m_Project = inProject;
 			
 		setupRequirementsPanel( withReqtsAlsoAdded );
 	}
@@ -53,17 +56,33 @@ public abstract class CreateTracedElementPanel extends JPanel {
 	public CreateTracedElementPanel(
 			IRPModelElement forSourceModelElement, 
 			Set<IRPRequirement> withReqtsAlsoAdded,
-			IRPClassifier onTargetClassifier) {
+			IRPClassifier onTargetClassifier,
+			IRPProject inProject ) {
 		
 		super();
 
 		m_TargetOwningElement = onTargetClassifier;		
 		m_SourceGraphElement = null;
 		m_SourceModelElement = forSourceModelElement;
+		m_Project = inProject;
 		
 		setupRequirementsPanel( withReqtsAlsoAdded );
 	}
 	
+	protected void setupPopulateCheckbox(
+			JCheckBox theCheckbox ) {
+		
+		boolean isPopulateOptionHidden = 
+				FunctionalAnalysisSettings.getIsPopulateOptionHidden(
+						m_Project );
+		
+		boolean isPopulate = 
+				FunctionalAnalysisSettings.getIsPopulateWantedByDefault(
+						m_Project );
+		
+		theCheckbox.setVisible( !isPopulateOptionHidden );
+		theCheckbox.setSelected( isPopulate );
+	}
 	
 	private void setupRequirementsPanel(
 			Set<IRPRequirement> withReqtsAlsoAdded ){
@@ -282,18 +301,34 @@ public abstract class CreateTracedElementPanel extends JPanel {
 	
 	protected static void addTraceabilityDependenciesTo(
 			IRPModelElement theElement, 
-			List<IRPRequirement> theReqtsToAdd){
+			List<IRPRequirement> theReqtsToAdd ){
 	
 		IRPStereotype theDependencyStereotype = 
-				FunctionalAnalysisSettings.getStereotypeForFunctionTracing(theElement.getProject());
+				FunctionalAnalysisSettings.getStereotypeForFunctionTracing( 
+						theElement.getProject() );
 		
-		if (theDependencyStereotype != null){
-			for (IRPRequirement theReqt : theReqtsToAdd) {
+		if( theDependencyStereotype != null ){
+			
+			String theStereotypeName = theDependencyStereotype.getName();
+			
+			Set<IRPModelElement> theExistingTracedReqts = 
+					TraceabilityHelper.getElementsThatHaveStereotypedDependenciesFrom( 
+							theElement, theStereotypeName );
+			
+			for( IRPRequirement theReqt : theReqtsToAdd ) {
 				
-				IRPDependency theDep = theElement.addDependencyTo(theReqt);
-				theDep.setStereotype(theDependencyStereotype);		
-				Logger.writeLine("Added a " + theDependencyStereotype.getName() + " dependency to " + Logger.elementInfo( theElement ));
+				if( theExistingTracedReqts.contains( theReqt ) ){
+					Logger.writeLine( theElement, "already has a «" + theStereotypeName + 
+							"» dependency to " + Logger.elementInfo( theReqt ) + ", so doing nothing" );
+				} else {					
+					Logger.writeLine( theElement, "does not have a «" + theStereotypeName + 
+							"» dependency to " + Logger.elementInfo( theReqt ) + ", so adding one" );
+					
+					IRPDependency theDep = theElement.addDependencyTo( theReqt );
+					theDep.setStereotype( theDependencyStereotype );						
+				}
 			}
+			
 		} else {
 			Logger.writeLine("Error in addTraceabilityDependenciesTo, unable to find stereotype to apply to dependencies");
 		}
@@ -435,17 +470,7 @@ public abstract class CreateTracedElementPanel extends JPanel {
 		}
 	}
 	
-	public static String determineBestCheckOperationNameFor(
-			IRPClassifier onTargetBlock,
-			String theAttributeName){
-		
-		String theProposedName = GeneralHelpers.determineUniqueNameBasedOn( 
-				GeneralHelpers.toMethodName( "check" + GeneralHelpers.capitalize( theAttributeName ) ), 
-				"Attribute", 
-				onTargetBlock );
-		
-		return theProposedName;
-	}
+
 }
 
 /**
@@ -468,7 +493,10 @@ public abstract class CreateTracedElementPanel extends JPanel {
     #099 14-SEP-2016: Allow event and operation creation from right-click on AD and RD diagram canvas (F.J.Chadburn)
     #105 03-NOV-2016: Only bleed to requirements checked for coverage (F.J.Chadburn)
     #115 13-NOV-2016: Removed use of isEnableBlockSelectionByUser tag and <<LogicalSystem>> by helper (F.J.Chadburn)
-
+    #125 25-NOV-2016: AutoRipple used in UpdateTracedAttributePanel to keep check and FlowPort name updated (F.J.Chadburn)
+    #129 25-NOV-2016: Fixed addTraceabilityDependenciesTo to avoid creation of duplicate dependencies (F.J.Chadburn)
+    #130 25-NOV-2016: Improved consistency in handling of isPopulateOptionHidden and isPopulateWantedByDefault tags (F.J.Chadburn)
+     
     This file is part of SysMLHelperPlugin.
 
     SysMLHelperPlugin is free software: you can redistribute it and/or modify

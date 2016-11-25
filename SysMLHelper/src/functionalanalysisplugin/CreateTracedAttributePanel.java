@@ -72,7 +72,7 @@ public class CreateTracedAttributePanel extends CreateTracedElementPanel {
 			final Set<IRPRequirement> withReqtsAlsoAdded,
 			IRPClassifier onTargetBlock) {
 		
-		super(forSourceGraphElement, withReqtsAlsoAdded, onTargetBlock);
+		super( forSourceGraphElement, withReqtsAlsoAdded, onTargetBlock, onTargetBlock.getProject() );
 		
 		IRPModelElement theModelObject = m_SourceGraphElement.getModelObject();
 		
@@ -143,18 +143,9 @@ public class CreateTracedAttributePanel extends CreateTracedElementPanel {
 		m_CheckOperationCheckBox.setSelected(true);
 		m_CheckOperationCheckBox.setEnabled(true);
 
-		boolean isPopulateOptionHidden = 
-				FunctionalAnalysisSettings.getIsPopulateOptionHidden(
-						onTargetBlock.getProject() );
-		
-		boolean isPopulate = 
-				FunctionalAnalysisSettings.getIsPopulateWantedByDefault(
-						onTargetBlock.getProject() );
-
 		m_CallOperationIsNeededCheckBox = new JCheckBox("Populate the '" + m_CheckOpName + "' operation on diagram?");
 		m_CallOperationIsNeededCheckBox.setBorder( BorderFactory.createEmptyBorder( 0, 0, 10, 0 ) );
-		m_CallOperationIsNeededCheckBox.setSelected( isPopulate );
-		m_CallOperationIsNeededCheckBox.setVisible( !isPopulateOptionHidden );
+		setupPopulateCheckbox( m_CallOperationIsNeededCheckBox );
 		
 		updateNames();
 		
@@ -226,7 +217,7 @@ public class CreateTracedAttributePanel extends CreateTracedElementPanel {
 	
 	private void updateNames(){
 		
-		m_CheckOpName = determineBestCheckOperationNameFor(
+		m_CheckOpName = GeneralHelpers.determineBestCheckOperationNameFor(
 				(IRPClassifier)m_TargetOwningElement, 
 				m_ChosenNameTextField.getText() );
 		
@@ -356,7 +347,9 @@ public class CreateTracedAttributePanel extends CreateTracedElementPanel {
     #090 15-AUG-2016: Fix check operation name issue introduced in fixes #083 and #084 (F.J.Chadburn)
     #115 13-NOV-2016: Removed use of isEnableBlockSelectionByUser tag and <<LogicalSystem>> by helper (F.J.Chadburn)
     #119 13-NOV-2016: Add a populate check operation option to the add new attribute panel (F.J.Chadburn)
-    
+    #125 25-NOV-2016: AutoRipple used in UpdateTracedAttributePanel to keep check and FlowPort name updated (F.J.Chadburn)
+    #130 25-NOV-2016: Improved consistency in handling of isPopulateOptionHidden and isPopulateWantedByDefault tags (F.J.Chadburn)
+
     This file is part of SysMLHelperPlugin.
 
     SysMLHelperPlugin is free software: you can redistribute it and/or modify

@@ -16,8 +16,10 @@ import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JCheckBox;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
@@ -85,7 +87,7 @@ public class CreateIncomingEventPanel extends CreateTracedElementPanel {
 			IRPPort theSourceActorPort,
 			IRPPackage thePackageForEvent ){
 		
-		super( forSourceGraphElement, withReqtsAlsoAdded, onTargetBlock );
+		super( forSourceGraphElement, withReqtsAlsoAdded, onTargetBlock, onTargetBlock.getProject() );
 		
 		m_SourceActor = theSourceActor;
 		m_SourceActorPort = theSourceActorPort;
@@ -103,17 +105,7 @@ public class CreateIncomingEventPanel extends CreateTracedElementPanel {
 		setBorder( BorderFactory.createEmptyBorder( 10, 10, 10, 10 ) );
 		
 		m_EventActionIsNeededCheckBox = new JCheckBox("Populate on diagram?");
-
-		boolean isPopulateOptionHidden = 
-				FunctionalAnalysisSettings.getIsPopulateOptionHidden(
-						thePackageForEvent.getProject() );
-		
-		boolean isPopulate = 
-				FunctionalAnalysisSettings.getIsPopulateWantedByDefault(
-						thePackageForEvent.getProject() );
-		
-		m_EventActionIsNeededCheckBox.setVisible( !isPopulateOptionHidden );
-		m_EventActionIsNeededCheckBox.setSelected( isPopulate );
+		setupPopulateCheckbox( m_EventActionIsNeededCheckBox );
 		
 		JPanel thePageStartPanel = new JPanel();
 		thePageStartPanel.setLayout( new BoxLayout( thePageStartPanel, BoxLayout.X_AXIS ) );
@@ -132,7 +124,8 @@ public class CreateIncomingEventPanel extends CreateTracedElementPanel {
 		m_CreateSendEvent.setSelected( m_SourceActor != null );
 		theCenterPanel.add( m_CreateSendEvent );
 	
-		m_AttributeCheckBox = new JCheckBox("Add a value argument to change a corresponding attribute on the block");
+		m_AttributeCheckBox = new JCheckBox(
+				"Add a value argument to change a corresponding attribute on the block");
 		
 		m_AttributeCheckBox.addActionListener( new ActionListener() {
 			
@@ -145,8 +138,9 @@ public class CreateIncomingEventPanel extends CreateTracedElementPanel {
 			        m_CheckOperationCheckBox.setEnabled(selected);
 			        m_CreateAttributeLabel.setEnabled(selected);
 			        m_AttributeNameTextField.setEnabled(selected);
-			        m_CreateSendEventViaPanel.setEnabled(selected);
 			        
+			        setupSendEventViaPanelCheckbox( m_SourceActor );
+
 			        m_CheckOperationCheckBox.setSelected(selected);
 			        
 			        if( selected==false ){
@@ -165,7 +159,7 @@ public class CreateIncomingEventPanel extends CreateTracedElementPanel {
 						"Attribute", 
 						onTargetBlock ) );
 		
-		m_AttributeNamePanel.setAlignmentX(LEFT_ALIGNMENT);
+		m_AttributeNamePanel.setAlignmentX( LEFT_ALIGNMENT );
 	
 		theCenterPanel.add( m_AttributeNamePanel );
 		
@@ -175,8 +169,8 @@ public class CreateIncomingEventPanel extends CreateTracedElementPanel {
 		theCenterPanel.add( m_CheckOperationCheckBox );
 		
 		m_CreateSendEventViaPanel = new JCheckBox();
-		m_CreateSendEventViaPanel.setSelected(false);
-		m_CreateSendEventViaPanel.setEnabled(false);
+        setupSendEventViaPanelCheckbox( m_SourceActor );
+
 		theCenterPanel.add( m_CreateSendEventViaPanel );	
 		
 		add( theCenterPanel, BorderLayout.WEST );
@@ -190,7 +184,7 @@ public class CreateIncomingEventPanel extends CreateTracedElementPanel {
 			Set<IRPRequirement> withReqtsAlsoAdded,
 			IRPPackage thePackageForEvent ){
 		
-		super( forSourceGraphElement, withReqtsAlsoAdded, onTargetBlock );
+		super( forSourceGraphElement, withReqtsAlsoAdded, onTargetBlock, onTargetBlock.getProject() );
 		
 		m_SourceActor = null;
 		m_SourceActorPort = null;
@@ -211,17 +205,7 @@ public class CreateIncomingEventPanel extends CreateTracedElementPanel {
 		setBorder( BorderFactory.createEmptyBorder( 10, 10, 10, 10 ) );
 		
 		m_EventActionIsNeededCheckBox = new JCheckBox("Populate on diagram?");
-
-		boolean isPopulateOptionHidden = 
-				FunctionalAnalysisSettings.getIsPopulateOptionHidden(
-						thePackageForEvent.getProject() );
-		
-		boolean isPopulate = 
-				FunctionalAnalysisSettings.getIsPopulateWantedByDefault(
-						thePackageForEvent.getProject() );
-		
-		m_EventActionIsNeededCheckBox.setVisible( !isPopulateOptionHidden );
-		m_EventActionIsNeededCheckBox.setSelected( isPopulate );
+		setupPopulateCheckbox( m_EventActionIsNeededCheckBox );
 		
 		JPanel thePageStartPanel = new JPanel();
 		thePageStartPanel.setLayout( new BoxLayout( thePageStartPanel, BoxLayout.X_AXIS ) );
@@ -253,15 +237,9 @@ public class CreateIncomingEventPanel extends CreateTracedElementPanel {
 			        
 			        m_CheckOperationCheckBox.setEnabled(selected);
 			        m_CreateAttributeLabel.setEnabled(selected);
-			        m_AttributeNameTextField.setEnabled(selected);
-			        m_CreateSendEventViaPanel.setEnabled(selected);
-			        
+			        m_AttributeNameTextField.setEnabled(selected);			        
 			        m_CheckOperationCheckBox.setSelected(selected);
-			        
-			        if( selected==false ){
-				        m_CreateSendEventViaPanel.setSelected(false);			        	
-			        }
-			        
+			        setupSendEventViaPanelCheckbox( m_SourceActor );	        
 			        updateNames();
 			        
 			      }} );
@@ -284,9 +262,8 @@ public class CreateIncomingEventPanel extends CreateTracedElementPanel {
 		theCenterPanel.add( m_CheckOperationCheckBox );
 		
 		m_CreateSendEventViaPanel = new JCheckBox();
-		m_CreateSendEventViaPanel.setSelected(false);
-		m_CreateSendEventViaPanel.setEnabled(false);
-		m_CreateSendEventViaPanel.setVisible(false);
+        setupSendEventViaPanelCheckbox( m_SourceActor );
+        
 		theCenterPanel.add( m_CreateSendEventViaPanel );	
 		
 		add( theCenterPanel, BorderLayout.WEST );
@@ -302,7 +279,7 @@ public class CreateIncomingEventPanel extends CreateTracedElementPanel {
 			IRPPort theSourceActorPort,
 			IRPPackage thePackageForEvent ){
 		
-		super( forModelElement, withReqtsAlsoAdded, onTargetBlock );
+		super( forModelElement, withReqtsAlsoAdded, onTargetBlock, onTargetBlock.getProject() );
 		
 		m_SourceActor = theSourceActor;
 		m_SourceActorPort = theSourceActorPort;
@@ -313,8 +290,6 @@ public class CreateIncomingEventPanel extends CreateTracedElementPanel {
 		if( forModelElement instanceof IRPAttribute ){
 			theSourceText = forModelElement.getName();
 		}
-		
-		Logger.writeLine( onTargetBlock, "is the onTargetBlock");
 		
 		Logger.writeLine("CreateIncomingEventPanel constructor (3) called with text '" + theSourceText + "'");
 		
@@ -389,14 +364,11 @@ public class CreateIncomingEventPanel extends CreateTracedElementPanel {
 				        m_CheckOperationCheckBox.setEnabled(selected);
 				        m_CreateAttributeLabel.setEnabled(selected);
 				        m_AttributeNameTextField.setEnabled(selected);
-				        m_CreateSendEventViaPanel.setEnabled( m_SourceActor != null );
 				        
+				        setupSendEventViaPanelCheckbox( m_SourceActor ); 			        	
+										        
 				        m_CheckOperationCheckBox.setSelected(selected);
-				        
-				        if( selected==false ){
-					        m_CreateSendEventViaPanel.setSelected( false );			        	
-				        }
-				        
+				                 
 				        updateNames();
 				        
 				      }} );
@@ -439,9 +411,7 @@ public class CreateIncomingEventPanel extends CreateTracedElementPanel {
 		theCenterPanel.add( m_AttributeNamePanel );
 
 		m_CreateSendEventViaPanel = new JCheckBox();
-		m_CreateSendEventViaPanel.setSelected( false );
-		m_CreateSendEventViaPanel.setEnabled( theSourceActor != null );	
-		m_CreateSendEventViaPanel.setVisible( theSourceActor != null );
+		setupSendEventViaPanelCheckbox( m_SourceActor );
 
 		theCenterPanel.add( m_CreateSendEventViaPanel );
 		
@@ -454,6 +424,35 @@ public class CreateIncomingEventPanel extends CreateTracedElementPanel {
 		add( theCenterPanel, BorderLayout.WEST );
 
 		commonPanelSetup();
+	}
+
+	private void setupSendEventViaPanelCheckbox(
+			IRPActor theSourceActor ) {
+		
+		boolean isAttributeForEvent = 
+				m_AttributeCheckBox.isSelected();
+		
+		boolean isSendEventViaPanelOptionEnabled = 
+				FunctionalAnalysisSettings.getIsSendEventViaPanelOptionEnabled(
+						m_Project );
+		
+		boolean isSendEventViaPanelWantedByDefault = 
+				FunctionalAnalysisSettings.getIsSendEventViaPanelWantedByDefault(
+						m_Project );
+		
+		m_CreateSendEventViaPanel.setSelected( 
+				isAttributeForEvent && 
+				isSendEventViaPanelWantedByDefault &&
+				theSourceActor != null );
+		
+		m_CreateSendEventViaPanel.setEnabled( 
+				isAttributeForEvent && 
+				isSendEventViaPanelOptionEnabled &&
+				theSourceActor != null );
+		
+		m_CreateSendEventViaPanel.setVisible( 
+				isSendEventViaPanelOptionEnabled &&
+				theSourceActor != null );
 	}
 	
 	private void commonPanelSetup(){
@@ -495,8 +494,6 @@ public class CreateIncomingEventPanel extends CreateTracedElementPanel {
 			IRPClass theBuildingBlock = 
 					FunctionalAnalysisSettings.getBuildingBlock( thePackageUnderDev );
 			
-			Logger.writeLine( theBuildingBlock, "is the building block - TEMP");
-			
 			if( theBuildingBlock != null ){
 				
 				final IRPPackage thePackageForEvent = 
@@ -510,8 +507,6 @@ public class CreateIncomingEventPanel extends CreateTracedElementPanel {
 							GeneralHelpers.launchDialogToSelectElement(
 									theCandidateActors, "Select Actor", true);
 		
-					Logger.writeLine( theActor, "is the actor - TEMP");
-					
 					if( theActor != null && theActor instanceof IRPActor ){
 						
 						final IRPClass theChosenBlock = 
@@ -524,7 +519,22 @@ public class CreateIncomingEventPanel extends CreateTracedElementPanel {
 									(IRPClassifier)theChosenBlock,
 									theBuildingBlock );
 							
-							if( thePort != null ){
+							if( thePort == null ){
+								
+						    	JDialog.setDefaultLookAndFeelDecorated(true);
+								
+								JOptionPane.showMessageDialog(
+										null,  
+							    		"Unable to find a port that connects " + Logger.elementInfo(theActor) + " to the " + 
+										Logger.elementInfo(theChosenBlock) + ". \n" +
+							    		"You may want to add the necessary ports and connector to the IBD under " + 
+										Logger.elementInfo(theBuildingBlock) + " \nbefore trying this.",
+							    		"Warning",
+							    		JOptionPane.WARNING_MESSAGE );
+								
+								theBuildingBlock.highLightElement();
+								
+							} else { // Port != null
 								
 								final IRPPort theSourceActorPort = thePort;
 								
@@ -669,7 +679,7 @@ public class CreateIncomingEventPanel extends CreateTracedElementPanel {
 		if( m_AttributeCheckBox.isSelected() ){
 			m_CreateSendEvent.setText(
 					"Add a '" + determineSendEventNameFor( m_ChosenNameTextField.getText() ) 
-					+ "' event with 'value' argument to the actor");
+					+ "' event with 'value' argument to the actor for webify/test creation usage");
 		} else {
 			m_CreateSendEvent.setText(
 					"Add a '" + determineSendEventNameFor( m_ChosenNameTextField.getText() ) 
@@ -678,9 +688,9 @@ public class CreateIncomingEventPanel extends CreateTracedElementPanel {
 
 		m_CreateSendEventViaPanel.setText(
 				"Add a '" + determineSendEventViaPanelNameFor( m_ChosenNameTextField.getText() ) 
-				+ "' event and '" + m_AttributeNameTextField.getText() + "' attribute to the actor");
+				+ "' event and '" + m_AttributeNameTextField.getText() + "' attribute to the actor to ease panel creation");
 		
-		m_CheckOpName = determineBestCheckOperationNameFor(
+		m_CheckOpName = GeneralHelpers.determineBestCheckOperationNameFor(
 				(IRPClassifier)m_TargetOwningElement, 
 				m_AttributeNameTextField.getText() );
 		
@@ -1270,7 +1280,10 @@ public class CreateIncomingEventPanel extends CreateTracedElementPanel {
     #093 23-AUG-2016: Added isPopulateOptionHidden tag to allow hiding of the populate check-box on dialogs (F.J.Chadburn)
     #099 14-SEP-2016: Allow event and operation creation from right-click on AD and RD diagram canvas (F.J.Chadburn)
     #117 13-NOV-2016: Get incoming and outgoing event dialogs to work without actors in the context (F.J.Chadburn)
-
+    #125 25-NOV-2016: AutoRipple used in UpdateTracedAttributePanel to keep check and FlowPort name updated (F.J.Chadburn)
+    #127 25-NOV-2016: Improved usability of ViaPanel event creation by enabling default selection via tags (F.J.Chadburn)
+    #132 25-NOV-2016: Added "Unable to find a port that connects" warning to CreateIncomingEventPanel (F.J.Chadburn)
+    
     This file is part of SysMLHelperPlugin.
 
     SysMLHelperPlugin is free software: you can redistribute it and/or modify
