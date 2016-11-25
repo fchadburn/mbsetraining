@@ -100,7 +100,7 @@ public class TraceabilityHelper {
 		return theReqts;
 	}
 	
-	public static Set<IRPModelElement> getElementsThatHaveStereotypedDependencyRelationsFrom(
+	public static Set<IRPModelElement> getElementsThatHaveStereotypedDependenciesFrom(
 			IRPModelElement theElement, 
 			String withDependencyStereotype ){
 		
@@ -138,6 +138,7 @@ public class TraceabilityHelper {
     #043 03-JUL-2016: Add Derive downstream reqt for CallOps, InterfaceItems and Event Actions (F.J.Chadburn)
     #044 03-JUL-2016: Minor re-factoring/code corrections (F.J.Chadburn)
 	#083 09-AUG-2016: Add an Update attribute menu option and panel with add check operation option (F.J.Chadburn)
+    #129 25-NOV-2016: Fixed addTraceabilityDependenciesTo to avoid creation of duplicate dependencies (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

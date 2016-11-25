@@ -859,6 +859,118 @@ public class GeneralHelpers {
 		
 		return thePort;
 	}
+	
+	public static String determineBestCheckOperationNameFor(
+			IRPClassifier onTargetBlock,
+			String theAttributeName){
+		
+		String theProposedName = GeneralHelpers.determineUniqueNameBasedOn( 
+				GeneralHelpers.toMethodName( "check" + GeneralHelpers.capitalize( theAttributeName ) ), 
+				"Attribute", 
+				onTargetBlock );
+		
+		return theProposedName;
+	}
+	
+	public static IRPSysMLPort getExistingFlowPort( 
+			IRPAttribute forTheAttribute ){
+	
+		IRPSysMLPort theExistingFlowPort = null;
+		
+		Set<IRPModelElement> theEls = 
+				TraceabilityHelper.getElementsThatHaveStereotypedDependenciesFrom(
+						forTheAttribute, "AutoRipple" );
+		
+		IRPModelElement theAttributeOwner = forTheAttribute.getOwner();
+		
+		for( IRPModelElement theEl : theEls ) {
+			
+			if( theEl instanceof IRPSysMLPort ){
+				
+				IRPModelElement theElementsOwner = theEl.getOwner();
+				
+				if( theElementsOwner.equals( theAttributeOwner )){
+					theExistingFlowPort = (IRPSysMLPort)theEl;
+					Logger.writeLine( theExistingFlowPort, "was found based on «AutoRipple» dependency" );					
+				} else {
+					Logger.writeLine( "Warning, in getExistingFlowPort() for " + 
+							Logger.elementInfo( forTheAttribute ) + ":" + Logger.elementInfo( theEl ) + 
+							"was found based on «AutoRipple» dependency" );	
+					
+					Logger.writeLine("However, it is incorrectly owned by " + Logger.elementInfo( theElementsOwner ) + 
+							" hence relation needs to be deleted");
+				}
+			}
+		}
+		
+		// still not found?
+		if( theExistingFlowPort == null ){
+			
+			theExistingFlowPort = (IRPSysMLPort) forTheAttribute.getOwner().findNestedElement(
+					forTheAttribute.getName(), "FlowPort" );
+			
+			if( theExistingFlowPort != null ){
+				Logger.writeLine( theExistingFlowPort, "was found based on name matching" );
+			} else {
+				Logger.writeLine( "Unable to find an existing flow port related to " + Logger.elementInfo( forTheAttribute ) );
+			}
+		}
+		
+		return theExistingFlowPort;
+	}
+	
+	public static IRPOperation getExistingCheckOp( 
+			IRPAttribute forTheAttribute ){
+	
+		IRPOperation theExistingCheckOp = null;
+		
+		Set<IRPModelElement> theEls = 
+				TraceabilityHelper.getElementsThatHaveStereotypedDependenciesFrom(
+						forTheAttribute, "AutoRipple" );
+		
+		IRPModelElement theAttributeOwner = forTheAttribute.getOwner();
+		
+		for( IRPModelElement theEl : theEls ) {
+			
+			if( theEl instanceof IRPOperation && 
+				theEl.getName().contains( "check" ) ){
+				
+				IRPModelElement theElementsOwner = theEl.getOwner();
+				
+				if( theElementsOwner.equals( theAttributeOwner )){
+					theExistingCheckOp = (IRPOperation)theEl;
+					Logger.writeLine( theExistingCheckOp, "was found based on «AutoRipple» dependency" );					
+				} else {
+					Logger.writeLine( "Warning, in getExistingCheckOp() for " + 
+							Logger.elementInfo( forTheAttribute ) + ":" + Logger.elementInfo( theEl ) + 
+							"was found based on «AutoRipple» dependency" );	
+					
+					Logger.writeLine("However, it is incorrectly owned by " + Logger.elementInfo( theElementsOwner ) + 
+							" hence relation needs to be deleted");
+				}
+			}
+		}
+		
+		// still not found?
+		if( theExistingCheckOp == null ){
+			
+			String theExpectedName = determineBestCheckOperationNameFor(
+					(IRPClassifier)theAttributeOwner, 
+					forTheAttribute.getName() );
+			
+			theExistingCheckOp = 
+					(IRPOperation) forTheAttribute.getOwner().findNestedElement(
+							theExpectedName, "Operation" );
+			
+			if( theExistingCheckOp != null ){
+				Logger.writeLine( theExistingCheckOp, "was found based on name matching" );
+			} else {
+				Logger.writeLine( "Unable to find an existing check operation called " + theExpectedName );
+			}
+		}
+		
+		return theExistingCheckOp;
+	}
 }
 
 /**
@@ -886,6 +998,7 @@ public class GeneralHelpers {
 	#089 15-AUG-2016: Add a pull-down list to select Block when adding events/ops in white box (F.J.Chadburn)
 	#102 03-NOV-2016: Add right-click menu to auto update names of ADs from UC names (F.J.Chadburn)
 	#113 13-NOV-2016: Stereotypes moved to GlobalPreferencesProfile to simplify/remove orphaned ownership issues (F.J.Chadburn)
+    #125 25-NOV-2016: AutoRipple used in UpdateTracedAttributePanel to keep check and FlowPort name updated (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 
