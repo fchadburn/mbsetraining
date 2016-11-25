@@ -58,7 +58,7 @@ isVisible7=1
 DLLServerCompatible7=1
 
 #REM: Add pop-up menu 
-name8MBSE Method: General Utilities\Setup Gateway project based on rqtf template
+name8=MBSE Method: General Utilities\Setup Gateway project based on rqtf template
 isPluginCommand8=1
 command8=InvokeSysMLHelper
 applicableTo8=Project,SysML,Package
@@ -87,6 +87,7 @@ Triggers9=
 #REM #109 06-NOV-2016: Added .properties support for localisation of menus (F.J.Chadburn)
 #REM #111 13-NOV-2016: Added new Simple Sim (Guard only) functional analysis structure option (F.J.Chadburn)
 #REM #112 13-NOV-2016: Added new No Sim functional analysis structure option (F.J.Chadburn)
+#REM #133 25-NOV-2016: Fixed typo/missing= in SysMLHelper.hep preventing Gateway menu from showing (F.J.Chadburn)
 #REM
 #REM This file is part of SysMLHelperPlugin.
 #REM
