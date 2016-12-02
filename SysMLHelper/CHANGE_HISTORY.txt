@@ -221,3 +221,13 @@ BETA TEST RELEASE 2.0.28 (13-NOV-2016)
 ----------------------------------------------------------------------------------
 BETA TEST RELEASE 2.0.29 (25-NOV-2016)
 ----------------------------------------------------------------------------------
+#134 02-DEC-2016: Fix issue with Derive requirement dialog not launching (F.J.Chadburn)
+#135 02-DEC-2016: Avoid port proliferation in inheritance tree for actors/system (F.J.Chadburn)
+#136 02-DEC-2016: Menu renamed to 'Create an attribute/check operation for the system' to make clearer (F.J.Chadburn)
+#137 02-DEC-2016: Allow 'create attribute' menu command on AD/RD canvas right-click (F.J.Chadburn)
+#138 02-DEC-2016: Highlight Block when creating functional analysis structure (F.J.Chadburn)
+#139 02-DEC-2016: Improve robustness in block naming dialog when m_TestDriverNameTextField is null (F.J.Chadburn)
+#140 02-DEC-2016: Don't overwrite boolean tags in FunctionalAnalysisPkg to preserve user choice (F.J.Chadburn)
+----------------------------------------------------------------------------------
+RELEASE CANDIDATE 2.0.30 (02-DEC-2016)
+----------------------------------------------------------------------------------

@@ -74,10 +74,10 @@ isVisible9=1
 DLLServerCompatible9=1
 
 #REM: Add pop-up menu
-name10=MBSE Method: Functional Analysis\Create stand-alone attribute owned by the system
+name10=MBSE Method: Functional Analysis\Create an attribute/check operation owned by the system
 isPluginCommand10=1
 command10=InvokeFunctionalAnalysisHelper
-applicableTo10=State,Transition,Comment,AcceptEventAction,SendAction,AcceptTimeEvent,Constraint,Precondition,Postcondition,ControlFlow,Requirement
+applicableTo10=ActivityDiagram,ObjectModelDiagram,Requirements Diagram,State,Transition,Comment,AcceptEventAction,SendAction,AcceptTimeEvent,Constraint,Precondition,Postcondition,ControlFlow,Requirement
 isVisible10=1
 DLLServerCompatible10=1
 
@@ -177,6 +177,8 @@ DLLServerCompatible20=1
 #REM #109 06-NOV-2016: Added .properties support for localisation of menus (F.J.Chadburn)
 #REM #111 13-NOV-2016: Added new Simple Sim (Guard only) functional analysis structure option (F.J.Chadburn)
 #REM #112 13-NOV-2016: Added new No Sim functional analysis structure option (F.J.Chadburn)
+#REM #136 02-DEC-2016: Menu renamed to 'Create an attribute/check operation for the system' to make clearer (F.J.Chadburn)
+#REM #137 02-DEC-2016: Allow 'create attribute' menu command on AD/RD canvas right-click (F.J.Chadburn)
 #REM
 #REM This file is part of SysMLHelperPlugin.
 #REM
