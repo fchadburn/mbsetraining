@@ -50,7 +50,7 @@ public class CreateTracedAttributePanel extends CreateTracedElementPanel {
 		if (GeneralHelpers.doUnderlyingModelElementsIn( theSelectedGraphEls, "Requirement" )){
 			
 			// only requirements are selected hence assume only a single operation is needed
-			launchThePanel(	theSelectedGraphEls.get(0), theSelectedReqts, theActiveProject );
+			launchThePanel(	theSelectedGraphEls.get(0), null, theSelectedReqts, theActiveProject );
 		} else {
 			
 			// launch a dialog for each selected element that is not a requirement
@@ -61,7 +61,7 @@ public class CreateTracedAttributePanel extends CreateTracedElementPanel {
 				if (theModelObject != null && !(theModelObject instanceof IRPRequirement)){
 					
 					// only launch a dialog for non requirement elements
-					launchThePanel(	theGraphEl, theSelectedReqts, theActiveProject );
+					launchThePanel(	theGraphEl, null, theSelectedReqts, theActiveProject );
 				}		
 			}
 		}
@@ -73,12 +73,32 @@ public class CreateTracedAttributePanel extends CreateTracedElementPanel {
 			IRPClassifier onTargetBlock) {
 		
 		super( forSourceGraphElement, withReqtsAlsoAdded, onTargetBlock, onTargetBlock.getProject() );
-		
+		 
 		IRPModelElement theModelObject = m_SourceGraphElement.getModelObject();
+		String theSourceText = GeneralHelpers.getActionTextFrom( theModelObject );	
 		
-		final String theSourceText = GeneralHelpers.getActionTextFrom( theModelObject );	
+		Logger.writeLine("CreateTracedAttributePanel constructor (1) called with text '" + theSourceText + "'");
 		
-		Logger.writeLine("CreateTracedAttributePanel constructor called with text '" + theSourceText + "'");
+		createCommonContent( onTargetBlock, theSourceText );
+	}
+	
+	public CreateTracedAttributePanel(
+			IRPModelElement forModelElement, 
+			Set<IRPRequirement> withReqtsAlsoAdded,
+			IRPClassifier onTargetBlock ){
+		
+		super( forModelElement, withReqtsAlsoAdded, onTargetBlock, onTargetBlock.getProject() );
+		
+		String theSourceText = "attributeName";
+		
+		Logger.writeLine("CreateTracedAttributePanel constructor (2) called for " + Logger.elementInfo( forModelElement ) );
+		
+		createCommonContent( onTargetBlock, theSourceText );
+	}
+
+	private void createCommonContent(
+			IRPClassifier onTargetBlock,
+			String theSourceText) {
 		
 		String theProposedName = GeneralHelpers.determineUniqueNameBasedOn( 
 				GeneralHelpers.toMethodName( theSourceText ), 
@@ -183,6 +203,7 @@ public class CreateTracedAttributePanel extends CreateTracedElementPanel {
 	
 	public static void launchThePanel(
 			final IRPGraphElement selectedDiagramEl, 
+			final IRPModelElement orTheModelElement,
 			final Set<IRPRequirement> withReqtsAlsoAdded,
 			final IRPProject inProject){
 
@@ -202,12 +223,27 @@ public class CreateTracedAttributePanel extends CreateTracedElementPanel {
 
 				frame.setDefaultCloseOperation( JFrame.DISPOSE_ON_CLOSE );
 
-				CreateTracedAttributePanel thePanel = new CreateTracedAttributePanel(
-						selectedDiagramEl, 
-						withReqtsAlsoAdded,
-						theLogicalSystemBlock);
+				if( selectedDiagramEl != null ){
+					
+					CreateTracedAttributePanel thePanel = 
+							new CreateTracedAttributePanel(
+									selectedDiagramEl, 
+									withReqtsAlsoAdded,
+									theLogicalSystemBlock );
 
-				frame.setContentPane( thePanel );
+					frame.setContentPane( thePanel );
+					
+				} else if( orTheModelElement != null ){
+					
+					CreateTracedAttributePanel thePanel = 
+							new CreateTracedAttributePanel(
+									orTheModelElement, 
+									withReqtsAlsoAdded,
+									theLogicalSystemBlock );
+
+					frame.setContentPane( thePanel );
+				}
+
 				frame.pack();
 				frame.setLocationRelativeTo( null );
 				frame.setVisible( true );
@@ -322,7 +358,9 @@ public class CreateTracedAttributePanel extends CreateTracedElementPanel {
 				theCheckOp.highLightElement();
 			}
 			
-			bleedColorToElementsRelatedTo( m_SourceGraphElement );
+			if( m_SourceGraphElement != null ){
+				bleedColorToElementsRelatedTo( m_SourceGraphElement );
+			}
 			
 			theAttribute.highLightElement();
 			
@@ -349,6 +387,7 @@ public class CreateTracedAttributePanel extends CreateTracedElementPanel {
     #119 13-NOV-2016: Add a populate check operation option to the add new attribute panel (F.J.Chadburn)
     #125 25-NOV-2016: AutoRipple used in UpdateTracedAttributePanel to keep check and FlowPort name updated (F.J.Chadburn)
     #130 25-NOV-2016: Improved consistency in handling of isPopulateOptionHidden and isPopulateWantedByDefault tags (F.J.Chadburn)
+    #137 02-DEC-2016: Allow 'create attribute' menu command on AD/RD canvas right-click (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

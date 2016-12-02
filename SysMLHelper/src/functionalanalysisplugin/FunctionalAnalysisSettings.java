@@ -80,12 +80,10 @@ public class FunctionalAnalysisSettings {
 		return theNonActorOrTestBlocks;
 	}
 	
-	public static IRPClass getBuildingBlock( 
+	public static List<IRPClass> getBuildingBlocks(
 			IRPPackage underneathThePkg ){
 		
-		int count = 0;
-		
-		IRPClass theBuildingBlock = null;
+		List<IRPClass> theBuildingBlocks = new ArrayList<IRPClass>();
 
 		@SuppressWarnings("unchecked")
 		List<IRPModelElement> theCandidateBlocks = 
@@ -94,38 +92,51 @@ public class FunctionalAnalysisSettings {
 		for( IRPModelElement theCandidateBlock : theCandidateBlocks ) {
 			
 			@SuppressWarnings("unchecked")
-			List<IRPModelElement> theInstances = 
+			List<IRPInstance> theInstances = 
 					theCandidateBlock.getNestedElementsByMetaClass( "Instance", 0 ).toList();
 			
-			boolean isBuildingBlock = false;
+			for (IRPInstance theInstance : theInstances) {
 			
-			for( IRPModelElement theInstance : theInstances ) {
-					
-				if( theInstance.getUserDefinedMetaClass().equals("Object") ){
-						
-					isBuildingBlock = true;
+				if( theInstance.getUserDefinedMetaClass().equals("Object")){
+					theBuildingBlocks.add( (IRPClass) theCandidateBlock );
 					break;
 				}
 			}
-
-			if( isBuildingBlock && theCandidateBlock instanceof IRPClass){
-				Logger.writeLine( "getBuildingBlock called for " + Logger.elementInfo( underneathThePkg ) + 
-						" successfully found " + Logger.elementInfo( theCandidateBlock ));
-				
-				theBuildingBlock = (IRPClass) theCandidateBlock;
-				count++;
-			}
 		}
+				
+		return theBuildingBlocks;
+	}
+	
+	public static IRPClass getBuildingBlock( 
+			IRPPackage underneathThePkg ){
 		
-		if( count > 1 ){
-			Logger.writeLine( "Warning in getBuildingBlock, " + count + 
-					" building blocks were found when expecting just one." );
+		List<IRPClass> theBuildingBlocks = getBuildingBlocks( underneathThePkg );
+
+		IRPClass theBuildingBlock = null;
+
+		int theSize = theBuildingBlocks.size();
 		
-		} else if( count == 0 ){
+		if( theSize == 0 ){
+
 			Logger.writeLine( "Error in getBuildingBlock, no building block was found in " + 
 					Logger.elementInfo( underneathThePkg ) );
-		}
-		
+			
+		} else if( theSize == 1 ){
+			
+			theBuildingBlock = theBuildingBlocks.get( 0 );
+			
+			Logger.writeLine( "getBuildingBlock called for " + Logger.elementInfo( underneathThePkg ) + 
+					" successfully found " + Logger.elementInfo( theBuildingBlock ));
+						
+		} else {
+
+			theBuildingBlock = theBuildingBlocks.get( 0 );
+			
+			Logger.writeLine( "Warning in getBuildingBlock, " + theSize + 
+					" building blocks were found when expecting just one." );
+			
+		}				
+
 		return theBuildingBlock;
 	}
 	
@@ -465,10 +476,7 @@ public class FunctionalAnalysisSettings {
 		
 		if( theTag != null ){
 			String theExistingTagValue = theTag.getValue();
-			theTag.deleteFromProject();
-			IRPTag theNewTag = (IRPTag)theOwner.addNewAggr( "Tag", theTagName );
-			theOwner.setTagValue(theNewTag, theValue);
-			Logger.writeLine(theOwner, "already has a tag called " + theTagName + ", changing it from '" + theExistingTagValue + "'" + " to '" + theNewTag.getValue() + "'");
+			Logger.writeLine(theOwner, "already has a tag called " + theTagName + ", set to '" + theExistingTagValue + "' (leaving unchanged)" );
 
 		} else {
 			IRPTag theNewTag = (IRPTag)theOwner.addNewAggr( "Tag", theTagName );
@@ -522,6 +530,8 @@ public class FunctionalAnalysisSettings {
     #118 13-NOV-2016: Default FunctionalAnalysisPkg tags now set in Config.properties file (F.J.Chadburn)
     #126 25-NOV-2016: Fixes to CreateNewActorPanel to cope better when multiple blocks are in play (F.J.Chadburn)
     #127 25-NOV-2016: Improved usability of ViaPanel event creation by enabling default selection via tags (F.J.Chadburn)
+    #135 02-DEC-2016: Avoid port proliferation in inheritance tree for actors/system (F.J.Chadburn)
+    #140 02-DEC-2016: Don't overwrite boolean tags in FunctionalAnalysisPkg to preserve user choice (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

@@ -153,12 +153,17 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
 		
 		String theBlockName = m_BlockNameTextField.getText();
 		
-		for( ActorMappingInfo theInfo : m_ActorChoices ){
-			theInfo.updateToBestActorNamesBasedOn( theBlockName );			
-		}		
+		if( m_ActorChoices != null ){
+			for( ActorMappingInfo theInfo : m_ActorChoices ){
+				theInfo.updateToBestActorNamesBasedOn( theBlockName );				
+			}	
+		}
 		
-		m_TestDriverNameTextField.setText( 
-				determineTestDriverName( theBlockName ) );
+		if( m_TestDriverNameTextField != null ){
+			
+			m_TestDriverNameTextField.setText(
+					determineTestDriverName( theBlockName ) );
+		}
 	}
 	
 	private String determineTestDriverName(
@@ -737,7 +742,8 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
 			String theName = m_BlockNameTextField.getText();
 			
 			// Create packages first
-			IRPPackage theFunctionalBlockPkg = m_RootPackage.addNestedPackage( theName + "Pkg" );  
+			IRPPackage theFunctionalBlockPkg = 
+					m_RootPackage.addNestedPackage( theName + "Pkg" );  
 			
 			// Create nested package for block
 			IRPPackage theBlockPackage = 
@@ -755,11 +761,13 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
 			
 			// Create nested package for events and interfaces
 			IRPPackage theInterfacesPkg = 
-					theFunctionalBlockPkg.addNestedPackage( theName + "Interfaces" + "Pkg" );
+					theFunctionalBlockPkg.addNestedPackage( 
+							theName + "Interfaces" + "Pkg" );
 			
 			// Create nested TestPkg package with components necessary for wiring up a simulation
 			IRPPackage theTestPackage = 
-					theFunctionalBlockPkg.addNestedPackage( theName + "Test" + "Pkg" );
+					theFunctionalBlockPkg.addNestedPackage( 
+							theName + "Test" + "Pkg" );
 			
 			// Create nested package for housing the ADs
 			IRPPackage theWorkingPackage = 
@@ -783,6 +791,7 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
 			IRPClass theLogicalSystemBlock = theBlockPackage.addClass( theName );
 			GeneralHelpers.applyExistingStereotype( "LogicalSystem", theLogicalSystemBlock );
 			theLogicalSystemBlock.changeTo( "Block" );
+			theLogicalSystemBlock.highLightElement();
 
 			IRPProject theProject = theLogicalSystemBlock.getProject();
 			
@@ -968,6 +977,8 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
     #118 13-NOV-2016: Default FunctionalAnalysisPkg tags now set in Config.properties file (F.J.Chadburn)
     #120 25-NOV-2016: Enable TestDriver inheritance in the FullSim block creation dialog (F.J.Chadburn)
     #131 25-NOV-2016: Added initial auto-populate of IBD/BDD (F.J.Chadburn)
+    #138 02-DEC-2016: Highlight Block when creating functional analysis structure (F.J.Chadburn)
+    #139 02-DEC-2016: Improve robustness in block naming dialog when m_TestDriverNameTextField is null (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

@@ -159,7 +159,17 @@ public class FunctionalAnalysisPlugin extends RPUserPlugin {
 
 			} else if (menuItem.equals(m_configSettings.getString("functionalanalysisplugin.CreateAttributeMenu"))){
 
-				if (!theSelectedGraphEls.isEmpty()){
+				if (theSelectedEl instanceof IRPDiagram){
+					
+					Set<IRPRequirement> theReqts = new HashSet<IRPRequirement>();
+					
+					CreateTracedAttributePanel.launchThePanel(
+							null,
+							theSelectedEl, 
+							theReqts, 
+							theActiveProject );
+					
+				} else if (!theSelectedGraphEls.isEmpty()){
 					try {
 						CreateTracedAttributePanel.createSystemAttributesFor( theActiveProject, theSelectedGraphEls );
 						
@@ -362,6 +372,7 @@ public class FunctionalAnalysisPlugin extends RPUserPlugin {
     #112 13-NOV-2016: Added new No Sim functional analysis structure option (F.J.Chadburn)
     #117 13-NOV-2016: Get incoming and outgoing event dialogs to work without actors in the context (F.J.Chadburn)
     #128 25-NOV-2016: Improved usability/speed of Copy AD dialog by providing user choice to open diagrams (F.J.Chadburn)
+    #137 02-DEC-2016: Allow 'create attribute' menu command on AD/RD canvas right-click (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

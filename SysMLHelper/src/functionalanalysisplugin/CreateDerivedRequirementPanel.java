@@ -37,7 +37,6 @@ public class CreateDerivedRequirementPanel extends CreateTracedElementPanel {
 	NamedElementMap m_NamedElementMap;
 	private JComboBox<Object> m_FromPackageComboBox = null;
 	private JTextArea m_Specification = null;
-	private IRPGraphElement m_SourceGraphElement;
 	private RequirementSelectionPanel m_RequirementSelectionPanel;
 	private JCheckBox m_PopulateOnDiagramCheckBox; 
 	private JCheckBox m_MoveIntoCheckBox; 
@@ -217,6 +216,8 @@ public class CreateDerivedRequirementPanel extends CreateTracedElementPanel {
 		
 		super(theSourceGraphElement, forHigherLevelReqts, null, inTheProject);
 		
+		Logger.writeLine( "Create Derived Reqt panel invoked from " + Logger.elementInfo( m_SourceGraphElement.getModelObject() ) );
+		
 		final String preferredRootPackageName = "FunctionalAnalysisPkg";
 		
 		IRPModelElement thePreferredRootPkg = 
@@ -368,7 +369,7 @@ public class CreateDerivedRequirementPanel extends CreateTracedElementPanel {
 			// do silent check first
 			if( checkValidity( false ) ){
 				
-				if( m_SourceGraphElement instanceof IRPGraphNode ){
+				if( m_SourceGraphElement != null && m_SourceGraphElement instanceof IRPGraphNode ){
 
 					GraphNodeInfo theNodeInfo = new GraphNodeInfo( (IRPGraphNode) m_SourceGraphElement );
 					
@@ -607,7 +608,8 @@ public class CreateDerivedRequirementPanel extends CreateTracedElementPanel {
     #055 13-JUL-2016: Support requirement derivation from simplified AD elements (F.J.Chadburn)
     #103 03-NOV-2016: Allow derivation of requirements with trace-ability from attribute (F.J.Chadburn)
     #126 25-NOV-2016: Fixes to CreateNewActorPanel to cope better when multiple blocks are in play (F.J.Chadburn)
-
+    #134 02-DEC-2016: Fix issue with Derive requirement dialog not launching (F.J.Chadburn)
+    
     This file is part of SysMLHelperPlugin.
 
     SysMLHelperPlugin is free software: you can redistribute it and/or modify
