@@ -736,6 +736,9 @@ public class GeneralHelpers {
 			IRPClassifier theClassifier,
 			IRPClass inTheBuildingBlock ){
 		
+		@SuppressWarnings("unchecked")
+		List<IRPClassifier> theBaseClassifiers = theClassifier.getBaseClassifiers().toList();
+		
 		List<IRPModelElement> theClassifiersConnectedTo = new ArrayList<IRPModelElement>();
 		
 		@SuppressWarnings("unchecked")
@@ -750,22 +753,23 @@ public class GeneralHelpers {
 			
 			if( theFromPort != null && theToPort != null ){
 				
-				if( theFromPort.getOwner().equals( theClassifier ) ){
+				IRPModelElement fromPortOwner = theFromPort.getOwner();
+				IRPModelElement toPortOwner = theToPort.getOwner();
+				
+				if( fromPortOwner.equals( theClassifier ) || 
+						theBaseClassifiers.contains( fromPortOwner ) ){
 					
-					IRPModelElement theOwner = theToPort.getOwner();
-					
-					if( theOwner instanceof IRPClass &&
-						!GeneralHelpers.hasStereotypeCalled("TestDriver", theOwner) ){
-						theClassifiersConnectedTo.add( theOwner );
+					if( toPortOwner instanceof IRPClass &&
+						!GeneralHelpers.hasStereotypeCalled("TestDriver", toPortOwner) ){
+						theClassifiersConnectedTo.add( toPortOwner );
 					}
 					
-				} else if( theToPort.getOwner().equals( theClassifier ) ){
+				} else if( toPortOwner.equals( theClassifier ) ||
+						theBaseClassifiers.contains( toPortOwner )){
 					
-					IRPModelElement theOwner = theFromPort.getOwner();
-					
-					if( theOwner instanceof IRPClass &&
-						!GeneralHelpers.hasStereotypeCalled("TestDriver", theOwner) ){
-						theClassifiersConnectedTo.add( theOwner );
+					if( fromPortOwner instanceof IRPClass &&
+						!GeneralHelpers.hasStereotypeCalled("TestDriver", fromPortOwner) ){
+						theClassifiersConnectedTo.add( fromPortOwner );
 					}
 				}
 			}
@@ -773,16 +777,28 @@ public class GeneralHelpers {
 
 		return theClassifiersConnectedTo;
 	}
-
+	
 	public static IRPPort getPortThatConnects(
-			IRPClassifier theChosenClassifier, 
-			IRPActor withTheActor,
+			IRPClassifier theSourceClassifier,
+			IRPClassifier withTheTargetClassifier, 
 			IRPClass inTheBuildingBlock ) {
 		
 		IRPPort thePort = null;
 		
 		@SuppressWarnings("unchecked")
 		List<IRPModelElement> theConnectors = inTheBuildingBlock.getLinks().toList();
+		
+		@SuppressWarnings("unchecked")
+		List<IRPClassifier> theTargetClassifiers = 
+				withTheTargetClassifier.getBaseClassifiers().toList();
+		
+		theTargetClassifiers.add( withTheTargetClassifier );
+		
+		@SuppressWarnings("unchecked")
+		List<IRPClassifier> theSourceClassifiers = 
+				theSourceClassifier.getBaseClassifiers().toList();
+		
+		theSourceClassifiers.add( theSourceClassifier );
 		
 		for( IRPModelElement theConnector : theConnectors ){
 			
@@ -793,16 +809,19 @@ public class GeneralHelpers {
 			
 			if( theFromPort != null && theToPort != null ){
 				
-				if( theFromPort.getOwner().equals( withTheActor ) && 
-					theToPort.getOwner().equals( theChosenClassifier )){
+				IRPModelElement fromPortOwner = theFromPort.getOwner();
+				IRPModelElement toPortOwner = theToPort.getOwner();
+				
+				if( theTargetClassifiers.contains( fromPortOwner ) && 
+					theSourceClassifiers.contains( toPortOwner ) ){
 					
 					Logger.writeLine( "Found " + Logger.elementInfo(theConnector) + " owned by " + Logger.elementInfo( inTheBuildingBlock ) + 
 							"that goes from " + Logger.elementInfo(theFromPort) + " to " + Logger.elementInfo(theToPort));
 
 					thePort = theToPort;
 					
-				} else if( theToPort.getOwner().equals( withTheActor ) && 
-						   theFromPort.getOwner().equals( theChosenClassifier )){
+				} else if( theTargetClassifiers.contains( toPortOwner ) && 
+						   theSourceClassifiers.contains( fromPortOwner ) ){
 					
 					Logger.writeLine( "Found " + Logger.elementInfo(theConnector) + " owned by " + Logger.elementInfo( inTheBuildingBlock ) + 
 							"that goes from " + Logger.elementInfo(theFromPort) + " to " + Logger.elementInfo(theToPort));
@@ -816,50 +835,7 @@ public class GeneralHelpers {
 		
 		return thePort;
 	}
-	
-	public static IRPPort getPortThatConnects(
-			IRPActor theActor,
-			IRPClassifier withTheChosenClassifier, 
-			IRPClass inTheBuildingBlock ) {
 		
-		IRPPort thePort = null;
-		
-		@SuppressWarnings("unchecked")
-		List<IRPModelElement> theConnectors = inTheBuildingBlock.getLinks().toList();
-		
-		for( IRPModelElement theConnector : theConnectors ){
-			
-			IRPLink theLink = (IRPLink) theConnector;
-			
-			IRPPort theFromPort = theLink.getFromPort();
-			IRPPort theToPort = theLink.getToPort();
-			
-			if( theFromPort != null && theToPort != null ){
-				
-				if( theFromPort.getOwner().equals(theActor) && 
-					theToPort.getOwner().equals( withTheChosenClassifier)){
-					
-					Logger.writeLine( "Found " + Logger.elementInfo(theConnector) + " owned by " + Logger.elementInfo( inTheBuildingBlock ) + 
-							"that goes from " + Logger.elementInfo(theFromPort) + " to " + Logger.elementInfo(theToPort));
-
-					thePort = theFromPort;
-					
-				} else if( theToPort.getOwner().equals(theActor) && 
-						   theFromPort.getOwner().equals( withTheChosenClassifier )){
-					
-					Logger.writeLine( "Found " + Logger.elementInfo(theConnector) + " owned by " + Logger.elementInfo( inTheBuildingBlock ) + 
-							"that goes from " + Logger.elementInfo(theFromPort) + " to " + Logger.elementInfo(theToPort));
-
-					thePort = theToPort;
-				}
-			}
-		}
-		
-		Logger.writeLine("getPortThatConnects is returning " + Logger.elementInfo(thePort));
-		
-		return thePort;
-	}
-	
 	public static String determineBestCheckOperationNameFor(
 			IRPClassifier onTargetBlock,
 			String theAttributeName){
@@ -999,6 +975,7 @@ public class GeneralHelpers {
 	#102 03-NOV-2016: Add right-click menu to auto update names of ADs from UC names (F.J.Chadburn)
 	#113 13-NOV-2016: Stereotypes moved to GlobalPreferencesProfile to simplify/remove orphaned ownership issues (F.J.Chadburn)
     #125 25-NOV-2016: AutoRipple used in UpdateTracedAttributePanel to keep check and FlowPort name updated (F.J.Chadburn)
+    #135 02-DEC-2016: Avoid port proliferation in inheritance tree for actors/system (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 
