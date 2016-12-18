@@ -1,5 +1,6 @@
 package requirementsanalysisplugin;
 
+import generalhelpers.ConfigurationSettings;
 import generalhelpers.CreateGatewayProjectPanel;
 import generalhelpers.Logger;
 import generalhelpers.PopulatePkg;
@@ -90,14 +91,12 @@ public class PopulateRequirementsAnalysisPkg extends PopulatePkg {
 			deleteIfPresent( "Structure1", "StructureDiagram", forProject );
 			deleteIfPresent( "Default", "Package", forProject );
 			
-			setProperty( forProject, "Browser.Settings.ShowPredefinedPackage", "False" );
-			setProperty( forProject, "General.Model.AutoSaveInterval", "5" );
-			setProperty( forProject, "General.Model.HighlightElementsInActiveComponentScope", "False" );
-			setProperty( forProject, "General.Model.ShowModelTooltipInGE", "Enhanced" );			
-			setProperty( forProject, "General.Model.BackUps", "One" );
-			setProperty (forProject, "General.Model.RenameUnusedFiles", "True");
-			setProperty( forProject, "Activity.General.AutoSelectControlOrObjectFlow", "False" );
-			
+	    	ConfigurationSettings theConfigSettings = ConfigurationSettings.getInstance();
+	    	
+	    	theConfigSettings.setPropertiesValuesRequestedInConfigFile( 
+	    			forProject,
+	    			"setPropertyForRequirementsAnalysisModel" );
+	    			
 			forProject.save();
 			
 			@SuppressWarnings("unchecked")
@@ -139,6 +138,7 @@ public class PopulateRequirementsAnalysisPkg extends PopulatePkg {
     #061 17-JUL-2016: Ensure BasePkg is added by reference from profile to aid future integration (F.J.Chadburn)
     #091 23-AUG-2016: Turn off the Activity::General::AutoSelectControlOrObjectFlow property by default (F.J.Chadburn)
     #100 14-SEP-2016: Add option to create RequirementsAnalysisPkg if FunctionalAnalysisPkg not possible (F.J.Chadburn)
+    #142 18-DEC-2016: Project properties now set via config.properties, e.g., to easily switch off backups (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 
