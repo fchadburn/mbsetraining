@@ -231,3 +231,16 @@ BETA TEST RELEASE 2.0.29 (25-NOV-2016)
 ----------------------------------------------------------------------------------
 RELEASE CANDIDATE 2.0.30 (02-DEC-2016)
 ----------------------------------------------------------------------------------
+#141 18-DEC-2016: Automatically set-up GW .rqtf to export ADs and UCs into module (F.J.Chadburn)
+#142 18-DEC-2016: Project properties now set via config.properties, e.g., to easily switch off backups (F.J.Chadburn)
+#143 18-DEC-2016: Add separate tag to enable/disable conversion to detailed option in Copy AD dialog (F.J.Chadburn)
+#144 18-DEC-2016: Add default behaviour to protect for instances where tags are not in model (F.J.Chadburn)
+#145 18-DEC-2016: Fix to remove warning with getWorkingPkgUnderDev unexpectedly finding 2 packages (F.J.Chadburn)
+#146 18-DEC-2016: Allow block hierarchy creation from project level if there's an existing FA package (F.J.Chadburn)
+#147 18-DEC-2016: Fix Actor part creation not being created in correct place if multiple hierarchies (F.J.Chadburn)
+#148 18-DEC-2016: Add message if user tries to create an outgoing event when there are no actors (F.J.Chadburn)
+#149 18-DEC-2016: Improve robustness to allow actor part creation if no TestDriver is present (F.J.Chadburn)
+#150 18-DEC-2016: Removed the Metric layouts from RequirementsAnalysisProfile to ease migration to 8.2 (F.J.Chadburn)
+----------------------------------------------------------------------------------
+RELEASE CANDIDATE 2.0.31 (18-DEC-2016)
+----------------------------------------------------------------------------------
