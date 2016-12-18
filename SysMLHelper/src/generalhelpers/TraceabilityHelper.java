@@ -17,7 +17,7 @@ public class TraceabilityHelper {
 		
 		List<IRPModelElement> existingDeps = 
 				GeneralHelpers.findElementsWithMetaClassAndStereotype(
-						"Dependency", stereotypeName, fromElement );
+						"Dependency", stereotypeName, fromElement, 0 );
 		
 		int isExistingFoundCount = 0;
 		
@@ -139,6 +139,7 @@ public class TraceabilityHelper {
     #044 03-JUL-2016: Minor re-factoring/code corrections (F.J.Chadburn)
 	#083 09-AUG-2016: Add an Update attribute menu option and panel with add check operation option (F.J.Chadburn)
     #129 25-NOV-2016: Fixed addTraceabilityDependenciesTo to avoid creation of duplicate dependencies (F.J.Chadburn)
+    #145 18-DEC-2016: Fix to remove warning with getWorkingPkgUnderDev unexpectedly finding 2 packages (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

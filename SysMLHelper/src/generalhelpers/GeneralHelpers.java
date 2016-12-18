@@ -402,13 +402,14 @@ public class GeneralHelpers {
 	public static List<IRPModelElement> findElementsWithMetaClassAndStereotype(
 			String theMetaClass, 
 			String andStereotype, 
-			IRPModelElement underneathTheEl){
+			IRPModelElement underneathTheEl,
+			int recursive ){
 		
 		List <IRPModelElement> theFilteredList = new ArrayList<IRPModelElement>();
 		
 		@SuppressWarnings("unchecked")
 		List <IRPModelElement> theCandidates = 
-				underneathTheEl.getNestedElementsByMetaClass(theMetaClass, 1).toList();
+				underneathTheEl.getNestedElementsByMetaClass(theMetaClass, recursive).toList();
 
 		for (IRPModelElement theCandidate : theCandidates) {
 			
@@ -976,6 +977,7 @@ public class GeneralHelpers {
 	#113 13-NOV-2016: Stereotypes moved to GlobalPreferencesProfile to simplify/remove orphaned ownership issues (F.J.Chadburn)
     #125 25-NOV-2016: AutoRipple used in UpdateTracedAttributePanel to keep check and FlowPort name updated (F.J.Chadburn)
     #135 02-DEC-2016: Avoid port proliferation in inheritance tree for actors/system (F.J.Chadburn)
+    #145 18-DEC-2016: Fix to remove warning with getWorkingPkgUnderDev unexpectedly finding 2 packages (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

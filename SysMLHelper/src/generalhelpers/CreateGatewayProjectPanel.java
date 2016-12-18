@@ -529,7 +529,18 @@ public class CreateGatewayProjectPanel extends CreateStructuralElementPanel {
 		String theReqtsPkgValue = buildRequirementsPackageValueFor();
 		theUMLModelDoc.setVariableXValue( "requirementsPackage", theReqtsPkgValue );
 		theUMLModelDoc.setVariableXValue( "previousReqsPackage", theReqtsPkgValue );
+		 
+		String theDoorsModuleValue = theUMLModelDoc.getVariableXValue( "doorsModule" );
 		
+		// do we want to specify export model to DOORS into same module as the requirements?
+		if( m_GatewayDocumentPanel.size()==1 && (theDoorsModuleValue != null) ){
+			
+			GatewayDocumentPanel theDoorsInfo = m_GatewayDocumentPanel.get(0);
+		
+			Logger.writeLine("Setting the doorsModule variable to " + theDoorsInfo.getPathName() + " to get the export of diagrams to work");
+			theUMLModelDoc.setVariableXValue( "doorsModule", theDoorsInfo.getPathName() );
+		}
+
 		String theUMLModelPath = "..\\" + m_Project.getName() + ".rpy";
 		theUMLModelDoc.setValueFor( "Path", theUMLModelPath );
 	}
@@ -668,6 +679,7 @@ public class CreateGatewayProjectPanel extends CreateStructuralElementPanel {
     #063 17-JUL-2016: Gateway project creator now mimics GatewayProjectFiles pkg creation if necessary (F.J.Chadburn)
     #066 19-JUL-2016: Added optional baseline box to the fast Gateway setup panel (F.J.Chadburn)
     #101 14-SEP-2016: Provide hint on dialog that 'Setup Gateway based on rqtf template' menu is available (F.J.Chadburn)
+    #141 18-DEC-2016: Automatically set-up GW .rqtf to export ADs and UCs into module (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

@@ -7,12 +7,13 @@ import java.util.Locale;
 import java.util.Properties;
 import java.util.ResourceBundle;
 
+import com.telelogic.rhapsody.core.IRPModelElement;
+
 public class ConfigurationSettings {
 
 	protected ResourceBundle m_resources = null;
 	protected Properties m_properties = null;
-	
-	private static ConfigurationSettings m_instance = null;
+	protected static ConfigurationSettings m_instance = null;
 
 	public static ConfigurationSettings getInstance() {
 		if( m_instance == null ){
@@ -86,6 +87,32 @@ public class ConfigurationSettings {
 		String value = m_resources.getString( key );
 		return value;		
 	}
+	
+	public void setPropertiesValuesRequestedInConfigFile(
+			IRPModelElement onTheElement,
+			String basedOnContext ){
+
+		for( String key : m_properties.stringPropertyNames() ) {
+			
+			if( key.startsWith( basedOnContext ) ){
+				
+				String thePropertyName = key.replace( basedOnContext + ".", "");
+				String thePropertyValue = getProperty( key );
+				
+				Logger.writeLine( "Setting '" + thePropertyName + 
+						"' to '" + thePropertyValue + "' based on config.properties value" ); 
+				
+				try {
+					onTheElement.setPropertyValue( thePropertyName, thePropertyValue );
+					
+				} catch (Exception e) {
+					
+					Logger.writeLine("Exception in setPropertiesValuesRequestedInConfigFile, unable to set " + 
+							thePropertyName + " to " + thePropertyValue + " on " + Logger.elementInfo(onTheElement));
+				}
+			}
+		}
+	}
 }
 
 /**
@@ -95,7 +122,8 @@ public class ConfigurationSettings {
     #109 06-NOV-2016: Added .properties support for localisation of menus (F.J.Chadburn)
     #110 06-NOV-2016: PluginVersion now comes from Config.properties file, rather than hard wired (F.J.Chadburn)
     #118 13-NOV-2016: Default FunctionalAnalysisPkg tags now set in Config.properties file (F.J.Chadburn)
-    
+    #142 18-DEC-2016: Project properties now set via config.properties, e.g., to easily switch off backups (F.J.Chadburn)
+
     This file is part of SysMLHelperPlugin.
 
     SysMLHelperPlugin is free software: you can redistribute it and/or modify
