@@ -19,6 +19,8 @@ public class FunctionalAnalysisSettings {
 	private static final String tagNameForPackageForActorsAndTest = "packageForActorsAndTest";
 	private static final String tagNameForIsSendEventViaPanelOptionEnabled = "isSendEventViaPanelOptionEnabled";
 	private static final String tagNameForIsSendEventViaPanelWantedByDefault = "isSendEventViaPanelWantedByDefault";
+	private static final String tagNameForIsConvertToDetailedADOptionEnabled = "isConvertToDetailedADOptionEnabled";
+	private static final String tagNameForIsConvertToDetailedADOptionWantedByDefault = "isConvertToDetailedADOptionWantedByDefault";
 	
 	public static IRPPackage getPackageUnderDev(IRPProject inTheProject){
 		
@@ -249,7 +251,7 @@ public class FunctionalAnalysisSettings {
 				
 				List<IRPModelElement> theDependencies = 
 						GeneralHelpers.findElementsWithMetaClassAndStereotype(
-								"Dependency", "AppliedProfile", theNestedPkg);
+								"Dependency", "AppliedProfile", theNestedPkg, 0 );
 				
 				for (IRPModelElement theDependencyElement : theDependencies) {
 					
@@ -325,7 +327,8 @@ public class FunctionalAnalysisSettings {
 		return theBlockUnderDev;
 	}
 	
-	public static IRPStereotype getStereotypeForFunctionTracing(IRPProject inTheProject){
+	public static IRPStereotype getStereotypeForFunctionTracing(
+			IRPProject inTheProject){
 		
 		IRPStereotype theStereotype = null;
 		
@@ -345,7 +348,7 @@ public class FunctionalAnalysisSettings {
 	}
 	
 	public static boolean getTagBooleanValue(
-			IRPProject inTheProject, String forTagName ){
+			IRPProject inTheProject, String forTagName, boolean withDefault ){
 		
 		boolean result = false;
 		
@@ -366,10 +369,13 @@ public class FunctionalAnalysisSettings {
 
 			} else {
 				Logger.writeLine( "Warning in getTagBooleanValue, unable to find tag called " + 
-						forTagName + " underneath " + Logger.elementInfo( theRootPackage ) );
+						forTagName + " underneath " + Logger.elementInfo( theRootPackage ) + " so using '" + withDefault + "' instead" );
+				result = withDefault;
 			}
 		} else {
-			Logger.writeLine( "Error in getTagBooleanValue, unable to find FunctionalAnalysisPkg" );
+			Logger.writeLine( "Error in getTagBooleanValue, unable to find FunctionalAnalysisPkg while looking for tag called " + 
+					forTagName + " underneath " + Logger.elementInfo( theRootPackage ) + " so using '" + withDefault + "' instead" );			
+			result = withDefault;
 		}
 		
 		return result;
@@ -379,7 +385,7 @@ public class FunctionalAnalysisSettings {
 			IRPProject inTheProject ){
 		
 		boolean result = getTagBooleanValue(
-				inTheProject, tagNameForIsSendEventViaPanelOptionEnabled );
+				inTheProject, tagNameForIsSendEventViaPanelOptionEnabled, true );
 		
 		return result;
 	}
@@ -388,7 +394,7 @@ public class FunctionalAnalysisSettings {
 			IRPProject inTheProject ){
 		
 		boolean result = getTagBooleanValue(
-				inTheProject, tagNameForIsSendEventViaPanelWantedByDefault );
+				inTheProject, tagNameForIsSendEventViaPanelWantedByDefault, true );
 		
 		return result;
 	}
@@ -397,7 +403,7 @@ public class FunctionalAnalysisSettings {
 			IRPProject inTheProject ){
 		
 		boolean result = getTagBooleanValue(
-				inTheProject, tagNameForIsPopulateWantedByDefault );
+				inTheProject, tagNameForIsPopulateWantedByDefault, false );
 		
 		return result;
 	}
@@ -406,7 +412,25 @@ public class FunctionalAnalysisSettings {
 			IRPProject inTheProject ){
 		
 		boolean result = getTagBooleanValue(
-				inTheProject, tagNameForIsPopulateOptionHidden );
+				inTheProject, tagNameForIsPopulateOptionHidden, true );
+		
+		return result;
+	}
+	
+	public static boolean getIsConvertToDetailedADOptionEnabled(
+			IRPProject inTheProject ){
+		
+		boolean result = getTagBooleanValue(
+				inTheProject, tagNameForIsConvertToDetailedADOptionEnabled, false );
+		
+		return result;
+	}
+
+	public static boolean getIsConvertToDetailedADOptionWantedByDefault(
+			IRPProject inTheProject ){
+		
+		boolean result = getTagBooleanValue(
+				inTheProject, tagNameForIsConvertToDetailedADOptionWantedByDefault, false );
 		
 		return result;
 	}
@@ -454,7 +478,17 @@ public class FunctionalAnalysisSettings {
 					theRootPackage, 
 					tagNameForIsSendEventViaPanelWantedByDefault, 
 					theSettings.getProperty( tagNameForIsSendEventViaPanelWantedByDefault, "false" ) );
+		
+			setStringTagValueOn( 
+					theRootPackage, 
+					tagNameForIsConvertToDetailedADOptionEnabled, 
+					theSettings.getProperty( tagNameForIsConvertToDetailedADOptionEnabled, "false" ) );
 			
+			setStringTagValueOn( 
+					theRootPackage, 
+					tagNameForIsConvertToDetailedADOptionWantedByDefault, 
+					theSettings.getProperty( tagNameForIsConvertToDetailedADOptionWantedByDefault, "false" ) );
+
 			setPackageTagValueOn( 
 					theRootPackage, 
 					tagNameForPackageForEventsAndInterfaces, 
@@ -532,6 +566,10 @@ public class FunctionalAnalysisSettings {
     #127 25-NOV-2016: Improved usability of ViaPanel event creation by enabling default selection via tags (F.J.Chadburn)
     #135 02-DEC-2016: Avoid port proliferation in inheritance tree for actors/system (F.J.Chadburn)
     #140 02-DEC-2016: Don't overwrite boolean tags in FunctionalAnalysisPkg to preserve user choice (F.J.Chadburn)
+    #142 18-DEC-2016: Project properties now set via config.properties, e.g., to easily switch off backups (F.J.Chadburn)
+    #143 18-DEC-2016: Add separate tag to enable/disable conversion to detailed option in Copy AD dialog (F.J.Chadburn)
+    #144 18-DEC-2016: Add default behaviour to protect for instances where tags are not in model (F.J.Chadburn)
+    #145 18-DEC-2016: Fix to remove warning with getWorkingPkgUnderDev unexpectedly finding 2 packages (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

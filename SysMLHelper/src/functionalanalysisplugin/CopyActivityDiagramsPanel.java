@@ -144,13 +144,17 @@ public class CopyActivityDiagramsPanel extends CreateStructuralElementPanel {
 		
 		theBox.add( m_OpenDiagramsCheckBox );
 		
-		boolean isPopulateOptionHidden = 
-				FunctionalAnalysisSettings.getIsPopulateOptionHidden(
+		boolean isConvertToDetailedADOptionEnabled = 
+				FunctionalAnalysisSettings.getIsConvertToDetailedADOptionEnabled(
+						m_ToElement.getProject() );
+		
+		boolean isConvertToDetailedADOptionWantedByDefault = 
+				FunctionalAnalysisSettings.getIsConvertToDetailedADOptionWantedByDefault(
 						m_ToElement.getProject() );
 		
 		m_ApplyMoreDetailedADCheckBox = new JCheckBox("Switch toolbars and formatting to more detailed AD ready for conversion?");
-		m_ApplyMoreDetailedADCheckBox.setSelected( !isPopulateOptionHidden );
-		m_ApplyMoreDetailedADCheckBox.setVisible( !isPopulateOptionHidden );
+		m_ApplyMoreDetailedADCheckBox.setSelected( isConvertToDetailedADOptionWantedByDefault );
+		m_ApplyMoreDetailedADCheckBox.setVisible( isConvertToDetailedADOptionEnabled );
 		
 		if( !m_RadioButtonMap.isEmpty() ){
 			theBox.add( m_ApplyMoreDetailedADCheckBox );			
@@ -375,7 +379,8 @@ public class CopyActivityDiagramsPanel extends CreateStructuralElementPanel {
     #093 23-AUG-2016: Added isPopulateOptionHidden tag to allow hiding of the populate check-box on dialogs (F.J.Chadburn)
     #122 25-NOV-2016: Scroll-bar added to Copy AD dialog to enable it to scale to large number of ADs (F.J.Chadburn)
     #128 25-NOV-2016: Improved usability/speed of Copy AD dialog by providing user choice to open diagrams (F.J.Chadburn)
-    
+    #143 18-DEC-2016: Add separate tag to enable/disable conversion to detailed option in Copy AD dialog (F.J.Chadburn)
+
     This file is part of SysMLHelperPlugin.
 
     SysMLHelperPlugin is free software: you can redistribute it and/or modify

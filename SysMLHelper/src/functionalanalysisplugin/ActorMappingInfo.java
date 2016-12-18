@@ -4,6 +4,7 @@ import java.util.List;
 
 import generalhelpers.GeneralHelpers;
 import generalhelpers.Logger;
+import generalhelpers.UserInterfaceHelpers;
 
 import javax.swing.JCheckBox;
 import javax.swing.JTextField;
@@ -192,7 +193,7 @@ public class ActorMappingInfo {
 				}				
 			}
 			
-			if( connectedToBlock != null && theTesterBlock != null ){
+			if( connectedToBlock != null ){
 			
 				IRPPackage thePackageForActor = 
 						FunctionalAnalysisSettings.getPackageForActorsAndTest(
@@ -207,8 +208,9 @@ public class ActorMappingInfo {
 				String theText = "Create actor called " + m_ActorNameTextField.getText();
 				
 				// Make each of the actors a part of the SystemAssembly block
-				IRPInstance theActorPart = (IRPInstance) theAssemblyBlock.addNewAggr(
-						"Part", "its" + theActor.getName() );
+				IRPInstance theActorPart = 
+						(IRPInstance) theAssemblyBlock.addNewAggr(
+								"Part", "its" + theActor.getName() );
 				
 				theActorPart.highLightElement();
 				theActorPart.setOtherClass( theActor );
@@ -233,130 +235,168 @@ public class ActorMappingInfo {
 					}
 				}
 				
-				IRPLink existingLinkConnectingBlockToActor = 
-						getExistingLinkBetweenBaseClassifiersOf(
-								connectedToBlock, theActor );
+				connectActorPartWithBlockPartIn(
+						theAssemblyBlock,
+						theConnectedToPart, 
+						theActorPart);
 				
-				IRPPort theActorToSystemPort = null;
-				IRPPort theSystemToActorPort = null;
-				
-				if( existingLinkConnectingBlockToActor != null ){
+				if( theTesterBlock == null ){
 					
-					Logger.writeLine( "There is an existing connector between " + 
-							Logger.elementInfo( connectedToBlock ) + " and " + Logger.elementInfo( theActor ) );
-				
-					IRPPort fromPort = existingLinkConnectingBlockToActor.getFromPort();
-					IRPPort toPort = existingLinkConnectingBlockToActor.getToPort();
-					
-					if( fromPort.getOwner() instanceof IRPActor ){
-						theActorToSystemPort = fromPort;
-						theSystemToActorPort = toPort;
-					} else {
-						theActorToSystemPort = toPort;
-						theSystemToActorPort = fromPort;						
-					}	
+					UserInterfaceHelpers.showWarningDialog(
+							"A new Actor part called " + theActorPart.getName() + " was added to " + Logger.elementInfo( theAssemblyBlock ) + ". \n" +
+							"However, no TestDriver part was found hence skipping the creation of links to this. In future, you \n" +
+							"may want to consider using the FullSim structure to get the benefits of test driver creation. " );
 				} else {
-
-					Logger.writeLine( "Creating a new connector between " + 
-							Logger.elementInfo( connectedToBlock ) + " and " + Logger.elementInfo( theActor ) );
-
-					String theActorPortName = 
-							GeneralHelpers.determineUniqueNameBasedOn(
-									"p" + connectedToBlock.getName() , "Port", theActor);
-
-					Logger.writeLine("Attempting to create port called " + theActorPortName + " owned by " + Logger.elementInfo( theActor ));
-
-					// and connect actor to the LogicalSystem block
-			    	theActorToSystemPort = 
-			    			(IRPPort) theActor.addNewAggr( 
-			    					"Port", theActorPortName);
-
-					String theSystemPortName = 
-							GeneralHelpers.determineUniqueNameBasedOn(
-									"p" + theActor.getName() , "Port", connectedToBlock);
-
-					Logger.writeLine("Attempting to create port called " + theSystemPortName + " owned by " + Logger.elementInfo( connectedToBlock ));
-
-					try {
-						theSystemToActorPort = 
-								(IRPPort) connectedToBlock.addNewAggr(
-										"Port", theSystemPortName );	
-					} catch (Exception e) {
-						Logger.writeLine("Exception while trying to create system to actor port");
-					}			
+					
+					connectActorPartWithTesterPartIn(
+							theAssemblyBlock,
+							theTesterPart, 
+							theActorPart );
 				}
-				
-				try {
-					IRPLink theLogicalSystemLink = 
-							(IRPLink) theAssemblyBlock.addLink(
-									theActorPart, 
-									theConnectedToPart, 
-									null, 
-									theActorToSystemPort, 
-									theSystemToActorPort );
-					
-					theLogicalSystemLink.changeTo("connector");
-					
-				} catch (Exception e) {
-					Logger.writeLine("Exception while trying to addLink");
-				}
-				
-				IRPLink existingLinkConnectingTesterToActor = 
-						getExistingLinkBetweenBaseClassifiersOf(
-								theTesterBlock, theActor );
-				
-				IRPPort theActorToTesterPort = null;
-				IRPPort theTesterToActorPort = null;
-				
-				if( existingLinkConnectingTesterToActor != null ){
-					
-					Logger.writeLine( "There are existing ports between " + 
-							Logger.elementInfo( theTesterBlock ) + " and " + Logger.elementInfo( theActor ) );
-				
-					IRPPort fromPort = existingLinkConnectingTesterToActor.getFromPort();
-					IRPPort toPort = existingLinkConnectingTesterToActor.getToPort();
-					
-					if( fromPort.getOwner() instanceof IRPActor ){
-						theActorToTesterPort = fromPort;
-						theTesterToActorPort = toPort;
-					} else {
-						theActorToTesterPort = toPort;
-						theTesterToActorPort = fromPort;						
-					}
-					
-				} else {
 
-					Logger.writeLine( "Creating a new connector between " + 
-							Logger.elementInfo( theTesterBlock ) + " and " + Logger.elementInfo( theActor ) );
-
-					try {
-						// and connect actor to the TestDriver block
-				    	theActorToTesterPort = 
-				    			(IRPPort) theActor.addNewAggr( "Port", "pTester" );
-				    	
-						theTesterToActorPort = 
-								(IRPPort) theTesterBlock.addNewAggr(
-										"Port", "p" + theActor.getName() );
-					} catch (Exception e) {
-						Logger.writeLine("Exception while trying to add ports");
-					}
-				}
-				
-				IRPLink theTesterLink = 
-						(IRPLink) theAssemblyBlock.addLink(
-								theActorPart, 
-								theTesterPart, 
-								null, 
-								theActorToTesterPort, 
-								theTesterToActorPort );
-				
-				theTesterLink.changeTo("connector");
 			}
 			
 			Logger.writeLine("Finishing adding part connected to actor");
 
 		} else {
 			Logger.writeLine("Not selected");
+		}
+	}
+
+	private void connectActorPartWithTesterPartIn(
+			IRPClass theAssemblyBlock,
+			IRPInstance theTesterPart,
+			IRPInstance theActorPart ){
+		
+		IRPClassifier theActor = theActorPart.getOtherClass();
+		IRPClassifier theTesterBlock = theTesterPart.getOtherClass();
+		
+		IRPLink existingLinkConnectingTesterToActor = 
+				getExistingLinkBetweenBaseClassifiersOf(
+						theTesterBlock, theActor );
+		
+		IRPPort theActorToTesterPort = null;
+		IRPPort theTesterToActorPort = null;
+		
+		if( existingLinkConnectingTesterToActor != null ){
+			
+			Logger.writeLine( "There are existing ports between " + 
+					Logger.elementInfo( theTesterBlock ) + " and " + Logger.elementInfo( theActor ) );
+		
+			IRPPort fromPort = existingLinkConnectingTesterToActor.getFromPort();
+			IRPPort toPort = existingLinkConnectingTesterToActor.getToPort();
+			
+			if( fromPort.getOwner() instanceof IRPActor ){
+				theActorToTesterPort = fromPort;
+				theTesterToActorPort = toPort;
+			} else {
+				theActorToTesterPort = toPort;
+				theTesterToActorPort = fromPort;						
+			}
+			
+		} else {
+
+			Logger.writeLine( "Creating a new connector between " + 
+					Logger.elementInfo( theTesterBlock ) + " and " + Logger.elementInfo( theActor ) );
+
+			try {
+				// and connect actor to the TestDriver block
+		    	theActorToTesterPort = 
+		    			(IRPPort) theActor.addNewAggr( "Port", "pTester" );
+		    	
+				theTesterToActorPort = 
+						(IRPPort) theTesterBlock.addNewAggr(
+								"Port", "p" + theActor.getName() );
+			} catch (Exception e) {
+				Logger.writeLine("Exception while trying to add ports");
+			}
+		}
+		
+		IRPLink theTesterLink = 
+				(IRPLink) theAssemblyBlock.addLink(
+						theActorPart, 
+						theTesterPart, 
+						null, 
+						theActorToTesterPort, 
+						theTesterToActorPort );
+		
+		theTesterLink.changeTo("connector");
+	}
+
+	private void connectActorPartWithBlockPartIn(
+			IRPClass theAssemblyBlock,
+			IRPInstance theConnectedToPart,
+			IRPInstance theActorPart ){
+		
+		IRPClassifier theActor = theActorPart.getOtherClass();
+		IRPClassifier connectedToBlock = theConnectedToPart.getOtherClass();
+		
+		IRPLink existingLinkConnectingBlockToActor = 
+				getExistingLinkBetweenBaseClassifiersOf(
+						connectedToBlock, theActor );
+		
+		IRPPort theActorToSystemPort = null;
+		IRPPort theSystemToActorPort = null;
+		
+		if( existingLinkConnectingBlockToActor != null ){
+			
+			Logger.writeLine( "There is an existing connector between " + 
+					Logger.elementInfo( connectedToBlock ) + " and " + Logger.elementInfo( theActor ) );
+		
+			IRPPort fromPort = existingLinkConnectingBlockToActor.getFromPort();
+			IRPPort toPort = existingLinkConnectingBlockToActor.getToPort();
+			
+			if( fromPort.getOwner() instanceof IRPActor ){
+				theActorToSystemPort = fromPort;
+				theSystemToActorPort = toPort;
+			} else {
+				theActorToSystemPort = toPort;
+				theSystemToActorPort = fromPort;						
+			}	
+		} else {
+
+			Logger.writeLine( "Creating a new connector between " + 
+					Logger.elementInfo( connectedToBlock ) + " and " + Logger.elementInfo( theActor ) );
+
+			String theActorPortName = 
+					GeneralHelpers.determineUniqueNameBasedOn(
+							"p" + connectedToBlock.getName() , "Port", theActor);
+
+			Logger.writeLine("Attempting to create port called " + theActorPortName + " owned by " + Logger.elementInfo( theActor ));
+
+			// and connect actor to the LogicalSystem block
+			theActorToSystemPort = 
+					(IRPPort) theActor.addNewAggr( 
+							"Port", theActorPortName);
+
+			String theSystemPortName = 
+					GeneralHelpers.determineUniqueNameBasedOn(
+							"p" + theActor.getName() , "Port", connectedToBlock);
+
+			Logger.writeLine("Attempting to create port called " + theSystemPortName + " owned by " + Logger.elementInfo( connectedToBlock ));
+
+			try {
+				theSystemToActorPort = 
+						(IRPPort) connectedToBlock.addNewAggr(
+								"Port", theSystemPortName );	
+			} catch (Exception e) {
+				Logger.writeLine("Exception while trying to create system to actor port");
+			}			
+		}
+		
+		try {
+			IRPLink theLogicalSystemLink = 
+					(IRPLink) theAssemblyBlock.addLink(
+							theActorPart, 
+							theConnectedToPart, 
+							null, 
+							theActorToSystemPort, 
+							theSystemToActorPort );
+			
+			theLogicalSystemLink.changeTo("connector");
+			
+		} catch (Exception e) {
+			Logger.writeLine("Exception while trying to addLink");
 		}
 	}
 }
@@ -373,7 +413,8 @@ public class ActorMappingInfo {
     #120 25-NOV-2016: Enable TestDriver inheritance in the FullSim block creation dialog (F.J.Chadburn)
     #126 25-NOV-2016: Fixes to CreateNewActorPanel to cope better when multiple blocks are in play (F.J.Chadburn)
     #135 02-DEC-2016: Avoid port proliferation in inheritance tree for actors/system (F.J.Chadburn)
-    
+    #149 18-DEC-2016: Improve robustness to allow actor part creation if no TestDriver is present (F.J.Chadburn)
+
     This file is part of SysMLHelperPlugin.
 
     SysMLHelperPlugin is free software: you can redistribute it and/or modify

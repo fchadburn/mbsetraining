@@ -184,7 +184,7 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
 		
 		List<IRPModelElement> theExistingBlocks = 
 				GeneralHelpers.findElementsWithMetaClassAndStereotype(
-						"Class", "LogicalSystem", m_RootPackage);
+						"Class", "LogicalSystem", m_RootPackage, 1);
 			
 		m_BlockNameTextField = new JTextField( theBlockName );
 		m_BlockNameTextField.setPreferredSize( new Dimension( 200, 20 ));
@@ -375,7 +375,7 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
 			
 			List<IRPModelElement> theExistingBlocks = 
 					GeneralHelpers.findElementsWithMetaClassAndStereotype(
-							"Class", "TestDriver", m_RootPackage);
+							"Class", "TestDriver", m_RootPackage, 1);
 			
 			m_TestDriverInheritanceChoice = new RhapsodyComboBox( theExistingBlocks, false );			
 			m_TestDriverInheritanceChoice.setPreferredSize( new Dimension(100, 20) );
@@ -979,6 +979,7 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
     #131 25-NOV-2016: Added initial auto-populate of IBD/BDD (F.J.Chadburn)
     #138 02-DEC-2016: Highlight Block when creating functional analysis structure (F.J.Chadburn)
     #139 02-DEC-2016: Improve robustness in block naming dialog when m_TestDriverNameTextField is null (F.J.Chadburn)
+    #145 18-DEC-2016: Fix to remove warning with getWorkingPkgUnderDev unexpectedly finding 2 packages (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

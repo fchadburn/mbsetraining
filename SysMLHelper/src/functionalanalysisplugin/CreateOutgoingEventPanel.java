@@ -1,5 +1,6 @@
 package functionalanalysisplugin;
 
+import generalhelpers.ConfigurationSettings;
 import generalhelpers.GeneralHelpers;
 import generalhelpers.Logger;
 import generalhelpers.UserInterfaceHelpers;
@@ -214,7 +215,15 @@ public class CreateOutgoingEventPanel extends CreateTracedElementPanel {
 				
 				List<IRPModelElement> theCandidateActors = getNonElapsedTimeActorsRelatedTo( theBuildingBlock );
 				
-				if( !theCandidateActors.isEmpty() ){
+				if( theCandidateActors.isEmpty() ){
+					
+					ConfigurationSettings theConfigSettings = ConfigurationSettings.getInstance();
+					
+					UserInterfaceHelpers.showWarningDialog("There are no actor parts to send events to in the " + 
+							Logger.elementInfo(theBuildingBlock) + ". \n\n" +
+							"If you want to send an event then add an actor to the BDD and connect its part using ports. These steps are automated \n" +
+							"by the '" + theConfigSettings.getString( "functionalanalysisplugin.AddNewActorToPackageMenu" ) + "' command. ");
+				} else {
 					
 					final IRPModelElement theActor = 
 							GeneralHelpers.launchDialogToSelectElement(
@@ -526,6 +535,7 @@ public class CreateOutgoingEventPanel extends CreateTracedElementPanel {
     #117 13-NOV-2016: Get incoming and outgoing event dialogs to work without actors in the context (F.J.Chadburn)
     #125 25-NOV-2016: AutoRipple used in UpdateTracedAttributePanel to keep check and FlowPort name updated (F.J.Chadburn)
     #130 25-NOV-2016: Improved consistency in handling of isPopulateOptionHidden and isPopulateWantedByDefault tags (F.J.Chadburn)
+    #148 18-DEC-2016: Add message if user tries to create an outgoing event when there are no actors (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

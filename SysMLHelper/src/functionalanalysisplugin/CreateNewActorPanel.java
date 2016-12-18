@@ -31,8 +31,7 @@ public class CreateNewActorPanel extends CreateStructuralElementPanel {
 	private IRPClass m_BlockToConnectTo = null;
 	
 	public static void launchThePanel(
-			IRPProject theProject,
-			final IRPModelElement theRootPackage ){
+			IRPProject theProject ){
 		
 		final IRPPackage thePackageUnderDev = 
 				FunctionalAnalysisSettings.getPackageUnderDev( 
@@ -58,7 +57,7 @@ public class CreateNewActorPanel extends CreateStructuralElementPanel {
 
 				CreateNewActorPanel thePanel = 
 						new CreateNewActorPanel( 
-								theBlockUnderDev, (IRPPackage)theRootPackage );
+								theBlockUnderDev, thePackageUnderDev );
 
 				frame.setContentPane( thePanel );
 				frame.pack();
@@ -194,7 +193,8 @@ public class CreateNewActorPanel extends CreateStructuralElementPanel {
     #030 01-JUN-2016: Improve legal name checking across helpers (F.J.Chadburn)
     #035 15-JUN-2016: New panel to configure requirements package naming and gateway set-up (F.J.Chadburn)
     #126 25-NOV-2016: Fixes to CreateNewActorPanel to cope better when multiple blocks are in play (F.J.Chadburn)
-    
+    #147 18-DEC-2016: Fix Actor part creation not being created in correct place if multiple hierarchies (F.J.Chadburn)
+
     This file is part of SysMLHelperPlugin.
 
     SysMLHelperPlugin is free software: you can redistribute it and/or modify

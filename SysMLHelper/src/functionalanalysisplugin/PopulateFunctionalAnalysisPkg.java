@@ -1,5 +1,6 @@
 package functionalanalysisplugin;
 
+import generalhelpers.ConfigurationSettings;
 import generalhelpers.CreateGatewayProjectPanel;
 import generalhelpers.GeneralHelpers;
 import generalhelpers.PopulatePkg;
@@ -40,9 +41,17 @@ public class PopulateFunctionalAnalysisPkg extends PopulatePkg {
 		
 		IRPModelElement theExistingPkg = forProject.findElementsByFullName(rootPackageName, "Package");
 		
-		if (theExistingPkg != null){
-			Logger.writeLine("Doing nothing: " + Logger.elementInfo( forProject ) + " already has package called " + rootPackageName);
-			ok = false;
+		if (theExistingPkg != null && theExistingPkg instanceof IRPPackage ){
+			
+	    	boolean answer = UserInterfaceHelpers.askAQuestion( 
+	    			"This project already has a " + Logger.elementInfo( theExistingPkg ) + ". \n" +
+	    			"Do you want to create a " + withSimulationType + " package stucture underneath it?");
+	    	
+	    	if( answer==true ){
+		    	createFunctionalBlockPackageHierarchy( (IRPPackage)theExistingPkg, withSimulationType );
+	    	}
+
+	    	ok = false;
 		}
 		
 		if (ok) {
@@ -160,14 +169,12 @@ public class PopulateFunctionalAnalysisPkg extends PopulatePkg {
 			deleteIfPresent( "Structure1", "StructureDiagram", forProject );
 	    	deleteIfPresent( "Default", "Package", forProject );
 	    	
-	    	setProperty( forProject, "Browser.Settings.ShowPredefinedPackage", "True" );
-	    	setProperty( forProject, "General.Model.AutoSaveInterval", "5" );
-	    	setProperty( forProject, "General.Model.HighlightElementsInActiveComponentScope", "True" );
-	    	setProperty( forProject, "General.Model.ShowModelTooltipInGE", "Enhanced" );
-	    	setProperty( forProject, "General.Model.BackUps", "One" );
-	    	setProperty (forProject, "General.Model.RenameUnusedFiles", "True");
-	    	setProperty( forProject, "Activity.General.AutoSelectControlOrObjectFlow", "False" );
+	    	ConfigurationSettings theConfigSettings = ConfigurationSettings.getInstance();
 	    	
+	    	theConfigSettings.setPropertiesValuesRequestedInConfigFile( 
+	    			forProject,
+	    			"setPropertyForFunctionalAnalysisModel" );
+	    		    	
 	    	createFunctionalBlockPackageHierarchy( theFunctionalAnalysisPkg, withSimulationType );
 		}
 	}
@@ -219,7 +226,7 @@ public class PopulateFunctionalAnalysisPkg extends PopulatePkg {
 				theProject.findElementsByFullName( rootPackageName, "Package" );
 		
 		if( theRootPackage != null ){
-			CreateNewActorPanel.launchThePanel( theProject, theRootPackage );
+			CreateNewActorPanel.launchThePanel( theProject );
 		}
 	}
 	
@@ -344,7 +351,10 @@ public class PopulateFunctionalAnalysisPkg extends PopulatePkg {
     #115 13-NOV-2016: Removed use of isEnableBlockSelectionByUser tag and <<LogicalSystem>> by helper (F.J.Chadburn)
     #126 25-NOV-2016: Fixes to CreateNewActorPanel to cope better when multiple blocks are in play (F.J.Chadburn)
     #128 25-NOV-2016: Improved usability/speed of Copy AD dialog by providing user choice to open diagrams (F.J.Chadburn)
-    
+    #142 18-DEC-2016: Project properties now set via config.properties, e.g., to easily switch off backups (F.J.Chadburn)
+    #146 18-DEC-2016: Allow block hierarchy creation from project level if there's an existing FA package (F.J.Chadburn)
+    #147 18-DEC-2016: Fix Actor part creation not being created in correct place if multiple hierarchies (F.J.Chadburn)
+
     This file is part of SysMLHelperPlugin.
 
     SysMLHelperPlugin is free software: you can redistribute it and/or modify
