@@ -241,6 +241,7 @@ RELEASE CANDIDATE 2.0.30 (02-DEC-2016)
 #148 18-DEC-2016: Add message if user tries to create an outgoing event when there are no actors (F.J.Chadburn)
 #149 18-DEC-2016: Improve robustness to allow actor part creation if no TestDriver is present (F.J.Chadburn)
 #150 18-DEC-2016: Removed the Metric layouts from RequirementsAnalysisProfile to ease migration to 8.2 (F.J.Chadburn)
+#151 18-DEC-2016: Initialise elapsedTime to 0 in the BasePkg::TimeElapsedBlock used to support sim (F.J.Chadburn) 
 ----------------------------------------------------------------------------------
 RELEASE CANDIDATE 2.0.31 (18-DEC-2016)
 ----------------------------------------------------------------------------------
