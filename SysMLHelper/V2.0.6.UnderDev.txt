@@ -1,7 +1,0 @@
-#019 15-MAY-2016: Improvements to Functional Analysis Block default naming approach (F.J.Chadburn)
-     
-TODO:
-#XXX DD-MTH-YEAR: Add support for traced attribute creation (F.J.Chadburn)
-#XXX DD-MTH-YEAR: Improve singleton support for IRPApplication/IRPProject across project (F.J.Chadburn)
-#XXX DD-MTH-YEAR: Add check box for check operation (F.J.Chadburn)
-#XXX DD-MTH-YEAR: Allow user to choose which Activity Diagrams to synch from RequirementsAnalysisPkg
