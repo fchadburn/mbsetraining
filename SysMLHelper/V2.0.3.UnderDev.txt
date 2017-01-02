@@ -1,9 +1,0 @@
-#010 08-MAY-2016: Remove white-space from actor names (F.J.Chadburn)
-#011 08-MAY-2016: Simplify version numbering mechanism (F.J.Chadburn)
-#012 08-MAY-2016: Fix Send event without value plus re-word check box titles (F.J.Chadburn)
-
-TODO:
-#XXX 08-MAY-2016: Get Component created via API to work correctly (F.J.Chadburn)
-#XXX 08-MAY-2016: Get analysis block creation form to validate legality of user name choices (F.J.Chadburn)
-#XXX 08-MAY-2016: Add GPL advisory to the Log window (F.J.Chadburn)
-#XXX 08-MAY-2016: Add support for traced attribute creation (F.J.Chadburn)
