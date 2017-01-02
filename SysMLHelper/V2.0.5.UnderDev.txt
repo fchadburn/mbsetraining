@@ -1,9 +1,0 @@
-#016 11-MAY-2016: Add GPL advisory to the Log window (F.J.Chadburn)
-#017 11-MAY-2016: Double-click now works with both nested and hyper-linked diagrams (F.J.Chadburn)
-#018 11-MAY-2016: Provide advisory before add by reference of an external RequirementsAnalysisPkg (F.J.Chadburn)
-     
-TODO:
-#XXX 08-MAY-2016: Get analysis block creation form to validate legality of user name choices (F.J.Chadburn)
-#XXX 08-MAY-2016: Add support for traced attribute creation (F.J.Chadburn)
-#XXX 10-MAY-2016: Improve singleton support for IRPApplication/IRPProject across project (F.J.Chadburn)
-#XXX 11-MAY-2016: Add check box for check operation
