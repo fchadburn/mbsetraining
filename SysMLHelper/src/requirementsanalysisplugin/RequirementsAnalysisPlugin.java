@@ -146,7 +146,16 @@ public class RequirementsAnalysisPlugin extends RPUserPlugin {
 					NestedActivityDiagram.renameNestedActivityDiagramsFor( theSelectedEls );
 
 				} catch (Exception e) {
-					Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking RenameActions.performRenamesFor");
+					Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking NestedActivityDiagram.renameNestedActivityDiagramsFor");
+				}	
+
+			} else if (menuItem.equals(m_configSettings.getString( "requirementsanalysisplugin.DeleteTaggedAsDeletedAtHighLevelMenu" ))){
+
+				try {
+					MarkedAsDeletedPanel.launchThePanel( theSelectedEls );
+
+				} catch (Exception e) {
+					Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking MarkedAsDeletedPanel.launchThePanel");
 				}
 				
 			} else {
@@ -176,7 +185,7 @@ public class RequirementsAnalysisPlugin extends RPUserPlugin {
 }
 
 /**
- * Copyright (C) 2016  MBSE Training and Consulting Limited (www.executablembse.com)
+ * Copyright (C) 2016-2017  MBSE Training and Consulting Limited (www.executablembse.com)
 
     Change history:
     #004 10-APR-2016: Re-factored projects into single workspace (F.J.Chadburn)    
@@ -188,6 +197,7 @@ public class RequirementsAnalysisPlugin extends RPUserPlugin {
     #102 03-NOV-2016: Add right-click menu to auto update names of ADs from UC names (F.J.Chadburn)
     #109 06-NOV-2016: Added .properties support for localisation of menus (F.J.Chadburn)
     #110 06-NOV-2016: PluginVersion now comes from Config.properties file, rather than hard wired (F.J.Chadburn)
+    #155 25-JAN-2017: Added new panel to find and delete Gateway Deleted_At_High_Level req'ts with Rhp 8.2 (F.J.Chadburn)
     
     This file is part of SysMLHelperPlugin.
 
