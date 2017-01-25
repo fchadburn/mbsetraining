@@ -478,29 +478,39 @@ public class GeneralHelpers {
 	
 	public static IRPStereotype getStereotypeAppliedTo(
 			IRPModelElement theElement, 
-			String thatMatchesRegEx){
+			String thatMatchesRegEx ){
 		
 		IRPStereotype foundStereotype = null;
 		
 		@SuppressWarnings("unchecked")
-		List<IRPStereotype> theStereotypes = theElement.getStereotypes().toList();
+		List<IRPStereotype> theCandidateStereotypes = theElement.getStereotypes().toList();
+		List<IRPStereotype> theMatchingStereotypes = new ArrayList<IRPStereotype>();
 		
-		int count=0;
-		
-		for (IRPStereotype theStereotype : theStereotypes) {
+		for( IRPStereotype theCandidateStereotype : theCandidateStereotypes ){
 			
-			count++;
+			String theName = theCandidateStereotype.getName();
 			
-			String theName = theStereotype.getName();
-			
-			if (theName.matches(thatMatchesRegEx)){
-				foundStereotype = theStereotype;
-				
-				if (count > 1){
-					Logger.writeLine("Error in getStereotypeAppliedTo related to " + Logger.elementInfo(theElement) + " count=" + count);
-				}
+			if( theName.matches( thatMatchesRegEx ) ){
+
+				theMatchingStereotypes.add( theCandidateStereotype );
 			}		
 		}
+		
+		int count = theMatchingStereotypes.size();
+		
+		if( count == 1 ){
+			
+			foundStereotype = theMatchingStereotypes.get( 0 );
+			
+		} else if( count > 1 ){
+			
+			Logger.writeLine(
+					"Warning in getStereotypeAppliedTo, there are multiple stereotypes related to " + 
+					Logger.elementInfo(theElement) + " size=" + theMatchingStereotypes.size() + 
+					"matching regex=" + thatMatchesRegEx );
+			
+			foundStereotype = theMatchingStereotypes.get( 0 );
+		} 
 		
 		return foundStereotype;
 	}
@@ -951,7 +961,7 @@ public class GeneralHelpers {
 }
 
 /**
- * Copyright (C) 2016  MBSE Training and Consulting Limited (www.executablembse.com)
+ * Copyright (C) 2016-2017  MBSE Training and Consulting Limited (www.executablembse.com)
 
     Change history:
     #004 10-APR-2016: Re-factored projects into single workspace (F.J.Chadburn)
@@ -978,6 +988,7 @@ public class GeneralHelpers {
     #125 25-NOV-2016: AutoRipple used in UpdateTracedAttributePanel to keep check and FlowPort name updated (F.J.Chadburn)
     #135 02-DEC-2016: Avoid port proliferation in inheritance tree for actors/system (F.J.Chadburn)
     #145 18-DEC-2016: Fix to remove warning with getWorkingPkgUnderDev unexpectedly finding 2 packages (F.J.Chadburn)
+    #160 25-JAN-2017: Minor fixes to code found during development (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

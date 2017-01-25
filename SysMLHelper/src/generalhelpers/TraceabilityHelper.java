@@ -32,15 +32,15 @@ public class TraceabilityHelper {
 		}
 		
 		if( isExistingFoundCount==0 ){
-			IRPDependency theDeriveDependency = 
-					fromElement.addDependencyTo( toElement );
+			theDependency = fromElement.addDependencyTo( toElement );
+			theDependency.addStereotype( stereotypeName, "Dependency" );
 			
-			theDeriveDependency.addStereotype( stereotypeName, "Dependency" );
-			
-			Logger.writeLine( "Added a «" + stereotypeName + "» dependency to " + Logger.elementInfo(fromElement) );
+			Logger.writeLine( "Added a «" + stereotypeName + "» dependency to " + 
+					Logger.elementInfo(fromElement) + " (to " + Logger.elementInfo( toElement ) + ")" );
 		} else {
-			Logger.writeLine( "Skipped adding a «" + stereotypeName + "» dependency to " + Logger.elementInfo(fromElement) + 
-					" as " + isExistingFoundCount + " already exists" );
+			Logger.writeLine( "Skipped adding a «" + stereotypeName + "» dependency to " + Logger.elementInfo( fromElement ) + 
+					" (to " + Logger.elementInfo( toElement ) + 
+					") as " + isExistingFoundCount + " already exists" );
 		}
 		
 		return theDependency;
@@ -128,7 +128,7 @@ public class TraceabilityHelper {
 }
 
 /**
- * Copyright (C) 2016  MBSE Training and Consulting Limited (www.executablembse.com)
+ * Copyright (C) 2016-2017  MBSE Training and Consulting Limited (www.executablembse.com)
 
     Change history:
     #006 02-MAY-2016: Add FunctionalAnalysisPkg helper support (F.J.Chadburn)
@@ -140,6 +140,7 @@ public class TraceabilityHelper {
 	#083 09-AUG-2016: Add an Update attribute menu option and panel with add check operation option (F.J.Chadburn)
     #129 25-NOV-2016: Fixed addTraceabilityDependenciesTo to avoid creation of duplicate dependencies (F.J.Chadburn)
     #145 18-DEC-2016: Fix to remove warning with getWorkingPkgUnderDev unexpectedly finding 2 packages (F.J.Chadburn)
+    #160 25-JAN-2017: Minor fixes to code found during development (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 
