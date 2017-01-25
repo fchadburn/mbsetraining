@@ -54,33 +54,40 @@ public class SysMLHelperTriggers extends RPApplicationListener {
 			} else if (modelElement != null && 
 					modelElement instanceof IRPCallOperation){
 				
-				@SuppressWarnings("unchecked")
-				List<IRPGraphElement> theSelectedGraphEls = 
-					theApp.getSelectedGraphElements().toList();
-				
 				IRPCallOperation theCallOp = (IRPCallOperation)modelElement;
 				IRPInterfaceItem theOp = theCallOp.getOperation();
 				
-				if( theOp==null ){
-					IRPClass theBlock = FunctionalAnalysisSettings.getBlockUnderDev(
-							modelElement.getProject() );
+				IRPModelElement packageUnderDevTag = 
+						theApp.activeProject().findNestedElementRecursive(
+								"packageUnderDev", "Tag" );
+				
+				if( packageUnderDevTag != null ){
 					
-					if (theBlock != null){
-						boolean answer = UserInterfaceHelpers.askAQuestion(
-								"Do you want to add an Operation to " + 
-								Logger.elementInfo( theBlock ) + "?");
+					@SuppressWarnings("unchecked")
+					List<IRPGraphElement> theSelectedGraphEls = 
+						theApp.getSelectedGraphElements().toList();
+					
+					if( theOp==null ){
+						IRPClass theBlock = FunctionalAnalysisSettings.getBlockUnderDev(
+								modelElement.getProject() );
 						
-						if( answer==true ){
+						if (theBlock != null){
+							boolean answer = UserInterfaceHelpers.askAQuestion(
+									"Do you want to add an Operation to " + 
+									Logger.elementInfo( theBlock ) + "?");
 							
-							Set<IRPRequirement> theReqts = new HashSet<IRPRequirement>();
-							
-							CreateOperationPanel.launchThePanel( 
-									theSelectedGraphEls.get(0), 
-									theReqts, 
-									theApp.activeProject() );
+							if( answer==true ){
+								
+								Set<IRPRequirement> theReqts = new HashSet<IRPRequirement>();
+								
+								CreateOperationPanel.launchThePanel( 
+										theSelectedGraphEls.get(0), 
+										theReqts, 
+										theApp.activeProject() );
+							}
 						}
-					}
-				} // Operation already exists, i.e. element was dragged on so do nothing
+					} // Operation already exists, i.e. element was dragged on so do nothing
+				}
 			}
 
 		} catch (Exception e) {
@@ -364,7 +371,7 @@ public class SysMLHelperTriggers extends RPApplicationListener {
 }
 
 /**
- * Copyright (C) 2016  MBSE Training and Consulting Limited (www.executablembse.com)
+ * Copyright (C) 2016-2017  MBSE Training and Consulting Limited (www.executablembse.com)
 
     Change history:
     #001 31-MAR-2016: Added ListenForRhapsodyTriggers (F.J.Chadburn)
@@ -384,6 +391,7 @@ public class SysMLHelperTriggers extends RPApplicationListener {
     #098 14-SEP-2016: Improve dialog for double-click to clarify cancelling gets the Features dialog (F.J.Chadburn)
     #115 13-NOV-2016: Removed use of isEnableBlockSelectionByUser tag and <<LogicalSystem>> by helper (F.J.Chadburn)
     #130 25-NOV-2016: Improved consistency in handling of isPopulateOptionHidden and isPopulateWantedByDefault tags (F.J.Chadburn)
+    #157 25-JAN-2017: Add additional protection to afterAddElement trigger for IRPCallOperation (F.J.Chadburn)
     
     This file is part of SysMLHelperPlugin.
 
