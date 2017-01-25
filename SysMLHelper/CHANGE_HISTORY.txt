@@ -249,3 +249,14 @@ RELEASE CANDIDATE 2.0.31 (18-DEC-2016)
 ----------------------------------------------------------------------------------
 RELEASE 2.0 (02-JAN-2017)
 ----------------------------------------------------------------------------------
+#153 25-JAN-2017: Functional Analysis helper creates new term ValueProperty's rather than attributes in Rhp 8.2+ (F.J.Chadburn) 
+#154 25-JAN-2017: Improved robustness by adding isLegalName check to CreateOperationPanel (F.J.Chadburn)
+#155 25-JAN-2017: Added new panel to find and delete Gateway Deleted_At_High_Level req'ts with Rhp 8.2 (F.J.Chadburn)
+#156 25-JAN-2017: Get SysMLHelper.hep to add additional Harmony/SE menus for Hyper-links/dependencies (F.J.Chadburn)
+#157 25-JAN-2017: Add additional protection to afterAddElement trigger for IRPCallOperation (F.J.Chadburn)
+#158 25-JAN-2017: Removed redundant RequirementsPkg in the SysMLHelper project FunctionalAnalysisPkg (F.J.Chadburn)
+#159 25-JAN-2017: Removed redundant Query - Gateway tagged as deleted requirements as cannot make work for 8.2 (F.J.Chadburn)
+#160 25-JAN-2017: Minor fixes to code found during development (F.J.Chadburn)
+----------------------------------------------------------------------------------
+UNDER DEV RELEASE 2.1.a (25-JAN-2017)
+----------------------------------------------------------------------------------
