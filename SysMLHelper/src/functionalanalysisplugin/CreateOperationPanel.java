@@ -217,10 +217,21 @@ public class CreateOperationPanel extends CreateTracedElementPanel {
 		String errorMessage = null;
 		boolean isValid = true;
 		
-		if (!GeneralHelpers.isElementNameUnique(
-				m_ChosenNameTextField.getText(), "Operation", m_TargetOwningElement, 1)){
+		String theChosenName = m_ChosenNameTextField.getText();
+		boolean isLegalName = GeneralHelpers.isLegalName( theChosenName );
+		
+		if (!isLegalName){
+			
+			errorMessage = theChosenName + " is not legal as an identifier representing an operation\n";				
+			isValid = false;
+			
+		} else if (!GeneralHelpers.isElementNameUnique(
+				theChosenName, 
+				"Operation", 
+				m_TargetOwningElement, 
+				1)){
 
-			errorMessage = "Unable to proceed as the name '" + m_ChosenNameTextField.getText() + "' is not unique";
+			errorMessage = "Unable to proceed as the name '" + theChosenName + "' is not unique";
 			isValid = false;
 		}
 
@@ -241,16 +252,31 @@ public class CreateOperationPanel extends CreateTracedElementPanel {
 					((IRPClassifier)m_TargetOwningElement).addOperation(
 							m_ChosenNameTextField.getText() );	
 			
-			theOperation.highLightElement();
-			
-			if( m_SourceGraphElement != null && !(m_SourceGraphElement.getModelObject() instanceof IRPCallOperation) ){
-				addTraceabilityDependenciesTo( theOperation, m_RequirementsPanel.getSelectedRequirementsList() );
-				bleedColorToElementsRelatedTo( m_SourceGraphElement );
+			if( m_SourceGraphElement != null ){
+				
+				if( m_SourceGraphElement.getModelObject() instanceof IRPCallOperation ){
+				
+					IRPCallOperation theCallOp = (IRPCallOperation) m_SourceGraphElement.getModelObject();
+					
+					IRPInterfaceItem theExistingOp = theCallOp.getOperation();
+					
+					if( theExistingOp == null ){
+						
+						Logger.writeLine("Setting the " + Logger.elementInfo(theCallOp) + " to " + Logger.elementInfo(theOperation) );
+						theCallOp.setOperation( theOperation );
+						theCallOp.setName( theOperation.getName() );
+					}
+				} else {
+					addTraceabilityDependenciesTo( theOperation, m_RequirementsPanel.getSelectedRequirementsList() );
+					bleedColorToElementsRelatedTo( m_SourceGraphElement );
+				}
 			}
 			
 			if (m_CallOperationIsNeededCheckBox.isSelected()){
 				populateCallOperationActionOnDiagram( theOperation );
 			}
+			
+			theOperation.highLightElement();
 			
 		} else {
 			Logger.writeLine("Error in CreateOperationPanel.performAction, checkValidity returned false");
@@ -259,7 +285,7 @@ public class CreateOperationPanel extends CreateTracedElementPanel {
 }
 
 /**
- * Copyright (C) 2016  MBSE Training and Consulting Limited (www.executablembse.com)
+ * Copyright (C) 2016-2017  MBSE Training and Consulting Limited (www.executablembse.com)
 
     Change history:
     #022 30-MAY-2016: Improved handling and validation of event/operation creation by adding new forms (F.J.Chadburn) 
@@ -276,6 +302,7 @@ public class CreateOperationPanel extends CreateTracedElementPanel {
     #115 13-NOV-2016: Removed use of isEnableBlockSelectionByUser tag and <<LogicalSystem>> by helper (F.J.Chadburn)
     #125 25-NOV-2016: AutoRipple used in UpdateTracedAttributePanel to keep check and FlowPort name updated (F.J.Chadburn)
     #130 25-NOV-2016: Improved consistency in handling of isPopulateOptionHidden and isPopulateWantedByDefault tags (F.J.Chadburn)
+    #154 25-JAN-2017: Improved robustness by adding isLegalName check to CreateOperationPanel (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

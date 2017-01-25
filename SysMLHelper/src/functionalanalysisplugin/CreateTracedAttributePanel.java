@@ -340,6 +340,15 @@ public class CreateTracedAttributePanel extends CreateTracedElementPanel {
 					((IRPClassifier)m_TargetOwningElement).addAttribute(
 							m_ChosenNameTextField.getText() );				
 			
+			IRPModelElement theValuePropertyStereotype = 
+					GeneralHelpers.findElementWithMetaClassAndName( "Stereotype", "ValueProperty", m_Project );
+			
+			if( theValuePropertyStereotype != null ){
+				Logger.writeLine( "Invoking change to from " + Logger.elementInfo( theAttribute ) + 
+						" to " + Logger.elementInfo( theValuePropertyStereotype ) );
+				theAttribute.changeTo( "ValueProperty" );
+			}
+			
 			theAttribute.highLightElement();
 			theAttribute.setDefaultValue( m_InitialValueTextField.getText() );
 			
@@ -372,7 +381,7 @@ public class CreateTracedAttributePanel extends CreateTracedElementPanel {
 }
 
 /**
- * Copyright (C) 2016  MBSE Training and Consulting Limited (www.executablembse.com)
+ * Copyright (C) 2016-2017  MBSE Training and Consulting Limited (www.executablembse.com)
 
     Change history:
     #028 01-JUN-2016: Add new menu to create a stand-alone attribute owned by the system (F.J.Chadburn)
@@ -388,6 +397,7 @@ public class CreateTracedAttributePanel extends CreateTracedElementPanel {
     #125 25-NOV-2016: AutoRipple used in UpdateTracedAttributePanel to keep check and FlowPort name updated (F.J.Chadburn)
     #130 25-NOV-2016: Improved consistency in handling of isPopulateOptionHidden and isPopulateWantedByDefault tags (F.J.Chadburn)
     #137 02-DEC-2016: Allow 'create attribute' menu command on AD/RD canvas right-click (F.J.Chadburn)
+    #153 25-JAN-2017: Functional Analysis helper creates new term ValueProperty's rather than attributes in Rhp 8.2+ (F.J.Chadburn) 
 
     This file is part of SysMLHelperPlugin.
 
