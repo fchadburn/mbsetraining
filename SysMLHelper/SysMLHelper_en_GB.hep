@@ -1,5 +1,5 @@
 [Helpers]
-numberOfElements=13
+numberOfElements=14
 
 #REM: Definition of the plug-in
 name1=InvokeSysMLHelper
@@ -157,6 +157,14 @@ applicableTo13=Project,SysML,Package
 isVisible13=1
 DLLServerCompatible13=1
 
+#REM: Add pop-up menu 
+name14=MBSE Method: General Utilities\Add a relative reference to an external unit (.sbs)
+isPluginCommand14=1
+command14=InvokeSysMLHelper
+applicableTo14=Project,SysML,Package
+isVisible14=1
+DLLServerCompatible14=1
+
 #REM Copyright (C) 2016-2017  MBSE Training and Consulting Limited (www.executablembse.com)
 #REM
 #REM Change history:
@@ -169,6 +177,7 @@ DLLServerCompatible13=1
 #REM #112 13-NOV-2016: Added new No Sim functional analysis structure option (F.J.Chadburn)
 #REM #133 25-NOV-2016: Fixed typo/missing= in SysMLHelper.hep preventing Gateway menu from showing (F.J.Chadburn)
 #REM #156 25-JAN-2017: Get SysMLHelper.hep to add additional Harmony/SE menus for Hyper-links/dependencies (F.J.Chadburn)
+#REM #162 05-FEB-2017: Add new menu to add a relative reference to an external unit (.sbs) (F.J.Chadburn)
 #REM
 #REM This file is part of SysMLHelperPlugin.
 #REM

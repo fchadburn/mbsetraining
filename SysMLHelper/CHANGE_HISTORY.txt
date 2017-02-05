@@ -260,3 +260,9 @@ RELEASE 2.0 (02-JAN-2017)
 ----------------------------------------------------------------------------------
 UNDER DEV RELEASE 2.1.a (25-JAN-2017)
 ----------------------------------------------------------------------------------
+#161 05-FEB-2017: Support nested diagram links in CallOperation description (F.J.Chadburn) 
+#162 05-FEB-2017: Add new menu to add a relative reference to an external unit (.sbs) (F.J.Chadburn)
+#163 05-FEB-2017: Add new menus to Smart link: Start and Smart link: End (F.J.Chadburn)
+----------------------------------------------------------------------------------
+UNDER DEV RELEASE 2.1.b (05-FEB-2017)
+----------------------------------------------------------------------------------

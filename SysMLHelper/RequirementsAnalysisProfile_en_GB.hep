@@ -1,5 +1,5 @@
 [Helpers]
-numberOfElements=8
+numberOfElements=10
 
 #REM: Definition of the plug-in
 name1=InvokeRequirementsAnalysisHelper
@@ -65,6 +65,22 @@ applicableTo8=UseCase,Project,SysML,Package,ActivityDiagram,Requirement,UseCaseD
 isVisible8=1
 DLLServerCompatible8=1
 
+#REM: Add pop-up menu
+name9=MBSE Method: Requirements Analysis\Smart link: Start
+isPluginCommand9=1
+command9=InvokeRequirementsAnalysisHelper
+applicableTo9=State,Transition,Comment,AcceptEventAction,SendAction,AcceptTimeEvent,Constraint,Precondition,Postcondition,ControlFlow,Attribute,Operation,Event,UseCase,Requirement
+isVisible9=1
+DLLServerCompatible9=1
+
+#REM: Add pop-up menu
+name10=MBSE Method: Requirements Analysis\Smart link: End
+isPluginCommand10=1
+command10=InvokeRequirementsAnalysisHelper
+applicableTo10=Requirement
+isVisible10=1
+DLLServerCompatible10=1
+
 #REM Copyright (C) 2016-2017  MBSE Training and Consulting Limited (www.executablembse.com)
 #REM
 #REM Change history:
@@ -75,6 +91,7 @@ DLLServerCompatible8=1
 #REM #102 03-NOV-2016: Add right-click menu to auto update names of ADs from UC names (F.J.Chadburn)
 #REM #109 06-NOV-2016: Added .properties support for localisation of menus (F.J.Chadburn)
 #REM #155 25-JAN-2017: Added new panel to find and delete Gateway Deleted_At_High_Level req'ts with Rhp 8.2 (F.J.Chadburn)
+#REM #163 05-FEB-2017: Add new menus to Smart link: Start and Smart link: End (F.J.Chadburn)
 #REM
 #REM This file is part of SysMLHelperPlugin.
 #REM
