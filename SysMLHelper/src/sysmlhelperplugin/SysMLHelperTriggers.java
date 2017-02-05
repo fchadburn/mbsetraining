@@ -2,6 +2,7 @@ package sysmlhelperplugin;
 
 import functionalanalysisplugin.CreateOperationPanel;
 import functionalanalysisplugin.FunctionalAnalysisSettings;
+import generalhelpers.GeneralHelpers;
 import generalhelpers.Logger;
 import generalhelpers.UserInterfaceHelpers;
 
@@ -52,7 +53,9 @@ public class SysMLHelperTriggers extends RPApplicationListener {
 					}			
 				}
 			} else if (modelElement != null && 
-					modelElement instanceof IRPCallOperation){
+					   modelElement instanceof IRPCallOperation && 
+					   FunctionalAnalysisSettings.getIsCallOperationSupportEnabled(
+							   modelElement.getProject() ) ){
 				
 				IRPCallOperation theCallOp = (IRPCallOperation)modelElement;
 				IRPInterfaceItem theOp = theCallOp.getOperation();
@@ -62,24 +65,25 @@ public class SysMLHelperTriggers extends RPApplicationListener {
 								"packageUnderDev", "Tag" );
 				
 				if( packageUnderDevTag != null ){
-					
+
 					@SuppressWarnings("unchecked")
 					List<IRPGraphElement> theSelectedGraphEls = 
-						theApp.getSelectedGraphElements().toList();
-					
-					if( theOp==null ){
-						IRPClass theBlock = FunctionalAnalysisSettings.getBlockUnderDev(
-								modelElement.getProject() );
-						
+							theApp.getSelectedGraphElements().toList();
+
+					if( theOp == null ){
+						IRPClass theBlock = 
+								FunctionalAnalysisSettings.getBlockUnderDev(
+										modelElement.getProject() );
+
 						if (theBlock != null){
 							boolean answer = UserInterfaceHelpers.askAQuestion(
 									"Do you want to add an Operation to " + 
 									Logger.elementInfo( theBlock ) + "?");
-							
+
 							if( answer==true ){
-								
+
 								Set<IRPRequirement> theReqts = new HashSet<IRPRequirement>();
-								
+
 								CreateOperationPanel.launchThePanel( 
 										theSelectedGraphEls.get(0), 
 										theReqts, 
@@ -88,9 +92,48 @@ public class SysMLHelperTriggers extends RPApplicationListener {
 						}
 					} // Operation already exists, i.e. element was dragged on so do nothing
 				}
+
+				// Use the operation name for the COA if possible
+				try {
+					String theProposedName = 
+							GeneralHelpers.determineUniqueNameBasedOn( 
+									GeneralHelpers.toMethodName( theOp.getName() ), 
+									"CallOperation", 
+									theCallOp.getOwner() );
+
+					theCallOp.setName( theProposedName );
+
+				} catch( Exception e ) {
+					Logger.writeLine( theCallOp, "Error: Cannot rename Call Operation to match Operation" );
+				}
+
+				// If the operation has an Activity Diagram under it, then populate an RTF 
+				// description with a link to the lower diagram
+				IRPFlowchart theAD = theOp.getActivityDiagram();
+
+				if( theAD != null ){
+					
+					IRPActivityDiagram theFC = theAD.getFlowchartDiagram();
+					
+					if( theFC != null ){
+						Logger.writeLine("Creating Hyperlinks in Description of COA");
+						
+						IRPCollection targets = theApp.createNewCollection();
+						
+						targets.setSize( 2 );
+						targets.setModelElement( 1, theOp );
+						targets.setModelElement( 2, theFC );
+						
+						String rtfText = "{\\rtf1\\fbidis\\ansi\\ansicpg1255\\deff0\\deflang1037{\\fonttbl{\\f0\\fnil\\fcharset0 Arial;}}\n{\\colortbl;\\red0\\green0\\blue255;}\n\\viewkind4\\uc1 " + 
+								"\\pard\\ltrpar\\qc\\fs18 Function: \\cf1\\ul\\protect " + theOp.getName() + "\\cf0\\ulnone\\protect0\\par" + 
+								"\\pard\\ltrpar\\qc\\fs18 Decomposed by: \\cf1\\ul\\protect " + theFC.getName() + "\\cf0\\ulnone\\protect0\\par\n}";
+						
+						theCallOp.setDescriptionAndHyperlinks( rtfText, targets );
+					}
+				}
 			}
 
-		} catch (Exception e) {
+		} catch( Exception e ){
 			Logger.writeLine("Error in SysMLHelperTriggers.afterAddElement, unhandled exception was detected related to " + Logger.elementInfo(modelElement));
 		}
 
@@ -392,6 +435,7 @@ public class SysMLHelperTriggers extends RPApplicationListener {
     #115 13-NOV-2016: Removed use of isEnableBlockSelectionByUser tag and <<LogicalSystem>> by helper (F.J.Chadburn)
     #130 25-NOV-2016: Improved consistency in handling of isPopulateOptionHidden and isPopulateWantedByDefault tags (F.J.Chadburn)
     #157 25-JAN-2017: Add additional protection to afterAddElement trigger for IRPCallOperation (F.J.Chadburn)
+    #161 05-FEB-2017: Support nested diagram links in CallOperation description (F.J.Chadburn) 
     
     This file is part of SysMLHelperPlugin.
 

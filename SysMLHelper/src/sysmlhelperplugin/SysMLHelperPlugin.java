@@ -152,6 +152,14 @@ public class SysMLHelperPlugin extends RPUserPlugin {
 						Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking CreateGatewayProjectPanel.launchThePanel");
 					}					
 				}
+			} else if (menuItem.equals(m_configSettings.getString("sysmlhelperplugin.AddRelativeUnitMenu"))){
+
+				try { 
+					RelativeUnitHandler.browseAndAddUnit( theSelectedEl.getProject(), true );
+
+				} catch (Exception e) {
+					Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking RelativeUnitHandler.browseAndAddUnit");
+				}									
 			}					
 		}
 
@@ -269,6 +277,7 @@ public class SysMLHelperPlugin extends RPUserPlugin {
     #110 06-NOV-2016: PluginVersion now comes from Config.properties file, rather than hard wired (F.J.Chadburn)
     #111 13-NOV-2016: Added new Simple Sim (Guard only) functional analysis structure option (F.J.Chadburn)
     #112 13-NOV-2016: Added new No Sim functional analysis structure option (F.J.Chadburn)
+    #162 05-FEB-2017: Add new menu to add a relative reference to an external unit (.sbs) (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 
