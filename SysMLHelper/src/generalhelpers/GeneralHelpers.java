@@ -309,6 +309,86 @@ public class GeneralHelpers {
 		}
 	}
 	
+	public static IRPStereotype getStereotypeIn(
+			IRPProject theProject, 
+			String basedOnTagName, 
+			String ownedByPackageName ){
+		
+		IRPStereotype theStereotype = null;
+		
+		IRPModelElement thePkg = 
+				theProject.findElementsByFullName( ownedByPackageName, "Package" );
+		
+		if( thePkg == null ){
+			
+			Logger.writeLine("Error in getStereotypeIn for basedOnTagName=" + basedOnTagName + 
+					", ownedByPackageName=" + ownedByPackageName + ", no " + ownedByPackageName + " was found" );
+			
+		} else {
+			
+			IRPTag theTag = thePkg.getTag( basedOnTagName );
+			
+			if( theTag == null ){
+				
+				Logger.writeLine("Warning in getStereotypeIn for basedOnTagName=" + basedOnTagName + 
+					", ownedByPackageName=" + ownedByPackageName + ", no tag called " + basedOnTagName + " was found" );				
+				
+				theTag = (IRPTag) thePkg.addNewAggr( "Tag", basedOnTagName );
+				theStereotype = selectAndPersistStereotype( theProject, thePkg, theTag );
+				
+			} else { // tag is not null
+				
+				String theValue = theTag.getValue();
+				
+				Logger.writeLine( "Read value of " + theValue + " from " + Logger.elementInfo( theTag ) );
+				
+				IRPModelElement theModelElement = 
+						GeneralHelpers.findElementWithMetaClassAndName( 
+								"Stereotype", theValue, theProject );
+				
+				if( theModelElement == null ){
+					Logger.writeLine( "Error in getStereotypeForActionTracing, no Stereotyped called " + theValue + " was found" );
+
+					theStereotype = selectAndPersistStereotype( theProject, thePkg, theTag );
+
+				} else if( theModelElement instanceof IRPStereotype ){
+					
+					theStereotype = (IRPStereotype)theModelElement;
+					Logger.writeLine( "Using " + Logger.elementInfo( theStereotype ) + " for action tracing" );
+				}
+			}
+		}
+		
+		return theStereotype;
+	}
+	
+	private static IRPStereotype selectAndPersistStereotype(
+			IRPProject inTheProject, 
+			IRPModelElement theReqtsAnalysisPkg, 
+			IRPTag theTag) {
+
+		IRPStereotype theStereotype = null;
+
+		@SuppressWarnings("unchecked")
+		List<IRPModelElement> theStereotypes = inTheProject.getNestedElementsByMetaClass("Stereotype", 1).toList();
+
+		if( theStereotypes.isEmpty() ){
+			Logger.writeLine("Error in selectAndPersistStereotype, there are no stereotypes in project");
+		} else {
+			IRPModelElement theSelectedEl = 
+					GeneralHelpers.launchDialogToSelectElement(
+							theStereotypes, "Pick a stereotype for " + Logger.elementInfo( theTag ), true);
+
+			if( theSelectedEl != null && theSelectedEl instanceof IRPStereotype ){
+				
+				theReqtsAnalysisPkg.setTagValue( theTag, theSelectedEl.getName() );
+				theStereotype = (IRPStereotype)theSelectedEl;
+			}
+		}
+
+		return theStereotype;
+	}
+	
 	public static IRPStereotype getStereotypeCalled(
 			String theName, 
 			IRPModelElement onTheEl){
@@ -989,6 +1069,7 @@ public class GeneralHelpers {
     #135 02-DEC-2016: Avoid port proliferation in inheritance tree for actors/system (F.J.Chadburn)
     #145 18-DEC-2016: Fix to remove warning with getWorkingPkgUnderDev unexpectedly finding 2 packages (F.J.Chadburn)
     #160 25-JAN-2017: Minor fixes to code found during development (F.J.Chadburn)
+    #163 05-FEB-2017: Add new menus to Smart link: Start and Smart link: End (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

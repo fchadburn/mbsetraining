@@ -8,35 +8,82 @@ import com.telelogic.rhapsody.core.*;
 
 public class TraceabilityHelper {
 
-	public static IRPDependency addStereotypedDependencyIfOneDoesntExist(
+	public static int countStereotypedDependencies(
 			IRPModelElement fromElement, 
 			IRPModelElement toElement,
-			String stereotypeName){
-		
-		IRPDependency theDependency = null;
-		
+			String stereotypeName ){
+
 		List<IRPModelElement> existingDeps = 
 				GeneralHelpers.findElementsWithMetaClassAndStereotype(
 						"Dependency", stereotypeName, fromElement, 0 );
-		
+
 		int isExistingFoundCount = 0;
-		
-		for (IRPModelElement theExistingDep : existingDeps) {
-			
+
+		for( IRPModelElement theExistingDep : existingDeps ){
+
 			IRPDependency theDep = (IRPDependency)theExistingDep;
 			IRPModelElement theDependsOn = theDep.getDependsOn();
-			
+
 			if( theDependsOn.equals( toElement )){
 				isExistingFoundCount++;
 			}
 		}
+		
+		return isExistingFoundCount;
+	}
+	
+	public static IRPDependency getExistingStereotypedDependency(
+			IRPModelElement fromElement, 
+			IRPModelElement toElement,
+			String stereotypeName ){
+
+		IRPDependency theExistingDependency = null;
+		
+		List<IRPModelElement> existingDeps = 
+				GeneralHelpers.findElementsWithMetaClassAndStereotype(
+						"Dependency", stereotypeName, fromElement, 0 );
+
+		int isExistingFoundCount = 0;
+
+		for( IRPModelElement theExistingDep : existingDeps ){
+
+			IRPDependency theDependency = (IRPDependency)theExistingDep;
+			IRPModelElement theDependsOn = theDependency.getDependsOn();
+
+			if( theDependsOn.equals( toElement )){
+				isExistingFoundCount++;
+				theExistingDependency = theDependency;
+			}
+		}
+		
+		if( isExistingFoundCount > 1 ){
+			Logger.writeLine( "Duplicate «" + stereotypeName + "» dependencies to " + Logger.elementInfo( toElement ) + 
+					" were found on " + Logger.elementInfo( fromElement ) );
+		}
+		
+		return theExistingDependency;
+	}
+	
+	
+	public static IRPDependency addStereotypedDependencyIfOneDoesntExist(
+			IRPModelElement fromElement, 
+			IRPModelElement toElement,
+			String stereotypeName ){
+		
+		IRPDependency theDependency = null;
+		
+		int isExistingFoundCount = 
+				countStereotypedDependencies(
+						fromElement, 
+						toElement, 
+						stereotypeName );
 		
 		if( isExistingFoundCount==0 ){
 			theDependency = fromElement.addDependencyTo( toElement );
 			theDependency.addStereotype( stereotypeName, "Dependency" );
 			
 			Logger.writeLine( "Added a «" + stereotypeName + "» dependency to " + 
-					Logger.elementInfo(fromElement) + " (to " + Logger.elementInfo( toElement ) + ")" );
+					Logger.elementInfo( fromElement ) + " (to " + Logger.elementInfo( toElement ) + ")" );
 		} else {
 			Logger.writeLine( "Skipped adding a «" + stereotypeName + "» dependency to " + Logger.elementInfo( fromElement ) + 
 					" (to " + Logger.elementInfo( toElement ) + 
@@ -141,6 +188,7 @@ public class TraceabilityHelper {
     #129 25-NOV-2016: Fixed addTraceabilityDependenciesTo to avoid creation of duplicate dependencies (F.J.Chadburn)
     #145 18-DEC-2016: Fix to remove warning with getWorkingPkgUnderDev unexpectedly finding 2 packages (F.J.Chadburn)
     #160 25-JAN-2017: Minor fixes to code found during development (F.J.Chadburn)
+    #163 05-FEB-2017: Add new menus to Smart link: Start and Smart link: End (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 
