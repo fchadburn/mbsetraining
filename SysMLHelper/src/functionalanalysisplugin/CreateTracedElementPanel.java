@@ -1,5 +1,6 @@
 package functionalanalysisplugin;
 
+import generalhelpers.GeneralHelpers;
 import generalhelpers.Logger;
 import generalhelpers.TraceabilityHelper;
 
@@ -302,10 +303,11 @@ public abstract class CreateTracedElementPanel extends JPanel {
 	protected static void addTraceabilityDependenciesTo(
 			IRPModelElement theElement, 
 			List<IRPRequirement> theReqtsToAdd ){
-	
-		IRPStereotype theDependencyStereotype = 
-				FunctionalAnalysisSettings.getStereotypeForFunctionTracing( 
-						theElement.getProject() );
+
+		
+		IRPStereotype theDependencyStereotype =
+				GeneralHelpers.getStereotypeIn(
+						theElement.getProject(), "traceabilityTypeToUseForFunctions", "FunctionalAnalysisPkg");
 		
 		if( theDependencyStereotype != null ){
 			
@@ -496,7 +498,8 @@ public abstract class CreateTracedElementPanel extends JPanel {
     #125 25-NOV-2016: AutoRipple used in UpdateTracedAttributePanel to keep check and FlowPort name updated (F.J.Chadburn)
     #129 25-NOV-2016: Fixed addTraceabilityDependenciesTo to avoid creation of duplicate dependencies (F.J.Chadburn)
     #130 25-NOV-2016: Improved consistency in handling of isPopulateOptionHidden and isPopulateWantedByDefault tags (F.J.Chadburn)
-     
+    #163 05-FEB-2017: Add new menus to Smart link: Start and Smart link: End (F.J.Chadburn)
+ 
     This file is part of SysMLHelperPlugin.
 
     SysMLHelperPlugin is free software: you can redistribute it and/or modify

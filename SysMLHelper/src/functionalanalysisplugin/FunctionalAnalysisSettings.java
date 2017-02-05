@@ -21,6 +21,7 @@ public class FunctionalAnalysisSettings {
 	private static final String tagNameForIsSendEventViaPanelWantedByDefault = "isSendEventViaPanelWantedByDefault";
 	private static final String tagNameForIsConvertToDetailedADOptionEnabled = "isConvertToDetailedADOptionEnabled";
 	private static final String tagNameForIsConvertToDetailedADOptionWantedByDefault = "isConvertToDetailedADOptionWantedByDefault";
+	private static final String tagNameForIsCallOperationSupportEnabled = "isCallOperationSupportEnabled";
 	
 	public static IRPPackage getPackageUnderDev(IRPProject inTheProject){
 		
@@ -327,26 +328,6 @@ public class FunctionalAnalysisSettings {
 		return theBlockUnderDev;
 	}
 	
-	public static IRPStereotype getStereotypeForFunctionTracing(
-			IRPProject inTheProject){
-		
-		IRPStereotype theStereotype = null;
-		
-		IRPModelElement theRootPackage = inTheProject.findNestedElementRecursive(
-				"FunctionalAnalysisPkg", "Package");
-		
-		if (theRootPackage != null){
-			IRPTag theTag = theRootPackage.getTag( tagNameForTraceabilityTypeToUseForFunctions );
-			String theTagValue = theTag.getValue();
-			
-			theStereotype = (IRPStereotype) inTheProject.findNestedElementRecursive(theTagValue, "Stereotype");
-		} else {
-			Logger.writeLine("Error in getPackageUnderDev, unable to find FunctionalAnalysisPkg");
-		}
-		
-		return theStereotype;
-	}
-	
 	public static boolean getTagBooleanValue(
 			IRPProject inTheProject, String forTagName, boolean withDefault ){
 		
@@ -435,6 +416,15 @@ public class FunctionalAnalysisSettings {
 		return result;
 	}
 	
+	public static boolean getIsCallOperationSupportEnabled(
+			IRPProject inTheProject ){
+		
+		boolean result = getTagBooleanValue(
+				inTheProject, tagNameForIsCallOperationSupportEnabled, true );
+		
+		return result;
+	}
+	
 	public static void setupFunctionalAnalysisTagsFor(
 			IRPProject theProject,
 			IRPPackage thePackageUnderDev,
@@ -489,6 +479,11 @@ public class FunctionalAnalysisSettings {
 					tagNameForIsConvertToDetailedADOptionWantedByDefault, 
 					theSettings.getProperty( tagNameForIsConvertToDetailedADOptionWantedByDefault, "false" ) );
 
+			setStringTagValueOn( 
+					theRootPackage, 
+					tagNameForIsCallOperationSupportEnabled, 
+					theSettings.getProperty( tagNameForIsCallOperationSupportEnabled, "true" ) );
+			
 			setPackageTagValueOn( 
 					theRootPackage, 
 					tagNameForPackageForEventsAndInterfaces, 
@@ -570,6 +565,7 @@ public class FunctionalAnalysisSettings {
     #143 18-DEC-2016: Add separate tag to enable/disable conversion to detailed option in Copy AD dialog (F.J.Chadburn)
     #144 18-DEC-2016: Add default behaviour to protect for instances where tags are not in model (F.J.Chadburn)
     #145 18-DEC-2016: Fix to remove warning with getWorkingPkgUnderDev unexpectedly finding 2 packages (F.J.Chadburn)
+    #161 05-FEB-2017: Support nested diagram links in CallOperation description (F.J.Chadburn) 
 
     This file is part of SysMLHelperPlugin.
 
