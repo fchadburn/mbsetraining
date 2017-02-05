@@ -157,6 +157,22 @@ public class RequirementsAnalysisPlugin extends RPUserPlugin {
 				} catch (Exception e) {
 					Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking MarkedAsDeletedPanel.launchThePanel");
 				}
+			} else if (menuItem.equals(m_configSettings.getString( "requirementsanalysisplugin.StartLinkMenu" ))){
+
+				try {
+					SmartLinkPanel.launchTheStartLinkPanel( theSelectedEls, theSelectedGraphEls );
+
+				} catch (Exception e) {
+					Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking SmartLinkPanel.launchTheStartLinkPanel");
+				}
+			} else if (menuItem.equals(m_configSettings.getString( "requirementsanalysisplugin.EndLinkMenu" ))){
+
+				try {				
+					SmartLinkPanel.launchTheEndLinkPanel( theSelectedEls, theSelectedGraphEls );
+
+				} catch (Exception e) {
+					Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking SmartLinkPanel.launchTheEndLinkPanel");
+				}
 				
 			} else {
 				Logger.writeLine(theSelectedEl, " was invoked with menuItem='" + menuItem + "'");
@@ -198,7 +214,8 @@ public class RequirementsAnalysisPlugin extends RPUserPlugin {
     #109 06-NOV-2016: Added .properties support for localisation of menus (F.J.Chadburn)
     #110 06-NOV-2016: PluginVersion now comes from Config.properties file, rather than hard wired (F.J.Chadburn)
     #155 25-JAN-2017: Added new panel to find and delete Gateway Deleted_At_High_Level req'ts with Rhp 8.2 (F.J.Chadburn)
-    
+    #163 05-FEB-2017: Add new menus to Smart link: Start and Smart link: End (F.J.Chadburn)
+
     This file is part of SysMLHelperPlugin.
 
     SysMLHelperPlugin is free software: you can redistribute it and/or modify

@@ -157,12 +157,14 @@ public class RequirementsHelper {
 		theReqt.setSpecification(theText);
 		theReqt.highLightElement();	
 
-		IRPDependency theDep = theModelObject.addDependencyTo(theReqt);
+		IRPDependency theDep = theModelObject.addDependencyTo( theReqt );
 
-		IRPStereotype theDependencyStereotype = getStereotypeForActionTracing(theDiagram.getProject());
+		IRPStereotype theDependencyStereotype = GeneralHelpers.getStereotypeIn( 
+				theDiagram.getProject(), "traceabilityTypeToUseForActions", "RequirementsAnalysisPkg" );
 		
-		if (theDependencyStereotype != null){
-			theDep.addSpecificStereotype(theDependencyStereotype);
+		if( theDependencyStereotype != null ){
+			
+			theDep.addSpecificStereotype( theDependencyStereotype );
 		} else {
 			theDep.addStereotype("derive", "Dependency");				
 		}
@@ -212,76 +214,6 @@ public class RequirementsHelper {
 		
 		return theText;
 	}
-	
-	public static IRPStereotype getStereotypeForActionTracing(IRPProject inTheProject){
-		
-		IRPStereotype theStereotype = null;
-		
-		String thePackageName = "RequirementsAnalysisPkg";
-		final String tagNameForDependency = "traceabilityTypeToUseForActions";	
-		
-		IRPModelElement theReqtsAnalysisPkg = inTheProject.findElementsByFullName(thePackageName, "Package");
-		
-		if (theReqtsAnalysisPkg==null){
-			Logger.writeLine("Error in getStereotypeForActionTracing, no " + thePackageName + " was found");
-			
-		} else {
-			
-			IRPTag theTag = theReqtsAnalysisPkg.getTag( tagNameForDependency );
-			
-			if (theTag == null){
-				Logger.writeLine("Warning in getStereotypeForActionTracing, no tag called " + tagNameForDependency + " was found");				
-				
-				theTag = (IRPTag) theReqtsAnalysisPkg.addNewAggr("Tag", tagNameForDependency);
-				theStereotype = selectAndPersistStereotypeToUseForActionTracing(inTheProject, theReqtsAnalysisPkg, theTag);
-				
-			} else { // tag is not null
-				
-				String theValue = theTag.getValue();
-				
-				Logger.writeLine("Read value of " + theValue + " from " + Logger.elementInfo(theTag));
-				
-				IRPModelElement theModelElement = GeneralHelpers.findElementWithMetaClassAndName("Stereotype", theValue, inTheProject);
-				
-				if (theModelElement==null){
-					Logger.writeLine("Error in getStereotypeForActionTracing, no Stereotyped called " + theValue + " was found");
-
-					theStereotype = selectAndPersistStereotypeToUseForActionTracing(inTheProject, theReqtsAnalysisPkg, theTag);
-
-				} else if (theModelElement instanceof IRPStereotype){
-					
-					theStereotype = (IRPStereotype)theModelElement;
-					
-					Logger.writeLine("Using " + Logger.elementInfo(theStereotype) + " for action tracing");
-				}
-			}
-		}
-		
-		return theStereotype;
-	}
-
-	private static IRPStereotype selectAndPersistStereotypeToUseForActionTracing(
-			IRPProject inTheProject, IRPModelElement theReqtsAnalysisPkg, IRPTag theTag) {
-
-		IRPStereotype theStereotype = null;
-
-		@SuppressWarnings("unchecked")
-		List<IRPModelElement> theStereotypes = inTheProject.getNestedElementsByMetaClass("Stereotype", 1).toList();
-
-		if (theStereotypes.isEmpty()){
-			Logger.writeLine("Error in getStereotypeForActionTracing, there are no stereotypes in project");
-		} else {
-			IRPModelElement theSelectedEl = GeneralHelpers.launchDialogToSelectElement(theStereotypes, "Pick a stereotype for action tracing", true);
-
-			if (theSelectedEl != null && theSelectedEl instanceof IRPStereotype){
-				
-				theReqtsAnalysisPkg.setTagValue(theTag, theSelectedEl.getName());
-				theStereotype = (IRPStereotype)theSelectedEl;
-			}
-		}
-
-		return theStereotype;
-	}
 }
 
 /**
@@ -292,7 +224,8 @@ public class RequirementsHelper {
     #005 10-APR-2016: Support ProductName substitution in reqt text tag (F.J.Chadburn)
     #067 19-JUL-2016: Improvement to forming Event/Guard+Action text when creating new requirements (F.J.Chadburn) 
     #072 25-JUL-2016: Improved robustness when graphEls that don't have model elements are selected (F.J.Chadburn)
-    
+    #163 05-FEB-2017: Add new menus to Smart link: Start and Smart link: End (F.J.Chadburn)
+
     This file is part of SysMLHelperPlugin.
 
     SysMLHelperPlugin is free software: you can redistribute it and/or modify
