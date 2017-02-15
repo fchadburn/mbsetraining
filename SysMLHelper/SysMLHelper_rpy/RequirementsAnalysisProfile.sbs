@@ -1,4 +1,4 @@
-I-Logix-RPY-Archive version 8.11.0 C++ 9499822
+I-Logix-RPY-Archive version 8.13.0 C++ 9794446
 { IProfile 
 	- _id = GUID ee68d643-007f-404c-89e5-7c61c7008170;
 	- _myState = 8192;
@@ -140,10 +140,10 @@ I-Logix-RPY-Archive version 8.11.0 C++ 9499822
 		}
 	}
 	- _name = "RequirementsAnalysisProfile";
-	- _modifiedTimeWeak = 1.25.2017::9:18:3;
+	- _modifiedTimeWeak = 2.15.2017::22:3:17;
 	- _lastID = 41;
-	- weakCGTime = 1.25.2017::9:18:3;
-	- strongCGTime = 7.25.2016::7:27:54;
+	- weakCGTime = 2.15.2017::22:3:17;
+	- strongCGTime = 2.15.2017::22:3:17;
 	- _defaultComposite = GUID 47ada376-b4c8-4895-8007-9fe51d77a548;
 	- _eventsBaseID = -1;
 	- Classes = { IRPYRawContainer 
@@ -153,8 +153,8 @@ I-Logix-RPY-Archive version 8.11.0 C++ 9499822
 			- _id = GUID 47ada376-b4c8-4895-8007-9fe51d77a548;
 			- _myState = 40960;
 			- _name = "TopLevel";
-			- _modifiedTimeWeak = 12.18.2016::8:29:0;
-			- weakCGTime = 12.18.2016::8:29:0;
+			- _modifiedTimeWeak = 2.15.2017::22:3:13;
+			- weakCGTime = 2.15.2017::22:3:13;
 			- strongCGTime = 7.25.2016::7:27:54;
 			- _multiplicity = "";
 			- StateCharts = { IRPYRawContainer 
@@ -164,9 +164,9 @@ I-Logix-RPY-Archive version 8.11.0 C++ 9499822
 					- _id = GUID 366b4e03-1300-4cda-a456-4b8b4d0f0171;
 					- _myState = 8192;
 					- _name = "template_for_act";
-					- _modifiedTimeWeak = 7.17.2016::8:49:15;
+					- _modifiedTimeWeak = 2.15.2017::22:3:13;
 					- _lastID = 4;
-					- weakCGTime = 7.17.2016::8:49:15;
+					- weakCGTime = 2.15.2017::22:3:13;
 					- strongCGTime = 1.31.2016::17:20:59;
 					- _multiplicity = "";
 					- _itsStateChart = { IHandle 
@@ -664,8 +664,8 @@ I-Logix-RPY-Archive version 8.11.0 C++ 9499822
 								}
 							}
 							- _name = "activitydiagram_0";
-							- _modifiedTimeWeak = 7.17.2016::8:49:15;
-							- _lastModifiedTime = "7.17.2016::8:49:15";
+							- _modifiedTimeWeak = 2.15.2017::22:3:13;
+							- _lastModifiedTime = "2.15.2017::22:3:17";
 							- _graphicChart = { CGIStateChart 
 								- _id = GUID 510d5383-844f-482d-b927-6684f707df4a;
 								- m_type = 0;
@@ -1528,6 +1528,7 @@ Tips:
 								- m_pRoot = GUID 9643822f-50b8-4e6d-8aa6-b44aef4f70a8;
 								- m_currentLeftTop = 0 0 ;
 								- m_currentRightBottom = 0 0 ;
+								- m_bFreezeCompartmentContent = 0;
 								- m_pInheritsFrom = { IHandle 
 									- _m2Class = "";
 								}
@@ -1549,6 +1550,31 @@ Tips:
 		{ ITableLayout 
 			- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
 			- _myState = 8192;
+			- _properties = { IPropertyContainer 
+				- Subjects = { IRPYRawContainer 
+					- size = 1;
+					- value = 
+					{ IPropertySubject 
+						- _Name = "Model";
+						- Metaclasses = { IRPYRawContainer 
+							- size = 1;
+							- value = 
+							{ IPropertyMetaclass 
+								- _Name = "TableLayout";
+								- Properties = { IRPYRawContainer 
+									- size = 1;
+									- value = 
+									{ IProperty 
+										- _Name = "EnableCriteriaCheck";
+										- _Value = "True";
+										- _Type = Bool;
+									}
+								}
+							}
+						}
+					}
+				}
+			}
 			- _name = "Query - Everything but requirements";
 			- Stereotypes = { IRPYRawContainer 
 				- size = 1;
@@ -1562,9 +1588,9 @@ Tips:
 					- _id = GUID 4c77a3b1-822f-466e-bd06-76145c9e3b88;
 				}
 			}
-			- _modifiedTimeWeak = 3.15.2016::6:44:25;
+			- _modifiedTimeWeak = 2.15.2017::20:24:32;
 			- TableElementTypes = { IRPYRawContainer 
-				- size = 143;
+				- size = 152;
 				- value = 
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
@@ -1575,7 +1601,7 @@ Tips:
 						- _m2Class = "";
 					}
 					- _name = "AcceptEventAction";
-					- _DataType = 2;
+					- _DataType = 43196144;
 				}
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
@@ -1586,7 +1612,7 @@ Tips:
 						- _m2Class = "";
 					}
 					- _name = "AcceptTimeEvent";
-					- _DataType = 2;
+					- _DataType = 0;
 				}
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
@@ -1596,8 +1622,8 @@ Tips:
 					- _modelElement = { IHandle 
 						- _m2Class = "";
 					}
-					- _name = "Activity_D";
-					- _DataType = 2;
+					- _name = "ActionBlock";
+					- _DataType = 43196144;
 				}
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
@@ -1608,7 +1634,7 @@ Tips:
 						- _m2Class = "";
 					}
 					- _name = "ActivityDiagram";
-					- _DataType = 2;
+					- _DataType = 0;
 				}
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
@@ -1619,7 +1645,18 @@ Tips:
 						- _m2Class = "";
 					}
 					- _name = "ActivityFinal";
-					- _DataType = 2;
+					- _DataType = 0;
+				}
+				{ TableDataDefinition 
+					- _myTable = { IHandle 
+						- _m2Class = "ITableLayout";
+						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
+					}
+					- _modelElement = { IHandle 
+						- _m2Class = "";
+					}
+					- _name = "Activity_D";
+					- _DataType = 1952542066;
 				}
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
@@ -1630,7 +1667,7 @@ Tips:
 						- _m2Class = "";
 					}
 					- _name = "Actor";
-					- _DataType = 2;
+					- _DataType = 43196144;
 				}
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
@@ -1641,7 +1678,7 @@ Tips:
 						- _m2Class = "";
 					}
 					- _name = "Allocation";
-					- _DataType = 2;
+					- _DataType = 269448864;
 				}
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
@@ -1652,7 +1689,7 @@ Tips:
 						- _m2Class = "";
 					}
 					- _name = "AllocationsTable";
-					- _DataType = 2;
+					- _DataType = 0;
 				}
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
@@ -1663,7 +1700,7 @@ Tips:
 						- _m2Class = "";
 					}
 					- _name = "Argument";
-					- _DataType = 2;
+					- _DataType = 43196144;
 				}
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
@@ -1674,7 +1711,7 @@ Tips:
 						- _m2Class = "";
 					}
 					- _name = "Association";
-					- _DataType = 2;
+					- _DataType = 0;
 				}
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
@@ -1685,7 +1722,7 @@ Tips:
 						- _m2Class = "";
 					}
 					- _name = "AssociationEnd";
-					- _DataType = 2;
+					- _DataType = 43196144;
 				}
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
@@ -1696,7 +1733,7 @@ Tips:
 						- _m2Class = "";
 					}
 					- _name = "Attribute";
-					- _DataType = 2;
+					- _DataType = 43196144;
 				}
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
@@ -1707,7 +1744,7 @@ Tips:
 						- _m2Class = "";
 					}
 					- _name = "BindingConnector";
-					- _DataType = 2;
+					- _DataType = 43196144;
 				}
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
@@ -1718,7 +1755,7 @@ Tips:
 						- _m2Class = "";
 					}
 					- _name = "Block";
-					- _DataType = 2;
+					- _DataType = 269741288;
 				}
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
@@ -1729,7 +1766,18 @@ Tips:
 						- _m2Class = "";
 					}
 					- _name = "Block Definition Diagram";
-					- _DataType = 2;
+					- _DataType = 0;
+				}
+				{ TableDataDefinition 
+					- _myTable = { IHandle 
+						- _m2Class = "ITableLayout";
+						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
+					}
+					- _modelElement = { IHandle 
+						- _m2Class = "";
+					}
+					- _name = "CSVImporter";
+					- _DataType = 0;
 				}
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
@@ -1740,7 +1788,7 @@ Tips:
 						- _m2Class = "";
 					}
 					- _name = "CallBehavior";
-					- _DataType = 2;
+					- _DataType = 0;
 				}
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
@@ -1751,7 +1799,18 @@ Tips:
 						- _m2Class = "";
 					}
 					- _name = "CallOperation";
-					- _DataType = 2;
+					- _DataType = 0;
+				}
+				{ TableDataDefinition 
+					- _myTable = { IHandle 
+						- _m2Class = "ITableLayout";
+						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
+					}
+					- _modelElement = { IHandle 
+						- _m2Class = "";
+					}
+					- _name = "Callout";
+					- _DataType = 0;
 				}
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
@@ -1762,7 +1821,7 @@ Tips:
 						- _m2Class = "";
 					}
 					- _name = "ChangeStructuralFeatureEvent";
-					- _DataType = 2;
+					- _DataType = 43196144;
 				}
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
@@ -1773,7 +1832,7 @@ Tips:
 						- _m2Class = "";
 					}
 					- _name = "Class";
-					- _DataType = 2;
+					- _DataType = 0;
 				}
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
@@ -1784,7 +1843,7 @@ Tips:
 						- _m2Class = "";
 					}
 					- _name = "Class Diagram";
-					- _DataType = 2;
+					- _DataType = 0;
 				}
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
@@ -1795,7 +1854,7 @@ Tips:
 						- _m2Class = "";
 					}
 					- _name = "ClassifierRole";
-					- _DataType = 2;
+					- _DataType = 43196144;
 				}
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
@@ -1806,7 +1865,7 @@ Tips:
 						- _m2Class = "";
 					}
 					- _name = "CombinedFragment";
-					- _DataType = 2;
+					- _DataType = 0;
 				}
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
@@ -1817,7 +1876,7 @@ Tips:
 						- _m2Class = "";
 					}
 					- _name = "Comment";
-					- _DataType = 2;
+					- _DataType = 0;
 				}
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
@@ -1828,7 +1887,7 @@ Tips:
 						- _m2Class = "";
 					}
 					- _name = "CommunicationDiagram";
-					- _DataType = 2;
+					- _DataType = 43196144;
 				}
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
@@ -1839,7 +1898,7 @@ Tips:
 						- _m2Class = "";
 					}
 					- _name = "Component";
-					- _DataType = 2;
+					- _DataType = 43196144;
 				}
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
@@ -1850,7 +1909,7 @@ Tips:
 						- _m2Class = "";
 					}
 					- _name = "ComponentDiagram";
-					- _DataType = 2;
+					- _DataType = 0;
 				}
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
@@ -1861,7 +1920,7 @@ Tips:
 						- _m2Class = "";
 					}
 					- _name = "ComponentInstance";
-					- _DataType = 2;
+					- _DataType = -2147359403;
 				}
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
@@ -1872,7 +1931,18 @@ Tips:
 						- _m2Class = "";
 					}
 					- _name = "Condition";
-					- _DataType = 2;
+					- _DataType = -2147361760;
+				}
+				{ TableDataDefinition 
+					- _myTable = { IHandle 
+						- _m2Class = "ITableLayout";
+						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
+					}
+					- _modelElement = { IHandle 
+						- _m2Class = "";
+					}
+					- _name = "ConditionMark";
+					- _DataType = 1852138323;
 				}
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
@@ -1883,7 +1953,7 @@ Tips:
 						- _m2Class = "";
 					}
 					- _name = "Configuration";
-					- _DataType = 2;
+					- _DataType = 269627936;
 				}
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
@@ -1894,7 +1964,7 @@ Tips:
 						- _m2Class = "";
 					}
 					- _name = "Conform";
-					- _DataType = 2;
+					- _DataType = 1130851945;
 				}
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
@@ -1905,18 +1975,7 @@ Tips:
 						- _m2Class = "";
 					}
 					- _name = "Connector";
-					- _DataType = 2;
-				}
-				{ TableDataDefinition 
-					- _myTable = { IHandle 
-						- _m2Class = "ITableLayout";
-						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
-					}
-					- _modelElement = { IHandle 
-						- _m2Class = "";
-					}
-					- _name = "connector";
-					- _DataType = 2;
+					- _DataType = 269761608;
 				}
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
@@ -1927,7 +1986,7 @@ Tips:
 						- _m2Class = "";
 					}
 					- _name = "Constraint";
-					- _DataType = 2;
+					- _DataType = 269761448;
 				}
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
@@ -2003,17 +2062,6 @@ Tips:
 					- _modelElement = { IHandle 
 						- _m2Class = "";
 					}
-					- _name = "CSVImporter";
-					- _DataType = 2;
-				}
-				{ TableDataDefinition 
-					- _myTable = { IHandle 
-						- _m2Class = "ITableLayout";
-						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
-					}
-					- _modelElement = { IHandle 
-						- _m2Class = "";
-					}
 					- _name = "DataType";
 					- _DataType = 2;
 				}
@@ -2059,6 +2107,17 @@ Tips:
 						- _m2Class = "";
 					}
 					- _name = "DeploymentDiagram";
+					- _DataType = 269472800;
+				}
+				{ TableDataDefinition 
+					- _myTable = { IHandle 
+						- _m2Class = "ITableLayout";
+						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
+					}
+					- _modelElement = { IHandle 
+						- _m2Class = "";
+					}
+					- _name = "DestructionEvent";
 					- _DataType = 2;
 				}
 				{ TableDataDefinition 
@@ -2070,7 +2129,7 @@ Tips:
 						- _m2Class = "";
 					}
 					- _name = "Destructor";
-					- _DataType = 2;
+					- _DataType = 0;
 				}
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
@@ -2146,18 +2205,7 @@ Tips:
 					- _modelElement = { IHandle 
 						- _m2Class = "";
 					}
-					- _name = "Module";
-					- _DataType = 2;
-				}
-				{ TableDataDefinition 
-					- _myTable = { IHandle 
-						- _m2Class = "ITableLayout";
-						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
-					}
-					- _modelElement = { IHandle 
-						- _m2Class = "";
-					}
-					- _name = "File ";
+					- _name = "File";
 					- _DataType = 2;
 				}
 				{ TableDataDefinition 
@@ -2180,17 +2228,6 @@ Tips:
 						- _m2Class = "";
 					}
 					- _name = "Flow Attribute";
-					- _DataType = 2;
-				}
-				{ TableDataDefinition 
-					- _myTable = { IHandle 
-						- _m2Class = "ITableLayout";
-						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
-					}
-					- _modelElement = { IHandle 
-						- _m2Class = "";
-					}
-					- _name = "Flowchart";
 					- _DataType = 2;
 				}
 				{ TableDataDefinition 
@@ -2234,7 +2271,29 @@ Tips:
 					- _modelElement = { IHandle 
 						- _m2Class = "";
 					}
+					- _name = "Flowchart";
+					- _DataType = 2;
+				}
+				{ TableDataDefinition 
+					- _myTable = { IHandle 
+						- _m2Class = "ITableLayout";
+						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
+					}
+					- _modelElement = { IHandle 
+						- _m2Class = "";
+					}
 					- _name = "Folder";
+					- _DataType = 2;
+				}
+				{ TableDataDefinition 
+					- _myTable = { IHandle 
+						- _m2Class = "ITableLayout";
+						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
+					}
+					- _modelElement = { IHandle 
+						- _m2Class = "";
+					}
+					- _name = "Fork";
 					- _DataType = 2;
 				}
 				{ TableDataDefinition 
@@ -2279,7 +2338,7 @@ Tips:
 						- _m2Class = "";
 					}
 					- _name = "HyperLink";
-					- _DataType = 2;
+					- _DataType = 152586240;
 				}
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
@@ -2290,7 +2349,7 @@ Tips:
 						- _m2Class = "";
 					}
 					- _name = "InputOutputTable";
-					- _DataType = 2;
+					- _DataType = 152586240;
 				}
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
@@ -2301,7 +2360,7 @@ Tips:
 						- _m2Class = "";
 					}
 					- _name = "InstanceSlot";
-					- _DataType = 2;
+					- _DataType = 269461664;
 				}
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
@@ -2312,7 +2371,7 @@ Tips:
 						- _m2Class = "";
 					}
 					- _name = "InstanceSpecification";
-					- _DataType = 2;
+					- _DataType = 152587120;
 				}
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
@@ -2323,7 +2382,7 @@ Tips:
 						- _m2Class = "";
 					}
 					- _name = "InteractionOccurrence";
-					- _DataType = 2;
+					- _DataType = 152588440;
 				}
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
@@ -2334,7 +2393,7 @@ Tips:
 						- _m2Class = "";
 					}
 					- _name = "InteractionOperand";
-					- _DataType = 2;
+					- _DataType = 152587912;
 				}
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
@@ -2345,7 +2404,7 @@ Tips:
 						- _m2Class = "";
 					}
 					- _name = "Interface";
-					- _DataType = 2;
+					- _DataType = 152587648;
 				}
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
@@ -2356,7 +2415,7 @@ Tips:
 						- _m2Class = "";
 					}
 					- _name = "InterfaceBlock";
-					- _DataType = 2;
+					- _DataType = 152588264;
 				}
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
@@ -2367,18 +2426,7 @@ Tips:
 						- _m2Class = "";
 					}
 					- _name = "Internal Block Diagram";
-					- _DataType = 2;
-				}
-				{ TableDataDefinition 
-					- _myTable = { IHandle 
-						- _m2Class = "ITableLayout";
-						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
-					}
-					- _modelElement = { IHandle 
-						- _m2Class = "";
-					}
-					- _name = "interruptibleRegion";
-					- _DataType = 2;
+					- _DataType = 152586592;
 				}
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
@@ -2399,7 +2447,7 @@ Tips:
 					- _modelElement = { IHandle 
 						- _m2Class = "";
 					}
-					- _name = "Link";
+					- _name = "Lifeline";
 					- _DataType = 2;
 				}
 				{ TableDataDefinition 
@@ -2411,28 +2459,6 @@ Tips:
 						- _m2Class = "";
 					}
 					- _name = "Link";
-					- _DataType = 2;
-				}
-				{ TableDataDefinition 
-					- _myTable = { IHandle 
-						- _m2Class = "ITableLayout";
-						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
-					}
-					- _modelElement = { IHandle 
-						- _m2Class = "";
-					}
-					- _name = "localPostcondition";
-					- _DataType = 2;
-				}
-				{ TableDataDefinition 
-					- _myTable = { IHandle 
-						- _m2Class = "ITableLayout";
-						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
-					}
-					- _modelElement = { IHandle 
-						- _m2Class = "";
-					}
-					- _name = "localPrecondition";
 					- _DataType = 2;
 				}
 				{ TableDataDefinition 
@@ -2455,7 +2481,7 @@ Tips:
 						- _m2Class = "";
 					}
 					- _name = "MatrixView";
-					- _DataType = 2;
+					- _DataType = 43196144;
 				}
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
@@ -2510,6 +2536,28 @@ Tips:
 						- _m2Class = "";
 					}
 					- _name = "Metrics View";
+					- _DataType = 2;
+				}
+				{ TableDataDefinition 
+					- _myTable = { IHandle 
+						- _m2Class = "ITableLayout";
+						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
+					}
+					- _modelElement = { IHandle 
+						- _m2Class = "";
+					}
+					- _name = "Module";
+					- _DataType = 2;
+				}
+				{ TableDataDefinition 
+					- _myTable = { IHandle 
+						- _m2Class = "ITableLayout";
+						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
+					}
+					- _modelElement = { IHandle 
+						- _m2Class = "";
+					}
+					- _name = "MoreDetailedRD";
 					- _DataType = 2;
 				}
 				{ TableDataDefinition 
@@ -2806,7 +2854,7 @@ Tips:
 					- _modelElement = { IHandle 
 						- _m2Class = "";
 					}
-					- _name = "Refinement";
+					- _name = "Requirements Diagram";
 					- _DataType = 2;
 				}
 				{ TableDataDefinition 
@@ -2817,7 +2865,7 @@ Tips:
 					- _modelElement = { IHandle 
 						- _m2Class = "";
 					}
-					- _name = "Requirements Diagram";
+					- _name = "RequirementsDiagramHL";
 					- _DataType = 2;
 				}
 				{ TableDataDefinition 
@@ -2851,7 +2899,7 @@ Tips:
 						- _m2Class = "";
 					}
 					- _name = "Settings";
-					- _DataType = 2;
+					- _DataType = 1953391982;
 				}
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
@@ -2862,7 +2910,7 @@ Tips:
 						- _m2Class = "";
 					}
 					- _name = "ShallowHistoryConnector";
-					- _DataType = 2;
+					- _DataType = 1869182049;
 				}
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
@@ -2873,7 +2921,7 @@ Tips:
 						- _m2Class = "";
 					}
 					- _name = "StandardPort";
-					- _DataType = 2;
+					- _DataType = 0;
 				}
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
@@ -2884,7 +2932,18 @@ Tips:
 						- _m2Class = "";
 					}
 					- _name = "State";
-					- _DataType = 2;
+					- _DataType = 1734439795;
+				}
+				{ TableDataDefinition 
+					- _myTable = { IHandle 
+						- _m2Class = "ITableLayout";
+						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
+					}
+					- _modelElement = { IHandle 
+						- _m2Class = "";
+					}
+					- _name = "StateInvariant";
+					- _DataType = 1935636848;
 				}
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
@@ -2895,7 +2954,7 @@ Tips:
 						- _m2Class = "";
 					}
 					- _name = "Statechart";
-					- _DataType = 2;
+					- _DataType = 1866673262;
 				}
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
@@ -2906,7 +2965,7 @@ Tips:
 						- _m2Class = "";
 					}
 					- _name = "Stereotype";
-					- _DataType = 2;
+					- _DataType = 1919897644;
 				}
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
@@ -2917,7 +2976,7 @@ Tips:
 						- _m2Class = "";
 					}
 					- _name = "StructureDiagram";
-					- _DataType = 2;
+					- _DataType = 1143762273;
 				}
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
@@ -2928,7 +2987,7 @@ Tips:
 						- _m2Class = "";
 					}
 					- _name = "Swimlane";
-					- _DataType = 2;
+					- _DataType = 745697140;
 				}
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
@@ -2939,7 +2998,7 @@ Tips:
 						- _m2Class = "";
 					}
 					- _name = "SysML";
-					- _DataType = 2;
+					- _DataType = 1835364969;
 				}
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
@@ -2950,7 +3009,7 @@ Tips:
 						- _m2Class = "";
 					}
 					- _name = "SysMLPort";
-					- _DataType = 2;
+					- _DataType = 1766072364;
 				}
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
@@ -2961,7 +3020,7 @@ Tips:
 						- _m2Class = "";
 					}
 					- _name = "TableLayout";
-					- _DataType = 2;
+					- _DataType = 2036427888;
 				}
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
@@ -2972,7 +3031,7 @@ Tips:
 						- _m2Class = "";
 					}
 					- _name = "TableView";
-					- _DataType = 2;
+					- _DataType = 1987208563;
 				}
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
@@ -2983,7 +3042,7 @@ Tips:
 						- _m2Class = "";
 					}
 					- _name = "Tag";
-					- _DataType = 2;
+					- _DataType = 1936548210;
 				}
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
@@ -2994,7 +3053,18 @@ Tips:
 						- _m2Class = "";
 					}
 					- _name = "Test Case";
-					- _DataType = 2;
+					- _DataType = 1633037428;
+				}
+				{ TableDataDefinition 
+					- _myTable = { IHandle 
+						- _m2Class = "ITableLayout";
+						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
+					}
+					- _modelElement = { IHandle 
+						- _m2Class = "";
+					}
+					- _name = "TimeSegment";
+					- _DataType = 745827941;
 				}
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
@@ -3005,7 +3075,7 @@ Tips:
 						- _m2Class = "";
 					}
 					- _name = "TimingDiagram";
-					- _DataType = 2;
+					- _DataType = 1936417647;
 				}
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
@@ -3016,7 +3086,7 @@ Tips:
 						- _m2Class = "";
 					}
 					- _name = "Transition";
-					- _DataType = 2;
+					- _DataType = 1984263280;
 				}
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
@@ -3027,7 +3097,7 @@ Tips:
 						- _m2Class = "";
 					}
 					- _name = "TriggeredOperation";
-					- _DataType = 2;
+					- _DataType = 1937337441;
 				}
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
@@ -3038,7 +3108,7 @@ Tips:
 						- _m2Class = "";
 					}
 					- _name = "Type";
-					- _DataType = 2;
+					- _DataType = 67766532;
 				}
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
@@ -3049,7 +3119,7 @@ Tips:
 						- _m2Class = "";
 					}
 					- _name = "Unit";
-					- _DataType = 2;
+					- _DataType = 1919251793;
 				}
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
@@ -3060,7 +3130,7 @@ Tips:
 						- _m2Class = "";
 					}
 					- _name = "UseCase";
-					- _DataType = 2;
+					- _DataType = 690488330;
 				}
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
@@ -3071,7 +3141,7 @@ Tips:
 						- _m2Class = "";
 					}
 					- _name = "UseCaseDiagram";
-					- _DataType = 2;
+					- _DataType = 1634615667;
 				}
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
@@ -3081,8 +3151,19 @@ Tips:
 					- _modelElement = { IHandle 
 						- _m2Class = "";
 					}
-					- _name = "Value Binding ";
-					- _DataType = 2;
+					- _name = "Value Binding (Deprecated)";
+					- _DataType = 1697461090;
+				}
+				{ TableDataDefinition 
+					- _myTable = { IHandle 
+						- _m2Class = "ITableLayout";
+						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
+					}
+					- _modelElement = { IHandle 
+						- _m2Class = "";
+					}
+					- _name = "ValueProperty";
+					- _DataType = 1835364969;
 				}
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
@@ -3093,7 +3174,7 @@ Tips:
 						- _m2Class = "";
 					}
 					- _name = "ValueType";
-					- _DataType = 2;
+					- _DataType = 544437358;
 				}
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
@@ -3104,7 +3185,7 @@ Tips:
 						- _m2Class = "";
 					}
 					- _name = "Verification";
-					- _DataType = 2;
+					- _DataType = 168374788;
 				}
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
@@ -3115,7 +3196,7 @@ Tips:
 						- _m2Class = "";
 					}
 					- _name = "View";
-					- _DataType = 2;
+					- _DataType = 1193812083;
 				}
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
@@ -3126,7 +3207,7 @@ Tips:
 						- _m2Class = "";
 					}
 					- _name = "Viewpoint";
-					- _DataType = 2;
+					- _DataType = 1849783156;
 				}
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
@@ -3137,7 +3218,51 @@ Tips:
 						- _m2Class = "";
 					}
 					- _name = "Visual Studio Configuration";
-					- _DataType = 2;
+					- _DataType = 1953849888;
+				}
+				{ TableDataDefinition 
+					- _myTable = { IHandle 
+						- _m2Class = "ITableLayout";
+						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
+					}
+					- _modelElement = { IHandle 
+						- _m2Class = "";
+					}
+					- _name = "connector";
+					- _DataType = 1667458349;
+				}
+				{ TableDataDefinition 
+					- _myTable = { IHandle 
+						- _m2Class = "ITableLayout";
+						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
+					}
+					- _modelElement = { IHandle 
+						- _m2Class = "";
+					}
+					- _name = "interruptibleRegion";
+					- _DataType = 1769235265;
+				}
+				{ TableDataDefinition 
+					- _myTable = { IHandle 
+						- _m2Class = "ITableLayout";
+						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
+					}
+					- _modelElement = { IHandle 
+						- _m2Class = "";
+					}
+					- _name = "localPostcondition";
+					- _DataType = 1667575091;
+				}
+				{ TableDataDefinition 
+					- _myTable = { IHandle 
+						- _m2Class = "ITableLayout";
+						- _id = GUID a253db64-595b-4a8d-adb3-ecc792d5d340;
+					}
+					- _modelElement = { IHandle 
+						- _m2Class = "";
+					}
+					- _name = "localPrecondition";
+					- _DataType = 67766532;
 				}
 			}
 		}
@@ -3160,7 +3285,7 @@ Tips:
 									- value = 
 									{ IProperty 
 										- _Name = "EnableCriteriaCheck";
-										- _Value = "False";
+										- _Value = "True";
 										- _Type = Bool;
 									}
 								}
@@ -3182,54 +3307,22 @@ Tips:
 					- _id = GUID 4c77a3b1-822f-466e-bd06-76145c9e3b88;
 				}
 			}
-			- _modifiedTimeWeak = 2.21.2016::14:34:16;
+			- _modifiedTimeWeak = 2.15.2017::20:17:14;
 			- Tags = { IRPYRawContainer 
-				- size = 7;
+				- size = 2;
 				- value = 
 				{ ITag 
-					- _id = GUID 5711f7cc-38ff-4ebf-a612-37f99db8e977;
-					- _myState = 8192;
-					- _name = "RelRef_Amount_Type";
-					- _modifiedTimeWeak = 3.24.2015::14:50:19;
-					- ValueSpecifications = { IRPYRawContainer 
-						- size = 1;
-						- value = 
-						{ ILiteralSpecification 
-							- _id = GUID dd80fa06-f648-4c86-a095-419019255484;
-							- _modifiedTimeWeak = 3.24.2015::14:50:19;
-							- _value = "MoreThan";
-						}
-					}
-					- _typeOf = { IHandle 
-						- _m2Class = "IType";
-						- _filename = "PredefinedTypes.sbs";
-						- _subsystem = "PredefinedTypes";
-						- _class = "";
-						- _name = "SearchRelRefAmountTypeEnum";
-						- _id = GUID 20f1e2d7-a8d9-47e3-ba8e-79c8a90bb771;
-					}
-					- _isOrdered = 0;
-					- _base = { IHandle 
-						- _m2Class = "ITag";
-						- _filename = "PredefinedTypes.sbs";
-						- _subsystem = "PredefinedTypes";
-						- _class = "Query";
-						- _name = "RelRef_Amount_Type";
-						- _id = GUID 1833af5f-34ee-4820-ae90-85fb4db717de;
-					}
-				}
-				{ ITag 
-					- _id = GUID 638bf000-7902-4d64-ba26-42c2b948506c;
+					- _id = GUID b27e350d-aa70-4d52-b258-59f866bb3c39;
 					- _myState = 8192;
 					- _name = "RelRef_How_Related";
-					- _modifiedTimeWeak = 3.24.2015::14:45:33;
+					- _modifiedTimeWeak = 2.15.2017::20:17:14;
 					- ValueSpecifications = { IRPYRawContainer 
 						- size = 1;
 						- value = 
 						{ ILiteralSpecification 
-							- _id = GUID e7a2a759-1ea4-4fcc-9beb-7c99b3e823f0;
-							- _modifiedTimeWeak = 3.24.2015::14:45:33;
-							- _value = "IncomingRelations";
+							- _id = GUID b223c921-ea72-4d61-bcb3-fe38cf2517e2;
+							- _modifiedTimeWeak = 2.15.2017::20:17:14;
+							- _value = "References";
 						}
 					}
 					- _typeOf = { IHandle 
@@ -3251,16 +3344,16 @@ Tips:
 					}
 				}
 				{ ITag 
-					- _id = GUID c3a96b22-6663-46ea-88b1-31d3572cc847;
+					- _id = GUID ff4dd2e0-7ad3-4c15-bd1d-1c76a9b5c9bf;
 					- _myState = 8192;
 					- _name = "RelRef_Metatype";
-					- _modifiedTimeWeak = 7.11.2015::9:26:46;
+					- _modifiedTimeWeak = 2.15.2017::20:17:14;
 					- ValueSpecifications = { IRPYRawContainer 
 						- size = 1;
 						- value = 
 						{ ILiteralSpecification 
-							- _id = GUID 738278ae-e74f-444e-85fb-d85d7ad9e23e;
-							- _modifiedTimeWeak = 7.11.2015::9:26:46;
+							- _id = GUID 00340f97-11f9-4e4b-a3bf-c22cb12a486f;
+							- _modifiedTimeWeak = 2.15.2017::20:17:14;
 							- _value = "Satisfaction";
 						}
 					}
@@ -3282,110 +3375,6 @@ Tips:
 						- _id = GUID 290c2612-b019-493a-941a-7a1fa6a005ac;
 					}
 				}
-				{ ITag 
-					- _id = GUID 8874ea02-6701-4784-a32f-478468617686;
-					- _myState = 8192;
-					- _name = "Conform_Viewpoint";
-					- _modifiedTimeWeak = 3.24.2015::14:45:33;
-					- _typeOf = { IHandle 
-						- _m2Class = "IType";
-						- _filename = "PredefinedTypes.sbs";
-						- _subsystem = "PredefinedTypes";
-						- _class = "";
-						- _name = "RhpString";
-						- _id = GUID ae5e3720-4e3e-40f1-9346-9a8b4e501f35;
-					}
-					- _isOrdered = 0;
-				}
-				{ ITag 
-					- _id = GUID 899d19b1-84b7-46b7-8519-07cda5aec44e;
-					- _myState = 8192;
-					- _name = "Or_And_Veiwpoint";
-					- _modifiedTimeWeak = 7.11.2015::9:26:46;
-					- ValueSpecifications = { IRPYRawContainer 
-						- size = 1;
-						- value = 
-						{ ILiteralSpecification 
-							- _id = GUID 1d9e7ef0-60ce-4e49-b7b2-816d430941a2;
-							- _modifiedTimeWeak = 7.11.2015::9:26:46;
-							- _value = "or";
-						}
-					}
-					- _typeOf = { IHandle 
-						- _m2Class = "IType";
-						- _filename = "PredefinedTypes.sbs";
-						- _subsystem = "PredefinedTypes";
-						- _class = "";
-						- _name = "RhpString";
-						- _id = GUID ae5e3720-4e3e-40f1-9346-9a8b4e501f35;
-					}
-					- _isOrdered = 0;
-				}
-				{ ITag 
-					- _id = GUID 753667a7-777d-42aa-93d3-10e7290d4250;
-					- _myState = 8192;
-					- _name = "Stereotype_Requirement";
-					- _modifiedTimeWeak = 3.24.2015::14:47:41;
-					- ValueSpecifications = { IRPYRawContainer 
-						- size = 1;
-						- value = 
-						{ IInstanceValue 
-							- _id = GUID 2d72b148-a53d-4d69-83b8-9d5f6240f1e4;
-							- _modifiedTimeWeak = 1.2.1990::0:0:0;
-							- _value = { IHandle 
-								- _m2Class = "";
-							}
-						}
-					}
-					- myTypeOf = { IType 
-						- _id = GUID c0d4a66f-5189-4673-9526-0ad9f2a7c2f9;
-						- _myState = 8192;
-						- _modifiedTimeWeak = 1.2.1990::0:0:0;
-						- _declaration = "Stereotype";
-						- _kind = Language;
-					}
-					- _isOrdered = 0;
-					- _base = { IHandle 
-						- _m2Class = "ITag";
-						- _filename = "PredefinedTypes.sbs";
-						- _subsystem = "PredefinedTypes";
-						- _class = "Query";
-						- _name = "Stereotype_Requirement";
-						- _id = GUID a249681c-22f5-4a25-b372-3cf2758f1473;
-					}
-				}
-				{ ITag 
-					- _id = GUID ec987753-4dff-4dfa-a066-10691cba3847;
-					- _myState = 8192;
-					- _name = "RelRef_Show_In_Result";
-					- _modifiedTimeWeak = 3.24.2015::14:52:50;
-					- ValueSpecifications = { IRPYRawContainer 
-						- size = 1;
-						- value = 
-						{ ILiteralSpecification 
-							- _id = GUID 25b5a7ef-2248-4dc5-a20d-df62cafdd939;
-							- _modifiedTimeWeak = 3.24.2015::14:52:50;
-							- _value = "False";
-						}
-					}
-					- _typeOf = { IHandle 
-						- _m2Class = "IType";
-						- _filename = "PredefinedTypes.sbs";
-						- _subsystem = "PredefinedTypes";
-						- _class = "";
-						- _name = "RhpBoolean";
-						- _id = GUID f19b56f2-78ab-44fa-860e-6ead487ecb07;
-					}
-					- _isOrdered = 0;
-					- _base = { IHandle 
-						- _m2Class = "ITag";
-						- _filename = "PredefinedTypes.sbs";
-						- _subsystem = "PredefinedTypes";
-						- _class = "Query";
-						- _name = "RelRef_Show_In_Result";
-						- _id = GUID d10dfdbb-1734-4f8d-9a64-a754bd8f8e9e;
-					}
-				}
 			}
 			- TableElementTypes = { IRPYRawContainer 
 				- size = 1;
@@ -3393,13 +3382,13 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _id = GUID f3eb8934-48be-4638-acd3-976a9caec4ec;
+						- _id = GUID 719b755b-a891-4406-915e-255628c0b6cb;
 					}
 					- _modelElement = { IHandle 
 						- _m2Class = "";
 					}
 					- _name = "Requirement";
-					- _DataType = 2;
+					- _DataType = 264283136;
 				}
 			}
 		}
@@ -3422,7 +3411,7 @@ Tips:
 									- value = 
 									{ IProperty 
 										- _Name = "EnableCriteriaCheck";
-										- _Value = "False";
+										- _Value = "True";
 										- _Type = Bool;
 									}
 								}
@@ -3444,21 +3433,21 @@ Tips:
 					- _id = GUID 4c77a3b1-822f-466e-bd06-76145c9e3b88;
 				}
 			}
-			- _modifiedTimeWeak = 2.21.2016::14:34:41;
+			- _modifiedTimeWeak = 2.15.2017::20:18:1;
 			- Tags = { IRPYRawContainer 
-				- size = 6;
+				- size = 3;
 				- value = 
 				{ ITag 
-					- _id = GUID c9365b80-e162-4241-b9d6-cce5f6d7abce;
+					- _id = GUID 7512df43-d313-410d-bc05-866293d26d8f;
 					- _myState = 8192;
 					- _name = "RelRef_Amount_Type";
-					- _modifiedTimeWeak = 3.24.2015::14:45:33;
+					- _modifiedTimeWeak = 2.15.2017::20:18:1;
 					- ValueSpecifications = { IRPYRawContainer 
 						- size = 1;
 						- value = 
 						{ ILiteralSpecification 
-							- _id = GUID 3856fca9-591d-416e-86c0-5e6e8dfad134;
-							- _modifiedTimeWeak = 3.24.2015::14:45:33;
+							- _id = GUID 7fa06676-5dbc-4da9-b410-647ab97be28e;
+							- _modifiedTimeWeak = 2.15.2017::20:18:1;
 							- _value = "Exactly";
 						}
 					}
@@ -3481,17 +3470,17 @@ Tips:
 					}
 				}
 				{ ITag 
-					- _id = GUID 9cceb38d-a9b6-4f14-bbfe-fadf7f7498e6;
+					- _id = GUID d7f4d202-89b6-4cf4-af28-5a58f04d5ea3;
 					- _myState = 8192;
 					- _name = "RelRef_How_Related";
-					- _modifiedTimeWeak = 3.24.2015::14:45:33;
+					- _modifiedTimeWeak = 2.15.2017::20:18:1;
 					- ValueSpecifications = { IRPYRawContainer 
 						- size = 1;
 						- value = 
 						{ ILiteralSpecification 
-							- _id = GUID 51a0f675-3b2e-4c28-a729-3294f7f41426;
-							- _modifiedTimeWeak = 3.24.2015::14:45:33;
-							- _value = "IncomingRelations";
+							- _id = GUID 81d25a98-33c4-4b06-bd53-a341747e35c0;
+							- _modifiedTimeWeak = 2.15.2017::20:18:1;
+							- _value = "References";
 						}
 					}
 					- _typeOf = { IHandle 
@@ -3513,16 +3502,16 @@ Tips:
 					}
 				}
 				{ ITag 
-					- _id = GUID 96a3720e-08d9-4b7b-8632-28dd546bc8be;
+					- _id = GUID 02c7f3c3-0e7c-48c0-83c9-7129ce4531aa;
 					- _myState = 8192;
 					- _name = "RelRef_Metatype";
-					- _modifiedTimeWeak = 3.24.2015::14:45:33;
+					- _modifiedTimeWeak = 2.15.2017::20:18:1;
 					- ValueSpecifications = { IRPYRawContainer 
 						- size = 1;
 						- value = 
 						{ ILiteralSpecification 
-							- _id = GUID 1493f094-5011-4509-bf48-73648e617a95;
-							- _modifiedTimeWeak = 3.24.2015::14:45:33;
+							- _id = GUID 8de17e57-f574-41a8-8980-09de0d566496;
+							- _modifiedTimeWeak = 2.15.2017::20:18:1;
 							- _value = "Satisfaction";
 						}
 					}
@@ -3544,78 +3533,6 @@ Tips:
 						- _id = GUID 290c2612-b019-493a-941a-7a1fa6a005ac;
 					}
 				}
-				{ ITag 
-					- _id = GUID 5f6b33c9-0497-4297-828e-dd3fab6bf410;
-					- _myState = 8192;
-					- _name = "Conform_Viewpoint";
-					- _modifiedTimeWeak = 3.24.2015::14:45:33;
-					- _typeOf = { IHandle 
-						- _m2Class = "IType";
-						- _filename = "PredefinedTypes.sbs";
-						- _subsystem = "PredefinedTypes";
-						- _class = "";
-						- _name = "RhpString";
-						- _id = GUID ae5e3720-4e3e-40f1-9346-9a8b4e501f35;
-					}
-					- _isOrdered = 0;
-				}
-				{ ITag 
-					- _id = GUID 0cc9a230-52e1-46b2-8d78-3605bd55229f;
-					- _myState = 8192;
-					- _name = "Or_And_Veiwpoint";
-					- _modifiedTimeWeak = 3.24.2015::14:47:41;
-					- ValueSpecifications = { IRPYRawContainer 
-						- size = 1;
-						- value = 
-						{ ILiteralSpecification 
-							- _id = GUID abd0c340-416e-4158-87ff-36b282a640a6;
-							- _modifiedTimeWeak = 3.24.2015::14:47:41;
-							- _value = "or";
-						}
-					}
-					- _typeOf = { IHandle 
-						- _m2Class = "IType";
-						- _filename = "PredefinedTypes.sbs";
-						- _subsystem = "PredefinedTypes";
-						- _class = "";
-						- _name = "RhpString";
-						- _id = GUID ae5e3720-4e3e-40f1-9346-9a8b4e501f35;
-					}
-					- _isOrdered = 0;
-				}
-				{ ITag 
-					- _id = GUID a66cd526-d6d3-4acd-92eb-398265f23634;
-					- _myState = 8192;
-					- _name = "Stereotype_Requirement";
-					- _modifiedTimeWeak = 3.24.2015::14:47:41;
-					- ValueSpecifications = { IRPYRawContainer 
-						- size = 1;
-						- value = 
-						{ IInstanceValue 
-							- _id = GUID 6ad512ac-2498-4d0c-a473-c1a8e6eba49b;
-							- _modifiedTimeWeak = 1.2.1990::0:0:0;
-							- _value = { IHandle 
-								- _m2Class = "";
-							}
-						}
-					}
-					- myTypeOf = { IType 
-						- _id = GUID 94b771e0-421d-44fd-8b32-e762a2eeda49;
-						- _myState = 8192;
-						- _modifiedTimeWeak = 1.2.1990::0:0:0;
-						- _declaration = "Stereotype";
-						- _kind = Language;
-					}
-					- _isOrdered = 0;
-					- _base = { IHandle 
-						- _m2Class = "ITag";
-						- _filename = "PredefinedTypes.sbs";
-						- _subsystem = "PredefinedTypes";
-						- _class = "Query";
-						- _name = "Stereotype_Requirement";
-						- _id = GUID a249681c-22f5-4a25-b372-3cf2758f1473;
-					}
-				}
 			}
 			- TableElementTypes = { IRPYRawContainer 
 				- size = 1;
@@ -3629,7 +3546,7 @@ Tips:
 						- _m2Class = "";
 					}
 					- _name = "Requirement";
-					- _DataType = 2;
+					- _DataType = 43196144;
 				}
 			}
 		}
@@ -3724,7 +3641,7 @@ Tips:
 									- value = 
 									{ IProperty 
 										- _Name = "EnableCriteriaCheck";
-										- _Value = "False";
+										- _Value = "True";
 										- _Type = Bool;
 									}
 								}
@@ -3746,22 +3663,22 @@ Tips:
 					- _id = GUID 4c77a3b1-822f-466e-bd06-76145c9e3b88;
 				}
 			}
-			- _modifiedTimeWeak = 2.21.2016::14:34:10;
+			- _modifiedTimeWeak = 2.15.2017::20:16:59;
 			- Tags = { IRPYRawContainer 
-				- size = 5;
+				- size = 2;
 				- value = 
 				{ ITag 
-					- _id = GUID f27e1124-2fc1-4ed6-956b-70544aa27b76;
+					- _id = GUID a6ffe8a6-7d62-4894-be96-f8343b9d2e08;
 					- _myState = 8192;
 					- _name = "RelRef_How_Related";
-					- _modifiedTimeWeak = 7.19.2015::11:38:27;
+					- _modifiedTimeWeak = 2.15.2017::20:16:59;
 					- ValueSpecifications = { IRPYRawContainer 
 						- size = 1;
 						- value = 
 						{ ILiteralSpecification 
-							- _id = GUID ca8a5070-8319-431b-a52b-211b3f13e173;
-							- _modifiedTimeWeak = 7.19.2015::11:38:27;
-							- _value = "IncomingRelations";
+							- _id = GUID ca5dc43c-d250-4497-ab30-4e2ee1ced3b0;
+							- _modifiedTimeWeak = 2.15.2017::20:16:59;
+							- _value = "References";
 						}
 					}
 					- _typeOf = { IHandle 
@@ -3783,16 +3700,16 @@ Tips:
 					}
 				}
 				{ ITag 
-					- _id = GUID 3244b18d-2cc7-47e8-91a8-96891495e293;
+					- _id = GUID d80bfa5c-34f2-4ed0-ae92-92c50c7dc38a;
 					- _myState = 8192;
 					- _name = "RelRef_Metatype";
-					- _modifiedTimeWeak = 7.19.2015::11:38:27;
+					- _modifiedTimeWeak = 2.15.2017::20:16:59;
 					- ValueSpecifications = { IRPYRawContainer 
 						- size = 1;
 						- value = 
 						{ ILiteralSpecification 
-							- _id = GUID d52ff761-b183-4007-a1ef-190e1d2d5014;
-							- _modifiedTimeWeak = 7.19.2015::11:38:27;
+							- _id = GUID 02b7a380-c063-45ae-aa27-cf013e682f98;
+							- _modifiedTimeWeak = 2.15.2017::20:16:59;
 							- _value = "Refinement";
 						}
 					}
@@ -3814,77 +3731,6 @@ Tips:
 						- _id = GUID 290c2612-b019-493a-941a-7a1fa6a005ac;
 					}
 				}
-				{ ITag 
-					- _id = GUID 1da3161e-11ac-47f4-bc70-cfeb68815f95;
-					- _myState = 8192;
-					- _name = "Conform_Viewpoint";
-					- _modifiedTimeWeak = 7.19.2015::11:38:27;
-					- _typeOf = { IHandle 
-						- _m2Class = "IType";
-						- _filename = "PredefinedTypes.sbs";
-						- _subsystem = "PredefinedTypes";
-						- _class = "";
-						- _name = "RhpString";
-						- _id = GUID ae5e3720-4e3e-40f1-9346-9a8b4e501f35;
-					}
-					- _isOrdered = 0;
-				}
-				{ ITag 
-					- _id = GUID c0e3b971-56ca-455c-bdb8-049f836ca90a;
-					- _myState = 8192;
-					- _name = "Or_And_Veiwpoint";
-					- _modifiedTimeWeak = 7.19.2015::11:38:57;
-					- ValueSpecifications = { IRPYRawContainer 
-						- size = 1;
-						- value = 
-						{ ILiteralSpecification 
-							- _id = GUID d0b81ebe-d231-4fd5-8515-b5b08de40237;
-							- _modifiedTimeWeak = 7.19.2015::11:38:57;
-							- _value = "or";
-						}
-					}
-					- _typeOf = { IHandle 
-						- _m2Class = "IType";
-						- _filename = "PredefinedTypes.sbs";
-						- _subsystem = "PredefinedTypes";
-						- _class = "";
-						- _name = "RhpString";
-						- _id = GUID ae5e3720-4e3e-40f1-9346-9a8b4e501f35;
-					}
-					- _isOrdered = 0;
-				}
-				{ ITag 
-					- _id = GUID 7d63004e-fac0-422a-a55b-c883a742eee7;
-					- _myState = 8192;
-					- _name = "RelRef_Show_In_Result";
-					- _modifiedTimeWeak = 7.19.2015::11:38:57;
-					- ValueSpecifications = { IRPYRawContainer 
-						- size = 1;
-						- value = 
-						{ ILiteralSpecification 
-							- _id = GUID 22d70370-b504-4ffa-92e1-9673742c0ad0;
-							- _modifiedTimeWeak = 7.19.2015::11:38:57;
-							- _value = "False";
-						}
-					}
-					- _typeOf = { IHandle 
-						- _m2Class = "IType";
-						- _filename = "PredefinedTypes.sbs";
-						- _subsystem = "PredefinedTypes";
-						- _class = "";
-						- _name = "RhpBoolean";
-						- _id = GUID f19b56f2-78ab-44fa-860e-6ead487ecb07;
-					}
-					- _isOrdered = 0;
-					- _base = { IHandle 
-						- _m2Class = "ITag";
-						- _filename = "PredefinedTypes.sbs";
-						- _subsystem = "PredefinedTypes";
-						- _class = "Query";
-						- _name = "RelRef_Show_In_Result";
-						- _id = GUID d10dfdbb-1734-4f8d-9a64-a754bd8f8e9e;
-					}
-				}
 			}
 			- TableElementTypes = { IRPYRawContainer 
 				- size = 1;
@@ -3898,7 +3744,7 @@ Tips:
 						- _m2Class = "";
 					}
 					- _name = "Requirement";
-					- _DataType = 2;
+					- _DataType = 0;
 				}
 			}
 		}
@@ -3921,7 +3767,7 @@ Tips:
 									- value = 
 									{ IProperty 
 										- _Name = "EnableCriteriaCheck";
-										- _Value = "False";
+										- _Value = "True";
 										- _Type = Bool;
 									}
 								}
@@ -3943,21 +3789,21 @@ Tips:
 					- _id = GUID 4c77a3b1-822f-466e-bd06-76145c9e3b88;
 				}
 			}
-			- _modifiedTimeWeak = 2.21.2016::14:34:34;
+			- _modifiedTimeWeak = 2.15.2017::20:17:44;
 			- Tags = { IRPYRawContainer 
-				- size = 6;
+				- size = 3;
 				- value = 
 				{ ITag 
-					- _id = GUID 7062b20f-33da-4915-8b4f-2f70366c2be8;
+					- _id = GUID 1feb77c0-1a48-4939-84e9-e4ee00add104;
 					- _myState = 8192;
 					- _name = "RelRef_Amount_Type";
-					- _modifiedTimeWeak = 7.19.2015::11:39:30;
+					- _modifiedTimeWeak = 2.15.2017::20:17:44;
 					- ValueSpecifications = { IRPYRawContainer 
 						- size = 1;
 						- value = 
 						{ ILiteralSpecification 
-							- _id = GUID 5a0f937d-e1ec-462b-9800-7ebfd0a74938;
-							- _modifiedTimeWeak = 7.19.2015::11:39:30;
+							- _id = GUID abc8c313-4852-4ac2-9d4f-503fd4854169;
+							- _modifiedTimeWeak = 2.15.2017::20:17:44;
 							- _value = "Exactly";
 						}
 					}
@@ -3980,17 +3826,17 @@ Tips:
 					}
 				}
 				{ ITag 
-					- _id = GUID ec49f7bc-37cb-487f-9ad5-c0106c73d2bd;
+					- _id = GUID e873e241-57aa-4167-8f22-e0e6d703636f;
 					- _myState = 8192;
 					- _name = "RelRef_How_Related";
-					- _modifiedTimeWeak = 7.19.2015::11:39:30;
+					- _modifiedTimeWeak = 2.15.2017::20:17:44;
 					- ValueSpecifications = { IRPYRawContainer 
 						- size = 1;
 						- value = 
 						{ ILiteralSpecification 
-							- _id = GUID acf52757-cfe6-4a14-802f-fde127e1c464;
-							- _modifiedTimeWeak = 7.19.2015::11:39:30;
-							- _value = "IncomingRelations";
+							- _id = GUID 9ec6b07b-afe3-4f1b-9e6a-bc9686b5410b;
+							- _modifiedTimeWeak = 2.15.2017::20:17:44;
+							- _value = "References";
 						}
 					}
 					- _typeOf = { IHandle 
@@ -4012,16 +3858,16 @@ Tips:
 					}
 				}
 				{ ITag 
-					- _id = GUID 5dba671e-ef6b-4695-a6b1-849b46b56bfb;
+					- _id = GUID a4fff845-8d05-4372-b1a6-7f87818fb8c6;
 					- _myState = 8192;
 					- _name = "RelRef_Metatype";
-					- _modifiedTimeWeak = 7.19.2015::11:39:30;
+					- _modifiedTimeWeak = 2.15.2017::20:17:44;
 					- ValueSpecifications = { IRPYRawContainer 
 						- size = 1;
 						- value = 
 						{ ILiteralSpecification 
-							- _id = GUID 737b1486-1ba8-4c27-81cf-fd28dcdb0d41;
-							- _modifiedTimeWeak = 7.19.2015::11:39:30;
+							- _id = GUID ed14381e-80d8-457c-9170-b966deafe090;
+							- _modifiedTimeWeak = 2.15.2017::20:17:44;
 							- _value = "Refinement";
 						}
 					}
@@ -4043,77 +3889,6 @@ Tips:
 						- _id = GUID 290c2612-b019-493a-941a-7a1fa6a005ac;
 					}
 				}
-				{ ITag 
-					- _id = GUID 36ee4404-47d0-4ee3-9945-b9ce666ac69d;
-					- _myState = 8192;
-					- _name = "Conform_Viewpoint";
-					- _modifiedTimeWeak = 7.19.2015::11:39:30;
-					- _typeOf = { IHandle 
-						- _m2Class = "IType";
-						- _filename = "PredefinedTypes.sbs";
-						- _subsystem = "PredefinedTypes";
-						- _class = "";
-						- _name = "RhpString";
-						- _id = GUID ae5e3720-4e3e-40f1-9346-9a8b4e501f35;
-					}
-					- _isOrdered = 0;
-				}
-				{ ITag 
-					- _id = GUID aea5ab42-e021-4273-a043-875764fb642f;
-					- _myState = 8192;
-					- _name = "Or_And_Veiwpoint";
-					- _modifiedTimeWeak = 7.19.2015::11:39:40;
-					- ValueSpecifications = { IRPYRawContainer 
-						- size = 1;
-						- value = 
-						{ ILiteralSpecification 
-							- _id = GUID e121c437-66e1-4688-b2bd-0eb09a962ccc;
-							- _modifiedTimeWeak = 7.19.2015::11:39:40;
-							- _value = "or";
-						}
-					}
-					- _typeOf = { IHandle 
-						- _m2Class = "IType";
-						- _filename = "PredefinedTypes.sbs";
-						- _subsystem = "PredefinedTypes";
-						- _class = "";
-						- _name = "RhpString";
-						- _id = GUID ae5e3720-4e3e-40f1-9346-9a8b4e501f35;
-					}
-					- _isOrdered = 0;
-				}
-				{ ITag 
-					- _id = GUID d631ef7b-f1c8-4a32-95c0-b61e7e0a85b1;
-					- _myState = 8192;
-					- _name = "RelRef_Show_In_Result";
-					- _modifiedTimeWeak = 7.19.2015::11:39:40;
-					- ValueSpecifications = { IRPYRawContainer 
-						- size = 1;
-						- value = 
-						{ ILiteralSpecification 
-							- _id = GUID 510cb326-d198-4675-bbec-3b4aab692e59;
-							- _modifiedTimeWeak = 7.19.2015::11:39:40;
-							- _value = "False";
-						}
-					}
-					- _typeOf = { IHandle 
-						- _m2Class = "IType";
-						- _filename = "PredefinedTypes.sbs";
-						- _subsystem = "PredefinedTypes";
-						- _class = "";
-						- _name = "RhpBoolean";
-						- _id = GUID f19b56f2-78ab-44fa-860e-6ead487ecb07;
-					}
-					- _isOrdered = 0;
-					- _base = { IHandle 
-						- _m2Class = "ITag";
-						- _filename = "PredefinedTypes.sbs";
-						- _subsystem = "PredefinedTypes";
-						- _class = "Query";
-						- _name = "RelRef_Show_In_Result";
-						- _id = GUID d10dfdbb-1734-4f8d-9a64-a754bd8f8e9e;
-					}
-				}
 			}
 			- TableElementTypes = { IRPYRawContainer 
 				- size = 1;
@@ -4127,7 +3902,7 @@ Tips:
 						- _m2Class = "";
 					}
 					- _name = "Requirement";
-					- _DataType = 2;
+					- _DataType = 43196144;
 				}
 			}
 		}
@@ -4260,7 +4035,7 @@ Tips:
 									- value = 
 									{ IProperty 
 										- _Name = "EnableCriteriaCheck";
-										- _Value = "False";
+										- _Value = "True";
 										- _Type = Bool;
 									}
 								}
@@ -4282,22 +4057,22 @@ Tips:
 					- _id = GUID 4c77a3b1-822f-466e-bd06-76145c9e3b88;
 				}
 			}
-			- _modifiedTimeWeak = 2.21.2016::14:33:46;
+			- _modifiedTimeWeak = 2.15.2017::20:16:30;
 			- Tags = { IRPYRawContainer 
-				- size = 5;
+				- size = 2;
 				- value = 
 				{ ITag 
-					- _id = GUID 85da556a-d349-4691-b4cd-fb1e28c3d8f6;
+					- _id = GUID 5fbe90af-8c90-405c-9fc7-f7485fe1646f;
 					- _myState = 8192;
 					- _name = "RelRef_How_Related";
-					- _modifiedTimeWeak = 2.21.2016::14:19:34;
+					- _modifiedTimeWeak = 2.15.2017::20:16:30;
 					- ValueSpecifications = { IRPYRawContainer 
 						- size = 1;
 						- value = 
 						{ ILiteralSpecification 
-							- _id = GUID 56623555-05f3-484e-afd3-9b81758ae0fb;
-							- _modifiedTimeWeak = 2.21.2016::14:19:34;
-							- _value = "IncomingRelations";
+							- _id = GUID 8f52320c-9243-4ba9-95c9-328ddcfcc6e9;
+							- _modifiedTimeWeak = 2.15.2017::20:16:30;
+							- _value = "References";
 						}
 					}
 					- _typeOf = { IHandle 
@@ -4319,16 +4094,16 @@ Tips:
 					}
 				}
 				{ ITag 
-					- _id = GUID 1a797bec-952a-4301-8391-0c90cef9a0aa;
+					- _id = GUID 9820e449-881d-48e1-9eb7-726de0484379;
 					- _myState = 8192;
 					- _name = "RelRef_Metatype";
-					- _modifiedTimeWeak = 2.21.2016::14:19:34;
+					- _modifiedTimeWeak = 2.15.2017::20:16:30;
 					- ValueSpecifications = { IRPYRawContainer 
 						- size = 1;
 						- value = 
 						{ ILiteralSpecification 
-							- _id = GUID e1a9a9eb-ba26-489f-815f-4c5fb516e493;
-							- _modifiedTimeWeak = 2.21.2016::14:19:34;
+							- _id = GUID 8a4c0de6-1352-44e5-ac8b-d17192c167a4;
+							- _modifiedTimeWeak = 2.15.2017::20:16:30;
 							- _value = "Derivation";
 						}
 					}
@@ -4350,77 +4125,6 @@ Tips:
 						- _id = GUID 290c2612-b019-493a-941a-7a1fa6a005ac;
 					}
 				}
-				{ ITag 
-					- _id = GUID 11c9150b-45b3-432b-ad95-532a24dc7634;
-					- _myState = 8192;
-					- _name = "RelRef_Show_In_Result";
-					- _modifiedTimeWeak = 2.21.2016::14:19:34;
-					- ValueSpecifications = { IRPYRawContainer 
-						- size = 1;
-						- value = 
-						{ ILiteralSpecification 
-							- _id = GUID 9f419da9-8ee1-4475-8e24-a34134c09324;
-							- _modifiedTimeWeak = 2.21.2016::14:19:34;
-							- _value = "False";
-						}
-					}
-					- _typeOf = { IHandle 
-						- _m2Class = "IType";
-						- _filename = "PredefinedTypes.sbs";
-						- _subsystem = "PredefinedTypes";
-						- _class = "";
-						- _name = "RhpBoolean";
-						- _id = GUID f19b56f2-78ab-44fa-860e-6ead487ecb07;
-					}
-					- _isOrdered = 0;
-					- _base = { IHandle 
-						- _m2Class = "ITag";
-						- _filename = "PredefinedTypes.sbs";
-						- _subsystem = "PredefinedTypes";
-						- _class = "Query";
-						- _name = "RelRef_Show_In_Result";
-						- _id = GUID d10dfdbb-1734-4f8d-9a64-a754bd8f8e9e;
-					}
-				}
-				{ ITag 
-					- _id = GUID 628e1fad-3ed4-4a10-8ad5-ddf17ffcc502;
-					- _myState = 8192;
-					- _name = "Conform_Viewpoint";
-					- _modifiedTimeWeak = 2.21.2016::14:19:34;
-					- _typeOf = { IHandle 
-						- _m2Class = "IType";
-						- _filename = "PredefinedTypes.sbs";
-						- _subsystem = "PredefinedTypes";
-						- _class = "";
-						- _name = "RhpString";
-						- _id = GUID ae5e3720-4e3e-40f1-9346-9a8b4e501f35;
-					}
-					- _isOrdered = 0;
-				}
-				{ ITag 
-					- _id = GUID 4e6a7b29-de29-47bd-9843-85e547acaa7c;
-					- _myState = 8192;
-					- _name = "Or_And_Veiwpoint";
-					- _modifiedTimeWeak = 2.21.2016::14:19:34;
-					- ValueSpecifications = { IRPYRawContainer 
-						- size = 1;
-						- value = 
-						{ ILiteralSpecification 
-							- _id = GUID 307ebb29-1a40-4c8d-95c6-4d533db0d21f;
-							- _modifiedTimeWeak = 2.21.2016::14:19:34;
-							- _value = "or";
-						}
-					}
-					- _typeOf = { IHandle 
-						- _m2Class = "IType";
-						- _filename = "PredefinedTypes.sbs";
-						- _subsystem = "PredefinedTypes";
-						- _class = "";
-						- _name = "RhpString";
-						- _id = GUID ae5e3720-4e3e-40f1-9346-9a8b4e501f35;
-					}
-					- _isOrdered = 0;
-				}
 			}
 			- TableElementTypes = { IRPYRawContainer 
 				- size = 1;
@@ -4434,7 +4138,7 @@ Tips:
 						- _m2Class = "";
 					}
 					- _name = "Requirement";
-					- _DataType = 2;
+					- _DataType = 0;
 				}
 			}
 		}
@@ -4457,7 +4161,7 @@ Tips:
 									- value = 
 									{ IProperty 
 										- _Name = "EnableCriteriaCheck";
-										- _Value = "False";
+										- _Value = "True";
 										- _Type = Bool;
 									}
 								}
@@ -4479,156 +4183,21 @@ Tips:
 					- _id = GUID 4c77a3b1-822f-466e-bd06-76145c9e3b88;
 				}
 			}
-			- _modifiedTimeWeak = 2.21.2016::14:34:25;
+			- _modifiedTimeWeak = 2.15.2017::20:17:27;
 			- Tags = { IRPYRawContainer 
-				- size = 6;
+				- size = 3;
 				- value = 
 				{ ITag 
-					- _id = GUID 9a931688-043b-4407-9b36-60b6d70cc8c6;
-					- _myState = 8192;
-					- _name = "RelRef_How_Related";
-					- _modifiedTimeWeak = 2.21.2016::14:19:34;
-					- ValueSpecifications = { IRPYRawContainer 
-						- size = 1;
-						- value = 
-						{ ILiteralSpecification 
-							- _id = GUID 9b661161-23f3-4d8b-b766-bfe95be0d617;
-							- _modifiedTimeWeak = 2.21.2016::14:19:34;
-							- _value = "IncomingRelations";
-						}
-					}
-					- _typeOf = { IHandle 
-						- _m2Class = "IType";
-						- _filename = "PredefinedTypes.sbs";
-						- _subsystem = "PredefinedTypes";
-						- _class = "";
-						- _name = "SearchRelRefHowRelatedEnum";
-						- _id = GUID 1f51c8cc-5b4f-4e36-a391-d8a3d29b610a;
-					}
-					- _isOrdered = 0;
-					- _base = { IHandle 
-						- _m2Class = "ITag";
-						- _filename = "PredefinedTypes.sbs";
-						- _subsystem = "PredefinedTypes";
-						- _class = "Query";
-						- _name = "RelRef_How_Related";
-						- _id = GUID f135968b-beae-4e26-8834-174d58eac9df;
-					}
-				}
-				{ ITag 
-					- _id = GUID 2f671889-80e2-4e4a-af9f-98fbd8063233;
-					- _myState = 8192;
-					- _name = "RelRef_Metatype";
-					- _modifiedTimeWeak = 2.21.2016::14:19:34;
-					- ValueSpecifications = { IRPYRawContainer 
-						- size = 1;
-						- value = 
-						{ ILiteralSpecification 
-							- _id = GUID 91cb60ce-248b-40a7-ae1d-373a3d5c0293;
-							- _modifiedTimeWeak = 2.21.2016::14:19:34;
-							- _value = "Derivation";
-						}
-					}
-					- _typeOf = { IHandle 
-						- _m2Class = "IType";
-						- _filename = "PredefinedTypes.sbs";
-						- _subsystem = "PredefinedTypes";
-						- _class = "";
-						- _name = "RhpString";
-						- _id = GUID ae5e3720-4e3e-40f1-9346-9a8b4e501f35;
-					}
-					- _isOrdered = 0;
-					- _base = { IHandle 
-						- _m2Class = "ITag";
-						- _filename = "PredefinedTypes.sbs";
-						- _subsystem = "PredefinedTypes";
-						- _class = "Query";
-						- _name = "RelRef_Metatype";
-						- _id = GUID 290c2612-b019-493a-941a-7a1fa6a005ac;
-					}
-				}
-				{ ITag 
-					- _id = GUID a3d6a67a-7d2d-4d77-800d-da9ae9824406;
-					- _myState = 8192;
-					- _name = "RelRef_Show_In_Result";
-					- _modifiedTimeWeak = 2.21.2016::14:19:34;
-					- ValueSpecifications = { IRPYRawContainer 
-						- size = 1;
-						- value = 
-						{ ILiteralSpecification 
-							- _id = GUID 73a386ba-ae74-40b4-9e70-c8b361d5f041;
-							- _modifiedTimeWeak = 2.21.2016::14:19:34;
-							- _value = "False";
-						}
-					}
-					- _typeOf = { IHandle 
-						- _m2Class = "IType";
-						- _filename = "PredefinedTypes.sbs";
-						- _subsystem = "PredefinedTypes";
-						- _class = "";
-						- _name = "RhpBoolean";
-						- _id = GUID f19b56f2-78ab-44fa-860e-6ead487ecb07;
-					}
-					- _isOrdered = 0;
-					- _base = { IHandle 
-						- _m2Class = "ITag";
-						- _filename = "PredefinedTypes.sbs";
-						- _subsystem = "PredefinedTypes";
-						- _class = "Query";
-						- _name = "RelRef_Show_In_Result";
-						- _id = GUID d10dfdbb-1734-4f8d-9a64-a754bd8f8e9e;
-					}
-				}
-				{ ITag 
-					- _id = GUID 64893e47-d3de-4840-9b71-20fec019fcea;
-					- _myState = 8192;
-					- _name = "Conform_Viewpoint";
-					- _modifiedTimeWeak = 2.21.2016::14:19:34;
-					- _typeOf = { IHandle 
-						- _m2Class = "IType";
-						- _filename = "PredefinedTypes.sbs";
-						- _subsystem = "PredefinedTypes";
-						- _class = "";
-						- _name = "RhpString";
-						- _id = GUID ae5e3720-4e3e-40f1-9346-9a8b4e501f35;
-					}
-					- _isOrdered = 0;
-				}
-				{ ITag 
-					- _id = GUID cfa11410-48ca-457a-acbe-ed3a37d87538;
-					- _myState = 8192;
-					- _name = "Or_And_Veiwpoint";
-					- _modifiedTimeWeak = 2.21.2016::14:20:24;
-					- ValueSpecifications = { IRPYRawContainer 
-						- size = 1;
-						- value = 
-						{ ILiteralSpecification 
-							- _id = GUID b1c50446-5ed2-4d40-a22f-e9cee7c0516e;
-							- _modifiedTimeWeak = 2.21.2016::14:20:24;
-							- _value = "or";
-						}
-					}
-					- _typeOf = { IHandle 
-						- _m2Class = "IType";
-						- _filename = "PredefinedTypes.sbs";
-						- _subsystem = "PredefinedTypes";
-						- _class = "";
-						- _name = "RhpString";
-						- _id = GUID ae5e3720-4e3e-40f1-9346-9a8b4e501f35;
-					}
-					- _isOrdered = 0;
-				}
-				{ ITag 
-					- _id = GUID 2cb91cf6-9823-4229-82bc-498781aadc9d;
+					- _id = GUID 910115f7-d11c-47e0-b232-11bec4a180b0;
 					- _myState = 8192;
 					- _name = "RelRef_Amount_Type";
-					- _modifiedTimeWeak = 2.21.2016::14:20:24;
+					- _modifiedTimeWeak = 2.15.2017::20:17:27;
 					- ValueSpecifications = { IRPYRawContainer 
 						- size = 1;
 						- value = 
 						{ ILiteralSpecification 
-							- _id = GUID 3c0a52f2-1e6a-4272-9272-73cd96fa28f4;
-							- _modifiedTimeWeak = 2.21.2016::14:20:24;
+							- _id = GUID 0c68c1c9-6c10-4963-87ca-d49dceacc380;
+							- _modifiedTimeWeak = 2.15.2017::20:17:27;
 							- _value = "Exactly";
 						}
 					}
@@ -4650,6 +4219,70 @@ Tips:
 						- _id = GUID 1833af5f-34ee-4820-ae90-85fb4db717de;
 					}
 				}
+				{ ITag 
+					- _id = GUID a0f70934-d600-4a1c-a092-76fd35387308;
+					- _myState = 8192;
+					- _name = "RelRef_How_Related";
+					- _modifiedTimeWeak = 2.15.2017::20:17:27;
+					- ValueSpecifications = { IRPYRawContainer 
+						- size = 1;
+						- value = 
+						{ ILiteralSpecification 
+							- _id = GUID f3822fa4-9450-4582-9778-7d9db897ca3e;
+							- _modifiedTimeWeak = 2.15.2017::20:17:27;
+							- _value = "References";
+						}
+					}
+					- _typeOf = { IHandle 
+						- _m2Class = "IType";
+						- _filename = "PredefinedTypes.sbs";
+						- _subsystem = "PredefinedTypes";
+						- _class = "";
+						- _name = "SearchRelRefHowRelatedEnum";
+						- _id = GUID 1f51c8cc-5b4f-4e36-a391-d8a3d29b610a;
+					}
+					- _isOrdered = 0;
+					- _base = { IHandle 
+						- _m2Class = "ITag";
+						- _filename = "PredefinedTypes.sbs";
+						- _subsystem = "PredefinedTypes";
+						- _class = "Query";
+						- _name = "RelRef_How_Related";
+						- _id = GUID f135968b-beae-4e26-8834-174d58eac9df;
+					}
+				}
+				{ ITag 
+					- _id = GUID c6e14f17-5062-49e5-9ed2-523db9550a9b;
+					- _myState = 8192;
+					- _name = "RelRef_Metatype";
+					- _modifiedTimeWeak = 2.15.2017::20:17:27;
+					- ValueSpecifications = { IRPYRawContainer 
+						- size = 1;
+						- value = 
+						{ ILiteralSpecification 
+							- _id = GUID c9488d23-4872-4a56-a692-43009fae613a;
+							- _modifiedTimeWeak = 2.15.2017::20:17:27;
+							- _value = "Derivation";
+						}
+					}
+					- _typeOf = { IHandle 
+						- _m2Class = "IType";
+						- _filename = "PredefinedTypes.sbs";
+						- _subsystem = "PredefinedTypes";
+						- _class = "";
+						- _name = "RhpString";
+						- _id = GUID ae5e3720-4e3e-40f1-9346-9a8b4e501f35;
+					}
+					- _isOrdered = 0;
+					- _base = { IHandle 
+						- _m2Class = "ITag";
+						- _filename = "PredefinedTypes.sbs";
+						- _subsystem = "PredefinedTypes";
+						- _class = "Query";
+						- _name = "RelRef_Metatype";
+						- _id = GUID 290c2612-b019-493a-941a-7a1fa6a005ac;
+					}
+				}
 			}
 			- TableElementTypes = { IRPYRawContainer 
 				- size = 1;
@@ -4657,19 +4290,44 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "ITableLayout";
-						- _id = GUID ba6a52ff-d05b-447d-ab12-e2ef230a91e2;
+						- _id = GUID 4e8c8e74-90e8-4b9d-a61e-136ae9f0238f;
 					}
 					- _modelElement = { IHandle 
 						- _m2Class = "";
 					}
 					- _name = "Requirement";
-					- _DataType = 2;
+					- _DataType = 43196144;
 				}
 			}
 		}
 		{ ITableLayout 
 			- _id = GUID 8c20d269-4d26-48d9-8eb7-240ac4f55293;
 			- _myState = 8192;
+			- _properties = { IPropertyContainer 
+				- Subjects = { IRPYRawContainer 
+					- size = 1;
+					- value = 
+					{ IPropertySubject 
+						- _Name = "Model";
+						- Metaclasses = { IRPYRawContainer 
+							- size = 1;
+							- value = 
+							{ IPropertyMetaclass 
+								- _Name = "TableLayout";
+								- Properties = { IRPYRawContainer 
+									- size = 1;
+									- value = 
+									{ IProperty 
+										- _Name = "EnableCriteriaCheck";
+										- _Value = "True";
+										- _Type = Bool;
+									}
+								}
+							}
+						}
+					}
+				}
+			}
 			- _name = "Query - No incoming relations requirements";
 			- Stereotypes = { IRPYRawContainer 
 				- size = 1;
@@ -4683,28 +4341,20 @@ Tips:
 					- _id = GUID 4c77a3b1-822f-466e-bd06-76145c9e3b88;
 				}
 			}
-			- _modifiedTimeWeak = 2.21.2016::14:33:59;
+			- _modifiedTimeWeak = 2.15.2017::20:20:33;
 			- Tags = { IRPYRawContainer 
-				- size = 2;
+				- size = 1;
 				- value = 
 				{ ITag 
-					- _id = GUID ef7c6769-f8c6-418d-8984-617761b5d250;
+					- _id = GUID c04bf590-68d9-4f7d-9a95-293e638b29ce;
 					- _myState = 8192;
 					- _name = "SubQueries";
-					- _modifiedTimeWeak = 2.21.2016::14:25:36;
+					- _modifiedTimeWeak = 2.15.2017::20:20:33;
 					- ValueSpecifications = { IRPYRawContainer 
 						- size = 3;
 						- value = 
 						{ IInstanceValue 
-							- _id = GUID 2e2a56cf-6f52-4890-925e-62f8de47bd37;
-							- _modifiedTimeWeak = 1.2.1990::0:0:0;
-							- _value = { IHandle 
-								- _m2Class = "ITableLayout";
-								- _id = GUID 5251a2b0-f53d-4b5d-9f6c-dc039336c357;
-							}
-						}
-						{ IInstanceValue 
-							- _id = GUID c7cef597-b624-47bd-9252-4a791ae61a1f;
+							- _id = GUID be9c5453-f84a-4125-a31f-3854e774ea9b;
 							- _modifiedTimeWeak = 1.2.1990::0:0:0;
 							- _value = { IHandle 
 								- _m2Class = "ITableLayout";
@@ -4712,7 +4362,15 @@ Tips:
 							}
 						}
 						{ IInstanceValue 
-							- _id = GUID a20e06a8-ddc3-427b-8b66-d6e64ea7f45e;
+							- _id = GUID 8062a8ab-d643-493e-bcf0-4c5bb60cd395;
+							- _modifiedTimeWeak = 1.2.1990::0:0:0;
+							- _value = { IHandle 
+								- _m2Class = "ITableLayout";
+								- _id = GUID 5251a2b0-f53d-4b5d-9f6c-dc039336c357;
+							}
+						}
+						{ IInstanceValue 
+							- _id = GUID 9f6d91ab-d815-4b36-b16b-51d469744798;
 							- _modifiedTimeWeak = 1.2.1990::0:0:0;
 							- _value = { IHandle 
 								- _m2Class = "ITableLayout";
@@ -4739,49 +4397,6 @@ Tips:
 						- _id = GUID caa101e6-3f54-415a-81ec-a67936c1a1d8;
 					}
 				}
-				{ ITag 
-					- _id = GUID ba474d2a-240f-4bd7-9b7e-1319e4465ea5;
-					- _myState = 8192;
-					- _name = "SubQueries_Use_NOT_Operator_List";
-					- _modifiedTimeWeak = 2.21.2016::14:25:36;
-					- ValueSpecifications = { IRPYRawContainer 
-						- size = 3;
-						- value = 
-						{ ILiteralSpecification 
-							- _id = GUID 67fde4b6-3e0c-4675-9071-b5cb5215d462;
-							- _modifiedTimeWeak = 2.21.2016::14:25:36;
-							- _value = "False";
-						}
-						{ ILiteralSpecification 
-							- _id = GUID d2689eaf-1234-49f1-af40-5289cf484477;
-							- _modifiedTimeWeak = 2.21.2016::14:25:36;
-							- _value = "False";
-						}
-						{ ILiteralSpecification 
-							- _id = GUID c6c6ca1a-bf8a-4575-ac3a-33e89b13e68a;
-							- _modifiedTimeWeak = 2.21.2016::14:25:36;
-							- _value = "False";
-						}
-					}
-					- _typeOf = { IHandle 
-						- _m2Class = "IType";
-						- _filename = "PredefinedTypes.sbs";
-						- _subsystem = "PredefinedTypes";
-						- _class = "";
-						- _name = "RhpBoolean";
-						- _id = GUID f19b56f2-78ab-44fa-860e-6ead487ecb07;
-					}
-					- _multiplicity = "*";
-					- _isOrdered = 0;
-					- _base = { IHandle 
-						- _m2Class = "ITag";
-						- _filename = "PredefinedTypes.sbs";
-						- _subsystem = "PredefinedTypes";
-						- _class = "Query";
-						- _name = "SubQueries_Use_NOT_Operator_List";
-						- _id = GUID fb7183a1-bfbd-4b0e-9300-40486f6646fe;
-					}
-				}
 			}
 			- TableElementTypes = { IRPYRawContainer 
 				- size = 1;
@@ -4795,7 +4410,7 @@ Tips:
 						- _m2Class = "";
 					}
 					- _name = "Requirement";
-					- _DataType = 2;
+					- _DataType = 0;
 				}
 			}
 		}
@@ -4887,6 +4502,10 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "IMatrixLayout";
+						- _filename = "";
+						- _subsystem = "";
+						- _class = "";
+						- _name = "";
 						- _id = GUID 7c5618bb-ce51-4bd0-baa0-27d6947e348d;
 					}
 					- _modelElement = { IHandle 
@@ -4902,6 +4521,10 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "IMatrixLayout";
+						- _filename = "";
+						- _subsystem = "";
+						- _class = "";
+						- _name = "";
 						- _id = GUID 7c5618bb-ce51-4bd0-baa0-27d6947e348d;
 					}
 					- _modelElement = { IHandle 
@@ -4917,6 +4540,10 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "IMatrixLayout";
+						- _filename = "";
+						- _subsystem = "";
+						- _class = "";
+						- _name = "";
 						- _id = GUID 7c5618bb-ce51-4bd0-baa0-27d6947e348d;
 					}
 					- _modelElement = { IHandle 
@@ -4938,6 +4565,10 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "IMatrixLayout";
+						- _filename = "";
+						- _subsystem = "";
+						- _class = "";
+						- _name = "";
 						- _id = GUID d0f99b87-9d35-453b-a2a9-9e22ec5fee1d;
 					}
 					- _modelElement = { IHandle 
@@ -4953,6 +4584,10 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "IMatrixLayout";
+						- _filename = "";
+						- _subsystem = "";
+						- _class = "";
+						- _name = "";
 						- _id = GUID 7c5618bb-ce51-4bd0-baa0-27d6947e348d;
 					}
 					- _modelElement = { IHandle 
@@ -4968,6 +4603,10 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "IMatrixLayout";
+						- _filename = "";
+						- _subsystem = "";
+						- _class = "";
+						- _name = "";
 						- _id = GUID d0f99b87-9d35-453b-a2a9-9e22ec5fee1d;
 					}
 					- _modelElement = { IHandle 
@@ -4989,6 +4628,10 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "IMatrixLayout";
+						- _filename = "";
+						- _subsystem = "";
+						- _class = "";
+						- _name = "";
 						- _id = GUID 41bbc743-af05-42c9-8ac2-f49a22d6a621;
 					}
 					- _modelElement = { IHandle 
@@ -5000,6 +4643,10 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "IMatrixLayout";
+						- _filename = "";
+						- _subsystem = "";
+						- _class = "";
+						- _name = "";
 						- _id = GUID 41bbc743-af05-42c9-8ac2-f49a22d6a621;
 					}
 					- _modelElement = { IHandle 
@@ -5011,6 +4658,10 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "IMatrixLayout";
+						- _filename = "";
+						- _subsystem = "";
+						- _class = "";
+						- _name = "";
 						- _id = GUID 41bbc743-af05-42c9-8ac2-f49a22d6a621;
 					}
 					- _modelElement = { IHandle 
@@ -5022,6 +4673,10 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "IMatrixLayout";
+						- _filename = "";
+						- _subsystem = "";
+						- _class = "";
+						- _name = "";
 						- _id = GUID 41bbc743-af05-42c9-8ac2-f49a22d6a621;
 					}
 					- _modelElement = { IHandle 
@@ -5033,6 +4688,10 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "IMatrixLayout";
+						- _filename = "";
+						- _subsystem = "";
+						- _class = "";
+						- _name = "";
 						- _id = GUID 41bbc743-af05-42c9-8ac2-f49a22d6a621;
 					}
 					- _modelElement = { IHandle 
@@ -5044,6 +4703,10 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "IMatrixLayout";
+						- _filename = "";
+						- _subsystem = "";
+						- _class = "";
+						- _name = "";
 						- _id = GUID 41bbc743-af05-42c9-8ac2-f49a22d6a621;
 					}
 					- _modelElement = { IHandle 
@@ -5059,6 +4722,10 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "IMatrixLayout";
+						- _filename = "";
+						- _subsystem = "";
+						- _class = "";
+						- _name = "";
 						- _id = GUID 7c5618bb-ce51-4bd0-baa0-27d6947e348d;
 					}
 					- _modelElement = { IHandle 
@@ -5074,6 +4741,10 @@ Tips:
 				{ TableDataDefinition 
 					- _myTable = { IHandle 
 						- _m2Class = "IMatrixLayout";
+						- _filename = "";
+						- _subsystem = "";
+						- _class = "";
+						- _name = "";
 						- _id = GUID 41bbc743-af05-42c9-8ac2-f49a22d6a621;
 					}
 					- _modelElement = { IHandle 

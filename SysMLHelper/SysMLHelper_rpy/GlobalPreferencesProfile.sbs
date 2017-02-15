@@ -1,4 +1,4 @@
-I-Logix-RPY-Archive version 8.11.0 C++ 9499822
+I-Logix-RPY-Archive version 8.13.0 C++ 9794446
 { IProfile 
 	- _id = GUID e6cbeb25-2cf4-4c66-9c75-cbb99e029222;
 	- _myState = 8192;
@@ -1220,7 +1220,7 @@ I-Logix-RPY-Archive version 8.11.0 C++ 9499822
 		}
 	}
 	- _name = "GlobalPreferencesProfile";
-	- _modifiedTimeWeak = 11.10.2016::10:29:18;
+	- _modifiedTimeWeak = 2.15.2017::22:3:10;
 	- _lastID = 1;
 	- Declaratives = { IRPYRawContainer 
 		- size = 21;
@@ -2034,8 +2034,8 @@ cStruct, DDS/tpQosPolicy, DDS/udQosPolicy, DDS/wdlQosPolicy, DDS/ddsDiagram, DDS
 			}
 		}
 	}
-	- weakCGTime = 11.10.2016::10:29:18;
-	- strongCGTime = 11.9.2016::7:13:32;
+	- weakCGTime = 2.15.2017::22:3:10;
+	- strongCGTime = 2.15.2017::22:3:10;
 	- _defaultComposite = GUID d99cf07a-d91b-4fe7-8454-c53a4512e0b1;
 	- _eventsBaseID = -1;
 	- Classes = { IRPYRawContainer 
@@ -2045,8 +2045,8 @@ cStruct, DDS/tpQosPolicy, DDS/udQosPolicy, DDS/wdlQosPolicy, DDS/ddsDiagram, DDS
 			- _id = GUID d99cf07a-d91b-4fe7-8454-c53a4512e0b1;
 			- _myState = 40960;
 			- _name = "TopLevel";
-			- _modifiedTimeWeak = 11.10.2016::10:24:20;
-			- weakCGTime = 11.10.2016::10:24:20;
+			- _modifiedTimeWeak = 11.10.2016::10:29:18;
+			- weakCGTime = 11.10.2016::10:29:18;
 			- strongCGTime = 11.9.2016::7:13:32;
 			- _multiplicity = "";
 			- _itsStateChart = { IHandle 

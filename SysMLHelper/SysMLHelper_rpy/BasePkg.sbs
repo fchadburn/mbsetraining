@@ -1,4 +1,4 @@
-I-Logix-RPY-Archive version 8.11.0 C++ 9499822
+I-Logix-RPY-Archive version 8.13.0 C++ 9794446
 { ISubsystem 
 	- _id = GUID c44ec7cb-7a75-45aa-92db-122629461c4b;
 	- _myState = 8192;
@@ -22,7 +22,7 @@ I-Logix-RPY-Archive version 8.11.0 C++ 9499822
 					- _id = GUID d2eca2c1-e5a5-4296-9453-29283c4ed8bc;
 				}
 			}
-			- _modifiedTimeWeak = 7.28.2016::9:32:54;
+			- _modifiedTimeWeak = 2.15.2017::22:2:55;
 			- _dependsOn = { INObjectHandle 
 				- _m2Class = "IProfile";
 				- _filename = "FunctionalAnalysisProfile.sbs";
@@ -33,10 +33,10 @@ I-Logix-RPY-Archive version 8.11.0 C++ 9499822
 			}
 		}
 	}
-	- _modifiedTimeWeak = 12.18.2016::9:27:14;
+	- _modifiedTimeWeak = 2.15.2017::22:2:55;
 	- _lastID = 2;
-	- weakCGTime = 12.18.2016::9:27:14;
-	- strongCGTime = 7.28.2016::9:32:54;
+	- weakCGTime = 2.15.2017::22:2:55;
+	- strongCGTime = 2.15.2017::22:2:55;
 	- _defaultComposite = GUID eb43e66a-110b-44f0-938e-75438ce7f83a;
 	- _eventsBaseID = 20401;
 	- Classes = { IRPYRawContainer 
@@ -46,8 +46,8 @@ I-Logix-RPY-Archive version 8.11.0 C++ 9499822
 			- _id = GUID eb43e66a-110b-44f0-938e-75438ce7f83a;
 			- _myState = 40960;
 			- _name = "TopLevel";
-			- _modifiedTimeWeak = 8.23.2016::19:5:27;
-			- weakCGTime = 8.23.2016::19:5:27;
+			- _modifiedTimeWeak = 12.18.2016::9:27:14;
+			- weakCGTime = 12.18.2016::9:27:14;
 			- strongCGTime = 7.28.2016::9:32:54;
 			- _multiplicity = "";
 			- _itsStateChart = { IHandle 
@@ -446,6 +446,7 @@ I-Logix-RPY-Archive version 8.11.0 C++ 9499822
 								- m_pRoot = GUID b6b212d9-ce34-4922-95e6-2183d9d14a45;
 								- m_currentLeftTop = 0 0 ;
 								- m_currentRightBottom = 0 0 ;
+								- m_bFreezeCompartmentContent = 0;
 								- m_pInheritsFrom = { IHandle 
 									- _m2Class = "";
 								}
@@ -1232,6 +1233,7 @@ I-Logix-RPY-Archive version 8.11.0 C++ 9499822
 											- m_pRoot = GUID 9b95ecc4-b0b8-4ad0-bf21-b6d9f9e05573;
 											- m_currentLeftTop = 0 0 ;
 											- m_currentRightBottom = 0 0 ;
+											- m_bFreezeCompartmentContent = 0;
 											- m_pInheritsFrom = { IHandle 
 												- _m2Class = "";
 											}
@@ -1722,6 +1724,7 @@ I-Logix-RPY-Archive version 8.11.0 C++ 9499822
 								- m_pRoot = GUID 40b9f37b-2264-4dad-a2fd-46dc95b6106a;
 								- m_currentLeftTop = 0 0 ;
 								- m_currentRightBottom = 0 0 ;
+								- m_bFreezeCompartmentContent = 0;
 								- m_pInheritsFrom = { IHandle 
 									- _m2Class = "";
 								}
@@ -2289,6 +2292,7 @@ sleep(2);";
 								- m_pRoot = GUID 981105a8-84db-4f5b-bebd-ee8ded459dd4;
 								- m_currentLeftTop = 0 0 ;
 								- m_currentRightBottom = 0 0 ;
+								- m_bFreezeCompartmentContent = 0;
 								- m_pInheritsFrom = { IHandle 
 									- _m2Class = "";
 								}
@@ -3984,6 +3988,7 @@ setElapsedTime( params->value );";
 											- m_pRoot = GUID 35bdf972-06f0-46a5-8414-318c627bad82;
 											- m_currentLeftTop = 0 0 ;
 											- m_currentRightBottom = 0 0 ;
+											- m_bFreezeCompartmentContent = 0;
 											- m_pInheritsFrom = { IHandle 
 												- _m2Class = "";
 											}
@@ -5075,6 +5080,7 @@ setElapsedTime( elapsedTime + 1 );";
 								- m_pRoot = GUID 4d02da3c-ea48-4e13-83a9-12ea49d9e06c;
 								- m_currentLeftTop = 0 0 ;
 								- m_currentRightBottom = 0 0 ;
+								- m_bFreezeCompartmentContent = 0;
 								- m_pInheritsFrom = { IHandle 
 									- _m2Class = "";
 								}
@@ -5468,6 +5474,7 @@ setElapsedTime( elapsedTime + 1 );";
 								- m_pRoot = GUID 5fa26d1f-7dcc-4c29-b511-875715bcea60;
 								- m_currentLeftTop = 0 0 ;
 								- m_currentRightBottom = 0 0 ;
+								- m_bFreezeCompartmentContent = 0;
 								- m_pInheritsFrom = { IHandle 
 									- _m2Class = "";
 								}
