@@ -1,4 +1,4 @@
-I-Logix-RPY-Archive version 8.11.0 C++ 9499822
+I-Logix-RPY-Archive version 8.13.0 C++ 9794446
 { IProject 
 	- _id = GUID db2d59f3-a4b2-406d-b2b9-3dd0919de68e;
 	- _myState = 8192;
@@ -40,7 +40,7 @@ I-Logix-RPY-Archive version 8.11.0 C++ 9499822
 			- _id = GUID 052b8171-a32b-4f45-a829-5585f79f9deb;
 		}
 	}
-	- _modifiedTimeWeak = 11.9.2016::7:5:1;
+	- _modifiedTimeWeak = 2.15.2017::22:1:50;
 	- _lastID = 13;
 	- _UserColors = { IRPYRawContainer 
 		- size = 16;
@@ -97,7 +97,7 @@ I-Logix-RPY-Archive version 8.11.0 C++ 9499822
 			- fileName = "SysML";
 			- _persistAs = "$OMROOT\\Profiles\\SysML\\SysMLProfile_rpy";
 			- _id = GUID d9689b73-885e-44c4-896b-de43defa0a33;
-			- _isReference = 1;
+			- _partOfTheModelKind = referenceunit;
 		}
 		{ ISubsystem 
 			- fileName = "GatewayProjectFiles";

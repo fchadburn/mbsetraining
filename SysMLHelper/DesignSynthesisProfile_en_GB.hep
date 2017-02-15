@@ -13,7 +13,7 @@ DLLServerCompatible1=1
 name2=MBSE Method: Design Synthesis\Make attribute a «publish» flowport
 isPluginCommand2=1
 command2=InvokeDesignSynthesisHelper
-applicableTo2=Attribute
+applicableTo2=Attribute,ValueProperty
 isVisible2=1
 DLLServerCompatible2=1
 
@@ -21,7 +21,7 @@ DLLServerCompatible2=1
 name3=MBSE Method: Design Synthesis\Make attribute a «subscribe» flowport
 isPluginCommand3=1
 command3=InvokeDesignSynthesisHelper
-applicableTo3=Attribute
+applicableTo3=Attribute,ValueProperty
 isVisible3=1
 DLLServerCompatible3=1
 
@@ -30,6 +30,7 @@ DLLServerCompatible3=1
 #REM Change history:
 #REM #021 30-MAY-2016: Added Copyright/History statements to the hep files (F.J.Chadburn)
 #REM #109 06-NOV-2016: Added .properties support for localisation of menus (F.J.Chadburn)
+#REM #164 15-FEB-2017: Fixed .hep for Publish/Subscribe flow ports to work with ValueProperty's in 8.2 (F.J.Chadburn)
 #REM
 #REM This file is part of SysMLHelperPlugin.
 #REM

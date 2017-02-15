@@ -266,3 +266,10 @@ UNDER DEV RELEASE 2.1.a (25-JAN-2017)
 ----------------------------------------------------------------------------------
 UNDER DEV RELEASE 2.1.b (05-FEB-2017)
 ----------------------------------------------------------------------------------
+#164 15-FEB-2017: Fixed .hep for Publish/Subscribe flow ports to work with ValueProperty's in 8.2 (F.J.Chadburn)
+#165 15-FEB-2017: Added new menu to select end of Dependency relations to assist usability (F.J.Chadburn)
+#166 15-FEB-2017: Corrected Copyright information to 2017 (F.J.Chadburn)
+#167 15-FEB-2017: Migrated profile to 8.2 so Queries and .hep file for HarmonySE bits work (F.J.Chadburn)
+----------------------------------------------------------------------------------
+UNDER DEV RELEASE 2.1.c (15-FEB-2017)
+----------------------------------------------------------------------------------
