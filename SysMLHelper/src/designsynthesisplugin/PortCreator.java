@@ -9,6 +9,7 @@ import java.util.Set;
 
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
+
 import com.telelogic.rhapsody.core.*;
 
 public class PortCreator {
@@ -58,16 +59,31 @@ public class PortCreator {
 			}
 			
 			cleanUpAutoRippleDependencies( theAttribute );
-
-			Logger.writeLine( "Applying publish stereotype to " + Logger.elementInfo( theAttribute ) );
-
-			GeneralHelpers.applyExistingStereotype( "publish", theAttribute );
+			applyStereotypeAndChangeBackToValuePropertyIfNeeded( theAttribute, "publish" );
 
 		} else {
 			Logger.writeLine("Error in createPublishFlowportFor, no port was created");
 		}
 		
 		return thePort;
+	}
+
+	private static void applyStereotypeAndChangeBackToValuePropertyIfNeeded(
+			IRPAttribute theAttribute,
+			String andStereotype ){
+				
+		Logger.writeLine( "Applying «" + andStereotype + "» stereotype to " + Logger.elementInfo( theAttribute ) );
+
+		GeneralHelpers.applyExistingStereotype( andStereotype, theAttribute );
+		
+		// Switch ValueProeprty back if 8.2+
+		IRPModelElement theValuePropertyStereotype = 
+				GeneralHelpers.findElementWithMetaClassAndName( 
+						"Stereotype", "ValueProperty", theAttribute.getProject() );
+		
+		if( theValuePropertyStereotype != null ){
+			theAttribute.changeTo( "ValueProperty" );
+		}
 	}
 	
 	public static IRPSysMLPort createSubscribeFlowportFor(
@@ -88,10 +104,7 @@ public class PortCreator {
 			}
 
 			cleanUpAutoRippleDependencies( theAttribute );
-
-			Logger.writeLine( "Applying subscribe stereotype to " + Logger.elementInfo( theAttribute ) );
-
-			GeneralHelpers.applyExistingStereotype( "subscribe", theAttribute );
+			applyStereotypeAndChangeBackToValuePropertyIfNeeded( theAttribute, "subscribe" );
 
 		} else {
 			Logger.writeLine( "Error in createSubscribeFlowportFor, no port was created" );
@@ -231,6 +244,7 @@ public class PortCreator {
     #095 23-AUG-2016: Turned off the "Do you want to add subscribe ports to other Blocks?" question (F.J.Chadburn)
     #123 25-NOV-2016: Improved Publish/Subscribe ports to clean up AutoRipple dependencies when doing copy/paste (F.J.Chadburn)
     #124 25-NOV-2016: Cleaned up unused code from PortCreator (F.J.Chadburn)
+    #164 15-FEB-2017: Fixed .hep for Publish/Subscribe flow ports to work with ValueProperty's in 8.2 (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 
