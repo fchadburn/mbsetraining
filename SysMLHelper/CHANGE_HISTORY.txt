@@ -273,3 +273,10 @@ UNDER DEV RELEASE 2.1.b (05-FEB-2017)
 ----------------------------------------------------------------------------------
 UNDER DEV RELEASE 2.1.c (15-FEB-2017)
 ----------------------------------------------------------------------------------
+#168 08-MAR-2017: Fixes to use 8.2 properties, incl. preventing suppression of RoundedRectilinear (F.J.Chadburn)
+#169 08-MAR-2017: Alignment to Add new requirement on ADs to add to same owner as user created (F.J.Chadburn)
+#170 08-MAR-2017: Tweaks to GlobalPreferencesProfile for OMD, e.g. ShowOperations 'Explicit' (F.J.Chadburn)
+#171 08-MAR-2017: Added some dormant ops to GeneralHelpers to assist with 3rd party integration (F.J.Chadburn)
+----------------------------------------------------------------------------------
+UNDER DEV RELEASE 2.1.d (20-MAR-2017)
+----------------------------------------------------------------------------------
