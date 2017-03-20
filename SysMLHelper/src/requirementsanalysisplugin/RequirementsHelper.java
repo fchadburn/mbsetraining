@@ -118,7 +118,13 @@ public class RequirementsHelper {
 					theText += " the feature shall " + theActionText;
 				}
 				
-				theReqt = addNewRequirementTracedTo( theModelObject, theDiagram, theText );	
+				IRPModelElement theReqtOwner = theDiagram;
+				
+				if( theReqtOwner instanceof IRPActivityDiagram ){
+					theReqtOwner = theDiagram.getOwner();
+				}
+				
+				theReqt = addNewRequirementTracedTo( theModelObject, theReqtOwner, theText );	
 				
 				IRPGraphicalProperty theGraphicalProperty = null;
 				
@@ -150,17 +156,17 @@ public class RequirementsHelper {
 
 	private static IRPRequirement addNewRequirementTracedTo(
 			IRPModelElement theModelObject, 
-			IRPDiagram theDiagram,
+			IRPModelElement toOwner,
 			String theText) {
 		
-		IRPRequirement theReqt = (IRPRequirement) theDiagram.addNewAggr("Requirement", "");
+		IRPRequirement theReqt = (IRPRequirement) toOwner.addNewAggr("Requirement", "");
 		theReqt.setSpecification(theText);
 		theReqt.highLightElement();	
 
 		IRPDependency theDep = theModelObject.addDependencyTo( theReqt );
 
 		IRPStereotype theDependencyStereotype = GeneralHelpers.getStereotypeIn( 
-				theDiagram.getProject(), "traceabilityTypeToUseForActions", "RequirementsAnalysisPkg" );
+				toOwner.getProject(), "traceabilityTypeToUseForActions", "RequirementsAnalysisPkg" );
 		
 		if( theDependencyStereotype != null ){
 			
@@ -217,7 +223,7 @@ public class RequirementsHelper {
 }
 
 /**
- * Copyright (C) 2016  MBSE Training and Consulting Limited (www.executablembse.com)
+ * Copyright (C) 2016-2017  MBSE Training and Consulting Limited (www.executablembse.com)
 
     Change history:
     #004 10-APR-2016: Re-factored projects into single workspace (F.J.Chadburn)
@@ -225,6 +231,7 @@ public class RequirementsHelper {
     #067 19-JUL-2016: Improvement to forming Event/Guard+Action text when creating new requirements (F.J.Chadburn) 
     #072 25-JUL-2016: Improved robustness when graphEls that don't have model elements are selected (F.J.Chadburn)
     #163 05-FEB-2017: Add new menus to Smart link: Start and Smart link: End (F.J.Chadburn)
+    #170 08-MAR-2017: Tweak to Add new requirement on ADs to add to same owner as user created (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

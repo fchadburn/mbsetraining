@@ -26,7 +26,7 @@ public class MoveRequirements {
 			IRPModelElement theElementToSearchUnder = theSelectedEl;
 			
 			if( theSelectedEl instanceof IRPActivityDiagram ){	
-				theElementToSearchUnder = theElementToSearchUnder.getOwner();
+				theElementToSearchUnder = theElementToSearchUnder.getOwner().getOwner();
 			}
 			
 			List<IRPModelElement> theReqtsToAdd = 
@@ -157,13 +157,14 @@ public class MoveRequirements {
 }
 
 /**
- * Copyright (C) 2016  MBSE Training and Consulting Limited (www.executablembse.com)
+ * Copyright (C) 2016-2017  MBSE Training and Consulting Limited (www.executablembse.com)
 
     Change history:
     #004 10-APR-2016: Re-factored projects into single workspace (F.J.Chadburn)
     #043 03-JUL-2016: Add Derive downstream reqt for CallOps, InterfaceItems and Event Actions (F.J.Chadburn)
     #121 25-NOV-2016: Move unclaimed requirements ready for Gateway synch now copes with duplicate names (F.J.Chadburn)
-    
+    #170 08-MAR-2017: Tweak to Add new requirement on ADs to add to same owner as user created (F.J.Chadburn)
+
     This file is part of SysMLHelperPlugin.
 
     SysMLHelperPlugin is free software: you can redistribute it and/or modify
