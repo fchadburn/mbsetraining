@@ -194,9 +194,9 @@ I-Logix-RPY-Archive version 8.13.0 C++ 9794446
 							}
 							{ IProperty 
 								- _Name = "line_style";
-								- _Value = "rectilinear_arrows";
+								- _Value = "rounded_rectilinear_arrows";
 								- _Type = Enum;
-								- _ExtraTypeInfo = "straight_arrows,rectilinear_arrows,spline_arrows";
+								- _ExtraTypeInfo = "straight_arrows,rectilinear_arrows,spline_arrows,rounded_rectilinear_arrows";
 							}
 						}
 					}
@@ -220,9 +220,9 @@ I-Logix-RPY-Archive version 8.13.0 C++ 9794446
 							- value = 
 							{ IProperty 
 								- _Name = "line_style";
-								- _Value = "rectilinear_arrows";
+								- _Value = "rounded_rectilinear_arrows";
 								- _Type = Enum;
-								- _ExtraTypeInfo = "straight_arrows,rectilinear_arrows,spline_arrows";
+								- _ExtraTypeInfo = "straight_arrows,rectilinear_arrows,spline_arrows,rounded_rectilinear_arrows";
 							}
 						}
 					}
@@ -343,9 +343,9 @@ I-Logix-RPY-Archive version 8.13.0 C++ 9794446
 							}
 							{ IProperty 
 								- _Name = "line_style";
-								- _Value = "rectilinear_arrows";
+								- _Value = "rounded_rectilinear_arrows";
 								- _Type = Enum;
-								- _ExtraTypeInfo = "straight_arrows,rectilinear_arrows,spline_arrows";
+								- _ExtraTypeInfo = "straight_arrows,rectilinear_arrows,spline_arrows,rounded_rectilinear_arrows";
 							}
 						}
 					}
@@ -501,7 +501,7 @@ I-Logix-RPY-Archive version 8.13.0 C++ 9794446
 			{ IPropertySubject 
 				- _Name = "ObjectModelGe";
 				- Metaclasses = { IRPYRawContainer 
-					- size = 11;
+					- size = 14;
 					- value = 
 					{ IPropertyMetaclass 
 						- _Name = "Actor";
@@ -519,7 +519,7 @@ I-Logix-RPY-Archive version 8.13.0 C++ 9794446
 					{ IPropertyMetaclass 
 						- _Name = "Aggregation";
 						- Properties = { IRPYRawContainer 
-							- size = 2;
+							- size = 3;
 							- value = 
 							{ IProperty 
 								- _Name = "ShowSourceRole";
@@ -530,13 +530,19 @@ I-Logix-RPY-Archive version 8.13.0 C++ 9794446
 								- _Name = "ShowTargetRole";
 								- _Value = "True";
 								- _Type = Bool;
+							}
+							{ IProperty 
+								- _Name = "line_style";
+								- _Value = "rounded_rectilinear_arrows";
+								- _Type = Enum;
+								- _ExtraTypeInfo = "straight_arrows,rectilinear_arrows,spline_arrows,rounded_rectilinear_arrows";
 							}
 						}
 					}
 					{ IPropertyMetaclass 
 						- _Name = "Association";
 						- Properties = { IRPYRawContainer 
-							- size = 2;
+							- size = 3;
 							- value = 
 							{ IProperty 
 								- _Name = "ShowSourceRole";
@@ -547,6 +553,12 @@ I-Logix-RPY-Archive version 8.13.0 C++ 9794446
 								- _Name = "ShowTargetRole";
 								- _Value = "True";
 								- _Type = Bool;
+							}
+							{ IProperty 
+								- _Name = "line_style";
+								- _Value = "rounded_rectilinear_arrows";
+								- _Type = Enum;
+								- _ExtraTypeInfo = "straight_arrows,rectilinear_arrows,spline_arrows,rounded_rectilinear_arrows";
 							}
 						}
 					}
@@ -569,7 +581,7 @@ I-Logix-RPY-Archive version 8.13.0 C++ 9794446
 							}
 							{ IProperty 
 								- _Name = "ShowOperations";
-								- _Value = "Public";
+								- _Value = "Explicit";
 								- _Type = Enum;
 								- _ExtraTypeInfo = "All,None,Public,Explicit";
 							}
@@ -644,20 +656,71 @@ I-Logix-RPY-Archive version 8.13.0 C++ 9794446
 								- _Name = "line_style";
 								- _Value = "straight_arrows";
 								- _Type = Enum;
-								- _ExtraTypeInfo = "straight_arrows,rectilinear_arrows,spline_arrows,tree";
+								- _ExtraTypeInfo = "straight_arrows,rectilinear_arrows,spline_arrows,tree,rounded_rectilinear_arrows";
+							}
+						}
+					}
+					{ IPropertyMetaclass 
+						- _Name = "Interface";
+						- Properties = { IRPYRawContainer 
+							- size = 2;
+							- value = 
+							{ IProperty 
+								- _Name = "ShowAttributes";
+								- _Value = "None";
+								- _Type = Enum;
+								- _ExtraTypeInfo = "All,None,Public,Explicit";
+							}
+							{ IProperty 
+								- _Name = "ShowName";
+								- _Value = "Name_only";
+								- _Type = Enum;
+								- _ExtraTypeInfo = "Full_path,Relative,Name_only,Label";
+							}
+						}
+					}
+					{ IPropertyMetaclass 
+						- _Name = "Link";
+						- Properties = { IRPYRawContainer 
+							- size = 1;
+							- value = 
+							{ IProperty 
+								- _Name = "line_style";
+								- _Value = "rounded_rectilinear_arrows";
+								- _Type = Enum;
+								- _ExtraTypeInfo = "straight_arrows,rectilinear_arrows,spline_arrows,rounded_rectilinear_arrows";
 							}
 						}
 					}
 					{ IPropertyMetaclass 
 						- _Name = "Object";
 						- Properties = { IRPYRawContainer 
-							- size = 1;
+							- size = 2;
 							- value = 
 							{ IProperty 
 								- _Name = "ShowName";
 								- _Value = "Name_only";
 								- _Type = Enum;
 								- _ExtraTypeInfo = "Full_path,Relative,Name_only,Type,Label";
+							}
+							{ IProperty 
+								- _Name = "ShowOperations";
+								- _Value = "Explicit";
+								- _Type = Enum;
+								- _ExtraTypeInfo = "All,None,Public,Explicit";
+							}
+						}
+					}
+					{ IPropertyMetaclass 
+						- _Name = "Realization";
+						- Properties = { IRPYRawContainer 
+							- size = 1;
+							- value = 
+							{ IProperty 
+								- _Name = "line_style";
+								- _Value = "straight_arrows";
+								- _Type = Enum;
+								- _ExtraTypeInfo = "straight_arrows,rectilinear_arrows,spline_arrows,tree,rounded_rectilinear_arrows";
 							}
 						}
 					}
@@ -1220,7 +1283,7 @@ I-Logix-RPY-Archive version 8.13.0 C++ 9794446
 		}
 	}
 	- _name = "GlobalPreferencesProfile";
-	- _modifiedTimeWeak = 2.15.2017::22:3:10;
+	- _modifiedTimeWeak = 3.3.2017::11:54:10;
 	- _lastID = 1;
 	- Declaratives = { IRPYRawContainer 
 		- size = 21;
@@ -2034,8 +2097,8 @@ cStruct, DDS/tpQosPolicy, DDS/udQosPolicy, DDS/wdlQosPolicy, DDS/ddsDiagram, DDS
 			}
 		}
 	}
-	- weakCGTime = 2.15.2017::22:3:10;
-	- strongCGTime = 2.15.2017::22:3:10;
+	- weakCGTime = 3.3.2017::11:54:10;
+	- strongCGTime = 3.3.2017::11:54:10;
 	- _defaultComposite = GUID d99cf07a-d91b-4fe7-8454-c53a4512e0b1;
 	- _eventsBaseID = -1;
 	- Classes = { IRPYRawContainer 
@@ -2045,9 +2108,9 @@ cStruct, DDS/tpQosPolicy, DDS/udQosPolicy, DDS/wdlQosPolicy, DDS/ddsDiagram, DDS
 			- _id = GUID d99cf07a-d91b-4fe7-8454-c53a4512e0b1;
 			- _myState = 40960;
 			- _name = "TopLevel";
-			- _modifiedTimeWeak = 11.10.2016::10:29:18;
-			- weakCGTime = 11.10.2016::10:29:18;
-			- strongCGTime = 11.9.2016::7:13:32;
+			- _modifiedTimeWeak = 2.15.2017::22:3:10;
+			- weakCGTime = 2.15.2017::22:3:10;
+			- strongCGTime = 2.15.2017::22:3:10;
 			- _multiplicity = "";
 			- _itsStateChart = { IHandle 
 				- _m2Class = "";

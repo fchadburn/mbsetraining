@@ -40,7 +40,7 @@ I-Logix-RPY-Archive version 8.13.0 C++ 9794446
 					{ IPropertyMetaclass 
 						- _Name = "Action";
 						- Properties = { IRPYRawContainer 
-							- size = 3;
+							- size = 2;
 							- value = 
 							{ IProperty 
 								- _Name = "ShowAction";
@@ -53,12 +53,6 @@ I-Logix-RPY-Archive version 8.13.0 C++ 9794446
 								- _Value = "None";
 								- _Type = Enum;
 								- _ExtraTypeInfo = "Name,Label,None";
-							}
-							{ IProperty 
-								- _Name = "ShowStereotype";
-								- _Value = "Bitmap";
-								- _Type = Enum;
-								- _ExtraTypeInfo = "Label,Bitmap,None";
 							}
 						}
 					}
@@ -140,10 +134,10 @@ I-Logix-RPY-Archive version 8.13.0 C++ 9794446
 		}
 	}
 	- _name = "RequirementsAnalysisProfile";
-	- _modifiedTimeWeak = 2.15.2017::22:3:17;
+	- _modifiedTimeWeak = 3.3.2017::11:55:35;
 	- _lastID = 41;
-	- weakCGTime = 2.15.2017::22:3:17;
-	- strongCGTime = 2.15.2017::22:3:17;
+	- weakCGTime = 3.3.2017::11:55:35;
+	- strongCGTime = 3.3.2017::11:55:35;
 	- _defaultComposite = GUID 47ada376-b4c8-4895-8007-9fe51d77a548;
 	- _eventsBaseID = -1;
 	- Classes = { IRPYRawContainer 
@@ -153,9 +147,9 @@ I-Logix-RPY-Archive version 8.13.0 C++ 9794446
 			- _id = GUID 47ada376-b4c8-4895-8007-9fe51d77a548;
 			- _myState = 40960;
 			- _name = "TopLevel";
-			- _modifiedTimeWeak = 2.15.2017::22:3:13;
-			- weakCGTime = 2.15.2017::22:3:13;
-			- strongCGTime = 7.25.2016::7:27:54;
+			- _modifiedTimeWeak = 2.15.2017::22:3:17;
+			- weakCGTime = 2.15.2017::22:3:17;
+			- strongCGTime = 2.15.2017::22:3:17;
 			- _multiplicity = "";
 			- StateCharts = { IRPYRawContainer 
 				- size = 1;
