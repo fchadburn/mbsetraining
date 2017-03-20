@@ -496,7 +496,7 @@ public class FunctionalAnalysisSettings {
 		}
 	}
 	
-	public static void setStringTagValueOn( 
+	private static void setStringTagValueOn( 
 			IRPModelElement theOwner, 
 			String theTagName, 
 			String theValue ){
@@ -566,7 +566,8 @@ public class FunctionalAnalysisSettings {
     #144 18-DEC-2016: Add default behaviour to protect for instances where tags are not in model (F.J.Chadburn)
     #145 18-DEC-2016: Fix to remove warning with getWorkingPkgUnderDev unexpectedly finding 2 packages (F.J.Chadburn)
     #161 05-FEB-2017: Support nested diagram links in CallOperation description (F.J.Chadburn) 
-
+    #171 08-MAR-2017: Added some dormant ops to GeneralHelpers to assist with 3rd party integration (F.J.Chadburn)
+    
     This file is part of SysMLHelperPlugin.
 
     SysMLHelperPlugin is free software: you can redistribute it and/or modify
