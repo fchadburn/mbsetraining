@@ -1038,6 +1038,60 @@ public class GeneralHelpers {
 		
 		return theExistingCheckOp;
 	}
+	
+	public static void setStringTagValueOn( 
+			IRPModelElement theOwner, 
+			String theTagName, 
+			String theValue ){
+		
+		IRPTag theTag = theOwner.getTag( theTagName );
+		
+		if( theTag != null ){
+			theOwner.setTagValue( theTag, theValue );
+		} else {
+			
+			Logger.writeLine( "Error in GeneralHelpers.setStringTagValueOn for " + 
+					Logger.elementInfo( theOwner) + ", unable to find tag called " + theTagName );
+		}
+	}
+	
+	public static IRPPackage getExistingOrCreateNewPackageWith( 
+			String theName, 
+			IRPModelElement underneathTheEl ){
+		
+		IRPModelElement thePackage = GeneralHelpers.findElementWithMetaClassAndName(
+				"Package", theName, underneathTheEl );
+		
+		if( thePackage == null ){
+
+			Logger.writeLine( "create a package called " + theName );
+			thePackage = underneathTheEl.addNewAggr( "Package", theName );
+		}
+		
+		return (IRPPackage) thePackage;
+	}
+
+	public static IRPModelElement getExistingOrCreateNewElementWith( 
+			String theName, 
+			String andMetaClass,
+			IRPModelElement underneathTheEl ){
+		
+		IRPModelElement theElement =
+				GeneralHelpers.findElementWithMetaClassAndName(
+						andMetaClass, theName, underneathTheEl );
+		
+		try {
+			if( theElement == null ){
+				theElement = underneathTheEl.addNewAggr( andMetaClass, theName );
+			}
+			
+		} catch (Exception e) {
+			Logger.writeLine("Exception in getExistingOrCreateNewElementWith( theName " + theName + 
+					", andMetaClass=" + andMetaClass + ", underneath=" + Logger.elementInfo(underneathTheEl));
+		}
+		
+		return theElement;
+	}
 }
 
 /**
@@ -1070,7 +1124,8 @@ public class GeneralHelpers {
     #145 18-DEC-2016: Fix to remove warning with getWorkingPkgUnderDev unexpectedly finding 2 packages (F.J.Chadburn)
     #160 25-JAN-2017: Minor fixes to code found during development (F.J.Chadburn)
     #163 05-FEB-2017: Add new menus to Smart link: Start and Smart link: End (F.J.Chadburn)
-
+    #171 08-MAR-2017: Added some dormant ops to GeneralHelpers to assist with 3rd party integration (F.J.Chadburn)
+    
     This file is part of SysMLHelperPlugin.
 
     SysMLHelperPlugin is free software: you can redistribute it and/or modify
