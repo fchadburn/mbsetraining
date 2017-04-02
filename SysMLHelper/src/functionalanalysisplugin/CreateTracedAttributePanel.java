@@ -14,15 +14,19 @@ import java.util.Set;
 import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import com.telelogic.rhapsody.core.*;
+
+import designsynthesisplugin.PortCreator;
 
 public class CreateTracedAttributePanel extends CreateTracedElementPanel {
 
@@ -35,6 +39,10 @@ public class CreateTracedAttributePanel extends CreateTracedElementPanel {
 	private JCheckBox m_CheckOperationCheckBox;
 	private String m_CheckOpName;
 	private JCheckBox m_CallOperationIsNeededCheckBox;
+	
+	private JRadioButton m_NoFlowPort;
+	private JRadioButton m_PubFlowPort;
+	private JRadioButton m_SubFlowPort;
 	
 	public static void createSystemAttributesFor(
 			IRPProject theActiveProject,
@@ -172,6 +180,25 @@ public class CreateTracedAttributePanel extends CreateTracedElementPanel {
 		theCenterPanel.add( m_CheckOperationCheckBox );
 		theCenterPanel.add( m_CallOperationIsNeededCheckBox );
 
+		m_NoFlowPort  = new JRadioButton( "None", true );
+		m_PubFlowPort = new JRadioButton( "«Pub»" );
+		m_SubFlowPort = new JRadioButton( "«Sub»" );
+		
+		ButtonGroup group = new ButtonGroup();
+		group.add( m_NoFlowPort );
+		group.add( m_PubFlowPort );
+		group.add( m_SubFlowPort );
+
+		JPanel theFlowPortOptions = new JPanel();
+		theFlowPortOptions.setLayout( new BoxLayout( theFlowPortOptions, BoxLayout.LINE_AXIS ) );
+		theFlowPortOptions.setAlignmentX( LEFT_ALIGNMENT );
+		theFlowPortOptions.add ( new JLabel("Create a FlowPort: ") );
+		theFlowPortOptions.add( m_NoFlowPort );
+		theFlowPortOptions.add( m_PubFlowPort );
+		theFlowPortOptions.add( m_SubFlowPort );
+	    
+		theCenterPanel.add( theFlowPortOptions );
+		
 		setLayout( new BorderLayout(10,10) );
 		setBorder( BorderFactory.createEmptyBorder( 10, 10, 10, 10 ) );
 		
@@ -371,6 +398,14 @@ public class CreateTracedAttributePanel extends CreateTracedElementPanel {
 				bleedColorToElementsRelatedTo( m_SourceGraphElement );
 			}
 			
+			if( m_PubFlowPort.isSelected() ){
+				PortCreator.createPublishFlowportFor( theAttribute );
+			}
+
+			if( m_SubFlowPort.isSelected() ){
+				PortCreator.createSubscribeFlowportFor( theAttribute );
+			}
+			
 			theAttribute.highLightElement();
 			
 		} else {
@@ -398,6 +433,7 @@ public class CreateTracedAttributePanel extends CreateTracedElementPanel {
     #130 25-NOV-2016: Improved consistency in handling of isPopulateOptionHidden and isPopulateWantedByDefault tags (F.J.Chadburn)
     #137 02-DEC-2016: Allow 'create attribute' menu command on AD/RD canvas right-click (F.J.Chadburn)
     #153 25-JAN-2017: Functional Analysis helper creates new term ValueProperty's rather than attributes in Rhp 8.2+ (F.J.Chadburn) 
+    #176 02-APR-2017: Added option to create a flow-port at the same time as creating a traced attribute (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 
