@@ -2,14 +2,14 @@ package designsynthesisplugin;
 
 import generalhelpers.GeneralHelpers;
 import generalhelpers.Logger;
+import generalhelpers.TraceabilityHelper;
+import generalhelpers.UserInterfaceHelpers;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import javax.swing.JDialog;
-import javax.swing.JOptionPane;
-
 import com.telelogic.rhapsody.core.*;
 
 public class PortCreator {
@@ -60,6 +60,8 @@ public class PortCreator {
 			
 			cleanUpAutoRippleDependencies( theAttribute );
 			applyStereotypeAndChangeBackToValuePropertyIfNeeded( theAttribute, "publish" );
+			TraceabilityHelper.copyRequirementTraceabilityFrom( theAttribute, thePort );
+			thePort.highLightElement();
 
 		} else {
 			Logger.writeLine("Error in createPublishFlowportFor, no port was created");
@@ -105,6 +107,8 @@ public class PortCreator {
 
 			cleanUpAutoRippleDependencies( theAttribute );
 			applyStereotypeAndChangeBackToValuePropertyIfNeeded( theAttribute, "subscribe" );
+			TraceabilityHelper.copyRequirementTraceabilityFrom( theAttribute, thePort );
+			thePort.highLightElement();
 
 		} else {
 			Logger.writeLine( "Error in createSubscribeFlowportFor, no port was created" );
@@ -221,11 +225,7 @@ public class PortCreator {
 						" owned by " + Logger.elementInfo( theElementOwner ) + " \n";
 			}
 
-			JOptionPane.showMessageDialog(
-					null, 
-					introText, 
-					"Confirm",
-					JOptionPane.WARNING_MESSAGE);
+			UserInterfaceHelpers.showInformationDialog( introText );
 			
 			theAttribute.getOwner().highLightElement();
 			
@@ -237,7 +237,7 @@ public class PortCreator {
 }
 
 /**
- * Copyright (C) 2016  MBSE Training and Consulting Limited (www.executablembse.com)
+ * Copyright (C) 2016-2017  MBSE Training and Consulting Limited (www.executablembse.com)
 
     Change history:
     #006 02-MAY-2016: Add FunctionalAnalysisPkg helper support (F.J.Chadburn)
@@ -245,6 +245,9 @@ public class PortCreator {
     #123 25-NOV-2016: Improved Publish/Subscribe ports to clean up AutoRipple dependencies when doing copy/paste (F.J.Chadburn)
     #124 25-NOV-2016: Cleaned up unused code from PortCreator (F.J.Chadburn)
     #164 15-FEB-2017: Fixed .hep for Publish/Subscribe flow ports to work with ValueProperty's in 8.2 (F.J.Chadburn)
+    #173 02-APR-2017: cleanUpAutoRippleDependencies now gives an information rather than warning dialog (F.J.Chadburn)
+    #174 02-APR-2017: Improved flowPort creation to highlight port after creation (F.J.Chadburn)
+    #175 02-APR-2017: Improved flowPort creation to copy req'ts traceability from attribute to flow-port (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 
