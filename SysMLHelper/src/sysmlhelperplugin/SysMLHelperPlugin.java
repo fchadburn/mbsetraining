@@ -3,8 +3,6 @@ package sysmlhelperplugin;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.JOptionPane;
-
 import requirementsanalysisplugin.PopulateRequirementsAnalysisPkg;
 import functionalanalysisplugin.PopulateFunctionalAnalysisPkg;
 import functionalanalysisplugin.PopulateFunctionalAnalysisPkg.SimulationType;
@@ -148,49 +146,21 @@ public class SysMLHelperPlugin extends RPUserPlugin {
 			} else if (menuItem.equals(m_configSettings.getString("sysmlhelperplugin.SelectDependsOnElementsMenu"))){
 
 				try { 
-					IRPCollection theDependsOnEls = m_rhpApplication.createNewCollection();
-					
-					for( IRPModelElement theCandidateEl : theSelectedEls ){
-						
-						@SuppressWarnings("unchecked")
-						List<IRPModelElement> theNestedElDependencies = 
-								theCandidateEl.getNestedElementsByMetaClass( "Dependency", 1 ).toList();
-						
-						for( IRPModelElement theNestElDependency : theNestedElDependencies ){
-
-							IRPModelElement theDependsOn = 
-									((IRPDependency) theNestElDependency).getDependsOn();
-							
-							if( theDependsOn != null ){
-								theDependsOnEls.addItem( theDependsOn );
-							}
-						}
-						
-						if( theCandidateEl instanceof IRPDependency ){
-
-							IRPModelElement theDependsOn = 
-									((IRPDependency) theCandidateEl).getDependsOn();
-							
-							if( theDependsOn != null ){
-								theDependsOnEls.addItem( theDependsOn );
-							}
-						}
-					}
-					
-					if( theDependsOnEls.getCount() > 0 ){
-						m_rhpApplication.selectModelElements( theDependsOnEls );
-					} else {
-					    JOptionPane.showMessageDialog(
-					    		null,  
-					    		"There were no depends on relations found underneath the " + theSelectedEls.size() + " selected elements.",
-					    		"No elements found",
-					    		JOptionPane.INFORMATION_MESSAGE);	
-					}
+					DependencySelector.selectDependsOnElementsFor( theSelectedEls );
 
 				} catch (Exception e) {
-					Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking MBSE Method: General\\Select depends on elements");
+					Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking MBSE Method: General\\Select Depends On element(s)");
 				}
 
+			} else if (menuItem.equals(m_configSettings.getString("sysmlhelperplugin.SelectDependentElementsMenu"))){
+
+				try { 
+					DependencySelector.selectDependentElementsFor( theSelectedEls );
+
+				} catch (Exception e) {
+					Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking MBSE Method: General\\Select Dependent element(s)");
+				}
+				
 			} else if (menuItem.equals(m_configSettings.getString("sysmlhelperplugin.SetupGatewayProjectMenu"))){
 
 				if (theSelectedEl instanceof IRPProject){
@@ -329,6 +299,7 @@ public class SysMLHelperPlugin extends RPUserPlugin {
     #162 05-FEB-2017: Add new menu to add a relative reference to an external unit (.sbs) (F.J.Chadburn)
     #165 15-FEB-2017: Added new menu to select end of Dependency relations to assist usability (F.J.Chadburn)
     #166 15-FEB-2017: Corrected Copyright information to 2017 (F.J.Chadburn)
+    #172 02-APR-2017: Added new General Utilities > Select Dependent element(s) option (F.J.Chadburn)
     
     This file is part of SysMLHelperPlugin.
 
