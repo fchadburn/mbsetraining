@@ -10,7 +10,8 @@ import com.telelogic.rhapsody.core.IRPModelElement;
 
 public class UserInterfaceHelpers {
 
-	public static boolean askAQuestion(String question){
+	public static boolean askAQuestion(
+			String question ){
 		 
 		JDialog.setDefaultLookAndFeelDecorated(true);
 		 
@@ -23,11 +24,12 @@ public class UserInterfaceHelpers {
 		return (answer == JOptionPane.YES_OPTION);
 	}
 	
-	public static void showWarningDialog(String theMsg){
+	public static void showWarningDialog(
+			String theMsg ){
 		
 		Logger.writeLine("Warning: " + theMsg);
 		
-	    JDialog.setDefaultLookAndFeelDecorated(true);
+	    JDialog.setDefaultLookAndFeelDecorated( true );
 	    
 	    JOptionPane.showMessageDialog(
 	    		null,  
@@ -36,8 +38,24 @@ public class UserInterfaceHelpers {
 	    		JOptionPane.WARNING_MESSAGE);	
 	}
 	
+	public static void showInformationDialog(
+			String theMsg ){
+		
+		Logger.writeLine("Information: " + theMsg);
+		
+	    JDialog.setDefaultLookAndFeelDecorated( true );
+	    
+	    JOptionPane.showMessageDialog(
+	    		null,  
+	    		theMsg,
+	    		"Information",
+	    		JOptionPane.INFORMATION_MESSAGE);	
+	}
+	
 	public static IRPModelElement launchDialogToSelectElement(
-			List<IRPModelElement> inList, String messageToDisplay, Boolean isFullPathRequested){
+			List<IRPModelElement> inList, 
+			String messageToDisplay, 
+			Boolean isFullPathRequested ){
 		
 		IRPModelElement theEl = null;
 		
@@ -74,13 +92,14 @@ public class UserInterfaceHelpers {
 }
 
 /**
- * Copyright (C) 2016  MBSE Training and Consulting Limited (www.executablembse.com)
+ * Copyright (C) 2016-2017  MBSE Training and Consulting Limited (www.executablembse.com)
 
     Change history:
     #003 09-APR-2016: Added double-click UC to open ACT (F.J.Chadburn)
     #004 10-APR-2016: Re-factored projects into single workspace (F.J.Chadburn)
     #017 11-MAY-2016: Double-click now works with both nested and hyper-linked diagrams (F.J.Chadburn)
     #029 01-JUN-2016: Add Warning Dialog helper to UserInterfaceHelpers (F.J.Chadburn)
+    #173 02-APR-2017: cleanUpAutoRippleDependencies now gives an information rather than warning dialog (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

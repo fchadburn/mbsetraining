@@ -8,6 +8,32 @@ import com.telelogic.rhapsody.core.*;
 
 public class TraceabilityHelper {
 
+	public static void copyRequirementTraceabilityFrom(
+			IRPModelElement theElement,
+			IRPModelElement toTheElement ){
+	
+		@SuppressWarnings("unchecked")
+		List<IRPDependency> theDependenciesOnSource = 
+				theElement.getDependencies().toList();
+	
+		for( IRPDependency theDependencyOnSource : theDependenciesOnSource ){
+			
+			IRPModelElement theDependsOn = theDependencyOnSource.getDependsOn();
+			
+			if( theDependsOn instanceof IRPRequirement ){
+				
+				IRPStereotype theStereotype = 
+						GeneralHelpers.getStereotypeAppliedTo( theDependencyOnSource, ".*" );
+				
+				if( theStereotype != null ){
+					addStereotypedDependencyIfOneDoesntExist(
+							toTheElement, theDependsOn, theStereotype.getName() );
+				}
+				
+			}
+		}
+	}
+	
 	public static int countStereotypedDependencies(
 			IRPModelElement fromElement, 
 			IRPModelElement toElement,
@@ -189,6 +215,7 @@ public class TraceabilityHelper {
     #145 18-DEC-2016: Fix to remove warning with getWorkingPkgUnderDev unexpectedly finding 2 packages (F.J.Chadburn)
     #160 25-JAN-2017: Minor fixes to code found during development (F.J.Chadburn)
     #163 05-FEB-2017: Add new menus to Smart link: Start and Smart link: End (F.J.Chadburn)
+    #175 02-APR-2017: Improved flowPort creation to copy req'ts traceability from attribute to flow-port (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 
