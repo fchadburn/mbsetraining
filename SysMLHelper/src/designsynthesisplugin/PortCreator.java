@@ -55,14 +55,15 @@ public class PortCreator {
 					GeneralHelpers.getStereotypeCalled( "subscribe", theAttribute );
 
 			if( existingSubscribeStereotype != null ){
-				thePort.removeStereotype( existingSubscribeStereotype );
+				theAttribute.removeStereotype( existingSubscribeStereotype );
 			}
 			
 			cleanUpAutoRippleDependencies( theAttribute );
 			applyStereotypeAndChangeBackToValuePropertyIfNeeded( theAttribute, "publish" );
 			TraceabilityHelper.copyRequirementTraceabilityFrom( theAttribute, thePort );
 			thePort.highLightElement();
-
+			theAttribute.highLightElement();
+			
 		} else {
 			Logger.writeLine("Error in createPublishFlowportFor, no port was created");
 		}
@@ -102,13 +103,14 @@ public class PortCreator {
 					GeneralHelpers.getStereotypeCalled( "publish", theAttribute );
 
 			if( existingStereotype != null ){
-				thePort.removeStereotype( existingStereotype );
+				theAttribute.removeStereotype( existingStereotype );
 			}
 
 			cleanUpAutoRippleDependencies( theAttribute );
 			applyStereotypeAndChangeBackToValuePropertyIfNeeded( theAttribute, "subscribe" );
 			TraceabilityHelper.copyRequirementTraceabilityFrom( theAttribute, thePort );
 			thePort.highLightElement();
+			theAttribute.highLightElement();
 
 		} else {
 			Logger.writeLine( "Error in createSubscribeFlowportFor, no port was created" );
@@ -157,6 +159,47 @@ public class PortCreator {
 		}
 	}
 
+	public static void deleteAttributeAndRelatedEls(
+			IRPAttribute theAttribute ){
+	
+		Set<IRPModelElement> theRelatedEls = 
+				TraceabilityHelper.getElementsThatHaveStereotypedDependenciesFrom(
+						theAttribute, "AutoRipple" );
+	
+		JDialog.setDefaultLookAndFeelDecorated(true);
+
+		String infoText = "Do you want to delete:\n" + "1. " + Logger.elementInfo( theAttribute );
+				
+		if( !theRelatedEls.isEmpty() ){
+			
+			int count = 1;
+			
+			infoText = infoText + "\n";
+			
+			for( IRPModelElement theRelatedEl : theRelatedEls ){
+				
+				count++;
+				
+				infoText = infoText + count + ". " + Logger.elementInfo( theRelatedEl ) + 
+						"\n";
+			}			
+		}
+
+		boolean answer = UserInterfaceHelpers.askAQuestion( infoText );
+		
+		if( answer ){
+		
+			for( IRPModelElement theRelatedEl : theRelatedEls ){
+				Logger.writeLine( "Deleting " + Logger.elementInfo( theRelatedEl ) + " from the project" );
+				theRelatedEl.deleteFromProject();
+			}
+			
+			Logger.writeLine( "Deleting " + Logger.elementInfo( theAttribute ) + " from the project" );
+			theAttribute.getOwner().highLightElement();
+			theAttribute.deleteFromProject();
+		}	
+	}
+	
 	private static void cleanUpAutoRippleDependencies(
 			IRPAttribute theAttribute ){
 		
@@ -208,7 +251,7 @@ public class PortCreator {
 			
 			JDialog.setDefaultLookAndFeelDecorated(true);
 
-			String introText = "To maintain consistency the following «AutoRipple» dependencies will be deleted: " +
+			String infoText = "To maintain consistency the following «AutoRipple» dependencies will be deleted: " +
 					"\n";
 
 			int count = 0;
@@ -221,11 +264,11 @@ public class PortCreator {
 				
 				count++;
 				
-				introText = introText + count + ". " + Logger.elementInfo( theDependsOn ) + 
+				infoText = infoText + count + ". " + Logger.elementInfo( theDependsOn ) + 
 						" owned by " + Logger.elementInfo( theElementOwner ) + " \n";
 			}
 
-			UserInterfaceHelpers.showInformationDialog( introText );
+			Logger.writeLine( infoText );
 			
 			theAttribute.getOwner().highLightElement();
 			
@@ -248,6 +291,9 @@ public class PortCreator {
     #173 02-APR-2017: cleanUpAutoRippleDependencies now gives an information rather than warning dialog (F.J.Chadburn)
     #174 02-APR-2017: Improved flowPort creation to highlight port after creation (F.J.Chadburn)
     #175 02-APR-2017: Improved flowPort creation to copy req'ts traceability from attribute to flow-port (F.J.Chadburn)
+    #180 29-MAY-2017: Added new Design Synthesis menu to Delete attribute and related elements (F.J.Chadburn)
+    #181 29-MAY-2017: Replace dialog with Log message in cleanUpAutoRippleDependencies (F.J.Chadburn)
+    #182 29-MAY-2017: Tweak to keep attribute selected after switching to publish or subscribe flow-port (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

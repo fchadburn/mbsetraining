@@ -77,6 +77,17 @@ public class DesignSynthesisPlugin extends RPUserPlugin {
 					}
 				}
 
+			} else if (menuItem.equals(m_configSettings.getString("designsynthesisplugin.DeleteAttributeAndRelatedElementsMenu"))){
+				
+				if( theSelectedEl instanceof IRPAttribute ){
+					try {
+						PortCreator.deleteAttributeAndRelatedEls( (IRPAttribute) theSelectedEl );
+						
+					} catch (Exception e) {
+						Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking PortCreator.deleteAttributeAndRelatedEls");
+					}
+				}
+
 			} else {
 				Logger.writeLine(theSelectedEl, " was invoked with menuItem='" + menuItem + "'");
 			}
@@ -112,7 +123,8 @@ public class DesignSynthesisPlugin extends RPUserPlugin {
     #016 11-MAY-2016: Add GPL advisory to the Log window (F.J.Chadburn)
     #109 06-NOV-2016: Added .properties support for localisation of menus (F.J.Chadburn)
     #110 06-NOV-2016: PluginVersion now comes from Config.properties file, rather than hard wired (F.J.Chadburn)
-    
+    #180 29-MAY-2017: Added new Design Synthesis menu to Delete attribute and related elements (F.J.Chadburn)
+
     This file is part of SysMLHelperPlugin.
 
     SysMLHelperPlugin is free software: you can redistribute it and/or modify
