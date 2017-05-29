@@ -1,9 +1,12 @@
 package functionalanalysisplugin;
 
+import generalhelpers.GeneralHelpers;
 import generalhelpers.Logger;
 import generalhelpers.TraceabilityHelper;
+import generalhelpers.UserInterfaceHelpers;
 
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -240,16 +243,128 @@ public class SequenceDiagramHelper {
 			
 		return theReqts;
 	}
+	
+	public static void updateLifelinesToMatchPartsInActiveBuildingBlock(
+			IRPSequenceDiagram theSequenceDiagram ){
+		
+		IRPPackage thePackageUnderDev =
+				FunctionalAnalysisSettings.getPackageUnderDev( theSequenceDiagram.getProject() );
+		
+		if( thePackageUnderDev != null ){
+
+			IRPClass theBuildingBlock = 
+					FunctionalAnalysisSettings.getBuildingBlock( thePackageUnderDev );
+					
+			if( theBuildingBlock != null ){
+				
+				createSequenceDiagramFor(
+						theBuildingBlock, 
+						(IRPPackage) theSequenceDiagram.getOwner(), 
+						theSequenceDiagram.getName() );
+			
+			} else {
+				Logger.writeLine("Error, unable to find building block or tester pkg");
+			}
+		} else {
+			Logger.writeLine( "Error, unable to find thePackageUnderDev" );
+		}
+	}
+	
+	public static void createSequenceDiagramFor(
+			IRPClass theAssemblyBlock, 
+			IRPPackage inPackage,
+			String withName ){
+		
+		boolean isCreateSD = true;
+		
+		IRPModelElement theExistingDiagram = 
+				inPackage.findNestedElement( withName, "SequenceDiagram" );
+		
+		@SuppressWarnings("unchecked")
+		List<IRPInstance> theParts =
+		    theAssemblyBlock.getNestedElementsByMetaClass( "Part", 0 ).toList();
+		
+		if( theExistingDiagram != null ){
+			
+			String theMsg = Logger.elementInfo( theExistingDiagram ) + " already exists in " + 
+					Logger.elementInfo( inPackage ) + "\nDo you want to recreate it with x" + theParts.size() + 
+					" lifelines for:\n";
+			
+			for( Iterator<IRPInstance> iterator = theParts.iterator(); iterator.hasNext(); ){
+				
+				IRPInstance thePart = (IRPInstance) iterator.next();
+				IRPClassifier theType = thePart.getOtherClass();
+				theMsg += theType.getName() + "\n"; 
+			}
+					
+			isCreateSD = UserInterfaceHelpers.askAQuestion( theMsg );
+			
+			if( isCreateSD ){
+				theExistingDiagram.deleteFromProject();
+			}
+		}
+		
+		if( isCreateSD ){
+			
+			IRPSequenceDiagram theSD = inPackage.addSequenceDiagram( withName );
+
+			int xPos = 30;
+			int yPos = 0;
+			int nWidth = 100;
+			int nHeight = 1000;
+			int xGap = 30;
+
+			// Do Test Driver first
+			for( IRPInstance thePart : theParts ) {
+
+				if( GeneralHelpers.hasStereotypeCalled( "TestDriver", thePart ) ){
+
+					IRPClassifier theType = thePart.getOtherClass();
+					theSD.addNewNodeForElement( theType, xPos, yPos, nWidth, nHeight );
+					xPos=xPos+nWidth+xGap;
+				}
+			}
+			
+			// Then actors
+			for( IRPInstance thePart : theParts ) {
+
+				IRPClassifier theType = thePart.getOtherClass();
+
+				if( theType instanceof IRPActor ){
+					theSD.addNewNodeForElement( theType, xPos, yPos, nWidth, nHeight );
+					xPos=xPos+nWidth+xGap;
+				}
+			}
+
+			// Then components
+			for( IRPInstance thePart : theParts ) {
+
+				IRPClassifier theType = thePart.getOtherClass();
+
+				if( !( theType instanceof IRPActor ) &&
+					!GeneralHelpers.hasStereotypeCalled( "TestDriver", thePart ) ){
+
+					theSD.addNewNodeForElement( theType, xPos, yPos, nWidth, nHeight );
+					xPos=xPos+nWidth+xGap;
+				}
+			}
+
+			GeneralHelpers.applyExistingStereotype( "AutoShow", theSD );
+		}
+	}
+
 }
 
 /**
- * Copyright (C) 2016  MBSE Training and Consulting Limited (www.executablembse.com)
+ * Copyright (C) 2016-2017  MBSE Training and Consulting Limited (www.executablembse.com)
 
     Change history:
     #013 10-MAY-2016: (new) Add support for sequence diagram req't and verification relation population (F.J.Chadburn)
     #032 05-JUN-2016: Populate call operation/event actions on diagram check-box added (F.J.Chadburn)
     #033 05-JUN-2016: Add support for creation of operations and events from raw requirement selection (F.J.Chadburn)
     #044 03-JUL-2016: Minor re-factoring/code corrections (F.J.Chadburn)
+    #179 29-MAY-2017: Add new Functional Analysis menu to Re-create «AutoShow» sequence diagram (F.J.Chadburn)
+    #187 29-MAY-2017: Provide option to re-create «AutoShow» sequence diagram when adding new actor (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

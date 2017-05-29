@@ -240,7 +240,7 @@ public class CreateTracedAttributePanel extends CreateTracedElementPanel {
 			public void run() {
 				IRPClassifier theLogicalSystemBlock = 
 						FunctionalAnalysisSettings.getBlockUnderDev( 
-								inProject );
+								inProject, "Select Block to add attribute to:" );
 
 				JFrame.setDefaultLookAndFeelDecorated( true );
 
@@ -434,6 +434,7 @@ public class CreateTracedAttributePanel extends CreateTracedElementPanel {
     #137 02-DEC-2016: Allow 'create attribute' menu command on AD/RD canvas right-click (F.J.Chadburn)
     #153 25-JAN-2017: Functional Analysis helper creates new term ValueProperty's rather than attributes in Rhp 8.2+ (F.J.Chadburn) 
     #176 02-APR-2017: Added option to create a flow-port at the same time as creating a traced attribute (F.J.Chadburn)
+    #186 29-MAY-2017: Add context string to getBlockUnderDev to make it clearer for user when selecting (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

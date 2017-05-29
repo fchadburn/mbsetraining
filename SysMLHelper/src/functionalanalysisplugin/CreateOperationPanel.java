@@ -86,7 +86,7 @@ public class CreateOperationPanel extends CreateTracedElementPanel {
 			public void run() {
 				IRPClassifier theLogicalSystemBlock = 
 						FunctionalAnalysisSettings.getBlockUnderDev( 
-								inProject );
+								inProject, "Select Block to add operation to:" );
 				
 				JFrame.setDefaultLookAndFeelDecorated( true );
 				
@@ -119,7 +119,7 @@ public class CreateOperationPanel extends CreateTracedElementPanel {
 			public void run() {
 				IRPClassifier theLogicalSystemBlock = 
 						FunctionalAnalysisSettings.getBlockUnderDev( 
-								inProject );
+								inProject, "Select Block to add operation to:" );
 				
 				JFrame.setDefaultLookAndFeelDecorated( true );
 				
@@ -303,6 +303,7 @@ public class CreateOperationPanel extends CreateTracedElementPanel {
     #125 25-NOV-2016: AutoRipple used in UpdateTracedAttributePanel to keep check and FlowPort name updated (F.J.Chadburn)
     #130 25-NOV-2016: Improved consistency in handling of isPopulateOptionHidden and isPopulateWantedByDefault tags (F.J.Chadburn)
     #154 25-JAN-2017: Improved robustness by adding isLegalName check to CreateOperationPanel (F.J.Chadburn)
+    #186 29-MAY-2017: Add context string to getBlockUnderDev to make it clearer for user when selecting (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

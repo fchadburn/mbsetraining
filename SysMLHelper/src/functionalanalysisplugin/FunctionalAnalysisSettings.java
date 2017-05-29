@@ -174,7 +174,7 @@ public class FunctionalAnalysisSettings {
 		if (thePackage==null){
 			Logger.writeLine("Error in getPackageForActorsAndTest, unable to determine package from the tag value");
 		
-			IRPClass theLogicalBlock = getBlockUnderDev( inTheProject );
+			IRPClass theLogicalBlock = getBlockUnderDev( inTheProject, "Unable to determine package for actors and test, which Block is under dev" );
 			
 			// old projects may not have an test package hence use the package the block is in
 			IRPModelElement theOwner = theLogicalBlock.getOwner();
@@ -220,7 +220,7 @@ public class FunctionalAnalysisSettings {
 		if (thePackage==null){
 			Logger.writeLine("Error in getPkgThatOwnsEventsAndInterfaces, unable to determine packageUnderDev from the tag value");
 		
-			IRPClass theLogicalBlock = getBlockUnderDev( inTheProject );
+			IRPClass theLogicalBlock = getBlockUnderDev( inTheProject, "Unable to determine Logical Block, please pick one" );
 			
 			// old projects may not have an InterfacesPkg hence use the package the block is in
 			IRPModelElement theOwner = theLogicalBlock.getOwner();
@@ -279,7 +279,8 @@ public class FunctionalAnalysisSettings {
 	}
 	
 	public static IRPClass getBlockUnderDev(
-			IRPProject inTheProject ){
+			IRPProject inTheProject,
+			String theMsg ){
 		
 		IRPClass theBlockUnderDev = null;
 		
@@ -313,7 +314,7 @@ public class FunctionalAnalysisSettings {
 					if( theCandidates.size() > 1 ){
 						final IRPModelElement theChosenBlockEl = 
 								GeneralHelpers.launchDialogToSelectElement(
-										theCandidates, "Select Block to add operation to:", true );
+										theCandidates, theMsg, true ); 
 
 						if( theChosenBlockEl != null && theChosenBlockEl instanceof IRPClass ){
 							theBlockUnderDev = (IRPClass) theChosenBlockEl;
@@ -539,7 +540,7 @@ public class FunctionalAnalysisSettings {
 }
 
 /**
- * Copyright (C) 2016  MBSE Training and Consulting Limited (www.executablembse.com)
+ * Copyright (C) 2016-2017  MBSE Training and Consulting Limited (www.executablembse.com)
 
     Change history:
     #006 02-MAY-2016: Add FunctionalAnalysisPkg helper support (F.J.Chadburn)
@@ -567,7 +568,8 @@ public class FunctionalAnalysisSettings {
     #145 18-DEC-2016: Fix to remove warning with getWorkingPkgUnderDev unexpectedly finding 2 packages (F.J.Chadburn)
     #161 05-FEB-2017: Support nested diagram links in CallOperation description (F.J.Chadburn) 
     #171 08-MAR-2017: Added some dormant ops to GeneralHelpers to assist with 3rd party integration (F.J.Chadburn)
-    
+    #186 29-MAY-2017: Add context string to getBlockUnderDev to make it clearer for user when selecting (F.J.Chadburn)
+
     This file is part of SysMLHelperPlugin.
 
     SysMLHelperPlugin is free software: you can redistribute it and/or modify

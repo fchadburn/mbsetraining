@@ -510,7 +510,7 @@ public class CreateIncomingEventPanel extends CreateTracedElementPanel {
 					if( theActor != null && theActor instanceof IRPActor ){
 						
 						final IRPClass theChosenBlock = 
-								FunctionalAnalysisSettings.getBlockUnderDev( inProject );
+								FunctionalAnalysisSettings.getBlockUnderDev( inProject, "Which Block do you want to add the Event to?" );
 		
 						if( theChosenBlock != null ){
 							
@@ -595,7 +595,7 @@ public class CreateIncomingEventPanel extends CreateTracedElementPanel {
 						
 						theChosenBlock = (IRPClass) orTheModelElement.getOwner();
 					} else {
-						theChosenBlock = FunctionalAnalysisSettings.getBlockUnderDev( inProject );
+						theChosenBlock = FunctionalAnalysisSettings.getBlockUnderDev( inProject, "Which Block do you want to add the event to?" );
 					}
 								
 					if( theChosenBlock != null ){
@@ -1255,7 +1255,7 @@ public class CreateIncomingEventPanel extends CreateTracedElementPanel {
 }
 
 /**
- * Copyright (C) 2016  MBSE Training and Consulting Limited (www.executablembse.com)
+ * Copyright (C) 2016-2017  MBSE Training and Consulting Limited (www.executablembse.com)
 
     Change history:
     #022 30-MAY-2016: Improved handling and validation of event/operation creation by adding new forms (F.J.Chadburn)
@@ -1283,7 +1283,8 @@ public class CreateIncomingEventPanel extends CreateTracedElementPanel {
     #125 25-NOV-2016: AutoRipple used in UpdateTracedAttributePanel to keep check and FlowPort name updated (F.J.Chadburn)
     #127 25-NOV-2016: Improved usability of ViaPanel event creation by enabling default selection via tags (F.J.Chadburn)
     #132 25-NOV-2016: Added "Unable to find a port that connects" warning to CreateIncomingEventPanel (F.J.Chadburn)
-    
+    #186 29-MAY-2017: Add context string to getBlockUnderDev to make it clearer for user when selecting (F.J.Chadburn)
+
     This file is part of SysMLHelperPlugin.
 
     SysMLHelperPlugin is free software: you can redistribute it and/or modify

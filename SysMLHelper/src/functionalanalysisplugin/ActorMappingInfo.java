@@ -68,8 +68,16 @@ public class ActorMappingInfo {
 			theOriginalActorName = m_ActorBlankName;
 		}
 		
+		String theDesiredName;
+		
+		if( theBlockName.isEmpty() ){
+			theDesiredName = GeneralHelpers.toLegalClassName( theOriginalActorName );
+		} else {
+			theDesiredName = GeneralHelpers.toLegalClassName( theOriginalActorName ) + "_" + theBlockName;
+		}
+		
 		String theProposedActorName = GeneralHelpers.determineUniqueNameBasedOn( 
-				GeneralHelpers.toLegalClassName( theOriginalActorName ) + "_" + theBlockName, 
+				theDesiredName, 
 				"Actor", 
 				m_Project );
 		
@@ -145,9 +153,11 @@ public class ActorMappingInfo {
 		return theExistingLink;
 	}
 	
-	public void performActorPartCreationIfSelectedIn(
+	public IRPInstance performActorPartCreationIfSelectedIn(
 			IRPClass theAssemblyBlock,
 			IRPClass connectedToBlock ){
+		
+		IRPInstance theActorPart = null;
 		
 		if( isSelected() ){
 
@@ -173,94 +183,96 @@ public class ActorMappingInfo {
 							GeneralHelpers.hasStereotypeCalled( 
 									"TestDriver", thePart );
 					
-					if( !isTestDriver &&
+					if( !isTestDriver && 
+						(connectedToBlock != null) &&
 						theOtherClass.equals( connectedToBlock ) ){
 
 						theConnectedToPart = thePart;
 
 						Logger.writeLine( theConnectedToPart, "was found to connect the actors to, and is typed by " + 
 								Logger.elementInfo( connectedToBlock ) );
-						
-					} else {
-						
+
+					} else if ( isTestDriver ){
+
 						theTesterPart = thePart;
 						theTesterBlock = theOtherClass;
 
 						Logger.writeLine( theTesterPart, "was found as the test driver, and is typed by " + 
 								Logger.elementInfo( theTesterBlock ) );
-											
+
 					}
 				}				
 			}
-			
-			if( connectedToBlock != null ){
-			
-				IRPPackage thePackageForActor = 
-						FunctionalAnalysisSettings.getPackageForActorsAndTest(
-								theAssemblyBlock.getProject() );
-				
-				IRPActor theActor = thePackageForActor.addActor( theLegalActorName );
+
+			IRPPackage thePackageForActor = 
+					FunctionalAnalysisSettings.getPackageForActorsAndTest(
+							theAssemblyBlock.getProject() );
+
+			IRPActor theActor = thePackageForActor.addActor( theLegalActorName );
+			theActor.highLightElement();
+
+			IRPModelElement theInheritedFrom = 
+					m_InheritedFromComboBox.getSelectedRhapsodyItem();
+
+			String theText = "Create actor called " + m_ActorNameTextField.getText();
+
+			// Make each of the actors a part of the SystemAssembly block
+			theActorPart = 
+					(IRPInstance) theAssemblyBlock.addNewAggr(
+							"Part", "" );
+
+			theActorPart.highLightElement();
+			theActorPart.setOtherClass( theActor );
+
+			if( theInheritedFrom != null ){
+
+				theText = theText + " inherited from " + theInheritedFrom.getName();
+
+				theActor.addGeneralization( (IRPClassifier) theInheritedFrom );
 				theActor.highLightElement();
-				
-				IRPModelElement theInheritedFrom = 
-						m_InheritedFromComboBox.getSelectedRhapsodyItem();
 
-				String theText = "Create actor called " + m_ActorNameTextField.getText();
-				
-				// Make each of the actors a part of the SystemAssembly block
-				IRPInstance theActorPart = 
-						(IRPInstance) theAssemblyBlock.addNewAggr(
-								"Part", "its" + theActor.getName() );
-				
-				theActorPart.highLightElement();
-				theActorPart.setOtherClass( theActor );
-				
-				if( theInheritedFrom != null ){
-					
-					theText = theText + " inherited from " + theInheritedFrom.getName();
-										
-					theActor.addGeneralization( (IRPClassifier) theInheritedFrom );
-					theActor.highLightElement();
-					
+			} else {
+
+				IRPActor theTestbench = 
+						(IRPActor) theActor.getProject().findNestedElementRecursive(
+								"Testbench", "Actor" );
+
+				if( theTestbench != null ){
+					theActor.addGeneralization( theTestbench );
 				} else {
-
-					IRPActor theTestbench = 
-							(IRPActor) theActor.getProject().findNestedElementRecursive(
-									"Testbench", "Actor" );
-
-					if( theTestbench != null ){
-						theActor.addGeneralization( theTestbench );
-					} else {
-						Logger.writeLine("Error: Unable to find Actor with name Testbench");
-					}
+					Logger.writeLine("Error: Unable to find Actor with name Testbench");
 				}
-				
+			}
+
+			if( theConnectedToPart != null ){
+
 				connectActorPartWithBlockPartIn(
 						theAssemblyBlock,
 						theConnectedToPart, 
-						theActorPart);
-				
-				if( theTesterBlock == null ){
-					
-					UserInterfaceHelpers.showWarningDialog(
-							"A new Actor part called " + theActorPart.getName() + " was added to " + Logger.elementInfo( theAssemblyBlock ) + ". \n" +
-							"However, no TestDriver part was found hence skipping the creation of links to this. In future, you \n" +
-							"may want to consider using the FullSim structure to get the benefits of test driver creation. " );
-				} else {
-					
-					connectActorPartWithTesterPartIn(
-							theAssemblyBlock,
-							theTesterPart, 
-							theActorPart );
-				}
-
+						theActorPart );					
 			}
-			
+
+			if( theTesterBlock == null ){
+
+				UserInterfaceHelpers.showWarningDialog(
+						"A new Actor part called " + theActorPart.getName() + " was added to " + Logger.elementInfo( theAssemblyBlock ) + ". \n" +
+						"However, no TestDriver part was found hence skipping the creation of links to this. In future, you \n" +
+						"may want to consider using the FullSim structure to get the benefits of test driver creation. " );
+			} else {
+
+				connectActorPartWithTesterPartIn(
+						theAssemblyBlock,
+						theTesterPart, 
+						theActorPart );
+			}
+
 			Logger.writeLine("Finishing adding part connected to actor");
 
 		} else {
 			Logger.writeLine("Not selected");
 		}
+		
+		return theActorPart;
 	}
 
 	private void connectActorPartWithTesterPartIn(
@@ -402,7 +414,7 @@ public class ActorMappingInfo {
 }
 
 /**
- * Copyright (C) 2016  MBSE Training and Consulting Limited (www.executablembse.com)
+ * Copyright (C) 2016-2017  MBSE Training and Consulting Limited (www.executablembse.com)
 
     Change history:
     #006 02-MAY-2016: Add FunctionalAnalysisPkg helper support (F.J.Chadburn)
@@ -414,6 +426,7 @@ public class ActorMappingInfo {
     #126 25-NOV-2016: Fixes to CreateNewActorPanel to cope better when multiple blocks are in play (F.J.Chadburn)
     #135 02-DEC-2016: Avoid port proliferation in inheritance tree for actors/system (F.J.Chadburn)
     #149 18-DEC-2016: Improve robustness to allow actor part creation if no TestDriver is present (F.J.Chadburn)
+    #187 29-MAY-2017: Provide option to re-create «AutoShow» sequence diagram when adding new actor (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

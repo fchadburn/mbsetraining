@@ -244,7 +244,7 @@ public class CreateOutgoingEventPanel extends CreateTracedElementPanel {
 						} else {
 							
 							final IRPClass theChosenBlock = 
-									FunctionalAnalysisSettings.getBlockUnderDev( inProject );
+									FunctionalAnalysisSettings.getBlockUnderDev( inProject, "Select Block to add event generation from:" );
 						
 							if( theChosenBlock != null ){
 								
@@ -512,7 +512,7 @@ public class CreateOutgoingEventPanel extends CreateTracedElementPanel {
 }
 
 /**
- * Copyright (C) 2016  MBSE Training and Consulting Limited (www.executablembse.com)
+ * Copyright (C) 2016-2017  MBSE Training and Consulting Limited (www.executablembse.com)
 
     Change history:
     #022 30-MAY-2016: Improved handling and validation of event/operation creation by adding new forms (F.J.Chadburn)
@@ -536,6 +536,7 @@ public class CreateOutgoingEventPanel extends CreateTracedElementPanel {
     #125 25-NOV-2016: AutoRipple used in UpdateTracedAttributePanel to keep check and FlowPort name updated (F.J.Chadburn)
     #130 25-NOV-2016: Improved consistency in handling of isPopulateOptionHidden and isPopulateWantedByDefault tags (F.J.Chadburn)
     #148 18-DEC-2016: Add message if user tries to create an outgoing event when there are no actors (F.J.Chadburn)
+    #186 29-MAY-2017: Add context string to getBlockUnderDev to make it clearer for user when selecting (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

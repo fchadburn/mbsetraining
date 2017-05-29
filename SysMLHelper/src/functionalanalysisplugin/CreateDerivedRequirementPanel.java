@@ -67,7 +67,7 @@ public class CreateDerivedRequirementPanel extends CreateTracedElementPanel {
 						theSelectedGraphEls.get(0), 
 						theReqts, 
 						RequirementsAnalysisPlugin.getActiveProject() );
-			
+
 			} else if (theModelObject instanceof IRPCallOperation){
 				
 				IRPCallOperation theCallOp = (IRPCallOperation)theModelObject;
@@ -389,7 +389,9 @@ public class CreateDerivedRequirementPanel extends CreateTracedElementPanel {
 								"Requirement", m_ChosenNameTextField.getText() );
 						
 					} else if( theDiagram instanceof IRPObjectModelDiagram ||
-							   theDiagram instanceof IRPStatechartDiagram ){
+							   theDiagram instanceof IRPStatechartDiagram ||
+							   theDiagram instanceof IRPStructureDiagram ||
+							   theDiagram instanceof IRPUseCaseDiagram ){
 					
 						theRequirement = (IRPRequirement) theDiagram.addNewAggr(
 								"Requirement", m_ChosenNameTextField.getText()  );
@@ -599,7 +601,7 @@ public class CreateDerivedRequirementPanel extends CreateTracedElementPanel {
 }
 
 /**
- * Copyright (C) 2016  MBSE Training and Consulting Limited (www.executablembse.com)
+ * Copyright (C) 2016-2017  MBSE Training and Consulting Limited (www.executablembse.com)
 
     Change history:
     #041 29-JUN-2016: Derive downstream requirement menu added for reqts on diagrams (F.J.Chadburn) 
@@ -609,7 +611,8 @@ public class CreateDerivedRequirementPanel extends CreateTracedElementPanel {
     #103 03-NOV-2016: Allow derivation of requirements with trace-ability from attribute (F.J.Chadburn)
     #126 25-NOV-2016: Fixes to CreateNewActorPanel to cope better when multiple blocks are in play (F.J.Chadburn)
     #134 02-DEC-2016: Fix issue with Derive requirement dialog not launching (F.J.Chadburn)
-    
+    #188 29-MAY-2017: Tweak Derive downstream requirement to work on right-clicking reqt on IBD or UCD (F.J.Chadburn)
+
     This file is part of SysMLHelperPlugin.
 
     SysMLHelperPlugin is free software: you can redistribute it and/or modify

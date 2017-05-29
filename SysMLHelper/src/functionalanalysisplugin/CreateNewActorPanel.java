@@ -8,6 +8,7 @@ import generalhelpers.UserInterfaceHelpers;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.util.List;
+
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JCheckBox;
@@ -30,6 +31,12 @@ public class CreateNewActorPanel extends CreateStructuralElementPanel {
 	private ActorMappingInfo m_ClassifierMappingInfo;
 	private IRPClass m_BlockToConnectTo = null;
 	
+	public static void main(String[] args) {
+		
+		IRPApplication theApp = RhapsodyAppServer.getActiveRhapsodyApplication();
+		launchThePanel( theApp.activeProject() );
+	}
+	
 	public static void launchThePanel(
 			IRPProject theProject ){
 		
@@ -39,7 +46,7 @@ public class CreateNewActorPanel extends CreateStructuralElementPanel {
 
 		final IRPClass theBlockUnderDev = 
 				FunctionalAnalysisSettings.getBlockUnderDev( 
-						theProject );
+						theProject, "Which Block/Part do you want to wire the Actor to?" );
 		
 		Logger.writeLine("Add new actor part to " + Logger.elementInfo( thePackageUnderDev ) + " was invoked");
 		
@@ -49,9 +56,16 @@ public class CreateNewActorPanel extends CreateStructuralElementPanel {
 			public void run() {
 				
 				JFrame.setDefaultLookAndFeelDecorated( true );
-
-				JFrame frame = new JFrame("Create new actor connected to " 
-						+ theBlockUnderDev.getUserDefinedMetaClass() + " called " + theBlockUnderDev.getName());
+				
+				String msg;
+				
+				if( theBlockUnderDev != null ){
+					msg = "Create new actor connected to " + Logger.elementInfo( theBlockUnderDev );
+				} else {
+					msg = "Create new actor";
+				}
+				
+				JFrame frame = new JFrame( msg );
 				
 				frame.setDefaultCloseOperation( JFrame.DISPOSE_ON_CLOSE );
 
@@ -79,7 +93,14 @@ public class CreateNewActorPanel extends CreateStructuralElementPanel {
 		setLayout( new BorderLayout(10,10) );
 		setBorder( BorderFactory.createEmptyBorder( 10, 10, 10, 10 ) );
 		
-		add( createActorChoicePanel( m_BlockToConnectTo.getName() ), BorderLayout.PAGE_START );
+		if( m_BlockToConnectTo != null ){
+			add( createActorChoicePanel( m_BlockToConnectTo.getName() ), BorderLayout.PAGE_START );
+
+		} else {
+			add( createActorChoicePanel( "" ), BorderLayout.PAGE_START );
+
+		}
+		
 		add( createOKCancelPanel(), BorderLayout.PAGE_END );
 	}
 
@@ -171,8 +192,36 @@ public class CreateNewActorPanel extends CreateStructuralElementPanel {
 			
 			if( m_RootPackage != null ){
 				
-				m_ClassifierMappingInfo.performActorPartCreationIfSelectedIn( 
-						theAssemblyBlock, m_BlockToConnectTo );
+				IRPInstance theActorPart =
+						m_ClassifierMappingInfo.performActorPartCreationIfSelectedIn( 
+								theAssemblyBlock, m_BlockToConnectTo );
+				
+				if( theActorPart != null ){
+					
+					IRPPackage thePackageForSD = 
+							FunctionalAnalysisSettings.getPackageForActorsAndTest(
+									theAssemblyBlock.getProject() );
+					
+					if( thePackageForSD != null ){
+						
+						List<IRPModelElement> theSDs = 
+								GeneralHelpers.findElementsWithMetaClassAndStereotype(
+										"SequenceDiagram", 
+										"AutoShow", 
+										thePackageForSD, 
+										0 );
+						
+						if( theSDs.size()==1 ){
+							
+							IRPSequenceDiagram theSD = (IRPSequenceDiagram) theSDs.get( 0 );
+							
+							SequenceDiagramHelper.createSequenceDiagramFor(
+									theAssemblyBlock, 
+									thePackageForSD, 
+									theSD.getName() );
+						}
+					}
+				}
 			
 			} else {
 				Logger.writeLine("Error in CreateNewActorPanel.performAction, unable to find " + Logger.elementInfo( m_RootPackage ) );
@@ -185,7 +234,7 @@ public class CreateNewActorPanel extends CreateStructuralElementPanel {
 }
 
 /**
- * Copyright (C) 2016  MBSE Training and Consulting Limited (www.executablembse.com)
+ * Copyright (C) 2016-2017  MBSE Training and Consulting Limited (www.executablembse.com)
 
     Change history:
     #025 31-MAY-2016: Add new menu and dialog to add a new actor to package under development (F.J.Chadburn)
@@ -194,6 +243,8 @@ public class CreateNewActorPanel extends CreateStructuralElementPanel {
     #035 15-JUN-2016: New panel to configure requirements package naming and gateway set-up (F.J.Chadburn)
     #126 25-NOV-2016: Fixes to CreateNewActorPanel to cope better when multiple blocks are in play (F.J.Chadburn)
     #147 18-DEC-2016: Fix Actor part creation not being created in correct place if multiple hierarchies (F.J.Chadburn)
+    #186 29-MAY-2017: Add context string to getBlockUnderDev to make it clearer for user when selecting (F.J.Chadburn)
+    #187 29-MAY-2017: Provide option to re-create «AutoShow» sequence diagram when adding new actor (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

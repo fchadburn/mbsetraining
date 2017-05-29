@@ -322,7 +322,22 @@ public class FunctionalAnalysisPlugin extends RPUserPlugin {
 				} catch (Exception e) {
 					Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking MBSE Method: Functional Analysis\\Switch menus to full sim");
 				}
+
+			} else if (menuItem.equals(m_configSettings.getString("functionalanalysisplugin.RecreateAutoShowSequenceDiagramMenu"))){
+
+				try {
+					if( theSelectedEl instanceof IRPSequenceDiagram ){
+
+						SequenceDiagramHelper.updateLifelinesToMatchPartsInActiveBuildingBlock(
+								(IRPSequenceDiagram) theSelectedEl );
+						
+					}	
+										
+				} catch (Exception e) {
+					Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking MBSE Method: Functional Analysis\\Re-create «AutoShow» sequence diagram");
+				}
 				
+
 			} else {
 				Logger.writeLine(theSelectedEl, " was invoked with menuItem='" + menuItem + "'");
 			}
@@ -350,7 +365,7 @@ public class FunctionalAnalysisPlugin extends RPUserPlugin {
 }
 
 /**
- * Copyright (C) 2016  MBSE Training and Consulting Limited (www.executablembse.com)
+ * Copyright (C) 2016-2017  MBSE Training and Consulting Limited (www.executablembse.com)
 
     Change history:
     #006 02-MAY-2016: Add FunctionalAnalysisPkg helper support (F.J.Chadburn)
@@ -373,6 +388,7 @@ public class FunctionalAnalysisPlugin extends RPUserPlugin {
     #117 13-NOV-2016: Get incoming and outgoing event dialogs to work without actors in the context (F.J.Chadburn)
     #128 25-NOV-2016: Improved usability/speed of Copy AD dialog by providing user choice to open diagrams (F.J.Chadburn)
     #137 02-DEC-2016: Allow 'create attribute' menu command on AD/RD canvas right-click (F.J.Chadburn)
+    #179 29-MAY-2017: Add new Functional Analysis menu to Re-create «AutoShow» sequence diagram (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

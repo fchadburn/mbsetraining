@@ -422,61 +422,6 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
 		theConfiguration.getProject().setActiveConfiguration(theConfiguration);		
 	}
 
-	private static void createSequenceDiagramFor(
-			IRPClass theAssemblyBlock, 
-			IRPPackage inPackage,
-			String withName){
-		
-		IRPSequenceDiagram theSD = inPackage.addSequenceDiagram( withName );
-		
-		@SuppressWarnings("unchecked")
-		List<IRPInstance> theParts =
-		    theAssemblyBlock.getNestedElementsByMetaClass("Part", 0).toList();
-
-		int xPos = 30;
-		int yPos = 0;
-		int nWidth = 100;
-		int nHeight = 1000;
-		int xGap = 30;
-
-		// Do Test Driver first
-		for( IRPInstance thePart : theParts ) {
-
-			if( GeneralHelpers.hasStereotypeCalled( "TestDriver", thePart ) ){
-
-				IRPClassifier theType = thePart.getOtherClass();
-				theSD.addNewNodeForElement( theType, xPos, yPos, nWidth, nHeight );
-				xPos=xPos+nWidth+xGap;
-			}
-		}
-		
-		// Then actors
-		for( IRPInstance thePart : theParts ) {
-
-			IRPClassifier theType = thePart.getOtherClass();
-
-			if( theType instanceof IRPActor ){
-				theSD.addNewNodeForElement( theType, xPos, yPos, nWidth, nHeight );
-				xPos=xPos+nWidth+xGap;
-			}
-		}
-
-		// Then components
-		for( IRPInstance thePart : theParts ) {
-
-			IRPClassifier theType = thePart.getOtherClass();
-
-			if( !( theType instanceof IRPActor ) &&
-				!GeneralHelpers.hasStereotypeCalled( "TestDriver", thePart ) ){
-
-				theSD.addNewNodeForElement( theType, xPos, yPos, nWidth, nHeight );
-				xPos=xPos+nWidth+xGap;
-			}
-		}
-
-		GeneralHelpers.applyExistingStereotype( "AutoShow", theSD );
-	}
-
 	private static Set<IRPClassifier> getBaseClassesOf( 
 			Set<IRPClassifier> theClassifiers ){
 		
@@ -838,7 +783,7 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
 			// Make the LogicalSystem a part of the SystemAssembly block
 			IRPInstance theLogicalSystemPart = 
 					(IRPInstance) theSystemAssemblyBlock.addNewAggr(
-							"Part", "its" + theLogicalSystemBlock.getName() );
+							"Part", "" );
 			
 			theLogicalSystemPart.setOtherClass( theLogicalSystemBlock );
 			
@@ -853,21 +798,48 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
 				IRPModelElement theElapsedTimeActor = 
 						theProject.findNestedElementRecursive( "ElapsedTime", "Actor" );
 				
+				IRPInstance theElapsedTimePart = null;
+				
 				if( theElapsedTimeActor != null ){
 					
-					IRPInstance theElapsedTimePart = 
+					theElapsedTimePart = 
 							(IRPInstance) theSystemAssemblyBlock.addNewAggr(
 									"Part", "");
 					
-					theElapsedTimePart.setOtherClass( (IRPClassifier) theElapsedTimeActor );
+					theElapsedTimePart.setOtherClass( 
+							(IRPClassifier) theElapsedTimeActor );
+					
+					IRPSysMLPort theActorsElapsedTimePort = 
+							(IRPSysMLPort) GeneralHelpers.findNestedElementUnder( 
+									(IRPClassifier) theElapsedTimeActor,
+									"elapsedTime",
+									"SysMLPort",
+									true );
+							
+					IRPSysMLPort theBlocksElapsedTimePort = 
+							(IRPSysMLPort) GeneralHelpers.findNestedElementUnder( 
+									(IRPClassifier) theLogicalSystemBlock,
+									"elapsedTime",
+									"SysMLPort",
+									true );
+					
+					if( theActorsElapsedTimePort != null &&
+						theBlocksElapsedTimePort != null ){
+						
+						GeneralHelpers.AddConnectorBetweenSysMLPortsIfOneDoesntExist(
+								theActorsElapsedTimePort, 
+								theElapsedTimePart, 
+								theBlocksElapsedTimePort, 
+								theLogicalSystemPart );
+						
+					} else {
+						Logger.writeLine("Error in CreateFunctionalBlockPackagePanel.performAction(), unable to find elapsedTime ports") ;
+					}
+						
 				} else {
 					Logger.writeLine("Error in CreateFunctionalBlockPackagePanel.performAction: Unable to find ElapsedTime actor in project. You may be missing the BasePkg");
 				}
-			}
-			
-			if( m_SimulationType==SimulationType.FullSim ||
-				m_SimulationType==SimulationType.SimpleSim ){			
-
+				
 				IRPPanelDiagram thePD = 
 						theTestPackage.addPanelDiagram(
 								"PD - " + theLogicalSystemBlock.getName() );
@@ -897,7 +869,7 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
 					// Make the TestDriver a part of the UsageDomain block
 					IRPInstance theTestDriverPart = 
 							(IRPInstance) theSystemAssemblyBlock.addNewAggr(
-									"Part", "its" + theTesterBlock.getName() );
+									"Part", "" );
 					
 					theTestDriverPart.setOtherClass( theTesterBlock );
 					
@@ -909,17 +881,37 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
 								theSystemAssemblyBlock,
 								theLogicalSystemBlock );		
 					}
+					
+					// Connect TestDriver to elapsedTime actor
+					IRPPort theElapsedTimePortOnTesterBlock = 
+							(IRPPort) theTesterBlock.addNewAggr( "Port", "pElapsedTime" );
+					
+					IRPPort theTesterPortOnElapsedTimeActor =
+							(IRPPort) theElapsedTimeActor.findNestedElement( "pTester", "Port" );
 
+					if( theTesterPortOnElapsedTimeActor != null &&
+						theElapsedTimePart != null ){
+
+						theSystemAssemblyBlock.addLink(
+								theElapsedTimePart, 
+								theTestDriverPart, 
+								null, 
+								theTesterPortOnElapsedTimeActor,
+								theElapsedTimePortOnTesterBlock );
+					} else {
+						Logger.writeLine( "Error, either part or port is null" );
+					}
+					
 				} else {
 					// assume panel diagram simulation will be used (esp. for simple sim)
 					GeneralHelpers.applyExistingStereotype("AutoShow", thePD);
-				}				
+				} // end FullSim only				
 				
 				// Add a sequence diagram
-				createSequenceDiagramFor(
+				SequenceDiagramHelper.createSequenceDiagramFor(
 						theSystemAssemblyBlock, 
 						theTestPackage, 
-						"SD - " + theName);
+						"SD - " + theName );
 				
 				IRPStatechartDiagram theStatechart = 
 						theLogicalSystemBlock.getStatechart().getStatechartDiagram();
@@ -956,7 +948,7 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
 }
 
 /**
- * Copyright (C) 2016  MBSE Training and Consulting Limited (www.executablembse.com)
+ * Copyright (C) 2016-2017  MBSE Training and Consulting Limited (www.executablembse.com)
 
     Change history:
     #023 30-MAY-2016: Added form to support validation checks for analysis block hierarchy creation (F.J.Chadburn) 
@@ -980,6 +972,9 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
     #138 02-DEC-2016: Highlight Block when creating functional analysis structure (F.J.Chadburn)
     #139 02-DEC-2016: Improve robustness in block naming dialog when m_TestDriverNameTextField is null (F.J.Chadburn)
     #145 18-DEC-2016: Fix to remove warning with getWorkingPkgUnderDev unexpectedly finding 2 packages (F.J.Chadburn)
+    #179 29-MAY-2017: Added new Functional Analysis menu to Re-create «AutoShow» sequence diagram (F.J.Chadburn)
+    #184 29-MAY-2017: Create a connector between pElapsedTime port when creating block hierarchy (F.J.Chadburn)
+    #185 29-MAY-2017: Change Block hierarchy creation to use implicit not explicit names for parts (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 
