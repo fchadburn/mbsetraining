@@ -69,7 +69,7 @@ DLLServerCompatible8=1
 name9=MBSE Method: Requirements Analysis\Smart link: Start
 isPluginCommand9=1
 command9=InvokeRequirementsAnalysisHelper
-applicableTo9=State,Transition,Comment,AcceptEventAction,SendAction,AcceptTimeEvent,Constraint,Precondition,Postcondition,ControlFlow,Attribute,Operation,Event,UseCase,Requirement
+applicableTo9=State,Transition,Comment,AcceptEventAction,SendAction,AcceptTimeEvent,Constraint,Precondition,Postcondition,ControlFlow,Attribute,ValueProperty,Operation,Event,UseCase,Requirement
 isVisible9=1
 DLLServerCompatible9=1
 
@@ -92,6 +92,7 @@ DLLServerCompatible10=1
 #REM #109 06-NOV-2016: Added .properties support for localisation of menus (F.J.Chadburn)
 #REM #155 25-JAN-2017: Added new panel to find and delete Gateway Deleted_At_High_Level req'ts with Rhp 8.2 (F.J.Chadburn)
 #REM #163 05-FEB-2017: Add new menus to Smart link: Start and Smart link: End (F.J.Chadburn)
+#REM #178 29-MAY-2017: Update hep files so menus appear for ValueProperty (8.2) replacement of Attributes (F.J.Chadburn)
 #REM
 #REM This file is part of SysMLHelperPlugin.
 #REM

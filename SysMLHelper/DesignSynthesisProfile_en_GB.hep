@@ -1,5 +1,5 @@
 [Helpers]
-numberOfElements=3
+numberOfElements=4
 
 #REM: Definition of the plug-in
 name1=InvokeDesignSynthesisHelper
@@ -25,12 +25,21 @@ applicableTo3=Attribute,ValueProperty
 isVisible3=1
 DLLServerCompatible3=1
 
-#REM Copyright (C) 2016  MBSE Training and Consulting Limited (www.executablembse.com)
+#REM: Add pop-up menu
+name4=MBSE Method: Design Synthesis\Delete attribute and related elements
+isPluginCommand4=1
+command4=InvokeDesignSynthesisHelper
+applicableTo4=Attribute,ValueProperty
+isVisible4=1
+DLLServerCompatible4=1
+
+#REM Copyright (C) 2016-2017  MBSE Training and Consulting Limited (www.executablembse.com)
 #REM
 #REM Change history:
 #REM #021 30-MAY-2016: Added Copyright/History statements to the hep files (F.J.Chadburn)
 #REM #109 06-NOV-2016: Added .properties support for localisation of menus (F.J.Chadburn)
 #REM #164 15-FEB-2017: Fixed .hep for Publish/Subscribe flow ports to work with ValueProperty's in 8.2 (F.J.Chadburn)
+#REM #180 29-MAY-2017: Added new Design Synthesis menu to Delete attribute and related elements (F.J.Chadburn)
 #REM
 #REM This file is part of SysMLHelperPlugin.
 #REM

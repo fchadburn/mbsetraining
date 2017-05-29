@@ -289,3 +289,18 @@ UNDER DEV RELEASE 2.1.d (20-MAR-2017)
 ----------------------------------------------------------------------------------
 UNDER DEV RELEASE 2.1.e (02-APR-2017)
 ----------------------------------------------------------------------------------
+#178 29-MAY-2017: Update hep files so menus appear for ValueProperty (8.2) replacement of Attributes (F.J.Chadburn)
+#179 29-MAY-2017: Added new Functional Analysis menu to Re-create «AutoShow» sequence diagram (F.J.Chadburn)
+#180 29-MAY-2017: Added new Design Synthesis menu to Delete attribute and related elements (F.J.Chadburn)
+#181 29-MAY-2017: Replace dialog with Log message in cleanUpAutoRippleDependencies (F.J.Chadburn)
+#182 29-MAY-2017: Tweak to keep attribute selected after switching to publish or subscribe flow-port (F.J.Chadburn)
+#183 29-MAY-2017: Automatically add a pElapsedTime port and connection to the TestDriver (F.J.Chadburn)
+#184 29-MAY-2017: Create a connector between pElapsedTime port when creating block hierarchy (F.J.Chadburn)
+#185 29-MAY-2017: Change Block hierarchy creation to use implicit not explicit names for parts (F.J.Chadburn)
+#186 29-MAY-2017: Add context string to getBlockUnderDev to make it clearer for user when selecting (F.J.Chadburn)
+#187 29-MAY-2017: Provide option to re-create «AutoShow» sequence diagram when adding new actor (F.J.Chadburn)
+#188 29-MAY-2017: Tweak Derive downstream requirement to work on right-clicking reqt on IBD or UCD (F.J.Chadburn)
+#189 29-MAY-2017: Updated hep files so create event, attribute, or operations menus appear more widely (F.J.Chadburn)
+----------------------------------------------------------------------------------
+UNDER DEV RELEASE 2.1.f (29-MAY-2017)
+----------------------------------------------------------------------------------
