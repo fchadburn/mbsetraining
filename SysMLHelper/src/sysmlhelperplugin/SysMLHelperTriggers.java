@@ -73,7 +73,8 @@ public class SysMLHelperTriggers extends RPApplicationListener {
 					if( theOp == null ){
 						IRPClass theBlock = 
 								FunctionalAnalysisSettings.getBlockUnderDev(
-										modelElement.getProject() );
+										modelElement.getProject(),
+										"Which Block do you want to add operation to:");
 
 						if (theBlock != null){
 							boolean answer = UserInterfaceHelpers.askAQuestion(
@@ -436,7 +437,8 @@ public class SysMLHelperTriggers extends RPApplicationListener {
     #130 25-NOV-2016: Improved consistency in handling of isPopulateOptionHidden and isPopulateWantedByDefault tags (F.J.Chadburn)
     #157 25-JAN-2017: Add additional protection to afterAddElement trigger for IRPCallOperation (F.J.Chadburn)
     #161 05-FEB-2017: Support nested diagram links in CallOperation description (F.J.Chadburn) 
-    
+    #186 29-MAY-2017: Add context string to getBlockUnderDev to make it clearer for user when selecting (F.J.Chadburn)
+
     This file is part of SysMLHelperPlugin.
 
     SysMLHelperPlugin is free software: you can redistribute it and/or modify
