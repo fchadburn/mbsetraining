@@ -260,9 +260,11 @@ public class GeneralHelpers {
 			Boolean isFullPathRequested){
 		
 		IRPModelElement theEl = null;
-		
+
 		List<String> nameList = new ArrayList<String>();
-		
+
+		nameList.add("Nothing");
+
 		for (int i = 0; i < inList.size(); i++) {
 			if (isFullPathRequested){
 				nameList.add(i, inList.get(i).getFullPathName());
@@ -270,12 +272,12 @@ public class GeneralHelpers {
 				nameList.add(i, inList.get(i).getName());
 			}
 		} 	
-		
+
 		Object[] options = nameList.toArray();
-	
-		 JDialog.setDefaultLookAndFeelDecorated(true);
-		 
-		 String selectedElementName = (String) JOptionPane.showInputDialog(
+
+		JDialog.setDefaultLookAndFeelDecorated(true);
+
+		String selectedElementName = (String) JOptionPane.showInputDialog(
 				null,
 				messageToDisplay,
 				"Input",
@@ -283,16 +285,22 @@ public class GeneralHelpers {
 				null,
 				options,
 				options[0]);
-		
-		int index = nameList.indexOf(selectedElementName);
-		
-		theEl = inList.get(index);
-		
-		Logger.writeLine(theEl, "was chosen");
-		
+
+		if( selectedElementName != null && 
+			!selectedElementName.equals("Nothing") ){
+
+			int index = nameList.indexOf(selectedElementName);
+			theEl = inList.get(index);
+			Logger.writeLine(theEl, "was chosen");
+
+		} else {
+			Logger.writeLine("'Nothing' was chosen by user");
+			theEl = null;
+		}
+
 		return theEl;
 	}
-	
+
 	public static void applyExistingStereotype(
 			String withTheName, 
 			IRPModelElement toTheEl){
@@ -458,7 +466,39 @@ public class GeneralHelpers {
 		
 		return theElement;
 	}
-	
+
+	public static IRPModelElement findNestedElementUnder( 
+			IRPClassifier theElement,
+			String withName,
+			String andMetaClass,
+			boolean isIncludeBases ){
+		
+		IRPModelElement theNestedElement = 
+				theElement.findNestedElement( withName, andMetaClass );
+		
+		if( theNestedElement == null && isIncludeBases ){
+			
+			@SuppressWarnings("unchecked")
+			List<IRPModelElement> theBaseClassifiers = 
+					theElement.getBaseClassifiers().toList();
+		
+			for( IRPModelElement theBaseClassifier : theBaseClassifiers ) {
+				
+				theNestedElement = findNestedElementUnder( 
+						(IRPClassifier) theBaseClassifier, 
+						withName, 
+						andMetaClass, 
+						isIncludeBases );
+				
+				if( theNestedElement != null ){
+					break;
+				}
+			}
+		}
+		
+		return theNestedElement;
+	}
+		
 	public static List<IRPModelElement> findElementsWithMetaClassAndName(
 			String theMetaClass, 
 			String andName, 
@@ -1092,6 +1132,71 @@ public class GeneralHelpers {
 		
 		return theElement;
 	}
+	
+	public static List<IRPLink> getLinksBetween(
+			IRPSysMLPort thePort,
+			IRPSysMLPort andThePort,
+			IRPClassifier inBuildingBlock ){
+		
+		List<IRPLink> theLinksBetween = 
+				new ArrayList<IRPLink>();
+	
+		@SuppressWarnings("unchecked")
+		List<IRPLink> theExistingLinks = inBuildingBlock.getLinks().toList();
+		
+		for( IRPLink theExistingLink : theExistingLinks ){
+		
+			IRPSysMLPort fromSysMLPort = theExistingLink.getFromSysMLPort();
+			IRPSysMLPort toSysMLPort = theExistingLink.getToSysMLPort();
+		
+			boolean fromLinkFound = 
+					( fromSysMLPort != null && thePort.equals( fromSysMLPort ) ) &&
+					( toSysMLPort != null && andThePort.equals( toSysMLPort ) );
+
+			boolean toLinkFound = 
+					( fromSysMLPort != null && andThePort.equals( fromSysMLPort ) ) &&
+					( toSysMLPort != null && thePort.equals( toSysMLPort ) );
+
+			if( fromLinkFound || toLinkFound ){
+								
+				theLinksBetween.add( theExistingLink );
+			}
+		}
+		
+		Logger.writeLine("getLinksBetween " + Logger.elementInfo( thePort ) + " has found " + 
+				theLinksBetween.size() + " matches");
+		
+		return theLinksBetween;
+	}
+
+	public static void AddConnectorBetweenSysMLPortsIfOneDoesntExist(
+			IRPSysMLPort theSrcPort,
+			IRPInstance theSrcPart, 
+			IRPSysMLPort theTgtPort,
+			IRPInstance theTgtPart) {
+		
+		IRPClass theAssemblyBlock = (IRPClass) theSrcPart.getOwner();
+		
+		// only add if one does not already exist
+		if( getLinksBetween(
+				theSrcPort, 
+				theTgtPort, 
+				theAssemblyBlock ).size() == 0 ){
+
+			IRPPackage thePkg = (IRPPackage) theAssemblyBlock.getOwner();
+
+			IRPLink theLink = thePkg.addLinkBetweenSYSMLPorts(
+					theSrcPart, 
+					theTgtPart, 
+					null, 
+					theSrcPort, 
+					theTgtPort );
+
+			theLink.changeTo("connector");
+			theLink.setOwner( theAssemblyBlock );
+
+		}
+	}
 }
 
 /**
@@ -1125,7 +1230,8 @@ public class GeneralHelpers {
     #160 25-JAN-2017: Minor fixes to code found during development (F.J.Chadburn)
     #163 05-FEB-2017: Add new menus to Smart link: Start and Smart link: End (F.J.Chadburn)
     #171 08-MAR-2017: Added some dormant ops to GeneralHelpers to assist with 3rd party integration (F.J.Chadburn)
-    
+    #184 29-MAY-2017: Create a connector between pElapsedTime port when creating block hierarchy (F.J.Chadburn)
+
     This file is part of SysMLHelperPlugin.
 
     SysMLHelperPlugin is free software: you can redistribute it and/or modify
