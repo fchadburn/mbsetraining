@@ -311,7 +311,7 @@ public class GeneralHelpers {
 		
 		if (theStereotype != null){
 			toTheEl.setStereotype(theStereotype);
-			Logger.writeLine(theStereotype, "was applied to " + Logger.elementInfo(toTheEl));
+			//Logger.writeLine(theStereotype, "was applied to " + Logger.elementInfo(toTheEl));
 		} else {
 			Logger.writeLine("Warning: Unable to find a stereotype with name " + withTheName + " in applyExistingStereotype");
 		}
@@ -1050,7 +1050,7 @@ public class GeneralHelpers {
 				} else {
 					Logger.writeLine( "Warning, in getExistingCheckOp() for " + 
 							Logger.elementInfo( forTheAttribute ) + ":" + Logger.elementInfo( theEl ) + 
-							"was found based on «AutoRipple» dependency" );	
+							" was found based on «AutoRipple» dependency" );	
 					
 					Logger.writeLine("However, it is incorrectly owned by " + Logger.elementInfo( theElementsOwner ) + 
 							" hence relation needs to be deleted");
@@ -1163,7 +1163,8 @@ public class GeneralHelpers {
 			}
 		}
 		
-		Logger.writeLine("getLinksBetween " + Logger.elementInfo( thePort ) + " has found " + 
+		Logger.writeLine("getLinksBetween " + Logger.elementInfo( thePort ) + " and " +
+				Logger.elementInfo( andThePort ) + " has found " + 
 				theLinksBetween.size() + " matches");
 		
 		return theLinksBetween;
@@ -1177,12 +1178,17 @@ public class GeneralHelpers {
 		
 		IRPClass theAssemblyBlock = (IRPClass) theSrcPart.getOwner();
 		
-		// only add if one does not already exist
-		if( getLinksBetween(
+		List<IRPLink> theLinks = getLinksBetween(
 				theSrcPort, 
 				theTgtPort, 
-				theAssemblyBlock ).size() == 0 ){
+				theAssemblyBlock );
+		
+		// only add if one does not already exist
+		if( theLinks.size() == 0 ){
 
+			Logger.writeLine( "Adding a new connector between " + Logger.elementInfo( theSrcPort ) + 
+					" and " + Logger.elementInfo( theTgtPort ) + " as one does not exist" ); 
+			
 			IRPPackage thePkg = (IRPPackage) theAssemblyBlock.getOwner();
 
 			IRPLink theLink = thePkg.addLinkBetweenSYSMLPorts(
@@ -1194,8 +1200,9 @@ public class GeneralHelpers {
 
 			theLink.changeTo("connector");
 			theLink.setOwner( theAssemblyBlock );
-
 		}
+		
+		Logger.writeLine("Done");
 	}
 }
 
