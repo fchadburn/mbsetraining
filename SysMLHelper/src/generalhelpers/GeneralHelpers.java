@@ -1200,9 +1200,8 @@ public class GeneralHelpers {
 
 			theLink.changeTo("connector");
 			theLink.setOwner( theAssemblyBlock );
+
 		}
-		
-		Logger.writeLine("Done");
 	}
 }
 
@@ -1238,6 +1237,7 @@ public class GeneralHelpers {
     #163 05-FEB-2017: Add new menus to Smart link: Start and Smart link: End (F.J.Chadburn)
     #171 08-MAR-2017: Added some dormant ops to GeneralHelpers to assist with 3rd party integration (F.J.Chadburn)
     #184 29-MAY-2017: Create a connector between pElapsedTime port when creating block hierarchy (F.J.Chadburn)
+    #202 05-JUN-2017: Minor changes to logging in GeneralHelpers (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 
