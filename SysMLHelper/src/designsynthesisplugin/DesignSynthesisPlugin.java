@@ -79,13 +79,15 @@ public class DesignSynthesisPlugin extends RPUserPlugin {
 
 			} else if (menuItem.equals(m_configSettings.getString("designsynthesisplugin.DeleteAttributeAndRelatedElementsMenu"))){
 				
-				if( theSelectedEl instanceof IRPAttribute ){
-					try {
+				try {
+					if( theSelectedEl instanceof IRPAttribute ){
 						PortCreator.deleteAttributeAndRelatedEls( (IRPAttribute) theSelectedEl );
-						
-					} catch (Exception e) {
-						Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking PortCreator.deleteAttributeAndRelatedEls");
+					} else if ( theSelectedEl instanceof IRPSysMLPort ){
+						PortCreator.deleteFlowPortAndRelatedEls( (IRPSysMLPort) theSelectedEl );
 					}
+
+				} catch (Exception e) {
+					Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking designsynthesisplugin.DeleteAttributeAndRelatedElementsMenu");
 				}
 
 			} else {
@@ -124,6 +126,7 @@ public class DesignSynthesisPlugin extends RPUserPlugin {
     #109 06-NOV-2016: Added .properties support for localisation of menus (F.J.Chadburn)
     #110 06-NOV-2016: PluginVersion now comes from Config.properties file, rather than hard wired (F.J.Chadburn)
     #180 29-MAY-2017: Added new Design Synthesis menu to Delete attribute and related elements (F.J.Chadburn)
+    #192 05-JUN-2017: Widened DeleteAttributeAndRelatedElementsMenu support to work with flow-ports as well (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

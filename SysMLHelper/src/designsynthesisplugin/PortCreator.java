@@ -129,9 +129,8 @@ public class PortCreator {
 		if( thePort == null ){
 			Logger.writeLine( "Creating an flowport for " + Logger.elementInfo( theAttribute ) + " called " + theDesiredPortName );
 			thePort = (IRPSysMLPort) theAttribute.getOwner().addNewAggr( "FlowPort", theDesiredPortName );
-			IRPDependency theAutoRippleDependency = theAttribute.addDependencyTo( thePort );
-			theAutoRippleDependency.addStereotype( "AutoRipple", "Dependency" );
-			
+			TraceabilityHelper.addStereotypedDependencyIfOneDoesntExist( theAttribute, thePort, "AutoRipple" );
+						
 		} else if( !thePort.getName().equals( theDesiredPortName ) ){ // does port require renaming?
 			
 			Logger.writeLine( "Renaming " + Logger.elementInfo( thePort ) + " to " + theDesiredPortName );
@@ -159,6 +158,30 @@ public class PortCreator {
 		}
 	}
 
+	public static void deleteFlowPortAndRelatedEls(
+			IRPSysMLPort theFlowPort ){
+		
+		@SuppressWarnings("unchecked")
+		List<IRPModelElement> theReferences = theFlowPort.getReferences().toList();
+		
+		for( IRPModelElement theReference : theReferences ){
+			
+			if( theReference instanceof IRPDependency && 
+				GeneralHelpers.hasStereotypeCalled( "AutoRipple", theReference ) ){
+				
+				IRPDependency theDependency = (IRPDependency)theReference;
+				IRPModelElement theDependent = theDependency.getDependent();
+				
+				if( theDependent instanceof IRPAttribute ){
+					deleteAttributeAndRelatedEls( (IRPAttribute) theDependent );
+				} else {
+					UserInterfaceHelpers.showWarningDialog( 
+							"Unable to delete as " + Logger.elementInfo( theFlowPort ) + " has no related attribute" );
+				}
+			}
+		}
+	}
+	
 	public static void deleteAttributeAndRelatedEls(
 			IRPAttribute theAttribute ){
 	
@@ -191,12 +214,24 @@ public class PortCreator {
 		
 			for( IRPModelElement theRelatedEl : theRelatedEls ){
 				Logger.writeLine( "Deleting " + Logger.elementInfo( theRelatedEl ) + " from the project" );
-				theRelatedEl.deleteFromProject();
+
+				try {
+					theRelatedEl.deleteFromProject();
+
+				} catch (Exception e) {
+					Logger.writeLine("Exception in deleteAttributeAndRelatedEls, trying to delete " + Logger.elementInfo( theRelatedEl ) + " failed");
+				}
 			}
-			
+
 			Logger.writeLine( "Deleting " + Logger.elementInfo( theAttribute ) + " from the project" );
 			theAttribute.getOwner().highLightElement();
-			theAttribute.deleteFromProject();
+
+			try {
+				theAttribute.deleteFromProject();
+
+			} catch (Exception e) {
+				Logger.writeLine("Exception in deleteAttributeAndRelatedEls, trying to delete attribute failed");
+			}			
 		}	
 	}
 	
@@ -212,36 +247,37 @@ public class PortCreator {
 
 			IRPModelElement theDependsOn = theDependency.getDependsOn();
 
-			if( theDependsOn != null && theDependsOn instanceof IRPModelElement ){
+			if( theDependsOn != null && 
+				theDependsOn instanceof IRPModelElement &&
+				GeneralHelpers.hasStereotypeCalled( "AutoRipple", theDependency ) ){
 
-				if( GeneralHelpers.hasStereotypeCalled( 
-						"AutoRipple", theDependency ) ){
+				IRPModelElement theElementOwner = theDependsOn.getOwner();
+				IRPModelElement theAttributeOwner = theAttribute.getOwner();
 
-					IRPModelElement theElementOwner = theDependsOn.getOwner();
-					IRPModelElement theAttributeOwner = theAttribute.getOwner();
+				boolean isCheckOperation = 
+						theDependsOn instanceof IRPOperation && theDependsOn.getName().contains( "check" );
 
-					boolean isCheckOperation = 
-							theDependsOn instanceof IRPOperation && theDependsOn.getName().contains( "check" );
+				boolean isReception =
+						theDependsOn.getUserDefinedMetaClass().equals( "Reception" );
 
-					boolean isReception =
-							theDependsOn.getUserDefinedMetaClass().equals( "Reception" );
-					
-					boolean isFlowPort =
-							theDependsOn instanceof IRPSysMLPort;
+				boolean isFlowPort =
+						theDependsOn instanceof IRPSysMLPort;
 
-					if( isCheckOperation || isReception || isFlowPort ){
-						
-						if( !theElementOwner.equals( theAttributeOwner ) ){
+				boolean isTransition =
+						theDependsOn instanceof IRPTransition;
 
-							Logger.writeLine( "Detected a need to delete the «AutoRipple» dependency to " + Logger.elementInfo( theDependsOn ) + 
-									" owned by " + Logger.elementInfo( theElementOwner ) + ", as it is not owned by " + 
-									Logger.elementInfo( theAttributeOwner ) );
+				if( isCheckOperation || isReception || isFlowPort || isTransition ){
 
-							dependenciesToDelete.add( theDependency );
-							theDependency.highLightElement();
-						} else {
-							Logger.writeLine( theDependsOn, "was found based on «AutoRipple» dependency");
-						}
+					if( !theElementOwner.equals( theAttributeOwner ) ){
+
+						Logger.writeLine( "Detected a need to delete the «AutoRipple» dependency to " + Logger.elementInfo( theDependsOn ) + 
+								" owned by " + Logger.elementInfo( theElementOwner ) + ", as it is not owned by " + 
+								Logger.elementInfo( theAttributeOwner ) );
+
+						dependenciesToDelete.add( theDependency );
+						theDependency.highLightElement();
+					} else {
+						Logger.writeLine( theDependsOn, "was found based on «AutoRipple» dependency");
 					}
 				}	
 			}
@@ -294,6 +330,8 @@ public class PortCreator {
     #180 29-MAY-2017: Added new Design Synthesis menu to Delete attribute and related elements (F.J.Chadburn)
     #181 29-MAY-2017: Replace dialog with Log message in cleanUpAutoRippleDependencies (F.J.Chadburn)
     #182 29-MAY-2017: Tweak to keep attribute selected after switching to publish or subscribe flow-port (F.J.Chadburn)
+    #192 05-JUN-2017: Widened DeleteAttributeAndRelatedElementsMenu support to work with flow-ports as well (F.J.Chadburn)
+    #193 05-JUN-2017: Added Transitions to «AutoRipple» list so they're also cleaned up when attribute is deleted (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 
