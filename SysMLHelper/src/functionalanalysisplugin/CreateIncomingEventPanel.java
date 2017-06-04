@@ -2,12 +2,15 @@ package functionalanalysisplugin;
 
 import generalhelpers.GeneralHelpers;
 import generalhelpers.Logger;
+import generalhelpers.StatechartHelpers;
+import generalhelpers.TraceabilityHelper;
 import generalhelpers.UserInterfaceHelpers;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -33,7 +36,7 @@ public class CreateIncomingEventPanel extends CreateTracedElementPanel {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-
+	
 	private JCheckBox m_EventActionIsNeededCheckBox;
 	private JCheckBox m_CreateSendEvent;
 	private JCheckBox m_CreateSendEventViaPanel;
@@ -47,6 +50,37 @@ public class CreateIncomingEventPanel extends CreateTracedElementPanel {
 	private IRPActor m_SourceActor;
 	private IRPPort m_SourceActorPort;
 	
+	public static void main(String[] args) {
+		IRPApplication theRhpApp = RhapsodyAppServer.getActiveRhapsodyApplication();
+		
+		IRPProject theActiveProject = theRhpApp.activeProject();
+		
+		@SuppressWarnings("unchecked")
+		List<IRPGraphElement> theSelectedGraphEls = theRhpApp.getSelectedGraphElements().toList();
+		IRPModelElement theSelectedEl = theRhpApp.getSelectedElement();
+		
+		if( theSelectedGraphEls.isEmpty() && ( 
+				theSelectedEl instanceof IRPClass ||
+				theSelectedEl instanceof IRPInstance ||
+				theSelectedEl instanceof IRPDiagram ) ){
+			
+			Set<IRPRequirement> theReqts = new HashSet<IRPRequirement>();
+			
+			CreateIncomingEventPanel.launchThePanel( 
+					null,
+					theSelectedEl, 
+					theReqts, 
+					theActiveProject );
+			
+		} else if (!theSelectedGraphEls.isEmpty()){
+			try {
+				CreateIncomingEventPanel.createIncomingEventsFor( theActiveProject, theSelectedGraphEls );
+
+			} catch (Exception e) {
+				Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking OperationCreator.createIncomingEventsFor");
+			}
+		}
+	}
 	public static void createIncomingEventsFor(
 			IRPProject theActiveProject,
 			List<IRPGraphElement> theSelectedGraphEls) {
@@ -93,7 +127,11 @@ public class CreateIncomingEventPanel extends CreateTracedElementPanel {
 		m_SourceActorPort = theSourceActorPort;
 		m_PackageForEvent = thePackageForEvent;
 		
-		final String theSourceText = GeneralHelpers.getActionTextFrom( m_SourceGraphElement.getModelObject() );	
+		String theSourceText = GeneralHelpers.getActionTextFrom( m_SourceGraphElement.getModelObject() );	
+		
+		if( theSourceText.isEmpty() ){
+			theSourceText = m_Tbd;
+		}
 		
 		Logger.writeLine("CreateIncomingEventPanel constructor (1) called with text '" + theSourceText + "'");
 		
@@ -190,7 +228,11 @@ public class CreateIncomingEventPanel extends CreateTracedElementPanel {
 		m_SourceActorPort = null;
 		m_PackageForEvent = thePackageForEvent;
 		
-		final String theSourceText = GeneralHelpers.getActionTextFrom( m_SourceGraphElement.getModelObject() );	
+		String theSourceText = GeneralHelpers.getActionTextFrom( m_SourceGraphElement.getModelObject() );	
+		
+		if( theSourceText.isEmpty() ){
+			theSourceText = m_Tbd;
+		}
 		
 		Logger.writeLine("CreateIncomingEventPanel constructor (2) called with text '" + theSourceText + "'");
 		
@@ -285,7 +327,7 @@ public class CreateIncomingEventPanel extends CreateTracedElementPanel {
 		m_SourceActorPort = theSourceActorPort;
 		m_PackageForEvent = thePackageForEvent;
 		
-		String theSourceText = "Tbd";
+		String theSourceText = m_Tbd;
 		
 		if( forModelElement instanceof IRPAttribute ){
 			theSourceText = forModelElement.getName();
@@ -317,14 +359,7 @@ public class CreateIncomingEventPanel extends CreateTracedElementPanel {
 			
 		} else {			
 			
-			boolean isPopulate = 
-					FunctionalAnalysisSettings.getIsPopulateWantedByDefault(
-							thePackageForEvent.getProject() );
-			
-			m_EventActionIsNeededCheckBox = new JCheckBox("Populate on diagram?");
-			m_EventActionIsNeededCheckBox.setVisible( true );
-			m_EventActionIsNeededCheckBox.setSelected( isPopulate );
-			
+			setupPopulateCheckbox( m_EventActionIsNeededCheckBox );			
 			thePageStartPanel.add( m_EventActionIsNeededCheckBox );
 		}
 		
@@ -378,7 +413,7 @@ public class CreateIncomingEventPanel extends CreateTracedElementPanel {
 		
 		if ( forModelElement instanceof IRPAttribute ){
 			m_AttributeNamePanel = new JPanel();
-			m_AttributeNamePanel.setLayout( new BoxLayout(m_AttributeNamePanel, BoxLayout.X_AXIS ) );	
+			m_AttributeNamePanel.setLayout( new BoxLayout( m_AttributeNamePanel, BoxLayout.X_AXIS ) );	
 
 			m_CreateAttributeLabel = new JLabel("Use the attribute called:  ");
 			m_CreateAttributeLabel.setEnabled(false);
@@ -395,7 +430,7 @@ public class CreateIncomingEventPanel extends CreateTracedElementPanel {
 			}
 			
 			m_AttributeNamePanel.add( m_AttributeNameTextField );
-			m_AttributeNamePanel.setAlignmentX(LEFT_ALIGNMENT);
+			m_AttributeNamePanel.setAlignmentX( LEFT_ALIGNMENT );
 			
 		} else {
 			
@@ -405,7 +440,7 @@ public class CreateIncomingEventPanel extends CreateTracedElementPanel {
 							"Attribute", 
 							onTargetBlock ) );
 			
-			m_AttributeNamePanel.setAlignmentX(LEFT_ALIGNMENT);
+			m_AttributeNamePanel.setAlignmentX( LEFT_ALIGNMENT );
 		}
 		
 		theCenterPanel.add( m_AttributeNamePanel );
@@ -509,10 +544,15 @@ public class CreateIncomingEventPanel extends CreateTracedElementPanel {
 		
 					if( theActor != null && theActor instanceof IRPActor ){
 						
-						final IRPClass theChosenBlock = 
-								FunctionalAnalysisSettings.getBlockUnderDev( inProject, "Which Block do you want to add the Event to?" );
+						IRPClass theBlock = getBlock( 
+								theSourceGraphElement, 
+								orTheModelElement, 
+								inProject,
+								"Which Block do you want to add the Event to?" );
 		
-						if( theChosenBlock != null ){
+						if( theBlock != null ){
+							
+							final IRPClass theChosenBlock = theBlock;
 							
 							IRPPort thePort = GeneralHelpers.getPortThatConnects(
 									(IRPActor)theActor, 
@@ -747,7 +787,7 @@ public class CreateIncomingEventPanel extends CreateTracedElementPanel {
 		
 		if (theStatechart != null){
 			
-			IRPState theReadyState = getStateCalled("Ready", theStatechart, onTheActor);
+			IRPState theReadyState = StatechartHelpers.getStateCalled("Ready", theStatechart, onTheActor);
 			
 			if (theReadyState != null){
 				
@@ -803,7 +843,7 @@ public class CreateIncomingEventPanel extends CreateTracedElementPanel {
 		
 		if (theStatechart != null){
 			
-			IRPState theReadyState = getStateCalled("Ready", theStatechart, onTheActor);
+			IRPState theReadyState = StatechartHelpers.getStateCalled("Ready", theStatechart, onTheActor);
 			
 			if (theReadyState != null){
 				
@@ -849,52 +889,6 @@ public class CreateIncomingEventPanel extends CreateTracedElementPanel {
 		return sendEvent;
 	}
 	
-	private IRPState getStateCalled(
-			String theName, 
-			IRPStatechart inTheDiagram, 
-			IRPModelElement ownedByEl){
-		
-		@SuppressWarnings("unchecked")
-		List<IRPModelElement> theElsInDiagram = inTheDiagram.getElementsInDiagram().toList();
-		
-		IRPState theState = null;
-		
-		int count = 0;
-		
-		for (IRPModelElement theEl : theElsInDiagram) {
-			
-			if (theEl instanceof IRPState 
-					&& theEl.getName().equals(theName)
-					&& getOwningClassifierFor(theEl).equals(ownedByEl)){
-				
-				Logger.writeLine("Found state called " + theEl.getName() + " owned by " + theEl.getOwner().getFullPathName());
-				
-				theState = (IRPState) theEl;
-				count++;
-			}
-		}
-		
-		if (count != 1){
-			Logger.writeLine("Warning in getStateCalled (" + count + ") states called " + theName + " were found");
-		}
-		
-		return theState;
-	}
-	
-	private IRPModelElement getOwningClassifierFor(
-			IRPModelElement theState){
-		
-		IRPModelElement theOwner = theState.getOwner();
-		
-		while (theOwner.getMetaClass().equals("State") || theOwner.getMetaClass().equals("Statechart")){
-			theOwner = theOwner.getOwner();
-		}
-		
-		Logger.writeLine("The owner for " + Logger.elementInfo(theState) + " is " + Logger.elementInfo(theOwner));
-			
-		return theOwner;
-	}	
-	
 	private void addSetAttributeTransitionToMonitoringStateFor(
 			IRPAttribute theAttribute, 
 			String triggeredByTheEventName, 
@@ -903,7 +897,7 @@ public class CreateIncomingEventPanel extends CreateTracedElementPanel {
 		IRPStatechart theStatechart = theOwnerOfStatechart.getStatechart();
 
 		IRPState theMonitoringState = 
-				getStateCalled("MonitoringConditions", theStatechart, theOwnerOfStatechart);
+				StatechartHelpers.getStateCalled("MonitoringConditions", theStatechart, theOwnerOfStatechart);
 
 		if (theMonitoringState != null){
 			Logger.writeLine(theMonitoringState, "found");
@@ -915,7 +909,7 @@ public class CreateIncomingEventPanel extends CreateTracedElementPanel {
 
 			Logger.writeLine(theTransition, "was added");	
 
-			IRPGraphElement theGraphEl = findGraphEl(theOwnerOfStatechart, "MonitoringConditions");
+			IRPGraphElement theGraphEl = StatechartHelpers.findGraphEl(theOwnerOfStatechart, "MonitoringConditions");
 
 			if (theGraphEl != null){
 				IRPDiagram theGraphElDiagram = theGraphEl.getDiagram();
@@ -946,43 +940,6 @@ public class CreateIncomingEventPanel extends CreateTracedElementPanel {
 		}
 	}
 	
-	private IRPGraphElement findGraphEl(
-			IRPClassifier theClassifier, 
-			String withTheName) {
-		
-		IRPGraphElement theFoundGraphEl = null;
-		
-		@SuppressWarnings("unchecked")
-		List<IRPStatechartDiagram> theStatechartDiagrams = 
-				theClassifier.getStatechart().getNestedElementsByMetaClass("StatechartDiagram", 1).toList();
-		
-		for (IRPStatechartDiagram theStatechartDiagram : theStatechartDiagrams) {
-			
-			Logger.writeLine(theStatechartDiagram, "was found owned by " + Logger.elementInfo(theClassifier));
-			
-			@SuppressWarnings("unchecked")
-			List<IRPGraphElement> theGraphEls = theStatechartDiagram.getGraphicalElements().toList();
-			
-			for (IRPGraphElement theGraphEl : theGraphEls) {
-				
-				IRPModelElement theEl = theGraphEl.getModelObject();
-				
-				if (theEl != null){
-					Logger.writeLine("Found " + theEl.getMetaClass() + " called " + theEl.getName());
-					
-					if (theEl.getName().equals(withTheName)){
-						
-						Logger.writeLine("Success, found GraphEl called " + withTheName + " in statechart for " + Logger.elementInfo(theClassifier));
-						theFoundGraphEl = theGraphEl;
-						break;
-					}
-				}
-			}
-		}
-		
-		return theFoundGraphEl;
-	}
-
 	@Override
 	protected boolean checkValidity(
 			boolean isMessageEnabled) {
@@ -1021,7 +978,8 @@ public class CreateIncomingEventPanel extends CreateTracedElementPanel {
 			
 			if (theStatechart != null){
 				IRPState theMonitoringState = 
-						getStateCalled("MonitoringConditions", theStatechart, m_TargetOwningElement);
+						StatechartHelpers.getStateCalled( 
+								"MonitoringConditions", theStatechart, m_TargetOwningElement );
 				
 				if (theMonitoringState==null){
 					errorMessage = "You selected to update an attribute with an event. The Block has a statechart but for this to work the owning block needs to have a statechart with a MonitoringConditions \n" +
@@ -1133,28 +1091,24 @@ public class CreateIncomingEventPanel extends CreateTracedElementPanel {
 					}
 				}
 
+				IRPAttribute theAttribute = null;
+
 				if ( m_AttributeCheckBox.isSelected() && 
 						m_TargetOwningElement instanceof IRPClassifier){
 					
 					IRPClassifier theClassifier = (IRPClassifier) m_TargetOwningElement;
-					
-					IRPAttribute theAttribute;
 					
 					if (m_SourceModelElement != null && m_SourceModelElement instanceof IRPAttribute){
 						
 						theAttribute = (IRPAttribute)m_SourceModelElement;
 						
 					} else {
-						theAttribute = theClassifier.addAttribute(
-								m_AttributeNameTextField.getText() );
-						
-						theAttribute.setDefaultValue("0");
-						addTraceabilityDependenciesTo( theAttribute, selectedReqtsList );
-						theAttribute.highLightElement();
+						theAttribute = addAttributeTo(
+								theClassifier, m_AttributeNameTextField.getText(), "0", selectedReqtsList );
 					}
 					
-					IRPDependency theAutoRippleDependency = theAttribute.addDependencyTo( theReception );
-					theAutoRippleDependency.addStereotype("AutoRipple", "Dependency");
+					TraceabilityHelper.addStereotypedDependencyIfOneDoesntExist(
+							theAttribute, theReception, "AutoRipple" );
 
 					if( m_CreateSendEventViaPanel.isSelected() ){
 						
@@ -1179,7 +1133,6 @@ public class CreateIncomingEventPanel extends CreateTracedElementPanel {
 						addTraceabilityDependenciesTo( theCheckOp, selectedReqtsList);	
 						theCheckOp.highLightElement();
 					}
-
 					
 					addSetAttributeTransitionToMonitoringStateFor(
 							theAttribute, theEvent.getName(), theClassifier );
@@ -1193,7 +1146,13 @@ public class CreateIncomingEventPanel extends CreateTracedElementPanel {
 					populateReceiveEventActionOnDiagram( theEvent );
 				}
 				
-				theEvent.highLightElement();
+				if( theAttribute != null ){
+					
+					// highlight the attribute so that it can be made a publish flow-port next, if needed
+					theAttribute.highLightElement();
+				} else {
+					theEvent.highLightElement();			
+				}
 				
 			} else {
 				Logger.writeLine( "Error in CreateIncomingEventPanel.performAction, checkValidity returned false" );
@@ -1208,48 +1167,50 @@ public class CreateIncomingEventPanel extends CreateTracedElementPanel {
 		
 		IRPApplication theRhpApp = FunctionalAnalysisPlugin.getRhapsodyApp();		
 
-		IRPDiagram theDiagram = null;
-		
-		if( m_SourceModelElement instanceof IRPDiagram){
+		if( m_SourceGraphElementDiagram != null ){
 			
-			theDiagram = (IRPDiagram) m_SourceModelElement;
-		} else {
-			theDiagram = m_SourceGraphElement.getDiagram();
-		}
-		
-		if( theDiagram instanceof IRPActivityDiagram ){
+			if( m_SourceGraphElementDiagram instanceof IRPActivityDiagram ){
+				IRPActivityDiagram theAD = (IRPActivityDiagram)m_SourceGraphElementDiagram;
 
-			IRPActivityDiagram theAD = (IRPActivityDiagram)theDiagram;
+				IRPFlowchart theFlowchart = theAD.getFlowchart();
 
-			IRPFlowchart theFlowchart = theAD.getFlowchart();
+				IRPAcceptEventAction theAcceptEvent = 
+						(IRPAcceptEventAction) theFlowchart.addNewAggr(
+								"AcceptEventAction", theEvent.getName() );
 
-			IRPAcceptEventAction theAcceptEvent = 
-					(IRPAcceptEventAction) theFlowchart.addNewAggr(
-							"AcceptEventAction", theEvent.getName() );
+				theAcceptEvent.setEvent( theEvent );			
+				
+				theFlowchart.addNewNodeForElement( 
+						theAcceptEvent, getSourceElementX(), getSourceElementY(), 300, 40 );
 
-			theAcceptEvent.setEvent( theEvent );			
-			theFlowchart.addNewNodeForElement( theAcceptEvent, getSourceElementX(), getSourceElementY(), 300, 40 );
+				theAcceptEvent.highLightElement();
+				
+			} else if( m_SourceGraphElementDiagram instanceof IRPObjectModelDiagram ){				
 
-			theRhpApp.highLightElement( theAcceptEvent );
+				IRPObjectModelDiagram theOMD = (IRPObjectModelDiagram)m_SourceGraphElementDiagram;
 
-		} else if( theDiagram instanceof IRPObjectModelDiagram ){				
+				IRPGraphNode theEventNode = theOMD.addNewNodeForElement(
+						theEvent, getSourceElementX() + 50, getSourceElementY() + 50, 300, 40 );	
 
-			IRPObjectModelDiagram theOMD = (IRPObjectModelDiagram)theDiagram;
+				if( m_SourceGraphElement != null ){
+					
+					IRPCollection theGraphElsToDraw = theRhpApp.createNewCollection();
+					
+					theGraphElsToDraw.addGraphicalItem( m_SourceGraphElement );
+					theGraphElsToDraw.addGraphicalItem( theEventNode );
 
-			IRPGraphNode theEventNode = theOMD.addNewNodeForElement(theEvent, getSourceElementX() + 50, getSourceElementY() + 50, 300, 40);	
+					theOMD.completeRelations( theGraphElsToDraw, 1 );
+				}
 
-			if( m_SourceGraphElement != null ){
-				IRPCollection theGraphElsToDraw = theRhpApp.createNewCollection();
-				theGraphElsToDraw.addGraphicalItem( m_SourceGraphElement );
-				theGraphElsToDraw.addGraphicalItem( theEventNode );
+				theEvent.highLightElement();
 
-				theOMD.completeRelations( theGraphElsToDraw, 1 );
+			} else {
+				Logger.writeLine( "Error in populateReceiveEventActionOnDiagram, m_SourceGraphElement is not a supported diagram" );
 			}
-
-			theRhpApp.highLightElement( theEvent );
-
+			
 		} else {
-			Logger.writeLine( "Error in CreateOperationPanel.performAction, expected an IRPActivityDiagram" );
+		
+			Logger.writeLine( "Error in populateReceiveEventActionOnDiagram, m_SourceGraphElement is null when value was expected" );
 		}
 	}
 }
@@ -1284,6 +1245,12 @@ public class CreateIncomingEventPanel extends CreateTracedElementPanel {
     #127 25-NOV-2016: Improved usability of ViaPanel event creation by enabling default selection via tags (F.J.Chadburn)
     #132 25-NOV-2016: Added "Unable to find a port that connects" warning to CreateIncomingEventPanel (F.J.Chadburn)
     #186 29-MAY-2017: Add context string to getBlockUnderDev to make it clearer for user when selecting (F.J.Chadburn)
+    #196 05-JUN-2017: Enhanced create traced element dialogs to be context aware for blocks/parts (F.J.Chadburn)
+    #197 05-JUN-2017: Fix 8.2 issue in Incoming Event panel, create ValueProperty rather than attribute (F.J.Chadburn)
+    #198 05-JUN-2017: Support for adding MonitoringConditions transitions moved into shared StatechartHelpers (F.J.Chadburn)
+    #199 05-JUN-2017: Improved create event panel consistency to name event Tbd if no text provided (F.J.Chadburn)
+    #200 05-JUN-2017: Hide Populate on diagram check-boxes if context is not valid (F.J.Chadburn)
+    #201 05-JUN-2017: Highlight attribute post-event creation to ease potential for flow-port creation (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

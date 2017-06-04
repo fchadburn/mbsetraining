@@ -5,6 +5,7 @@ import generalhelpers.Logger;
 import generalhelpers.UserInterfaceHelpers;
 
 import java.awt.BorderLayout;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -25,6 +26,39 @@ public class CreateOperationPanel extends CreateTracedElementPanel {
 
 	private JCheckBox m_CallOperationIsNeededCheckBox;
 
+	public static void main(String[] args) {
+		
+		IRPApplication theRhpApp = RhapsodyAppServer.getActiveRhapsodyApplication();
+		IRPProject theActiveProject = theRhpApp.activeProject();
+		
+		@SuppressWarnings("unchecked")
+		List<IRPGraphElement> theSelectedGraphEls = 
+				theRhpApp.getSelectedGraphElements().toList();
+		
+		IRPModelElement theSelectedEl = theRhpApp.getSelectedElement();
+		
+		if( theSelectedGraphEls.isEmpty() && ( 
+				theSelectedEl instanceof IRPClass ||
+				theSelectedEl instanceof IRPInstance ||
+				theSelectedEl instanceof IRPDiagram ) ){
+			
+			Set<IRPRequirement> theReqts = new HashSet<IRPRequirement>();
+			
+			// only launch a dialog for non requirement elements
+			CreateOperationPanel.launchThePanel(
+					theSelectedEl, 
+					theReqts, 
+					theActiveProject );
+			
+		} else if (!theSelectedGraphEls.isEmpty()){
+			try {
+				CreateOperationPanel.createSystemOperationsFor( theActiveProject, theSelectedGraphEls );
+
+			} catch (Exception e) {
+				Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking OperationCreator.createSystemOperationsFor");
+			}
+		}
+	}
 	public static void createSystemOperationsFor(
 			IRPProject theActiveProject,
 			List<IRPGraphElement> theSelectedGraphEls) {
@@ -62,19 +96,6 @@ public class CreateOperationPanel extends CreateTracedElementPanel {
 		}
 	}
 	
-	public static void createSystemOperationFor(
-			IRPDiagram theDiagram, 
-			final Set<IRPRequirement> withReqtsAlsoAdded ){
-		
-		IRPProject theActiveProject = theDiagram.getProject();
-		
-		// only launch a dialog for non requirement elements
-		launchThePanel(	
-				theDiagram, 
-				withReqtsAlsoAdded, 
-				theActiveProject );
-	}
-	
 	public static void launchThePanel(
 			final IRPGraphElement selectedDiagramEl, 
 			final Set<IRPRequirement> withReqtsAlsoAdded,
@@ -84,21 +105,24 @@ public class CreateOperationPanel extends CreateTracedElementPanel {
 
 			@Override
 			public void run() {
-				IRPClassifier theLogicalSystemBlock = 
-						FunctionalAnalysisSettings.getBlockUnderDev( 
-								inProject, "Select Block to add operation to:" );
+				
+				IRPClass theBlock = getBlock( 
+						selectedDiagramEl, 
+						null, 
+						inProject,
+						"Which Block do you want to add the Operation to?" );
 				
 				JFrame.setDefaultLookAndFeelDecorated( true );
 				
 				JFrame frame = new JFrame(
-						"Create an operation on " + Logger.elementInfo( theLogicalSystemBlock ) );
+						"Create an operation on " + Logger.elementInfo( theBlock ) );
 				
 				frame.setDefaultCloseOperation( JFrame.DISPOSE_ON_CLOSE );
 				
 				CreateOperationPanel thePanel = new CreateOperationPanel(
 						selectedDiagramEl,
 						withReqtsAlsoAdded,
-						theLogicalSystemBlock );
+						theBlock );
 
 				frame.setContentPane( thePanel );
 				frame.pack();
@@ -117,21 +141,24 @@ public class CreateOperationPanel extends CreateTracedElementPanel {
 
 			@Override
 			public void run() {
-				IRPClassifier theLogicalSystemBlock = 
-						FunctionalAnalysisSettings.getBlockUnderDev( 
-								inProject, "Select Block to add operation to:" );
+				
+				IRPClass theBlock = getBlock( 
+						null, 
+						theModelElement, 
+						inProject,
+						"Which Block do you want to add the Operation to?" );
 				
 				JFrame.setDefaultLookAndFeelDecorated( true );
 				
 				JFrame frame = new JFrame(
-						"Create an operation on " + Logger.elementInfo( theLogicalSystemBlock ) );
+						"Create an operation on " + Logger.elementInfo( theBlock ) );
 				
 				frame.setDefaultCloseOperation( JFrame.DISPOSE_ON_CLOSE );
 				
 				CreateOperationPanel thePanel = new CreateOperationPanel(
 						theModelElement,
 						withReqtsAlsoAdded,
-						theLogicalSystemBlock );
+						theBlock );
 
 				frame.setContentPane( thePanel );
 				frame.pack();
@@ -304,6 +331,7 @@ public class CreateOperationPanel extends CreateTracedElementPanel {
     #130 25-NOV-2016: Improved consistency in handling of isPopulateOptionHidden and isPopulateWantedByDefault tags (F.J.Chadburn)
     #154 25-JAN-2017: Improved robustness by adding isLegalName check to CreateOperationPanel (F.J.Chadburn)
     #186 29-MAY-2017: Add context string to getBlockUnderDev to make it clearer for user when selecting (F.J.Chadburn)
+    #196 05-JUN-2017: Enhanced create traced element dialogs to be context aware for blocks/parts (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

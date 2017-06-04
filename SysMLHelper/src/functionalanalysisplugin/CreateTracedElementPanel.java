@@ -36,8 +36,10 @@ public abstract class CreateTracedElementPanel extends JPanel {
 	protected JTextField m_ChosenNameTextField = null;
 	protected IRPGraphElement m_SourceGraphElement = null;
 	protected IRPModelElement m_SourceModelElement = null;
+	protected IRPDiagram m_SourceGraphElementDiagram = null;
 	protected IRPProject m_Project = null;
-	
+	protected final String m_Tbd = "Tbd";
+
 	public CreateTracedElementPanel(
 			IRPGraphElement forSourceGraphElement, 
 			Set<IRPRequirement> withReqtsAlsoAdded,
@@ -50,7 +52,14 @@ public abstract class CreateTracedElementPanel extends JPanel {
 		m_SourceGraphElement = forSourceGraphElement;
 		m_SourceModelElement = m_SourceGraphElement.getModelObject();
 		m_Project = inProject;
-			
+		
+		if( m_SourceModelElement instanceof IRPDiagram ){
+			 
+			m_SourceGraphElementDiagram = (IRPDiagram) m_SourceModelElement;
+		} else {
+			m_SourceGraphElementDiagram = m_SourceGraphElement.getDiagram();
+		}
+		
 		setupRequirementsPanel( withReqtsAlsoAdded );
 	}
 
@@ -66,6 +75,10 @@ public abstract class CreateTracedElementPanel extends JPanel {
 		m_SourceGraphElement = null;
 		m_SourceModelElement = forSourceModelElement;
 		m_Project = inProject;
+
+		if( m_SourceModelElement instanceof IRPDiagram ){
+			m_SourceGraphElementDiagram = (IRPDiagram) m_SourceModelElement;
+		}
 		
 		setupRequirementsPanel( withReqtsAlsoAdded );
 	}
@@ -73,16 +86,28 @@ public abstract class CreateTracedElementPanel extends JPanel {
 	protected void setupPopulateCheckbox(
 			JCheckBox theCheckbox ) {
 		
-		boolean isPopulateOptionHidden = 
-				FunctionalAnalysisSettings.getIsPopulateOptionHidden(
-						m_Project );
-		
-		boolean isPopulate = 
-				FunctionalAnalysisSettings.getIsPopulateWantedByDefault(
-						m_Project );
-		
-		theCheckbox.setVisible( !isPopulateOptionHidden );
-		theCheckbox.setSelected( isPopulate );
+		// is the diagram an AD or RD?
+		if( m_SourceGraphElementDiagram != null && ( 
+				m_SourceGraphElementDiagram instanceof IRPActivityDiagram ||
+				m_SourceGraphElementDiagram instanceof IRPObjectModelDiagram ) ){
+
+			boolean isPopulateOptionHidden = 
+					FunctionalAnalysisSettings.getIsPopulateOptionHidden(
+							m_Project );
+			
+			boolean isPopulate = 
+					FunctionalAnalysisSettings.getIsPopulateWantedByDefault(
+							m_Project );
+			
+			theCheckbox.setVisible( !isPopulateOptionHidden );
+			theCheckbox.setSelected( isPopulate );
+			
+		} else {
+			
+			// Not supported
+			theCheckbox.setVisible( false );
+			theCheckbox.setSelected( false );
+		}
 	}
 	
 	private void setupRequirementsPanel(
@@ -137,17 +162,18 @@ public abstract class CreateTracedElementPanel extends JPanel {
 			
 			theOperation = theClassifier.addOperation( withTheName );
 			
-			theOperation.setBody("OM_RETURN( " + theAttributeName + " );");
+			theOperation.setBody( "OM_RETURN( " + theAttributeName + " );" );
 			
-			IRPDependency theAutoRippleDependency = theAttribute.addDependencyTo(theOperation);
-			theAutoRippleDependency.addStereotype("AutoRipple", "Dependency");
-			IRPClassifier theType = findTypeCalled("int");
+			TraceabilityHelper.addStereotypedDependencyIfOneDoesntExist( theAttribute, theOperation, "AutoRipple" );
+
+			IRPClassifier theType = findTypeCalled( "int" );
 			
-			if (theType!=null){
-				theOperation.setReturns(theType);
+			if( theType != null ){
+				theOperation.setReturns( theType );
 			}
 		} else {
-			Logger.writeLine("Error in addCheckOperationFor, owner of " + Logger.elementInfo(theAttribute) + " is not a Classifier");
+			Logger.writeLine( "Error in addCheckOperationFor, owner of " + 
+					Logger.elementInfo( theAttribute ) + " is not a Classifier" );
 		}
 		
 		return theOperation;
@@ -407,76 +433,199 @@ public abstract class CreateTracedElementPanel extends JPanel {
 	}
 
 	protected void populateCallOperationActionOnDiagram(
-			IRPOperation theOperation) {
+			IRPOperation theOperation ){
 
 		try {
 			IRPApplication theRhpApp = FunctionalAnalysisPlugin.getRhapsodyApp();
-			
-			IRPDiagram theDiagram = null;
 
-			if( m_SourceModelElement instanceof IRPDiagram ){
-				
-				theDiagram = (IRPDiagram) m_SourceModelElement;
-			} else {
-				theDiagram = m_SourceGraphElement.getDiagram();
-			}
+			if( m_SourceGraphElementDiagram != null ){
 
-			if (theDiagram instanceof IRPActivityDiagram){
+				if( m_SourceGraphElementDiagram instanceof IRPActivityDiagram ){
+					
+					IRPActivityDiagram theAD = (IRPActivityDiagram)m_SourceGraphElementDiagram;
 
-				IRPActivityDiagram theAD = (IRPActivityDiagram)theDiagram;
+					IRPFlowchart theFlowchart = theAD.getFlowchart();
 
-				IRPFlowchart theFlowchart = theAD.getFlowchart();
+					if( m_SourceGraphElement != null && 
+						m_SourceGraphElement.getModelObject() instanceof IRPCallOperation ){
 
-				if( m_SourceGraphElement != null && 
-					m_SourceGraphElement.getModelObject() instanceof IRPCallOperation ){
+						IRPCallOperation theCallOp = (IRPCallOperation) m_SourceGraphElement.getModelObject();
+						theCallOp.setOperation(theOperation);
 
-					IRPCallOperation theCallOp = (IRPCallOperation) m_SourceGraphElement.getModelObject();
-					theCallOp.setOperation(theOperation);
+					} else {
+						IRPCallOperation theCallOp = 
+								(IRPCallOperation) theFlowchart.addNewAggr(
+										"CallOperation", theOperation.getName() );
+
+						theCallOp.setOperation(theOperation);
+
+						theFlowchart.addNewNodeForElement(
+								theCallOp, getSourceElementX(), getSourceElementY(), 300, 40 );
+
+						theCallOp.highLightElement();
+					}
+
+				} else if( m_SourceGraphElementDiagram instanceof IRPObjectModelDiagram ){
+
+					IRPObjectModelDiagram theOMD = (IRPObjectModelDiagram)m_SourceGraphElementDiagram;
+
+					IRPGraphNode theEventNode = theOMD.addNewNodeForElement( 
+							theOperation, getSourceElementX() + 50, getSourceElementY() + 50, 300, 40 );	
+
+					if( m_SourceGraphElement != null ){
+						IRPCollection theGraphElsToDraw = theRhpApp.createNewCollection();
+						theGraphElsToDraw.addGraphicalItem( m_SourceGraphElement );
+						theGraphElsToDraw.addGraphicalItem( theEventNode );
+
+						theOMD.completeRelations( theGraphElsToDraw, 1 );
+					}
+					
+					theOperation.highLightElement();
 
 				} else {
-					IRPCallOperation theCallOp = 
-							(IRPCallOperation) theFlowchart.addNewAggr(
-									"CallOperation", theOperation.getName() );
-
-					theCallOp.setOperation(theOperation);
-
-					theFlowchart.addNewNodeForElement(
-							theCallOp, getSourceElementX(), getSourceElementY(), 300, 40 );
-
-					theRhpApp.highLightElement( theCallOp );
+					Logger.writeLine( "Error in populateCallOperationActionOnDiagram " + Logger.elementInfo( m_SourceGraphElementDiagram ) + 
+							" is not supported for populating on");
 				}
 
-			} else if (theDiagram instanceof IRPObjectModelDiagram){				
-
-				IRPObjectModelDiagram theOMD = (IRPObjectModelDiagram)theDiagram;
-
-				IRPGraphNode theEventNode = theOMD.addNewNodeForElement( 
-						theOperation, getSourceElementX() + 50, getSourceElementY() + 50, 300, 40 );	
-
-				if( m_SourceGraphElement != null ){
-					IRPCollection theGraphElsToDraw = theRhpApp.createNewCollection();
-					theGraphElsToDraw.addGraphicalItem( m_SourceGraphElement );
-					theGraphElsToDraw.addGraphicalItem( theEventNode );
-
-					theOMD.completeRelations( theGraphElsToDraw, 1 );
-				}
-				
-				theRhpApp.highLightElement( theOperation );
-
-			} else {
-				Logger.writeLine("Error in populateCallOperationActionOnDiagram, expected an IRPActivityDiagram");
+			} else {	
+				Logger.writeLine( "Error in populateCallOperationActionOnDiagram, m_SourceGraphElementDiagram is null when value was expected" );
 			}
 
 		} catch (Exception e) {
-			Logger.writeLine("Error in populateCallOperationActionOnDiagram, unhandled exception was detected");
+			Logger.writeLine( "Error in populateCallOperationActionOnDiagram, unhandled exception was detected ");
 		}
 	}
 	
+	protected static IRPClass getBlock(
+			final IRPGraphElement theSourceGraphElement,
+			final IRPModelElement orTheModelElement, 
+			final IRPProject inProject,
+			final String theMsg ){
+		
+		IRPClass theBlock = null;
+		
+		if( theSourceGraphElement != null ){
+			
+			IRPModelElement theModelObject = theSourceGraphElement.getModelObject();
+			
+			if( theModelObject != null ){
+
+				if( theModelObject instanceof IRPClass &&
+					!GeneralHelpers.hasStereotypeCalled( "TestDriver", theModelObject ) ){
+
+					theBlock = (IRPClass) theModelObject;
+
+				} else if( theModelObject instanceof IRPInstance ){
+
+					IRPInstance thePart = (IRPInstance) theModelObject;
+
+					IRPClassifier theOtherClass = thePart.getOtherClass();
+
+					if( theOtherClass instanceof IRPClass &&
+						!GeneralHelpers.hasStereotypeCalled( "TestDriver", theOtherClass ) ){
+
+						theBlock = (IRPClass)theOtherClass;
+					}
+				}
+			}
+
+		} else if( orTheModelElement != null ){
+
+			Logger.writeLine(orTheModelElement.getMetaClass() + "is the MetaClass");
+			
+			if( orTheModelElement instanceof IRPClass &&
+				!GeneralHelpers.hasStereotypeCalled( "TestDriver", orTheModelElement ) ){
+
+				theBlock = (IRPClass) orTheModelElement;
+
+			} else if( orTheModelElement instanceof IRPInstance ){
+
+				IRPInstance thePart = (IRPInstance) orTheModelElement;
+
+				IRPClassifier theOtherClass = thePart.getOtherClass();
+
+				if( theOtherClass instanceof IRPClass &&
+					!GeneralHelpers.hasStereotypeCalled( "TestDriver", theOtherClass ) ){
+					
+					theBlock = (IRPClass)theOtherClass;
+				}
+				
+			} else if( orTheModelElement.getMetaClass().equals("StatechartDiagram") ){
+		
+				IRPModelElement theOwner = findOwningClassIfOneExistsFor( orTheModelElement );
+				
+				Logger.writeLine( theOwner, "is the Owner");
+				
+				if( theOwner instanceof IRPClass &&
+					!GeneralHelpers.hasStereotypeCalled( "TestDriver", theOwner )){
+					
+					theBlock = (IRPClass) theOwner;
+				}
+			}
+		}
+
+		if( theBlock == null ){
+			
+			theBlock = FunctionalAnalysisSettings.getBlockUnderDev( 
+					inProject, theMsg );
+		}
+		
+		return theBlock;
+	}
+	
+	static private IRPClass findOwningClassIfOneExistsFor( 
+			IRPModelElement theModelEl ){
+		
+		IRPModelElement theOwner = theModelEl.getOwner();
+		IRPClass theResult = null;
+		
+		if( ( theOwner != null ) &&
+			!( theOwner instanceof IRPProject ) ){
+			
+			if( theOwner.getMetaClass().equals("Class") ){
+
+				theResult = (IRPClass) theOwner;
+				Logger.writeLine( "findOwningClassIfOneExistsFor has found " + Logger.elementInfo( theResult ) );
+			} else {
+				theResult = findOwningClassIfOneExistsFor( theOwner );
+			}
+		}
+
+		return theResult;
+	}
+	
+	protected IRPAttribute addAttributeTo( 
+			IRPClassifier theClassifier, 
+			String withTheName, 
+			String andDefaultValue,
+			List<IRPRequirement> withTraceabilityReqts ){
+		
+		IRPAttribute theAttribute = theClassifier.addAttribute( withTheName );				
+		
+		IRPModelElement theValuePropertyStereotype = 
+				GeneralHelpers.findElementWithMetaClassAndName( 
+						"Stereotype", "ValueProperty", m_Project );
+		
+		if( theValuePropertyStereotype != null ){
+			
+			Logger.writeLine( "Invoking change to from " + Logger.elementInfo( theAttribute ) + 
+					" to " + Logger.elementInfo( theValuePropertyStereotype ) );
+			
+			theAttribute.changeTo( "ValueProperty" );
+		}
+		
+		theAttribute.setDefaultValue( andDefaultValue );
+		theAttribute.highLightElement();
+
+		addTraceabilityDependenciesTo( theAttribute, withTraceabilityReqts );
+
+		return theAttribute;
+	}
 
 }
 
 /**
- * Copyright (C) 2016  MBSE Training and Consulting Limited (www.executablembse.com)
+ * Copyright (C) 2016-2017  MBSE Training and Consulting Limited (www.executablembse.com)
 
     Change history:
     #022 30-MAY-2016: Improved handling and validation of event/operation creation by adding new forms (F.J.Chadburn) 
@@ -499,7 +648,11 @@ public abstract class CreateTracedElementPanel extends JPanel {
     #129 25-NOV-2016: Fixed addTraceabilityDependenciesTo to avoid creation of duplicate dependencies (F.J.Chadburn)
     #130 25-NOV-2016: Improved consistency in handling of isPopulateOptionHidden and isPopulateWantedByDefault tags (F.J.Chadburn)
     #163 05-FEB-2017: Add new menus to Smart link: Start and Smart link: End (F.J.Chadburn)
- 
+    #196 05-JUN-2017: Enhanced create traced element dialogs to be context aware for blocks/parts (F.J.Chadburn)
+    #197 05-JUN-2017: Fix 8.2 issue in Incoming Event panel, create ValueProperty rather than attribute (F.J.Chadburn)
+    #199 05-JUN-2017: Improved create event panel consistency to name event Tbd if no text provided (F.J.Chadburn)
+    #200 05-JUN-2017: Hide Populate on diagram check-boxes if context is not valid (F.J.Chadburn)
+
     This file is part of SysMLHelperPlugin.
 
     SysMLHelperPlugin is free software: you can redistribute it and/or modify

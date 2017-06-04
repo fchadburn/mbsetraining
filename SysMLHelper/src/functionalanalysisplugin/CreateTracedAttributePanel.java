@@ -238,15 +238,18 @@ public class CreateTracedAttributePanel extends CreateTracedElementPanel {
 
 			@Override
 			public void run() {
-				IRPClassifier theLogicalSystemBlock = 
-						FunctionalAnalysisSettings.getBlockUnderDev( 
-								inProject, "Select Block to add attribute to:" );
-
+				
+				IRPClass theBlock = getBlock( 
+						selectedDiagramEl, 
+						orTheModelElement, 
+						inProject, 
+						"Select Block to add attribute to:" );
+						
 				JFrame.setDefaultLookAndFeelDecorated( true );
 
 				JFrame frame = new JFrame(
-						"Create an attribute on " + theLogicalSystemBlock.getUserDefinedMetaClass() 
-						+ " called " + theLogicalSystemBlock.getName());
+						"Create an attribute on " + theBlock.getUserDefinedMetaClass() 
+						+ " called " + theBlock.getName());
 
 				frame.setDefaultCloseOperation( JFrame.DISPOSE_ON_CLOSE );
 
@@ -256,7 +259,7 @@ public class CreateTracedAttributePanel extends CreateTracedElementPanel {
 							new CreateTracedAttributePanel(
 									selectedDiagramEl, 
 									withReqtsAlsoAdded,
-									theLogicalSystemBlock );
+									theBlock );
 
 					frame.setContentPane( thePanel );
 					
@@ -266,7 +269,7 @@ public class CreateTracedAttributePanel extends CreateTracedElementPanel {
 							new CreateTracedAttributePanel(
 									orTheModelElement, 
 									withReqtsAlsoAdded,
-									theLogicalSystemBlock );
+									theBlock );
 
 					frame.setContentPane( thePanel );
 				}
@@ -357,33 +360,23 @@ public class CreateTracedAttributePanel extends CreateTracedElementPanel {
 	    return true;
 	}
 
+	
 	@Override
 	protected void performAction() {
 		
 		// do silent check first
 		if (checkValidity( false )){
-			
-			IRPAttribute theAttribute =
-					((IRPClassifier)m_TargetOwningElement).addAttribute(
-							m_ChosenNameTextField.getText() );				
-			
-			IRPModelElement theValuePropertyStereotype = 
-					GeneralHelpers.findElementWithMetaClassAndName( "Stereotype", "ValueProperty", m_Project );
-			
-			if( theValuePropertyStereotype != null ){
-				Logger.writeLine( "Invoking change to from " + Logger.elementInfo( theAttribute ) + 
-						" to " + Logger.elementInfo( theValuePropertyStereotype ) );
-				theAttribute.changeTo( "ValueProperty" );
-			}
-			
-			theAttribute.highLightElement();
-			theAttribute.setDefaultValue( m_InitialValueTextField.getText() );
-			
+
 			List<IRPRequirement> selectedReqtsList = m_RequirementsPanel.getSelectedRequirementsList();
-			
-			addTraceabilityDependenciesTo( theAttribute, selectedReqtsList );
-			
+
+			IRPAttribute theAttribute = addAttributeTo( 
+					(IRPClassifier) m_TargetOwningElement, 
+					m_ChosenNameTextField.getText(), 
+					m_InitialValueTextField.getText(),
+					selectedReqtsList );
+												
 			if( m_CheckOperationCheckBox.isSelected() ){
+				
 				IRPOperation theCheckOp = addCheckOperationFor( theAttribute, m_CheckOpName );
 				addTraceabilityDependenciesTo( theCheckOp, selectedReqtsList );	
 				
@@ -435,6 +428,8 @@ public class CreateTracedAttributePanel extends CreateTracedElementPanel {
     #153 25-JAN-2017: Functional Analysis helper creates new term ValueProperty's rather than attributes in Rhp 8.2+ (F.J.Chadburn) 
     #176 02-APR-2017: Added option to create a flow-port at the same time as creating a traced attribute (F.J.Chadburn)
     #186 29-MAY-2017: Add context string to getBlockUnderDev to make it clearer for user when selecting (F.J.Chadburn)
+    #196 05-JUN-2017: Enhanced create traced element dialogs to be context aware for blocks/parts (F.J.Chadburn)
+    #197 05-JUN-2017: Fix 8.2 issue in Incoming Event panel, create ValueProperty rather than attribute (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

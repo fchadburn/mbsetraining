@@ -405,7 +405,7 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
 	private static void addAComponentWith(
 			String theName,
 			IRPPackage theBlockTestPackage, 
-			IRPClass theUsageDomainBlock) {
+			IRPClass theUsageDomainBlock ){
 		
 		IRPComponent theComponent = 
 				(IRPComponent) theBlockTestPackage.addNewAggr(
@@ -414,12 +414,20 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
 		theComponent.setPropertyValue("Activity.General.SimulationMode", "StateOriented");
 
 		IRPConfiguration theConfiguration = (IRPConfiguration) theComponent.findConfiguration("DefaultConfig");
-		theConfiguration.setName("Cygwin");
-		theConfiguration.addInitialInstance(theUsageDomainBlock);
-		theConfiguration.setScopeType("implicit");
-		theConfiguration.setPropertyValue("WebComponents.WebFramework.GenerateInstrumentationCode", "True");
 		
-		theConfiguration.getProject().setActiveConfiguration(theConfiguration);		
+		String theEnvironment = theConfiguration.getPropertyValue("CPP_CG.Configuration.Environment");
+		
+		theConfiguration.setName( theEnvironment );			
+		theConfiguration.setPropertyValue("WebComponents.WebFramework.GenerateInstrumentationCode", "True");		
+		theConfiguration.addInitialInstance( theUsageDomainBlock );
+		theConfiguration.setScopeType("implicit");
+
+		IRPConfiguration theNoWebConfig = theComponent.addConfiguration( theEnvironment + "_NoWebify" );			
+		theNoWebConfig.setPropertyValue("WebComponents.WebFramework.GenerateInstrumentationCode", "False");		
+		theNoWebConfig.addInitialInstance( theUsageDomainBlock );
+		theNoWebConfig.setScopeType("implicit");
+
+		theConfiguration.getProject().setActiveConfiguration( theConfiguration );		
 	}
 
 	private static Set<IRPClassifier> getBaseClassesOf( 
@@ -446,10 +454,11 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
 	
 	private static void createBDDFor(
 			IRPClass theAssemblyBlock, 
+			IRPPackage inPackage,
 			String withName){
 		
 		IRPObjectModelDiagram theBDD = 
-				(IRPObjectModelDiagram) theAssemblyBlock.getOwner().addNewAggr(
+				(IRPObjectModelDiagram) inPackage.addNewAggr(
 						"ObjectModelDiagram", withName );
 		
 		theBDD.changeTo("Block Definition Diagram");
@@ -927,6 +936,7 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
 			
 			createBDDFor(
 					theSystemAssemblyBlock,
+					theBlockPackage,
 					"BDD - " + theSystemAssemblyBlock.getName() );
 
 			createIBDFor( 
@@ -975,6 +985,8 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
     #179 29-MAY-2017: Added new Functional Analysis menu to Re-create «AutoShow» sequence diagram (F.J.Chadburn)
     #184 29-MAY-2017: Create a connector between pElapsedTime port when creating block hierarchy (F.J.Chadburn)
     #185 29-MAY-2017: Change Block hierarchy creation to use implicit not explicit names for parts (F.J.Chadburn)
+    #194 05-JUN-2017: Added _NoWebify configuration to FunctionalBlock creation to ease usage with 64bit Rhp (F.J.Chadburn)
+    #195 05-JUN-2017: Modified FunctionalBlockPackage creation to create BDD in BlockPkg to ease white box method (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

@@ -6,13 +6,16 @@ import generalhelpers.Logger;
 import generalhelpers.UserInterfaceHelpers;
 
 import java.awt.BorderLayout;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JCheckBox;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -33,6 +36,39 @@ public class CreateOutgoingEventPanel extends CreateTracedElementPanel {
 	private JCheckBox m_SendOperationIsNeededCheckBox;
 	private JCheckBox m_ActiveAgumentNeededCheckBox;
 
+	public static void main(String[] args) {
+		IRPApplication theRhpApp = RhapsodyAppServer.getActiveRhapsodyApplication();
+		
+		IRPProject theActiveProject = theRhpApp.activeProject();
+		
+		@SuppressWarnings("unchecked")
+		List<IRPGraphElement> theSelectedGraphEls = theRhpApp.getSelectedGraphElements().toList();
+		IRPModelElement theSelectedEl = theRhpApp.getSelectedElement();
+		
+		if( theSelectedGraphEls.isEmpty() && ( 
+				theSelectedEl instanceof IRPClass ||
+				theSelectedEl instanceof IRPInstance ||
+				theSelectedEl instanceof IRPDiagram ) ){
+			
+			Set<IRPRequirement> theReqts = new HashSet<IRPRequirement>();
+			
+			CreateOutgoingEventPanel.launchThePanel(	
+					null, 
+					theSelectedEl,
+					theReqts,
+					theActiveProject );
+					
+		} else if (!theSelectedGraphEls.isEmpty()){
+			try {
+				CreateOutgoingEventPanel.createOutgoingEventsFor( theActiveProject, theSelectedGraphEls );
+				
+			} catch (Exception e) {
+				Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking OperationCreator.createOutgoingEventsFor");
+			}
+		}
+
+	}
+	
 	public static void createOutgoingEventsFor(
 			IRPProject theActiveProject,
 			List<IRPGraphElement> theSelectedGraphEls) {
@@ -86,6 +122,10 @@ public class CreateOutgoingEventPanel extends CreateTracedElementPanel {
 		
 		String theSourceText = GeneralHelpers.getActionTextFrom( forSourceGraphElement.getModelObject() );		
 		
+		if( theSourceText.isEmpty() ){
+			theSourceText = m_Tbd;
+		}
+		
 		createCommonContent(
 				theSourceText, 
 				onTargetBlock, 
@@ -105,7 +145,7 @@ public class CreateOutgoingEventPanel extends CreateTracedElementPanel {
 		
 		super( forSourceModelElement, withReqtsAlsoAdded, onTargetBlock, onTargetBlock.getProject() );
 		
-		String theSourceText = "Tbd";		
+		String theSourceText = m_Tbd;		
 		
 		Logger.writeLine("CreateOutgoingEventPanel constructor called for " + Logger.elementInfo( forSourceModelElement ));
 		
@@ -237,14 +277,18 @@ public class CreateOutgoingEventPanel extends CreateTracedElementPanel {
 							
 						if( theCandidates.isEmpty() ){
 							
-							UserInterfaceHelpers.showWarningDialog("The " + Logger.elementInfo( theBuildingBlock ) + 
+							UserInterfaceHelpers.showWarningDialog(
+									"The " + Logger.elementInfo( theBuildingBlock ) + 
 									" does not have any connectors that connect the " + Logger.elementInfo(theActor) + " with Blocks.\n\n" +
 									"Fix this and then try again");
 							
 						} else {
 							
-							final IRPClass theChosenBlock = 
-									FunctionalAnalysisSettings.getBlockUnderDev( inProject, "Select Block to add event generation from:" );
+							final IRPClass theChosenBlock = getBlock(
+											theSourceGraphElement, 
+											orTheModelElement, 
+											inProject, 
+											"Select Block to add event generation from:" );
 						
 							if( theChosenBlock != null ){
 								
@@ -252,8 +296,23 @@ public class CreateOutgoingEventPanel extends CreateTracedElementPanel {
 										(IRPClassifier)theChosenBlock,
 										(IRPActor)theActor, 
 										theBuildingBlock );
-								
-								if( thePort != null ){
+							
+								if( thePort == null ){
+									
+							    	JDialog.setDefaultLookAndFeelDecorated( true );
+									
+									JOptionPane.showMessageDialog(
+											null,  
+								    		"Unable to find a port that connects " + Logger.elementInfo( theActor ) + " to the " + 
+											Logger.elementInfo( theChosenBlock ) + ". \n" +
+								    		"You may want to add the necessary ports and connector to the IBD under " + 
+											Logger.elementInfo( theBuildingBlock ) + " \nbefore trying this.",
+								    		"Warning",
+								    		JOptionPane.WARNING_MESSAGE );
+									
+									theBuildingBlock.highLightElement();
+
+								} else { // thePort != null
 									
 									javax.swing.SwingUtilities.invokeLater(new Runnable() {
 
@@ -327,61 +386,58 @@ public class CreateOutgoingEventPanel extends CreateTracedElementPanel {
 
 	private void populateSendActionOnDiagram(
 			IRPEvent theEvent) {
-		
+
 		IRPApplication theRhpApp = FunctionalAnalysisPlugin.getRhapsodyApp();
 
-		IRPDiagram theDiagram = null;
-		
-		if( m_SourceModelElement instanceof IRPDiagram){
-			
-			theDiagram = (IRPDiagram) m_SourceModelElement;
-		} else {
-			theDiagram = m_SourceGraphElement.getDiagram();
-		}
+		if( m_SourceGraphElementDiagram != null ){
 
-		if( theDiagram instanceof IRPActivityDiagram ){
+			if( m_SourceGraphElementDiagram instanceof IRPActivityDiagram ){
 
-			IRPActivityDiagram theAD = (IRPActivityDiagram)theDiagram;
+				IRPActivityDiagram theAD = (IRPActivityDiagram)m_SourceGraphElementDiagram;
 
-			IRPFlowchart theFlowchart = theAD.getFlowchart();
+				IRPFlowchart theFlowchart = theAD.getFlowchart();
 
-			IRPState theState = 
-					(IRPState) theFlowchart.addNewAggr(
-							"State", theEvent.getName() );
+				IRPState theState = 
+						(IRPState) theFlowchart.addNewAggr(
+								"State", theEvent.getName() );
 
-			theState.setStateType("EventState");
+				theState.setStateType("EventState");
 
-			if( theState != null ){
+				if( theState != null ){
 
-				IRPSendAction theSendAction = theState.getSendAction();
-				theSendAction.setEvent(theEvent);
+					IRPSendAction theSendAction = theState.getSendAction();
+					theSendAction.setEvent(theEvent);
+				}
+
+				theFlowchart.addNewNodeForElement(
+						theState, getSourceElementX(), getSourceElementY(), 300, 40 );
+
+				theState.highLightElement();
+
+			} else if( m_SourceGraphElementDiagram instanceof IRPObjectModelDiagram ){				
+
+				IRPObjectModelDiagram theOMD = (IRPObjectModelDiagram)m_SourceGraphElementDiagram;
+
+				IRPGraphNode theEventNode = theOMD.addNewNodeForElement(
+						theEvent, getSourceElementX() + 50, getSourceElementY() + 50, 300, 40 );	
+
+				if( m_SourceGraphElement != null ){
+					IRPCollection theGraphElsToDraw = theRhpApp.createNewCollection();
+					theGraphElsToDraw.addGraphicalItem( m_SourceGraphElement );
+					theGraphElsToDraw.addGraphicalItem( theEventNode );
+
+					theOMD.completeRelations( theGraphElsToDraw, 1 );
+				}
+
+				theEvent.highLightElement();
+				
+			} else {
+				Logger.writeLine( "Error in populateSendActionOnDiagram " + Logger.elementInfo( m_SourceGraphElementDiagram ) + 
+						" is not supported for populating on");
 			}
 
-			theFlowchart.addNewNodeForElement(
-					theState, getSourceElementX(), getSourceElementY(), 300, 40 );
-
-			theRhpApp.highLightElement( theState );
-
-		} else if( theDiagram instanceof IRPObjectModelDiagram ){				
-
-			IRPObjectModelDiagram theOMD = (IRPObjectModelDiagram)theDiagram;
-
-			IRPGraphNode theEventNode = theOMD.addNewNodeForElement(
-					theEvent, getSourceElementX() + 50, getSourceElementY() + 50, 300, 40 );	
-
-			if( m_SourceGraphElement != null ){
-				IRPCollection theGraphElsToDraw = theRhpApp.createNewCollection();
-				theGraphElsToDraw.addGraphicalItem( m_SourceGraphElement );
-				theGraphElsToDraw.addGraphicalItem( theEventNode );
-
-				theOMD.completeRelations( theGraphElsToDraw, 1 );
-			}
-			
-			theRhpApp.highLightElement( theEvent );
-
-		} else {
-			Logger.writeLine( "Warning in populateSendActionOnDiagram " + Logger.elementInfo( theDiagram ) + 
-					" is not supported for populating on");
+		} else {	
+			Logger.writeLine( "Error in populateSendActionOnDiagram, m_SourceGraphElement is null when value was expected" );
 		}
 	}
 	
@@ -537,6 +593,9 @@ public class CreateOutgoingEventPanel extends CreateTracedElementPanel {
     #130 25-NOV-2016: Improved consistency in handling of isPopulateOptionHidden and isPopulateWantedByDefault tags (F.J.Chadburn)
     #148 18-DEC-2016: Add message if user tries to create an outgoing event when there are no actors (F.J.Chadburn)
     #186 29-MAY-2017: Add context string to getBlockUnderDev to make it clearer for user when selecting (F.J.Chadburn)
+    #196 05-JUN-2017: Enhanced create traced element dialogs to be context aware for blocks/parts (F.J.Chadburn)
+    #199 05-JUN-2017: Improved create event panel consistency to name event Tbd if no text provided (F.J.Chadburn)
+    #200 05-JUN-2017: Hide Populate on diagram check-boxes if context is not valid (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

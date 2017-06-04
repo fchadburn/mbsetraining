@@ -99,15 +99,19 @@ public class FunctionalAnalysisPlugin extends RPUserPlugin {
 
 			} else if (menuItem.equals(m_configSettings.getString("functionalanalysisplugin.CreateIncomingEventMenu"))){
 
-				if (theSelectedEl instanceof IRPDiagram){
+				if( theSelectedGraphEls.isEmpty() && ( 
+						theSelectedEl instanceof IRPClass ||
+						theSelectedEl instanceof IRPInstance ||
+						theSelectedEl instanceof IRPDiagram ) ){
+					
 					Set<IRPRequirement> theReqts = new HashSet<IRPRequirement>();
 					
 					CreateIncomingEventPanel.launchThePanel( 
 							null,
-							(IRPDiagram)theSelectedEl, 
+							theSelectedEl, 
 							theReqts, 
 							theActiveProject );
-				
+					
 				} else if (!theSelectedGraphEls.isEmpty()){
 					try {
 						CreateIncomingEventPanel.createIncomingEventsFor( theActiveProject, theSelectedGraphEls );
@@ -119,13 +123,18 @@ public class FunctionalAnalysisPlugin extends RPUserPlugin {
 
 			} else if (menuItem.equals(m_configSettings.getString("functionalanalysisplugin.CreateAnOperationMenu"))){
 
-				if (theSelectedEl instanceof IRPDiagram){
+				if( theSelectedGraphEls.isEmpty() && ( 
+						theSelectedEl instanceof IRPClass ||
+						theSelectedEl instanceof IRPInstance ||
+						theSelectedEl instanceof IRPDiagram ) ){
 					
 					Set<IRPRequirement> theReqts = new HashSet<IRPRequirement>();
 					
-					CreateOperationPanel.createSystemOperationFor(
-							(IRPDiagram) theSelectedEl, 
-							theReqts);
+					// only launch a dialog for non requirement elements
+					CreateOperationPanel.launchThePanel(
+							theSelectedEl, 
+							theReqts, 
+							theActiveProject );
 					
 				} else if (!theSelectedGraphEls.isEmpty()){
 					try {
@@ -138,13 +147,16 @@ public class FunctionalAnalysisPlugin extends RPUserPlugin {
 				
 			} else if (menuItem.equals(m_configSettings.getString("functionalanalysisplugin.CreateOutgoingEventMenu"))){
 
-				if (theSelectedEl instanceof IRPDiagram){
+				if( theSelectedGraphEls.isEmpty() && ( 
+						theSelectedEl instanceof IRPClass ||
+						theSelectedEl instanceof IRPInstance ||
+						theSelectedEl instanceof IRPDiagram ) ){
 					
 					Set<IRPRequirement> theReqts = new HashSet<IRPRequirement>();
 					
 					CreateOutgoingEventPanel.launchThePanel(	
 							null, 
-							(IRPDiagram) theSelectedEl,
+							theSelectedEl,
 							theReqts,
 							theActiveProject );
 							
@@ -159,7 +171,10 @@ public class FunctionalAnalysisPlugin extends RPUserPlugin {
 
 			} else if (menuItem.equals(m_configSettings.getString("functionalanalysisplugin.CreateAttributeMenu"))){
 
-				if (theSelectedEl instanceof IRPDiagram){
+				if( theSelectedGraphEls.isEmpty() && ( 
+						theSelectedEl instanceof IRPClass ||
+						theSelectedEl instanceof IRPInstance ||
+						theSelectedEl instanceof IRPDiagram ) ){
 					
 					Set<IRPRequirement> theReqts = new HashSet<IRPRequirement>();
 					
@@ -389,6 +404,7 @@ public class FunctionalAnalysisPlugin extends RPUserPlugin {
     #128 25-NOV-2016: Improved usability/speed of Copy AD dialog by providing user choice to open diagrams (F.J.Chadburn)
     #137 02-DEC-2016: Allow 'create attribute' menu command on AD/RD canvas right-click (F.J.Chadburn)
     #179 29-MAY-2017: Add new Functional Analysis menu to Re-create «AutoShow» sequence diagram (F.J.Chadburn)
+    #196 05-JUN-2017: Enhanced create traced element dialogs to be context aware for blocks/parts (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 
