@@ -304,3 +304,19 @@ UNDER DEV RELEASE 2.1.e (02-APR-2017)
 ----------------------------------------------------------------------------------
 UNDER DEV RELEASE 2.1.f (29-MAY-2017)
 ----------------------------------------------------------------------------------
+#190 05-JUN-2017: Added compiler-related Config.properties to improve control when using 64bit Rhp (F.J.Chadburn)
+#191 05-JUN-2017: Carriage return improvements to .properties files to make easier to edit (F.J.Chadburn)
+#192 05-JUN-2017: Widened DeleteAttributeAndRelatedElementsMenu support to work with flow-ports as well (F.J.Chadburn)
+#193 05-JUN-2017: Added Transitions to «AutoRipple» list so they're also cleaned up when attribute is deleted (F.J.Chadburn)
+#194 05-JUN-2017: Added _NoWebify configuration to FunctionalBlock creation to ease usage with 64bit Rhp (F.J.Chadburn)
+#195 05-JUN-2017: Modified FunctionalBlockPackage creation to create BDD in BlockPkg to ease white box method (F.J.Chadburn)
+#196 05-JUN-2017: Enhanced create traced element dialogs to be context aware for blocks/parts (F.J.Chadburn)
+#197 05-JUN-2017: Fix 8.2 issue in Incoming Event panel, create ValueProperty rather than attribute (F.J.Chadburn)
+#198 05-JUN-2017: Support for adding MonitoringConditions transitions moved into shared StatechartHelpers (F.J.Chadburn)
+#199 05-JUN-2017: Improved create event panel consistency to name event Tbd if no text provided (F.J.Chadburn)
+#200 05-JUN-2017: Hide Populate on diagram check-boxes if context is not valid (F.J.Chadburn)
+#201 05-JUN-2017: Highlight attribute post-event creation to ease potential for flow-port creation (F.J.Chadburn)
+#202 05-JUN-2017: Minor changes to logging in GeneralHelpers (F.J.Chadburn)
+----------------------------------------------------------------------------------
+UNDER DEV RELEASE 2.1.g (05-JUN-2017)
+----------------------------------------------------------------------------------

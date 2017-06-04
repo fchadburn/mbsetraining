@@ -29,7 +29,7 @@ DLLServerCompatible3=1
 name4=MBSE Method: Design Synthesis\Delete attribute and related elements
 isPluginCommand4=1
 command4=InvokeDesignSynthesisHelper
-applicableTo4=Attribute,ValueProperty
+applicableTo4=Attribute,ValueProperty,FlowPort
 isVisible4=1
 DLLServerCompatible4=1
 
@@ -40,6 +40,7 @@ DLLServerCompatible4=1
 #REM #109 06-NOV-2016: Added .properties support for localisation of menus (F.J.Chadburn)
 #REM #164 15-FEB-2017: Fixed .hep for Publish/Subscribe flow ports to work with ValueProperty's in 8.2 (F.J.Chadburn)
 #REM #180 29-MAY-2017: Added new Design Synthesis menu to Delete attribute and related elements (F.J.Chadburn)
+#REM #192 05-JUN-2017: Widened DeleteAttributeAndRelatedElementsMenu support to work with flow-ports as well (F.J.Chadburn)
 #REM
 #REM This file is part of SysMLHelperPlugin.
 #REM

@@ -53,7 +53,7 @@ DLLServerCompatible6=1
 name7=MBSE Method: Functional Analysis\Create an incoming event sent by an actor
 isPluginCommand7=1
 command7=InvokeFunctionalAnalysisHelper
-applicableTo7=ActivityDiagram,ObjectModelDiagram,Block Definition Diagram,Internal Block Diagram,Statechart,SequenceDiagram,UseCaseDiagram,Requirements Diagram,State,Transition,Comment,AcceptEventAction,SendAction,AcceptTimeEvent,Constraint,Precondition,Postcondition,ControlFlow,Requirement
+applicableTo7=ActivityDiagram,ObjectModelDiagram,Block Definition Diagram,Internal Block Diagram,Statechart,SequenceDiagram,UseCaseDiagram,Requirements Diagram,State,Transition,Comment,AcceptEventAction,SendAction,AcceptTimeEvent,Constraint,Precondition,Postcondition,ControlFlow,Requirement,Block,Object
 isVisible7=1
 DLLServerCompatible7=1
 
@@ -61,7 +61,7 @@ DLLServerCompatible7=1
 name8=MBSE Method: Functional Analysis\Create an outgoing event sent to an actor
 isPluginCommand8=1
 command8=InvokeFunctionalAnalysisHelper
-applicableTo8=ActivityDiagram,ObjectModelDiagram,Block Definition Diagram,Internal Block Diagram,Statechart,SequenceDiagram,UseCaseDiagram,Requirements Diagram,State,Transition,Comment,AcceptEventAction,SendAction,AcceptTimeEvent,Constraint,Precondition,Postcondition,ControlFlow,Requirement
+applicableTo8=ActivityDiagram,ObjectModelDiagram,Block Definition Diagram,Internal Block Diagram,Statechart,SequenceDiagram,UseCaseDiagram,Requirements Diagram,State,Transition,Comment,AcceptEventAction,SendAction,AcceptTimeEvent,Constraint,Precondition,Postcondition,ControlFlow,Requirement,Block,Object
 isVisible8=1
 DLLServerCompatible8=1
 
@@ -69,7 +69,7 @@ DLLServerCompatible8=1
 name9=MBSE Method: Functional Analysis\Create an operation that the system does
 isPluginCommand9=1
 command9=InvokeFunctionalAnalysisHelper
-applicableTo9=ActivityDiagram,ObjectModelDiagram,Block Definition Diagram,Internal Block Diagram,Statechart,SequenceDiagram,UseCaseDiagram,Requirements Diagram,State,Transition,Comment,AcceptEventAction,SendAction,AcceptTimeEvent,Constraint,Precondition,Postcondition,ControlFlow,Requirement
+applicableTo9=ActivityDiagram,ObjectModelDiagram,Block Definition Diagram,Internal Block Diagram,Statechart,SequenceDiagram,UseCaseDiagram,Requirements Diagram,State,Transition,Comment,AcceptEventAction,SendAction,AcceptTimeEvent,Constraint,Precondition,Postcondition,ControlFlow,Requirement,Block,Object
 isVisible9=1
 DLLServerCompatible9=1
 
@@ -77,7 +77,7 @@ DLLServerCompatible9=1
 name10=MBSE Method: Functional Analysis\Create an attribute/check operation owned by the system
 isPluginCommand10=1
 command10=InvokeFunctionalAnalysisHelper
-applicableTo10=ActivityDiagram,ObjectModelDiagram,Block Definition Diagram,Internal Block Diagram,Statechart,SequenceDiagram,UseCaseDiagram,Requirements Diagram,State,Transition,Comment,AcceptEventAction,SendAction,AcceptTimeEvent,Constraint,Precondition,Postcondition,ControlFlow,Requirement
+applicableTo10=ActivityDiagram,ObjectModelDiagram,Block Definition Diagram,Internal Block Diagram,Statechart,SequenceDiagram,UseCaseDiagram,Requirements Diagram,State,Transition,Comment,AcceptEventAction,SendAction,AcceptTimeEvent,Constraint,Precondition,Postcondition,ControlFlow,Requirement,Block,Object
 isVisible10=1
 DLLServerCompatible10=1
 
@@ -190,6 +190,7 @@ DLLServerCompatible21=1
 #REM #178 29-MAY-2017: Update hep files so menus appear for ValueProperty (8.2) replacement of Attributes (F.J.Chadburn)
 #REM #179 29-MAY-2017: Added new Functional Analysis menu to Re-create «AutoShow» sequence diagram (F.J.Chadburn)
 #REM #189 29-MAY-2017: Updated hep files so create event, attribute, or operations menus appear more widely (F.J.Chadburn)
+#REM #196 05-JUN-2017: Enhanced create traced element dialogs to be context aware for blocks/parts (F.J.Chadburn)
 #REM
 #REM This file is part of SysMLHelperPlugin.
 #REM
