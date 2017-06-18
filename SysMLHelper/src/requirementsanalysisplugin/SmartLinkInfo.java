@@ -213,9 +213,9 @@ public class SmartLinkInfo {
 		theMsg+="<p style=\"text-align:center;font-weight:normal\">";
 		
 		if( m_StartLinkElements.size() == 1 ){
-			theMsg+= m_StartLinkElements.size() + " element (a";
+			theMsg+= m_StartLinkElements.size() + " element (a ";
 		} else {
-			theMsg+= m_StartLinkElements.size() + " elements (a";
+			theMsg+= m_StartLinkElements.size() + " elements (a "; 
 		}
 
 		theMsg+= m_StartLinkElements.getCommaSeparatedListOfElementsHTML( 3 );
@@ -403,6 +403,7 @@ public class SmartLinkInfo {
 
     Change history:
     #163 05-FEB-2017: Add new menus to Smart link: Start and Smart link: End (F.J.Chadburn)
+    #204 18-JUN-2017: Refine menu for invoking Smart Link panel and add FlowPort/EventReceptions support (F.J.Chadburn)
     
     This file is part of SysMLHelperPlugin.
 

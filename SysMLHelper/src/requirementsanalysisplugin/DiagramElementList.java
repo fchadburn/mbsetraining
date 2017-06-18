@@ -73,7 +73,7 @@ public class DiagramElementList extends HashSet<DiagramElementInfo> {
 			"Transition", "State" , "DefaultTransition" };
 
 		final String[] theSatisfyNonDiagramMetaClasses = {
-			"Operation", "Event", "Attribute" };
+			"Operation", "Event", "EventReception", "SysMLPort", "Attribute" };
 		
 		boolean isMatchFoundForAll = true;
 		
@@ -242,6 +242,7 @@ public class DiagramElementList extends HashSet<DiagramElementInfo> {
 
     Change history:
     #163 05-FEB-2017: Add new menus to Smart link: Start and Smart link: End (F.J.Chadburn)
+    #204 18-JUN-2017: Refine menu for invoking Smart Link panel and add FlowPort/EventReceptions support (F.J.Chadburn)
     
     This file is part of SysMLHelperPlugin.
 
