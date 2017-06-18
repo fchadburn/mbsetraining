@@ -320,3 +320,9 @@ UNDER DEV RELEASE 2.1.f (29-MAY-2017)
 ----------------------------------------------------------------------------------
 UNDER DEV RELEASE 2.1.g (05-JUN-2017)
 ----------------------------------------------------------------------------------
+#203 18-JUN-2017: Fix issues caused by fix #190 on 32 bit client but keep CPU property value overridden (F.J.Chadburn)
+#204 18-JUN-2017: Refine menu for invoking Smart Link panel and add FlowPort/EventReceptions support (F.J.Chadburn)
+#205 18-JUN-2017: Removed Perform rename in browser for elements on ADs from menus to simply (F.J.Chadburn)
+----------------------------------------------------------------------------------
+UNDER DEV RELEASE 2.1.h (18-JUN-2017)
+----------------------------------------------------------------------------------
