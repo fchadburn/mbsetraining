@@ -28,7 +28,7 @@ public class PolygonInfo {
 			theResult = Integer.parseInt( component[theIndex] );
 			
 		} catch (Exception e) {
-			Logger.writeLine("Error, exception in getValueAt("+ theIndex + ")");
+			Logger.writeLine("Warning, unable to find polgyon value for getValueAt("+ theIndex + ")");
 		}	
 		
 		return theResult;
@@ -36,11 +36,12 @@ public class PolygonInfo {
 }
 
 /**
- * Copyright (C) 2016  MBSE Training and Consulting Limited (www.executablembse.com)
+ * Copyright (C) 2016-2017  MBSE Training and Consulting Limited (www.executablembse.com)
 
     Change history:
     #019 15-MAY-2016: (new) Improvements to Functional Analysis Block default naming approach (F.J.Chadburn)
     #069 20-JUL-2016: Fix population of events/ops on diagram when creating from a transition (F.J.Chadburn)
+    #204 18-JUN-2017: Refine menu for invoking Smart Link panel and add FlowPort/EventReceptions support (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 
