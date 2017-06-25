@@ -1,109 +1,187 @@
 package sysmlhelperplugin;
 
+import generalhelpers.GeneralHelpers;
 import generalhelpers.Logger;
 import generalhelpers.UserInterfaceHelpers;
 
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import com.telelogic.rhapsody.core.*;
 
 public class DependencySelector {
-
+	
 	public static void selectDependsOnElementsFor(
-			List<IRPModelElement> theSelectedEls ){
+			Set<IRPModelElement> theCandidateEls,
+			String theStereotypeName ){
 		
-		IRPApplication theRhpApp = SysMLHelperPlugin.getRhapsodyApp();
+		Set<IRPModelElement> theElsToHighlight = 
+				new HashSet<IRPModelElement>();
 		
-		IRPCollection theDependsOnEls = theRhpApp.createNewCollection();
-		
-		for( IRPModelElement theCandidateEl : theSelectedEls ){
+		for( IRPModelElement theCandidateEl : theCandidateEls ){
 			
-			Logger.writeLine(theCandidateEl, "owned by " + Logger.elementInfo( theCandidateEl.getOwner() ) + " was selected for DependsOn analysis");
+			Logger.writeLine( theCandidateEl, "owned by " + 
+					Logger.elementInfo( theCandidateEl.getOwner() ) + 
+					" was selected for DependsOn analysis");
+
 			@SuppressWarnings("unchecked")
 			List<IRPModelElement> theNestedElDependencies = 
 					theCandidateEl.getNestedElementsByMetaClass( "Dependency", 1 ).toList();
 			
 			for( IRPModelElement theNestElDependency : theNestedElDependencies ){
 
-				IRPModelElement theDependsOn = 
-						((IRPDependency) theNestElDependency).getDependsOn();
-				
-				if( theDependsOn != null ){
-					theDependsOnEls.addItem( theDependsOn );
-				}
-			}
-			
-			if( theCandidateEl instanceof IRPDependency ){
+				if( theStereotypeName == null || 
+						GeneralHelpers.hasStereotypeCalled(
+								theStereotypeName, theNestElDependency ) ){
 
-				IRPModelElement theDependsOn = 
-						((IRPDependency) theCandidateEl).getDependsOn();
-				
-				if( theDependsOn != null ){
-					theDependsOnEls.addItem( theDependsOn );
-				}
-			}
-		}
-		
-		if( theDependsOnEls.getCount() > 0 ){
-			
-			theRhpApp.selectModelElements( theDependsOnEls );
-		} else {
-			String theMsg = 
-					"There were no depends on relations found underneath the " + 
-					theSelectedEls.size() + " selected elements.";
-			
-			UserInterfaceHelpers.showInformationDialog( theMsg );
-		}
-	}
-	
-	public static void selectDependentElementsFor(
-			List<IRPModelElement> theSelectedEls ){
-		
-		IRPApplication theRhpApp = SysMLHelperPlugin.getRhapsodyApp();
-		
-		IRPCollection theDependentEls = theRhpApp.createNewCollection();
-		
-		for( IRPModelElement theCandidateEl : theSelectedEls ){
-			
-			Logger.writeLine(theCandidateEl, "was selected for Dependent analysis");
-
-			
-			@SuppressWarnings("unchecked")
-			List<IRPModelElement> theReferences = 
-					theCandidateEl.getReferences().toList();
-			
-			for( IRPModelElement theReference : theReferences ){
-
-				Logger.writeLine(theReference, " is a reference");
-				
-				if( theReference instanceof IRPDependency ){
+					IRPModelElement theDependsOn = 
+							((IRPDependency) theNestElDependency).getDependsOn();
 					
-					IRPModelElement theDependent = ((IRPDependency)theReference).getDependent();
-					
-					if( theDependent != null ){
-						theDependentEls.addItem( theDependent );
+					if( theDependsOn != null ){
+						theElsToHighlight.add( theDependsOn );
 					}
 				}
 			}
 			
 			if( theCandidateEl instanceof IRPDependency ){
 
-				IRPModelElement theDependsOn = 
+				if( theStereotypeName == null || 
+						GeneralHelpers.hasStereotypeCalled(
+								theStereotypeName, theCandidateEl ) ){
+
+					IRPModelElement theDependsOn = 
+							((IRPDependency) theCandidateEl).getDependsOn();
+					
+					if( theDependsOn != null ){
+						theElsToHighlight.add( theDependsOn );
+					}
+				}
+			}
+		}
+
+		multiSelectElementsInBrowser(
+				theElsToHighlight, true );
+	}
+		
+	public static void selectDependentElementsFor(
+			Set<IRPModelElement> theCandidateEls,
+			String theStereotypeName ){
+		
+		Set<IRPModelElement> theElsToHighlight = 
+				new HashSet<IRPModelElement>();
+		
+		for( IRPModelElement theCandidateEl : theCandidateEls ){
+			
+			Logger.writeLine( theCandidateEl, "was selected for Dependent analysis" );
+	
+			@SuppressWarnings("unchecked")
+			List<IRPModelElement> theReferences = 
+					theCandidateEl.getReferences().toList();
+			
+			for( IRPModelElement theReference : theReferences ){
+
+				if( theReference instanceof IRPDependency &&
+						( theStereotypeName == null || 
+								GeneralHelpers.hasStereotypeCalled(
+										theStereotypeName, theReference ) ) ){
+					
+					IRPModelElement theDependent = 
+							((IRPDependency)theReference).getDependent();
+					
+					if( theDependent != null ){
+						theElsToHighlight.add( theDependent );
+					}
+				}
+			}
+			
+			if( theCandidateEl instanceof IRPDependency &&
+					( theStereotypeName == null || 
+							GeneralHelpers.hasStereotypeCalled(
+									theStereotypeName, theCandidateEl ) )){
+
+				IRPModelElement theDependent = 
 						((IRPDependency) theCandidateEl).getDependent();
 				
-				if( theDependsOn != null ){
-					theDependentEls.addItem( theDependsOn );
+				if( theDependent != null ){
+					theElsToHighlight.add( theDependent );
 				}
 			}
 		}
 		
-		if( theDependentEls.getCount() > 0 ){
+		multiSelectElementsInBrowser(
+				theElsToHighlight, true );
+	}
+	
+	private static void multiSelectElementsInBrowser(
+			Set<IRPModelElement> theEls,
+			boolean withInfoDialog ){
+		
+		IRPApplication theRhpApp = SysMLHelperPlugin.getRhapsodyApp();
+		theRhpApp.refreshAllViews();
+					
+		IRPCollection theEmptyCollection = theRhpApp.createNewCollection();
+		theRhpApp.selectGraphElements( theEmptyCollection );
+
+		IRPCollection theRhpCollection = theRhpApp.createNewCollection();
+
+		for( IRPModelElement theEl : theEls ){
+			theEl.highLightElement();
+			theRhpCollection.addItem( theEl );
+		}
+
+		theRhpApp.refreshAllViews();
+		
+		int theCount = theRhpCollection.getCount();
+		
+		if( theCount > 0 ){
+
+			theRhpApp.selectModelElements( 
+					theRhpCollection );
+
+			if( withInfoDialog ){
+				
+				String theMsg = theCount + " elements will be selected in the browser: \n";
+				
+				int count = 0;
+				
+				for( Iterator<IRPModelElement> iterator = theEls.iterator(); iterator.hasNext(); ){
+
+					IRPModelElement theEl = (IRPModelElement) iterator.next();
+
+					String theElementInfo = Logger.elementInfo( theEl );
+					
+					int length = theElementInfo.length();
+					
+					if( length > 70 ){
+						theMsg += theElementInfo.substring(0, 70) + "... ";
+						
+					} else {
+						theMsg += theElementInfo + " ";
+					}
+					
+					if( iterator.hasNext() ){
+						theMsg += "\n";
+					}
+					
+					count++;
+					
+					if( count > 10 ){
+						theMsg += "(... more)";
+						break;
+					}
+				}
+								
+				theMsg += "\n";
+				
+				UserInterfaceHelpers.showInformationDialog( theMsg );
+			}
 			
-			theRhpApp.selectModelElements( theDependentEls );
-		} else {
+		} else if( withInfoDialog ) {
+			
 			String theMsg = 
-					"There were no dependent elements for the " + 
-					theSelectedEls.size() + " selected elements.";
+					"There were no elements selected.";
 			
 			UserInterfaceHelpers.showInformationDialog( theMsg );
 		}
@@ -115,6 +193,7 @@ public class DependencySelector {
 
     Change history:
     #172 02-APR-2017: Added new General Utilities > Select Dependent element(s) option (F.J.Chadburn)
+    #207 25-JUN-2017: Significant bolstering of Select Depends On/Dependent element(s) menus (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 
