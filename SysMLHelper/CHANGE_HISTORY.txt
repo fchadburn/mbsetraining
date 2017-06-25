@@ -326,3 +326,9 @@ UNDER DEV RELEASE 2.1.g (05-JUN-2017)
 ----------------------------------------------------------------------------------
 UNDER DEV RELEASE 2.1.h (18-JUN-2017)
 ----------------------------------------------------------------------------------
+#206 25-JUN-2017: Removed ReferenceUnitPath from .properties to fix profiles missing $OMROOT (F.J.Chadburn)
+#207 25-JUN-2017: Significant bolstering of Select Depends On/Dependent element(s) menus (F.J.Chadburn)
+#208 25-JUN-2017: Updated GlobalPreferencesProfile to allow for Rounded Rectilinear options (F.J.Chadburn)
+----------------------------------------------------------------------------------
+UNDER DEV RELEASE 2.1.i (25-JUN-2017)
+----------------------------------------------------------------------------------
