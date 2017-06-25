@@ -1203,6 +1203,25 @@ public class GeneralHelpers {
 
 		}
 	}
+	
+	public static Set<IRPModelElement> getSetOfElementsFromCombiningThe(
+			List<IRPModelElement> theSelectedEls,
+			List<IRPGraphElement> theSelectedGraphEls ){
+		
+		Set<IRPModelElement> theSetOfElements = 
+				new HashSet<IRPModelElement>( theSelectedEls );
+
+		for( IRPGraphElement theGraphEl : theSelectedGraphEls ){
+			
+			IRPModelElement theEl = theGraphEl.getModelObject();
+			
+			if( theEl != null ){
+				theSetOfElements.add( theEl );
+			}
+		}
+
+		return theSetOfElements;
+	}
 }
 
 /**
@@ -1238,6 +1257,7 @@ public class GeneralHelpers {
     #171 08-MAR-2017: Added some dormant ops to GeneralHelpers to assist with 3rd party integration (F.J.Chadburn)
     #184 29-MAY-2017: Create a connector between pElapsedTime port when creating block hierarchy (F.J.Chadburn)
     #202 05-JUN-2017: Minor changes to logging in GeneralHelpers (F.J.Chadburn)
+    #207 25-JUN-2017: Significant bolstering of Select Depends On/Dependent element(s) menus (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 
