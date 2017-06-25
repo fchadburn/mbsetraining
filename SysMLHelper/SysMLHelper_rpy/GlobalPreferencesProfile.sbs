@@ -470,9 +470,9 @@ I-Logix-RPY-Archive version 8.13.0 C++ 9794446
 							- value = 
 							{ IProperty 
 								- _Name = "line_style";
-								- _Value = "rectilinear_arrows";
+								- _Value = "rounded_rectilinear_arrows";
 								- _Type = Enum;
-								- _ExtraTypeInfo = "straight_arrows,rectilinear_arrows,spline_arrows";
+								- _ExtraTypeInfo = "straight_arrows,rectilinear_arrows,spline_arrows,rounded_rectilinear_arrows";
 							}
 						}
 					}
@@ -996,7 +996,7 @@ I-Logix-RPY-Archive version 8.13.0 C++ 9794446
 								- _Name = "line_style";
 								- _Value = "rectilinear_arrows";
 								- _Type = Enum;
-								- _ExtraTypeInfo = "straight_arrows,rectilinear_arrows,spline_arrows";
+								- _ExtraTypeInfo = "straight_arrows,rectilinear_arrows,spline_arrows,rounded_rectilinear_arrows";
 							}
 						}
 					}
@@ -1176,7 +1176,7 @@ I-Logix-RPY-Archive version 8.13.0 C++ 9794446
 								- _Name = "line_style";
 								- _Value = "rectilinear_arrows";
 								- _Type = Enum;
-								- _ExtraTypeInfo = "straight_arrows,rectilinear_arrows,spline_arrows";
+								- _ExtraTypeInfo = "straight_arrows,rectilinear_arrows,spline_arrows,rounded_rectilinear_arrows";
 							}
 						}
 					}
@@ -1237,7 +1237,7 @@ I-Logix-RPY-Archive version 8.13.0 C++ 9794446
 								- _Name = "line_style";
 								- _Value = "straight_arrows";
 								- _Type = Enum;
-								- _ExtraTypeInfo = "straight_arrows,rectilinear_arrows,spline_arrows,tree";
+								- _ExtraTypeInfo = "straight_arrows,rectilinear_arrows,spline_arrows,tree,rounded_rectilinear_arrows";
 							}
 						}
 					}
@@ -1283,7 +1283,7 @@ I-Logix-RPY-Archive version 8.13.0 C++ 9794446
 		}
 	}
 	- _name = "GlobalPreferencesProfile";
-	- _modifiedTimeWeak = 3.3.2017::11:54:10;
+	- _modifiedTimeWeak = 6.25.2017::14:44:15;
 	- _lastID = 1;
 	- Declaratives = { IRPYRawContainer 
 		- size = 21;
@@ -2097,8 +2097,8 @@ cStruct, DDS/tpQosPolicy, DDS/udQosPolicy, DDS/wdlQosPolicy, DDS/ddsDiagram, DDS
 			}
 		}
 	}
-	- weakCGTime = 3.3.2017::11:54:10;
-	- strongCGTime = 3.3.2017::11:54:10;
+	- weakCGTime = 6.25.2017::14:44:15;
+	- strongCGTime = 6.25.2017::14:44:15;
 	- _defaultComposite = GUID d99cf07a-d91b-4fe7-8454-c53a4512e0b1;
 	- _eventsBaseID = -1;
 	- Classes = { IRPYRawContainer 
@@ -2108,9 +2108,9 @@ cStruct, DDS/tpQosPolicy, DDS/udQosPolicy, DDS/wdlQosPolicy, DDS/ddsDiagram, DDS
 			- _id = GUID d99cf07a-d91b-4fe7-8454-c53a4512e0b1;
 			- _myState = 40960;
 			- _name = "TopLevel";
-			- _modifiedTimeWeak = 2.15.2017::22:3:10;
-			- weakCGTime = 2.15.2017::22:3:10;
-			- strongCGTime = 2.15.2017::22:3:10;
+			- _modifiedTimeWeak = 3.3.2017::11:54:10;
+			- weakCGTime = 3.3.2017::11:54:10;
+			- strongCGTime = 3.3.2017::11:54:10;
 			- _multiplicity = "";
 			- _itsStateChart = { IHandle 
 				- _m2Class = "";
