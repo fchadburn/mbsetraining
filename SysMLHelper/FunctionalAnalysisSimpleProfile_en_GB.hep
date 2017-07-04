@@ -109,7 +109,7 @@ DLLServerCompatible13=1
 name14=MBSE Method: Functional Analysis\Populate requirements for SD(s) based on messages
 isPluginCommand14=1
 command14=InvokeFunctionalAnalysisHelper
-applicableTo14=SequenceDiagram,Package
+applicableTo14=SequenceDiagram
 isVisible14=1
 DLLServerCompatible14=1
 
@@ -191,6 +191,7 @@ DLLServerCompatible21=1
 #REM #188 29-MAY-2017: Tweak Derive downstream requirement to work on right-clicking reqt on IBD or UCD (F.J.Chadburn)
 #REM #189 29-MAY-2017: Updated hep files so create event, attribute, or operations menus appear more widely (F.J.Chadburn)
 #REM #196 05-JUN-2017: Enhanced create traced element dialogs to be context aware for blocks/parts (F.J.Chadburn)
+#REM #209 04-JUL-2017: Populate requirements for SD(s) based on messages now supported with Dialog (F.J.Chadburn)
 #REM
 #REM This file is part of SysMLHelperPlugin.
 #REM

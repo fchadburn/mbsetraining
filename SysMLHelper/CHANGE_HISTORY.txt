@@ -332,3 +332,10 @@ UNDER DEV RELEASE 2.1.h (18-JUN-2017)
 ----------------------------------------------------------------------------------
 UNDER DEV RELEASE 2.1.i (25-JUN-2017)
 ----------------------------------------------------------------------------------
+#209 04-JUL-2017: Populate requirements for SD(s) based on messages now supported with Dialog (F.J.Chadburn)
+#210 04-JUL-2017: Fixed a bug stopping event creation dialog launching when populate check-box shown (F.J.Chadburn)
+#211 04-JUL-2017: Set UseCaseGe::Actor::ShowName property in GlobalPreferencesProfile to Name_only (F.J.Chadburn)
+#212 04-JUL-2017: Added a MergeActors helper, currently only invoked via Eclipse (F.J.Chadburn)
+----------------------------------------------------------------------------------
+UNDER DEV RELEASE 2.1.j (04-JUL-2017)
+----------------------------------------------------------------------------------
