@@ -1,4 +1,4 @@
-I-Logix-RPY-Archive version 8.13.0 C++ 9794446
+I-Logix-RPY-Archive version 8.13.0 C++ 9803352
 { IProfile 
 	- _id = GUID e6cbeb25-2cf4-4c66-9c75-cbb99e029222;
 	- _myState = 8192;
@@ -1185,8 +1185,21 @@ I-Logix-RPY-Archive version 8.13.0 C++ 9794446
 			{ IPropertySubject 
 				- _Name = "UseCaseGe";
 				- Metaclasses = { IRPYRawContainer 
-					- size = 5;
+					- size = 6;
 					- value = 
+					{ IPropertyMetaclass 
+						- _Name = "Actor";
+						- Properties = { IRPYRawContainer 
+							- size = 1;
+							- value = 
+							{ IProperty 
+								- _Name = "ShowName";
+								- _Value = "Name_only";
+								- _Type = Enum;
+								- _ExtraTypeInfo = "Full_path,Relative,Name_only,Label";
+							}
+						}
+					}
 					{ IPropertyMetaclass 
 						- _Name = "Association";
 						- Properties = { IRPYRawContainer 
@@ -1283,7 +1296,7 @@ I-Logix-RPY-Archive version 8.13.0 C++ 9794446
 		}
 	}
 	- _name = "GlobalPreferencesProfile";
-	- _modifiedTimeWeak = 6.25.2017::14:44:15;
+	- _modifiedTimeWeak = 7.4.2017::15:44:0;
 	- _lastID = 1;
 	- Declaratives = { IRPYRawContainer 
 		- size = 21;
@@ -2097,8 +2110,8 @@ cStruct, DDS/tpQosPolicy, DDS/udQosPolicy, DDS/wdlQosPolicy, DDS/ddsDiagram, DDS
 			}
 		}
 	}
-	- weakCGTime = 6.25.2017::14:44:15;
-	- strongCGTime = 6.25.2017::14:44:15;
+	- weakCGTime = 7.4.2017::15:44:0;
+	- strongCGTime = 7.4.2017::15:44:0;
 	- _defaultComposite = GUID d99cf07a-d91b-4fe7-8454-c53a4512e0b1;
 	- _eventsBaseID = -1;
 	- Classes = { IRPYRawContainer 
@@ -2108,9 +2121,9 @@ cStruct, DDS/tpQosPolicy, DDS/udQosPolicy, DDS/wdlQosPolicy, DDS/ddsDiagram, DDS
 			- _id = GUID d99cf07a-d91b-4fe7-8454-c53a4512e0b1;
 			- _myState = 40960;
 			- _name = "TopLevel";
-			- _modifiedTimeWeak = 3.3.2017::11:54:10;
-			- weakCGTime = 3.3.2017::11:54:10;
-			- strongCGTime = 3.3.2017::11:54:10;
+			- _modifiedTimeWeak = 6.25.2017::14:44:15;
+			- weakCGTime = 6.25.2017::14:44:15;
+			- strongCGTime = 6.25.2017::14:44:15;
 			- _multiplicity = "";
 			- _itsStateChart = { IHandle 
 				- _m2Class = "";
