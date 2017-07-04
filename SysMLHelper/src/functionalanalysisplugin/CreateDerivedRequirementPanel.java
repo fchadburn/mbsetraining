@@ -270,7 +270,9 @@ public class CreateDerivedRequirementPanel extends CreateTracedElementPanel {
 						m_TargetOwningElement );
 		
 		m_RequirementSelectionPanel = new RequirementSelectionPanel( 
-				forHigherLevelReqts, "Create «deriveReqt» dependencies to:" );
+				"Create «deriveReqt» dependencies to:",
+				forHigherLevelReqts, 
+				forHigherLevelReqts );
 		
 		m_RequirementSelectionPanel.setAlignmentX(LEFT_ALIGNMENT);
 		
@@ -612,6 +614,7 @@ public class CreateDerivedRequirementPanel extends CreateTracedElementPanel {
     #126 25-NOV-2016: Fixes to CreateNewActorPanel to cope better when multiple blocks are in play (F.J.Chadburn)
     #134 02-DEC-2016: Fix issue with Derive requirement dialog not launching (F.J.Chadburn)
     #188 29-MAY-2017: Tweak Derive downstream requirement to work on right-clicking reqt on IBD or UCD (F.J.Chadburn)
+    #209 04-JUL-2017: Populate requirements for SD(s) based on messages now supported with Dialog (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

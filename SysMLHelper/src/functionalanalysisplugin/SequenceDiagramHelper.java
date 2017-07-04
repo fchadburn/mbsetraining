@@ -14,16 +14,6 @@ import com.telelogic.rhapsody.core.*;
 
 public class SequenceDiagramHelper {	
 	
-	public static void populateRequirementsForSequenceDiagramsBasedOn(
-			List<IRPModelElement> theSelectedEls){
-		
-		Set<IRPModelElement> theEls = buildSetOfElementsFor(theSelectedEls, "SequenceDiagram", true);
-		
-		for (IRPModelElement theEl : theEls) {
-			populateRequirementsFor( (IRPSequenceDiagram)theEl );
-		}
-	}
-	
 	public static void updateVerificationsForSequenceDiagramsBasedOn(
 			List<IRPModelElement> theSelectedEls){
 		
@@ -31,75 +21,6 @@ public class SequenceDiagramHelper {
 		
 		for (IRPModelElement theEl : theEls) {
 			updateVerificationsFor( (IRPSequenceDiagram)theEl );
-		}
-	}
-
-	private static void removeExistingRequirementsFrom(IRPDiagram theDiagram){
-		
-		Set<IRPRequirement> theReqtsOnDiagram = buildSetOfRequirementsAlreadyOn( theDiagram );
-		
-		for (IRPRequirement theRequirement : theReqtsOnDiagram) {
-			removeElementFromDiagram( theRequirement, theDiagram );
-		}
-	}
-
-	private static void populateRequirementsFor(IRPSequenceDiagram theSD) {
-		
-		Logger.writeLine("Populate requirements invoked for " + Logger.elementInfo( theSD ) );
-		removeExistingRequirementsFrom( theSD );
-		
-		Set<IRPRequirement> theRequirementsAdded = new HashSet<IRPRequirement>();
-		
-		IRPCollaboration theCollaboration = theSD.getLogicalCollaboration();
-		
-		@SuppressWarnings("unchecked")
-		List<IRPModelElement> theMessagePoints = theCollaboration.getMessagePoints().toList();
-		
-		for (IRPModelElement irpModelElement : theMessagePoints) {
-			
-			IRPMessagePoint theMessagePoint = (IRPMessagePoint)irpModelElement;
-			IRPMessage theMessage = theMessagePoint.getMessage();
-			IRPInterfaceItem theInterfaceItem = theMessage.getFormalInterfaceItem();
-
-			if (theInterfaceItem instanceof IRPEvent || 
-				theInterfaceItem instanceof IRPOperation){
-				
-				@SuppressWarnings("unchecked")
-				List<IRPGraphElement> theGraphEls = theSD.getCorrespondingGraphicElements( theMessage ).toList();
-
-				for (IRPGraphElement irpGraphElement : theGraphEls) {
-					
-					if (irpGraphElement instanceof IRPGraphEdge){
-											
-						IRPGraphEdge theGraphEdge = (IRPGraphEdge) irpGraphElement;
-
-						IRPGraphicalProperty theGraphicalProperty = theGraphEdge.getGraphicalProperty("TargetPosition");
-						String theValue = theGraphicalProperty.getValue();
-
-						String[] xy = theValue.split(",");
-						int top_left_x = Integer.parseInt(xy[0]);
-						int top_left_y = Integer.parseInt(xy[1]);
-						int x = top_left_x + 100;
-						int xinc = 300;
-						
-						Set<IRPRequirement> theReqtsThatTraceFrom = 
-								TraceabilityHelper.getRequirementsThatTraceFrom( theInterfaceItem, true );
-						
-						for (IRPRequirement theReqt : theReqtsThatTraceFrom) {
-							
-							// only populate once per diagram, i.e. first instance only
-							if (!theRequirementsAdded.contains(theReqt)){
-								
-								//Logger.writeLine(theInterfaceItem, "traces to " + Logger.elementInfo( theReqt ));
-								theSD.addNewNodeForElement(theReqt, x, top_left_y-20, 298, 58);
-								theRequirementsAdded.add(theReqt);
-								x=x+xinc;
-							}
-
-						}
-					}
-				}	
-			}
 		}
 	}
 	
@@ -143,31 +64,6 @@ public class SequenceDiagramHelper {
 			} else {
 				theMatchingEls.add( elementToAdd );
 			}
-		}
-	}
-	
-	private static void removeElementFromDiagram(
-			IRPModelElement theElementToRemove, 
-			IRPDiagram fromDiagram){
-		
-		IRPCollection theGraphElsToDelete = FunctionalAnalysisPlugin.getRhapsodyApp().createNewCollection();
-		
-		@SuppressWarnings("unchecked")
-		List<IRPGraphElement> theGraphEls = fromDiagram.getGraphicalElements().toList();
-		
-		for (IRPGraphElement theGraphEl : theGraphEls) {
-			
-			IRPModelElement theModelObject = theGraphEl.getModelObject();
-				
-			if (theModelObject.equals( theElementToRemove )){
-				theGraphElsToDelete.addGraphicalItem( theGraphEl );
-			}			
-		}
-		
-		if (theGraphElsToDelete.getCount() != 0){
-			fromDiagram.removeGraphElements( theGraphElsToDelete );
-		} else {
-			Logger.writeLine(theElementToRemove,"Error: Unable to remove from " + Logger.elementInfo(fromDiagram) + "as it doesn't exist");
 		}
 	}
 	
@@ -352,7 +248,6 @@ public class SequenceDiagramHelper {
 			GeneralHelpers.applyExistingStereotype( "AutoShow", theSD );
 		}
 	}
-
 }
 
 /**
@@ -365,6 +260,7 @@ public class SequenceDiagramHelper {
     #044 03-JUL-2016: Minor re-factoring/code corrections (F.J.Chadburn)
     #179 29-MAY-2017: Add new Functional Analysis menu to Re-create «AutoShow» sequence diagram (F.J.Chadburn)
     #187 29-MAY-2017: Provide option to re-create «AutoShow» sequence diagram when adding new actor (F.J.Chadburn)
+    #209 04-JUL-2017: Populate requirements for SD(s) based on messages now supported with Dialog (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

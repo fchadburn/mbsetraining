@@ -26,6 +26,16 @@ public class GraphNodeInfo {
 		m_GraphNode = theGraphNode;
 	}
 	
+	public int getWidth(){
+	
+		return getBottomRightX() - getTopLeftX();
+	}
+	
+	public int getHeight(){
+		
+		return getBottomRightY() - getTopLeftY();
+	}
+	
 	public int getTopLeftX(){
 		
 		PolygonInfo thePolygonInfo = new PolygonInfo( m_GraphNode );		
@@ -88,10 +98,11 @@ public class GraphNodeInfo {
 }
 
 /**
- * Copyright (C) 2016  MBSE Training and Consulting Limited (www.executablembse.com)
+ * Copyright (C) 2016-2017  MBSE Training and Consulting Limited (www.executablembse.com)
 
     Change history:
     #019 15-MAY-2016: (new) Improvements to Functional Analysis Block default naming approach (F.J.Chadburn)
+    #212 04-JUL-2017: Added a MergeActors helper, currently only invoked via Eclipse (F.J.Chadburn) 
 
     This file is part of SysMLHelperPlugin.
 

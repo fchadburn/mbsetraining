@@ -119,10 +119,14 @@ public abstract class CreateTracedElementPanel extends JPanel {
 		
 		if (tracedToReqts.isEmpty()){	
 			m_RequirementsPanel = new RequirementSelectionPanel( 
-					tracedToReqts, "There are no requirements to establish «satisfy» dependencies to" );
+					"There are no requirements to establish «satisfy» dependencies to",
+					tracedToReqts, 
+					tracedToReqts );
 		} else {
 			m_RequirementsPanel = new RequirementSelectionPanel( 
-					tracedToReqts, "With «satisfy» dependencies to:" );
+					"With «satisfy» dependencies to:",
+					tracedToReqts, 
+					tracedToReqts );
 		}
 		
 	}
@@ -652,6 +656,7 @@ public abstract class CreateTracedElementPanel extends JPanel {
     #197 05-JUN-2017: Fix 8.2 issue in Incoming Event panel, create ValueProperty rather than attribute (F.J.Chadburn)
     #199 05-JUN-2017: Improved create event panel consistency to name event Tbd if no text provided (F.J.Chadburn)
     #200 05-JUN-2017: Hide Populate on diagram check-boxes if context is not valid (F.J.Chadburn)
+    #209 04-JUL-2017: Populate requirements for SD(s) based on messages now supported with Dialog (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

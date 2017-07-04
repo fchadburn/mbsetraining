@@ -269,9 +269,9 @@ public class FunctionalAnalysisPlugin extends RPUserPlugin {
 
 			} else if (menuItem.equals(m_configSettings.getString("functionalanalysisplugin.PopulateRequirementsForSDsMenu"))){
 
-				if (!theSelectedEls.isEmpty()){
+				if (theSelectedEl instanceof IRPSequenceDiagram){
 					try {
-						SequenceDiagramHelper.populateRequirementsForSequenceDiagramsBasedOn( theSelectedEls );
+						PopulateRelatedRequirementsPanel.launchThePanel( (IRPSequenceDiagram) theSelectedEl );
 
 					} catch (Exception e) {
 						Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking SequenceDiagramHelper.populateRequirementsForSequenceDiagramsBasedOn");
@@ -405,6 +405,7 @@ public class FunctionalAnalysisPlugin extends RPUserPlugin {
     #137 02-DEC-2016: Allow 'create attribute' menu command on AD/RD canvas right-click (F.J.Chadburn)
     #179 29-MAY-2017: Add new Functional Analysis menu to Re-create «AutoShow» sequence diagram (F.J.Chadburn)
     #196 05-JUN-2017: Enhanced create traced element dialogs to be context aware for blocks/parts (F.J.Chadburn)
+    #209 04-JUL-2017: Populate requirements for SD(s) based on messages now supported with Dialog (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

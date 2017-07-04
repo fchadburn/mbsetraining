@@ -346,10 +346,11 @@ public class CreateIncomingEventPanel extends CreateTracedElementPanel {
 		thePageStartPanel.setLayout( new BoxLayout( thePageStartPanel, BoxLayout.X_AXIS ) );
 		thePageStartPanel.add( createChosenNamePanelWith( "Create an event called:  ", theProposedName ) );
 
+		m_EventActionIsNeededCheckBox = new JCheckBox("Populate on diagram?");
+
 		if( forModelElement instanceof IRPAttribute  || 
 			FunctionalAnalysisSettings.getIsPopulateOptionHidden( thePackageForEvent.getProject() ) ){
 			
-			m_EventActionIsNeededCheckBox = new JCheckBox("Populate on diagram?");
 			m_EventActionIsNeededCheckBox.setSelected( false );
 			m_EventActionIsNeededCheckBox.setVisible( false );
 			
@@ -1251,6 +1252,7 @@ public class CreateIncomingEventPanel extends CreateTracedElementPanel {
     #199 05-JUN-2017: Improved create event panel consistency to name event Tbd if no text provided (F.J.Chadburn)
     #200 05-JUN-2017: Hide Populate on diagram check-boxes if context is not valid (F.J.Chadburn)
     #201 05-JUN-2017: Highlight attribute post-event creation to ease potential for flow-port creation (F.J.Chadburn)
+    #210 04-JUL-2017: Fixed a bug stopping event creation dialog launching when populate check-box shown (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

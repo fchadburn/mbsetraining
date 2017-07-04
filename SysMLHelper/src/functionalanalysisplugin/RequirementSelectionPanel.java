@@ -36,8 +36,9 @@ public class RequirementSelectionPanel extends JPanel {
 	private Map<IRPRequirement, JCheckBox> m_CheckBoxMap = new HashMap<IRPRequirement, JCheckBox>();
 
 	public RequirementSelectionPanel(
-			Set<IRPRequirement> theReqts, 
-			String theLabelText ){
+			String theLabelText,
+			Set<IRPRequirement> theReqtsInTable,
+			Set<IRPRequirement> theReqtsSelected ){
 		
 		super();
 
@@ -45,7 +46,7 @@ public class RequirementSelectionPanel extends JPanel {
 		
 		setLayout( theLayout );
 
-		if( !theReqts.isEmpty() ){
+		if( !theReqtsInTable.isEmpty() ){
 				
 			setBorder( BorderFactory.createLineBorder( new Color(0,0,0) ));
 			
@@ -57,7 +58,7 @@ public class RequirementSelectionPanel extends JPanel {
 			theLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
 			theBox.add( theLabel );
 
-			JPanel theReqtsTable = createContent( theReqts );
+			JPanel theReqtsTable = createContent( theReqtsInTable, theReqtsSelected );
 			theReqtsTable.setAlignmentX(Component.LEFT_ALIGNMENT);
 			theBox.add( theReqtsTable );
 			
@@ -65,7 +66,9 @@ public class RequirementSelectionPanel extends JPanel {
 		}
 	}
 	
-	private JPanel createContent(Set<IRPRequirement> theReqts){
+	private JPanel createContent(
+			Set<IRPRequirement> theReqtsInTable,
+			Set<IRPRequirement> theReqtsSelected ){
 		
 		JPanel thePanel = new JPanel();
 
@@ -82,11 +85,11 @@ public class RequirementSelectionPanel extends JPanel {
 		theHorizSequenceGroup.addGroup( theColumn1ParallelGroup );
 		theHorizSequenceGroup.addGroup( theColumn2ParallelGroup );
 
-		for (IRPRequirement theReqt : theReqts) {
+		for (IRPRequirement theReqt : theReqtsInTable) {
 
 			JCheckBox theReqtCheckBox = new JCheckBox( theReqt.getName()) ;
 
-			theReqtCheckBox.setSelected(true);
+			theReqtCheckBox.setSelected( theReqtsSelected.contains( theReqt ) );
 
 			JTextArea theSpecification = new JTextArea( theReqt.getSpecification() );
 			theSpecification.setEditable( false );
@@ -114,6 +117,35 @@ public class RequirementSelectionPanel extends JPanel {
 	    return thePanel;
 	}
 
+	public void selectedRequirementsIn( Set<IRPRequirement> theReqts ){
+		
+		for( IRPRequirement theReqt : theReqts ){
+			
+			JCheckBox theCheckBox = m_CheckBoxMap.get( theReqt );
+			
+			if( theCheckBox != null ){
+				theCheckBox.setSelected( true );
+			} else {
+				Logger.writeLine("Warning in RequirementSelectionPanel.selectedRequirementsIn, " + 
+						Logger.elementInfo( theReqt ) + " is not in table of expected requirements");
+			}
+		}
+	}
+
+	public void deselectedRequirementsIn( Set<IRPRequirement> theReqts ){
+		
+		for( IRPRequirement theReqt : theReqts ){
+			
+			JCheckBox theCheckBox = m_CheckBoxMap.get( theReqt );
+			
+			if( theCheckBox != null ){
+				theCheckBox.setSelected( false );
+			} else {
+				Logger.writeLine("Warning in RequirementSelectionPanel.selectedRequirementsIn, " + 
+						Logger.elementInfo( theReqt ) + " is not in table of expected requirements");
+			}
+		}
+	}
 	public List<IRPRequirement> getSelectedRequirementsList(){
 		
 		List<IRPRequirement> theFilteredReqts = new ArrayList<IRPRequirement>();
@@ -139,7 +171,7 @@ public class RequirementSelectionPanel extends JPanel {
 }
 
 /**
- * Copyright (C) 2016  MBSE Training and Consulting Limited (www.executablembse.com)
+ * Copyright (C) 2016-2017  MBSE Training and Consulting Limited (www.executablembse.com)
 
     Change history:
     #022 30-MAY-2016: Improved handling and validation of event/operation creation by adding new forms (F.J.Chadburn)
@@ -149,6 +181,7 @@ public class RequirementSelectionPanel extends JPanel {
     #051 06-JUL-2016: Re-factored the GW panel to allow it to incrementally add to previous setup (F.J.Chadburn)
     #056 13-JUL-2016: Minor fixes to RequirementsSelectionPanel to make it clearer (F.J.Chadburn)
     #058 13-JUL-2016: Dropping CallOp on diagram now gives option to create Op on block (F.J.Chadburn)
+    #209 04-JUL-2017: Populate requirements for SD(s) based on messages now supported with Dialog (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 
