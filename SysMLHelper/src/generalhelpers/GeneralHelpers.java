@@ -855,7 +855,9 @@ public class GeneralHelpers {
 		
 		String theUniqueName = theProposedName;
 		
-		while (!isElementNameUnique(theUniqueName, ofMetaClass, underElement, 1)){
+		while( !isElementNameUnique(
+				theUniqueName, ofMetaClass, underElement, 1 ) ){
+			
 			count++;
 			theUniqueName = theProposedName + count;
 		}
@@ -1135,31 +1137,61 @@ public class GeneralHelpers {
 	
 	public static List<IRPLink> getLinksBetween(
 			IRPSysMLPort thePort,
+			IRPInstance ownedByPart,
 			IRPSysMLPort andThePort,
+			IRPInstance whichIsOwnedByPart,
 			IRPClassifier inBuildingBlock ){
 		
 		List<IRPLink> theLinksBetween = 
 				new ArrayList<IRPLink>();
 	
 		@SuppressWarnings("unchecked")
-		List<IRPLink> theExistingLinks = inBuildingBlock.getLinks().toList();
+		List<IRPLink> theExistingLinks = 
+			inBuildingBlock.getLinks().toList();
 		
 		for( IRPLink theExistingLink : theExistingLinks ){
 		
 			IRPSysMLPort fromSysMLPort = theExistingLink.getFromSysMLPort();
+			IRPModelElement fromSysMLElement = theExistingLink.getFromElement();
+			
 			IRPSysMLPort toSysMLPort = theExistingLink.getToSysMLPort();
+			IRPModelElement toSysMLElement = theExistingLink.getToElement();
 		
-			boolean fromLinkFound = 
-					( fromSysMLPort != null && thePort.equals( fromSysMLPort ) ) &&
-					( toSysMLPort != null && andThePort.equals( toSysMLPort ) );
+			if( fromSysMLPort != null && 
+				fromSysMLElement != null && fromSysMLElement instanceof IRPInstance &&
+				toSysMLPort != null &&
+				toSysMLElement != null && toSysMLElement instanceof IRPInstance ){
 
-			boolean toLinkFound = 
-					( fromSysMLPort != null && andThePort.equals( fromSysMLPort ) ) &&
-					( toSysMLPort != null && thePort.equals( toSysMLPort ) );
+				if( thePort.equals( fromSysMLPort ) && 
+					ownedByPart.equals( fromSysMLElement ) &&
+					andThePort.equals( toSysMLPort ) &&
+					whichIsOwnedByPart.equals( toSysMLElement ) ){
+					
+					Logger.writeLine("Check for links between " + Logger.elementInfo(fromSysMLPort) + " and " + 
+							Logger.elementInfo( toSysMLPort ) + " successfully found " + 
+							Logger.elementInfo( theExistingLink ) );
+					
+					theLinksBetween.add( theExistingLink );
 
-			if( fromLinkFound || toLinkFound ){
-								
-				theLinksBetween.add( theExistingLink );
+				} else if( thePort.equals( toSysMLPort ) && 
+						   ownedByPart.equals( fromSysMLElement ) &&
+						   andThePort.equals( fromSysMLPort ) &&
+						   whichIsOwnedByPart.equals( toSysMLElement ) ){
+					
+					Logger.writeLine("Check for links between " + Logger.elementInfo(toSysMLPort) + " and " + 
+							Logger.elementInfo( fromSysMLPort ) + " successfully found " + 
+							Logger.elementInfo( theExistingLink ) );
+					
+					theLinksBetween.add( theExistingLink );
+
+				} else {
+//					Logger.writeLine("Check for links between " + Logger.elementInfo(toSysMLPort) + " and " + 
+//							Logger.elementInfo( fromSysMLPort ) + " found no match to " + 
+//							Logger.elementInfo( theExistingLink ) );
+				}
+
+			} else {
+				// we're only interested in flow ports
 			}
 		}
 		
@@ -1170,17 +1202,24 @@ public class GeneralHelpers {
 		return theLinksBetween;
 	}
 
-	public static void AddConnectorBetweenSysMLPortsIfOneDoesntExist(
+	public static IRPLink addConnectorBetweenSysMLPortsIfOneDoesntExist(
 			IRPSysMLPort theSrcPort,
 			IRPInstance theSrcPart, 
 			IRPSysMLPort theTgtPort,
 			IRPInstance theTgtPart) {
 		
+		IRPLink theLink = null;
+		
 		IRPClass theAssemblyBlock = (IRPClass) theSrcPart.getOwner();
+		
+		Logger.writeLine( "addConnectorBetweenSysMLPortsIfOneDoesntExist has determined that " + 
+				Logger.elementInfo( theAssemblyBlock ) + " is the assembly block" );
 		
 		List<IRPLink> theLinks = getLinksBetween(
 				theSrcPort, 
+				theSrcPart,
 				theTgtPort, 
+				theTgtPart,
 				theAssemblyBlock );
 		
 		// only add if one does not already exist
@@ -1191,7 +1230,7 @@ public class GeneralHelpers {
 			
 			IRPPackage thePkg = (IRPPackage) theAssemblyBlock.getOwner();
 
-			IRPLink theLink = thePkg.addLinkBetweenSYSMLPorts(
+			theLink = thePkg.addLinkBetweenSYSMLPorts(
 					theSrcPart, 
 					theTgtPart, 
 					null, 
@@ -1199,9 +1238,21 @@ public class GeneralHelpers {
 					theTgtPort );
 
 			theLink.changeTo("connector");
+						
+			String theUniqueName = GeneralHelpers.determineUniqueNameBasedOn(
+					theSrcPart.getName() + "_" + theSrcPort.getName() + "__" + 
+					theTgtPart.getName() + "_" + theTgtPort.getName(), 
+					"Link", 
+					theAssemblyBlock );
+			
+			theLink.setName( theUniqueName );		
 			theLink.setOwner( theAssemblyBlock );
-
+			
+			Logger.writeLine("Added " + Logger.elementInfo( theLink ) + 
+					" to " + Logger.elementInfo( theAssemblyBlock ));
 		}
+		
+		return theLink;
 	}
 	
 	public static Set<IRPModelElement> getSetOfElementsFromCombiningThe(
@@ -1221,6 +1272,22 @@ public class GeneralHelpers {
 		}
 
 		return theSetOfElements;
+	}
+	
+	public static void addGeneralization(
+			IRPClassifier fromElement, 
+			String toBlockWithName, 
+			IRPPackage underneathTheRootPackage ){
+		
+		IRPModelElement theBlock = 
+				underneathTheRootPackage.findNestedElementRecursive( 
+						toBlockWithName, "Block" );
+		
+		if( theBlock != null ){
+			fromElement.addGeneralization( (IRPClassifier) theBlock );
+		} else {
+			Logger.writeLine( "Error: Unable to find element with name " + toBlockWithName );
+		}
 	}
 }
 
@@ -1258,6 +1325,8 @@ public class GeneralHelpers {
     #184 29-MAY-2017: Create a connector between pElapsedTime port when creating block hierarchy (F.J.Chadburn)
     #202 05-JUN-2017: Minor changes to logging in GeneralHelpers (F.J.Chadburn)
     #207 25-JUN-2017: Significant bolstering of Select Depends On/Dependent element(s) menus (F.J.Chadburn)
+    #213 09-JUL-2017: Add dialogs to auto-connect «publish»/«subscribe» FlowPorts for white-box simulation (F.J.Chadburn)
+    #216 09-JUL-2017: Added a new Add Block/Part command added to the Functional Analysis menus (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

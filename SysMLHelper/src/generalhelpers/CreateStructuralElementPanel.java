@@ -18,8 +18,6 @@ import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 
-import com.telelogic.rhapsody.core.*;
-
 public abstract class CreateStructuralElementPanel extends JPanel {
 
 	/**
@@ -107,25 +105,10 @@ public abstract class CreateStructuralElementPanel extends JPanel {
 		
 		return thePanel;
 	}
-	
-	protected static void addGeneralization(
-			IRPClassifier fromElement, 
-			String toBlockWithName, 
-			IRPPackage underneathTheRootPackage){
-		
-		IRPModelElement theBlock = 
-				underneathTheRootPackage.findNestedElementRecursive( toBlockWithName, "Block" );
-		
-		if (theBlock != null){
-			fromElement.addGeneralization( (IRPClassifier) theBlock );
-		} else {
-			Logger.writeLine("Error: Unable to find element with name " + toBlockWithName);
-		}
-	}
 }
 
 /**
- * Copyright (C) 2016  MBSE Training and Consulting Limited (www.executablembse.com)
+ * Copyright (C) 2016-2017  MBSE Training and Consulting Limited (www.executablembse.com)
 
     Change history:
     #025 31-MAY-2016: Add new menu and dialog to add a new actor to package under development (F.J.Chadburn)
@@ -133,7 +116,8 @@ public abstract class CreateStructuralElementPanel extends JPanel {
     #030 01-JUN-2016: Improve legal name checking across helpers (F.J.Chadburn)
     #035 15-JUN-2016: New panel to configure requirements package naming and gateway set-up (F.J.Chadburn)
     #106 03-NOV-2016: Ease usage by renaming UsageDomain block to SystemAssembly and moving up one package (F.J.Chadburn)
-    
+    #216 09-JUL-2017: Added a new Add Block/Part command added to the Functional Analysis menus (F.J.Chadburn)
+
     This file is part of SysMLHelperPlugin.
 
     SysMLHelperPlugin is free software: you can redistribute it and/or modify
