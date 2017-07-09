@@ -1,5 +1,6 @@
 package designsynthesisplugin;
 
+import functionalanalysisplugin.FunctionalAnalysisPlugin;
 import generalhelpers.GeneralHelpers;
 import generalhelpers.Logger;
 import generalhelpers.TraceabilityHelper;
@@ -10,10 +11,21 @@ import java.util.List;
 import java.util.Set;
 
 import javax.swing.JDialog;
+
 import com.telelogic.rhapsody.core.*;
 
 public class PortCreator {
 
+	// test only
+	public static void main(String[] args) {
+
+		IRPModelElement theSelectedEl = FunctionalAnalysisPlugin.getRhapsodyApp().getSelectedElement();
+		
+		if( theSelectedEl instanceof IRPAttribute ){
+			createPublishFlowportFor( (IRPAttribute) theSelectedEl );
+		}
+	}
+	
 	public static void createPublishFlowportsFor(
 			List<IRPModelElement> theSelectedEls){
 
@@ -64,6 +76,8 @@ public class PortCreator {
 			thePort.highLightElement();
 			theAttribute.highLightElement();
 			
+			AutoConnectFlowPortsPanel.launchThePanel( theAttribute );
+
 		} else {
 			Logger.writeLine("Error in createPublishFlowportFor, no port was created");
 		}
@@ -332,6 +346,7 @@ public class PortCreator {
     #182 29-MAY-2017: Tweak to keep attribute selected after switching to publish or subscribe flow-port (F.J.Chadburn)
     #192 05-JUN-2017: Widened DeleteAttributeAndRelatedElementsMenu support to work with flow-ports as well (F.J.Chadburn)
     #193 05-JUN-2017: Added Transitions to «AutoRipple» list so they're also cleaned up when attribute is deleted (F.J.Chadburn)
+    #213 09-JUL-2017: Add dialogs to auto-connect «publish»/«subscribe» FlowPorts for white-box simulation (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 
