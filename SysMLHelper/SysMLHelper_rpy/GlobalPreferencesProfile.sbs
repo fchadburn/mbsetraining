@@ -1,4 +1,4 @@
-I-Logix-RPY-Archive version 8.13.0 C++ 9803352
+I-Logix-RPY-Archive version 8.13.0 C++ 9794446
 { IProfile 
 	- _id = GUID e6cbeb25-2cf4-4c66-9c75-cbb99e029222;
 	- _myState = 8192;
@@ -682,8 +682,14 @@ I-Logix-RPY-Archive version 8.13.0 C++ 9803352
 					{ IPropertyMetaclass 
 						- _Name = "Link";
 						- Properties = { IRPYRawContainer 
-							- size = 1;
+							- size = 2;
 							- value = 
+							{ IProperty 
+								- _Name = "ShowName";
+								- _Value = "None";
+								- _Type = Enum;
+								- _ExtraTypeInfo = "Name,Label,None";
+							}
 							{ IProperty 
 								- _Name = "line_style";
 								- _Value = "rounded_rectilinear_arrows";
@@ -1296,7 +1302,7 @@ I-Logix-RPY-Archive version 8.13.0 C++ 9803352
 		}
 	}
 	- _name = "GlobalPreferencesProfile";
-	- _modifiedTimeWeak = 7.4.2017::15:44:0;
+	- _modifiedTimeWeak = 7.9.2017::10:11:59;
 	- _lastID = 1;
 	- Declaratives = { IRPYRawContainer 
 		- size = 21;
@@ -2110,8 +2116,8 @@ cStruct, DDS/tpQosPolicy, DDS/udQosPolicy, DDS/wdlQosPolicy, DDS/ddsDiagram, DDS
 			}
 		}
 	}
-	- weakCGTime = 7.4.2017::15:44:0;
-	- strongCGTime = 7.4.2017::15:44:0;
+	- weakCGTime = 7.9.2017::10:11:59;
+	- strongCGTime = 7.9.2017::10:11:59;
 	- _defaultComposite = GUID d99cf07a-d91b-4fe7-8454-c53a4512e0b1;
 	- _eventsBaseID = -1;
 	- Classes = { IRPYRawContainer 
@@ -2121,9 +2127,9 @@ cStruct, DDS/tpQosPolicy, DDS/udQosPolicy, DDS/wdlQosPolicy, DDS/ddsDiagram, DDS
 			- _id = GUID d99cf07a-d91b-4fe7-8454-c53a4512e0b1;
 			- _myState = 40960;
 			- _name = "TopLevel";
-			- _modifiedTimeWeak = 6.25.2017::14:44:15;
-			- weakCGTime = 6.25.2017::14:44:15;
-			- strongCGTime = 6.25.2017::14:44:15;
+			- _modifiedTimeWeak = 7.4.2017::15:44:0;
+			- weakCGTime = 7.4.2017::15:44:0;
+			- strongCGTime = 7.4.2017::15:44:0;
 			- _multiplicity = "";
 			- _itsStateChart = { IHandle 
 				- _m2Class = "";
