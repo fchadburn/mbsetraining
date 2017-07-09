@@ -339,3 +339,11 @@ UNDER DEV RELEASE 2.1.i (25-JUN-2017)
 ----------------------------------------------------------------------------------
 UNDER DEV RELEASE 2.1.j (04-JUL-2017)
 ----------------------------------------------------------------------------------
+#213 09-JUL-2017: Add dialogs to auto-connect «publish»/«subscribe» FlowPorts for white-box simulation (F.J.Chadburn)
+#214 09-JUL-2017: Tweak Link from TimeActor to be a new term "connector" when creating block hierarchy (F.J.Chadburn)
+#215 09-JUL-2017: Change GlobalPreferencesProfile so that Link name is not shown on IBDs by default (F.J.Chadburn)
+#216 09-JUL-2017: Added a new Add Block/Part command added to the Functional Analysis menus (F.J.Chadburn)
+#217 09-JUL-2017: Refined the menus to say Create an attribute/flow-port/check operation (F.J.Chadburn)
+----------------------------------------------------------------------------------
+UNDER DEV RELEASE 2.1.k (09-JUL-2017)
+----------------------------------------------------------------------------------
