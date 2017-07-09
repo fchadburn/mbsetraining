@@ -323,10 +323,25 @@ public class PopulateFunctionalAnalysisPkg extends PopulatePkg {
 			setProperty( theDiagram.getFlowchart(), "Activity_diagram.SendAction.ShowNotation", "Event" );		
 		}
 	}
+
+	public static void addNewBlockPartToPackageUnderDevelopement(
+			IRPModelElement theSelectedEl ){
+		
+		final String rootPackageName = "FunctionalAnalysisPkg";
+		
+		IRPProject theProject = theSelectedEl.getProject();
+		
+		final IRPModelElement theRootPackage = 
+				theProject.findElementsByFullName( rootPackageName, "Package" );
+		
+		if( theRootPackage != null ){
+			CreateNewBlockPartPanel.launchThePanel( theProject );
+		}
+	}
 }
 
 /**
- * Copyright (C) 2016  MBSE Training and Consulting Limited (www.executablembse.com)
+ * Copyright (C) 2016-2017  MBSE Training and Consulting Limited (www.executablembse.com)
 
     Change history:
     #006 02-MAY-2016: Add FunctionalAnalysisPkg helper support (F.J.Chadburn)
@@ -354,6 +369,7 @@ public class PopulateFunctionalAnalysisPkg extends PopulatePkg {
     #142 18-DEC-2016: Project properties now set via config.properties, e.g., to easily switch off backups (F.J.Chadburn)
     #146 18-DEC-2016: Allow block hierarchy creation from project level if there's an existing FA package (F.J.Chadburn)
     #147 18-DEC-2016: Fix Actor part creation not being created in correct place if multiple hierarchies (F.J.Chadburn)
+    #216 09-JUL-2017: Added a new Add Block/Part command added to the Functional Analysis menus (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

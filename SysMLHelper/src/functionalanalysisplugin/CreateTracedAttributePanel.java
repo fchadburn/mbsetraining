@@ -8,6 +8,7 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -43,6 +44,45 @@ public class CreateTracedAttributePanel extends CreateTracedElementPanel {
 	private JRadioButton m_NoFlowPort;
 	private JRadioButton m_PubFlowPort;
 	private JRadioButton m_SubFlowPort;
+	
+	// test only
+	public static void main(String[] args) {
+		
+		IRPProject theActiveProject = FunctionalAnalysisPlugin.getRhapsodyApp().activeProject();
+
+		IRPModelElement theSelectedEl = FunctionalAnalysisPlugin.getRhapsodyApp().getSelectedElement();
+		
+		@SuppressWarnings("unchecked")
+		List<IRPModelElement> theSelectedEls = FunctionalAnalysisPlugin.getRhapsodyApp().getListOfSelectedElements().toList();
+
+		@SuppressWarnings("unchecked")
+		List<IRPGraphElement> theSelectedGraphEls = FunctionalAnalysisPlugin.getRhapsodyApp().getSelectedGraphElements().toList();
+
+		Logger.writeLine("Starting ("+ theSelectedEls.size() + " elements were selected) ...");
+
+		if( theSelectedGraphEls.isEmpty() && ( 
+				theSelectedEl instanceof IRPClass ||
+				theSelectedEl instanceof IRPInstance ||
+				theSelectedEl instanceof IRPDiagram ) ){
+			
+			Set<IRPRequirement> theReqts = new HashSet<IRPRequirement>();
+			
+			CreateTracedAttributePanel.launchThePanel(
+					null,
+					theSelectedEl, 
+					theReqts, 
+					theActiveProject );
+			
+		} else if (!theSelectedGraphEls.isEmpty()){
+			try {
+				CreateTracedAttributePanel.createSystemAttributesFor( 
+						theActiveProject, theSelectedGraphEls );
+				
+			} catch (Exception e) {
+				Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking CreateTracedAttributePanel.createSystemAttributeFor");
+			}
+		}
+	}
 	
 	public static void createSystemAttributesFor(
 			IRPProject theActiveProject,
@@ -404,7 +444,6 @@ public class CreateTracedAttributePanel extends CreateTracedElementPanel {
 		} else {
 			Logger.writeLine("Error in CreateOperationPanel.performAction, checkValidity returned false");
 		}	
-		
 	}
 }
 
@@ -430,6 +469,7 @@ public class CreateTracedAttributePanel extends CreateTracedElementPanel {
     #186 29-MAY-2017: Add context string to getBlockUnderDev to make it clearer for user when selecting (F.J.Chadburn)
     #196 05-JUN-2017: Enhanced create traced element dialogs to be context aware for blocks/parts (F.J.Chadburn)
     #197 05-JUN-2017: Fix 8.2 issue in Incoming Event panel, create ValueProperty rather than attribute (F.J.Chadburn)
+    #213 09-JUL-2017: Add dialogs to auto-connect «publish»/«subscribe» FlowPorts for white-box simulation (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

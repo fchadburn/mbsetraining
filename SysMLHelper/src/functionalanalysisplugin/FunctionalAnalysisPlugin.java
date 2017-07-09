@@ -255,6 +255,17 @@ public class FunctionalAnalysisPlugin extends RPUserPlugin {
 						Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking PopulateFunctionalAnalysisPkg.addNewActorToPackageUnderDevelopement");
 					}
 				}
+
+			} else if (menuItem.equals(m_configSettings.getString("functionalanalysisplugin.AddNewBlockPartToPackageMenu"))){
+
+				if (theSelectedEl instanceof IRPPackage){
+					try {
+						PopulateFunctionalAnalysisPkg.addNewBlockPartToPackageUnderDevelopement( theSelectedEl ); 
+
+					} catch (Exception e) {
+						Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking PopulateFunctionalAnalysisPkg.AddNewBlockPartToPackageMenu");
+					}
+				}
 				
 			} else if (menuItem.equals(m_configSettings.getString("functionalanalysisplugin.CopyActivityDiagramsMenu"))){
 
@@ -263,7 +274,7 @@ public class FunctionalAnalysisPlugin extends RPUserPlugin {
 						PopulateFunctionalAnalysisPkg.copyActivityDiagrams( theActiveProject ); 
 
 					} catch (Exception e) {
-						Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking PopulateFunctionalAnalysisPkg.addNewActorToPackageUnderDevelopement");
+						Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking PopulateFunctionalAnalysisPkg.CopyActivityDiagramsMenu");
 					}
 				}							
 
@@ -406,6 +417,7 @@ public class FunctionalAnalysisPlugin extends RPUserPlugin {
     #179 29-MAY-2017: Add new Functional Analysis menu to Re-create «AutoShow» sequence diagram (F.J.Chadburn)
     #196 05-JUN-2017: Enhanced create traced element dialogs to be context aware for blocks/parts (F.J.Chadburn)
     #209 04-JUL-2017: Populate requirements for SD(s) based on messages now supported with Dialog (F.J.Chadburn)
+    #216 09-JUL-2017: Added a new Add Block/Part command added to the Functional Analysis menus (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

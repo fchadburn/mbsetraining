@@ -755,8 +755,8 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
 				
 				IRPModelElement theChosenOne = m_BlockInheritanceChoice.getSelectedRhapsodyItem();
 				
-				if (theChosenOne==null ){
-					addGeneralization( theLogicalSystemBlock, "TimeElapsedBlock", theProject );
+				if( theChosenOne==null ){
+					GeneralHelpers.addGeneralization( theLogicalSystemBlock, "TimeElapsedBlock", theProject );
 					
 				} else {
 					theLogicalSystemBlock.addGeneralization( (IRPClassifier) theChosenOne );
@@ -835,7 +835,7 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
 					if( theActorsElapsedTimePort != null &&
 						theBlocksElapsedTimePort != null ){
 						
-						GeneralHelpers.AddConnectorBetweenSysMLPortsIfOneDoesntExist(
+						GeneralHelpers.addConnectorBetweenSysMLPortsIfOneDoesntExist(
 								theActorsElapsedTimePort, 
 								theElapsedTimePart, 
 								theBlocksElapsedTimePort, 
@@ -866,7 +866,11 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
 							m_TestDriverInheritanceChoice.getSelectedRhapsodyItem();
 					
 					if (theTestDriverBase==null ){
-						addGeneralization( theTesterBlock, "TestDriverBlock", theProject );
+						
+						GeneralHelpers.addGeneralization( 
+								theTesterBlock, 
+								"TestDriverBlock", 
+								theProject );
 						
 					} else {
 						theTesterBlock.addGeneralization( 
@@ -901,12 +905,14 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
 					if( theTesterPortOnElapsedTimeActor != null &&
 						theElapsedTimePart != null ){
 
-						theSystemAssemblyBlock.addLink(
+						IRPLink theLink = theSystemAssemblyBlock.addLink(
 								theElapsedTimePart, 
 								theTestDriverPart, 
 								null, 
 								theTesterPortOnElapsedTimeActor,
 								theElapsedTimePortOnTesterBlock );
+						
+						theLink.changeTo( "connector" );
 					} else {
 						Logger.writeLine( "Error, either part or port is null" );
 					}
@@ -987,6 +993,8 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
     #185 29-MAY-2017: Change Block hierarchy creation to use implicit not explicit names for parts (F.J.Chadburn)
     #194 05-JUN-2017: Added _NoWebify configuration to FunctionalBlock creation to ease usage with 64bit Rhp (F.J.Chadburn)
     #195 05-JUN-2017: Modified FunctionalBlockPackage creation to create BDD in BlockPkg to ease white box method (F.J.Chadburn)
+    #214 09-JUL-2017: Tweak Link from TimeActor to be a new term "connector" when creating block hierarchy (F.J.Chadburn)
+    #216 09-JUL-2017: Added a new Add Block/Part command added to the Functional Analysis menus (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

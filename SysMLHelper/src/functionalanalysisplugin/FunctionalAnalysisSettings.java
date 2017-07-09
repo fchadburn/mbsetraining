@@ -143,6 +143,27 @@ public class FunctionalAnalysisSettings {
 		return theBuildingBlock;
 	}
 	
+	public static IRPPackage getPackageForBlocks(
+			IRPProject inTheProject ){
+
+		IRPPackage thePackageUnderDev = getPackageUnderDev( inTheProject );
+
+		IRPPackage thePackage = thePackageUnderDev;
+				
+		@SuppressWarnings("unchecked")
+		List<IRPPackage> theCandidatePkgs = 
+				thePackageUnderDev.getNestedElementsByMetaClass(
+						"Package", 0 ).toList();
+		
+		for( IRPPackage theCandidatePkg : theCandidatePkgs ){
+			if( theCandidatePkg.getName().endsWith("BlockPkg") ){
+				thePackage = theCandidatePkg;
+			}
+		}
+		
+		return thePackage;
+	}
+	
 	public static IRPPackage getPackageForActorsAndTest(
 			IRPProject inTheProject ){
 		
@@ -569,6 +590,7 @@ public class FunctionalAnalysisSettings {
     #161 05-FEB-2017: Support nested diagram links in CallOperation description (F.J.Chadburn) 
     #171 08-MAR-2017: Added some dormant ops to GeneralHelpers to assist with 3rd party integration (F.J.Chadburn)
     #186 29-MAY-2017: Add context string to getBlockUnderDev to make it clearer for user when selecting (F.J.Chadburn)
+    #216 09-JUL-2017: Added a new Add Block/Part command added to the Functional Analysis menus (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

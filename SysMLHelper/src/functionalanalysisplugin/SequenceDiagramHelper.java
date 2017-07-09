@@ -166,6 +166,34 @@ public class SequenceDiagramHelper {
 		}
 	}
 	
+	public static void updateAutoShowSequenceDiagramFor(
+			IRPClass theAssemblyBlock) {
+		
+		IRPPackage thePackageForSD = 
+				FunctionalAnalysisSettings.getPackageForActorsAndTest(
+						theAssemblyBlock.getProject() );
+		
+		if( thePackageForSD != null ){
+			
+			List<IRPModelElement> theSDs = 
+					GeneralHelpers.findElementsWithMetaClassAndStereotype(
+							"SequenceDiagram", 
+							"AutoShow", 
+							thePackageForSD, 
+							0 );
+			
+			if( theSDs.size()==1 ){
+				
+				IRPSequenceDiagram theSD = (IRPSequenceDiagram) theSDs.get( 0 );
+				
+				SequenceDiagramHelper.createSequenceDiagramFor(
+						theAssemblyBlock, 
+						thePackageForSD, 
+						theSD.getName() );
+			}
+		}
+	}
+	
 	public static void createSequenceDiagramFor(
 			IRPClass theAssemblyBlock, 
 			IRPPackage inPackage,
@@ -261,6 +289,7 @@ public class SequenceDiagramHelper {
     #179 29-MAY-2017: Add new Functional Analysis menu to Re-create «AutoShow» sequence diagram (F.J.Chadburn)
     #187 29-MAY-2017: Provide option to re-create «AutoShow» sequence diagram when adding new actor (F.J.Chadburn)
     #209 04-JUL-2017: Populate requirements for SD(s) based on messages now supported with Dialog (F.J.Chadburn)
+    #216 09-JUL-2017: Added a new Add Block/Part command added to the Functional Analysis menus (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

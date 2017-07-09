@@ -198,29 +198,8 @@ public class CreateNewActorPanel extends CreateStructuralElementPanel {
 				
 				if( theActorPart != null ){
 					
-					IRPPackage thePackageForSD = 
-							FunctionalAnalysisSettings.getPackageForActorsAndTest(
-									theAssemblyBlock.getProject() );
-					
-					if( thePackageForSD != null ){
-						
-						List<IRPModelElement> theSDs = 
-								GeneralHelpers.findElementsWithMetaClassAndStereotype(
-										"SequenceDiagram", 
-										"AutoShow", 
-										thePackageForSD, 
-										0 );
-						
-						if( theSDs.size()==1 ){
-							
-							IRPSequenceDiagram theSD = (IRPSequenceDiagram) theSDs.get( 0 );
-							
-							SequenceDiagramHelper.createSequenceDiagramFor(
-									theAssemblyBlock, 
-									thePackageForSD, 
-									theSD.getName() );
-						}
-					}
+					SequenceDiagramHelper.updateAutoShowSequenceDiagramFor( 
+							theAssemblyBlock );
 				}
 			
 			} else {
@@ -230,7 +209,7 @@ public class CreateNewActorPanel extends CreateStructuralElementPanel {
 		} else {
 			Logger.writeLine("Error in CreateNewActorPanel.performAction, checkValidity returned false");
 		}		
-	}	
+	}
 }
 
 /**
@@ -245,6 +224,7 @@ public class CreateNewActorPanel extends CreateStructuralElementPanel {
     #147 18-DEC-2016: Fix Actor part creation not being created in correct place if multiple hierarchies (F.J.Chadburn)
     #186 29-MAY-2017: Add context string to getBlockUnderDev to make it clearer for user when selecting (F.J.Chadburn)
     #187 29-MAY-2017: Provide option to re-create «AutoShow» sequence diagram when adding new actor (F.J.Chadburn)
+    #216 09-JUL-2017: Added a new Add Block/Part command added to the Functional Analysis menus (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 
