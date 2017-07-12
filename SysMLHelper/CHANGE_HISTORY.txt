@@ -347,3 +347,13 @@ UNDER DEV RELEASE 2.1.j (04-JUL-2017)
 ----------------------------------------------------------------------------------
 UNDER DEV RELEASE 2.1.k (09-JUL-2017)
 ----------------------------------------------------------------------------------
+#218 12-JUL-2017: Added Gateway project Confirm dialogs to advise and provide option to delete and re-create (F.J.Chadburn)
+#219 12-JUL-2017: Added Select Depends On element(s)\Derive Requirement menus for deriveReqt relations (F.J.Chadburn)
+#220 12-JUL-2017: Added customisable Stereotype choice to the Block and block/Part creation dialogs (F.J.Chadburn) 
+#221 12-JUL-2017: Fixed Smart Link dialog to draw from middle of IRPGraphNodes rather than top left (F.J.Chadburn)
+#222 12-JUL-2017: Allow AddNewBlockPartToPackageMenu to work when right-clicking IBDs and BDDs (F.J.Chadburn) 			
+#223 12-JUL-2017: Change life-lines on simulated <<AutoShow>> SD to show Parts rather than Blocks (F.J.Chadburn)
+----------------------------------------------------------------------------------
+UNDER DEV RELEASE 2.1.l (12-JUL-2017)
+----------------------------------------------------------------------------------
+

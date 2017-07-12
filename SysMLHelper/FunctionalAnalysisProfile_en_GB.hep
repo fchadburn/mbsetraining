@@ -45,7 +45,7 @@ DLLServerCompatible5=1
 name6=MBSE Method: Functional Analysis\Add new block/part to package under development
 isPluginCommand6=1
 command6=InvokeFunctionalAnalysisHelper
-applicableTo6=Package
+applicableTo6=Package,Block Definition Diagram,Internal Block Diagram
 isVisible6=1
 DLLServerCompatible6=1
 
@@ -204,6 +204,7 @@ DLLServerCompatible21=1
 #REM #209 04-JUL-2017: Populate requirements for SD(s) based on messages now supported with Dialog (F.J.Chadburn)
 #REM #216 09-JUL-2017: Added a new Add Block/Part command added to the Functional Analysis menus (F.J.Chadburn)
 #REM #217 09-JUL-2017: Refined the menus to say Create an attribute/flow-port/check operation (F.J.Chadburn)
+#REM #222 12-JUL-2017: Allow AddNewBlockPartToPackageMenu to work when right-clicking IBDs and BDDs (F.J.Chadburn) 			
 #REM
 #REM This file is part of SysMLHelperPlugin.
 #REM
