@@ -57,14 +57,31 @@ public class RhapsodyComboBox extends JComboBox<Object>{
 
 		return theModelEl;
 	}
+	
+	public void setSelectedRhapsodyItem(
+			IRPModelElement toTheElement ){
+				
+		for( int i = 0; i < m_List.size(); i++ ){
+
+			IRPModelElement theElement = m_List.get( i );
+			
+			if( theElement != null && 
+				theElement.equals( toTheElement ) ){
+				
+				setSelectedIndex( i );
+				break;
+			}
+		}
+	}
 }
 
 /**
- * Copyright (C) 2016  MBSE Training and Consulting Limited (www.executablembse.com)
+ * Copyright (C) 2016-2017  MBSE Training and Consulting Limited (www.executablembse.com)
 
     Change history:
     #006 02-MAY-2016: Add FunctionalAnalysisPkg helper support (F.J.Chadburn)
-    
+    #220 12-JUL-2017: Added customisable Stereotype choice to the Block and block/Part creation dialogs (F.J.Chadburn) 
+
     This file is part of SysMLHelperPlugin.
 
     SysMLHelperPlugin is free software: you can redistribute it and/or modify

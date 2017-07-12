@@ -45,6 +45,7 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
 	private JTextField m_TestDriverNameTextField;
 	private JCheckBox m_TestDriverCheckBox;
 	private SimulationType m_SimulationType;
+	private RhapsodyComboBox m_ChosenStereotype;
 	
 	/**
 	 * 
@@ -212,6 +213,17 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
 		
 		thePanel.add( new JLabel("                       Block name:") );
         thePanel.add( m_BlockNameTextField );			
+        
+		List<IRPModelElement> theStereotypes = 
+				FunctionalAnalysisSettings.getStereotypesForBlockPartCreation( 
+						m_RootPackage.getProject() );
+
+		m_ChosenStereotype = new RhapsodyComboBox( theStereotypes, false );
+		m_ChosenStereotype.setSelectedRhapsodyItem( theStereotypes.get( 1 ) );
+		
+		thePanel.add( new JLabel( "  Stereotype as: " ) );
+		thePanel.add( m_ChosenStereotype );
+		
         thePanel.add( new JLabel("  Inherit from:  ") );	
 		thePanel.add( m_BlockInheritanceChoice );
 			
@@ -743,7 +755,15 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
 			
 			// Populate content for the BlockPkg
 			IRPClass theLogicalSystemBlock = theBlockPackage.addClass( theName );
-			GeneralHelpers.applyExistingStereotype( "LogicalSystem", theLogicalSystemBlock );
+			
+			IRPModelElement theChosenStereotype = m_ChosenStereotype.getSelectedRhapsodyItem();
+			
+			if( theChosenStereotype != null && 
+				theChosenStereotype instanceof IRPStereotype ){
+				
+				theLogicalSystemBlock.setStereotype( (IRPStereotype) theChosenStereotype );
+			}
+			
 			theLogicalSystemBlock.changeTo( "Block" );
 			theLogicalSystemBlock.highLightElement();
 
@@ -796,7 +816,11 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
 			
 			theLogicalSystemPart.setOtherClass( theLogicalSystemBlock );
 			
-			GeneralHelpers.applyExistingStereotype( "LogicalSystem", theLogicalSystemPart );	
+			if( theChosenStereotype != null && 
+				theChosenStereotype instanceof IRPStereotype ){
+					
+				theLogicalSystemPart.setStereotype( (IRPStereotype) theChosenStereotype );
+			}
 			
 			// Populate nested TestPkg package with components necessary for wiring up a simulation
 
@@ -995,6 +1019,7 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
     #195 05-JUN-2017: Modified FunctionalBlockPackage creation to create BDD in BlockPkg to ease white box method (F.J.Chadburn)
     #214 09-JUL-2017: Tweak Link from TimeActor to be a new term "connector" when creating block hierarchy (F.J.Chadburn)
     #216 09-JUL-2017: Added a new Add Block/Part command added to the Functional Analysis menus (F.J.Chadburn)
+    #220 12-JUL-2017: Added customisable Stereotype choice to the Block and block/Part creation dialogs (F.J.Chadburn) 
 
     This file is part of SysMLHelperPlugin.
 

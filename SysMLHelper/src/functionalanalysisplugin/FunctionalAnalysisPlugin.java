@@ -258,7 +258,7 @@ public class FunctionalAnalysisPlugin extends RPUserPlugin {
 
 			} else if (menuItem.equals(m_configSettings.getString("functionalanalysisplugin.AddNewBlockPartToPackageMenu"))){
 
-				if (theSelectedEl instanceof IRPPackage){
+				if (theSelectedEl instanceof IRPPackage || theSelectedEl instanceof IRPDiagram ){
 					try {
 						PopulateFunctionalAnalysisPkg.addNewBlockPartToPackageUnderDevelopement( theSelectedEl ); 
 
@@ -418,6 +418,7 @@ public class FunctionalAnalysisPlugin extends RPUserPlugin {
     #196 05-JUN-2017: Enhanced create traced element dialogs to be context aware for blocks/parts (F.J.Chadburn)
     #209 04-JUL-2017: Populate requirements for SD(s) based on messages now supported with Dialog (F.J.Chadburn)
     #216 09-JUL-2017: Added a new Add Block/Part command added to the Functional Analysis menus (F.J.Chadburn)
+    #222 12-JUL-2017: Allow AddNewBlockPartToPackageMenu to work when right-clicking IBDs and BDDs (F.J.Chadburn) 			
 
     This file is part of SysMLHelperPlugin.
 

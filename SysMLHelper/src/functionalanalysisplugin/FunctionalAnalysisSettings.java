@@ -22,6 +22,7 @@ public class FunctionalAnalysisSettings {
 	private static final String tagNameForIsConvertToDetailedADOptionEnabled = "isConvertToDetailedADOptionEnabled";
 	private static final String tagNameForIsConvertToDetailedADOptionWantedByDefault = "isConvertToDetailedADOptionWantedByDefault";
 	private static final String tagNameForIsCallOperationSupportEnabled = "isCallOperationSupportEnabled";
+	private static final String tagNameForStereotypesForBlockCreation = "stereotypesForBlockCreation";
 	
 	public static IRPPackage getPackageUnderDev(IRPProject inTheProject){
 		
@@ -447,6 +448,58 @@ public class FunctionalAnalysisSettings {
 		return result;
 	}
 	
+	public static List<IRPModelElement> getStereotypesForBlockPartCreation(
+			IRPProject inTheProject ){
+		
+		List<IRPModelElement> theStereotypes = new ArrayList<>();
+		
+		String thePackageName = "FunctionalAnalysisPkg";
+		
+		IRPModelElement theFunctionalAnalysisPkg = 
+				inTheProject.findElementsByFullName( thePackageName, "Package" );
+		
+		if( theFunctionalAnalysisPkg == null ){
+			
+			Logger.writeLine("Error in getStereotypesForBlockPartCreation, no " + thePackageName + " was found");
+			
+		} else {
+			
+			String theStereotypeList;
+
+			IRPTag theTag = theFunctionalAnalysisPkg.getTag( tagNameForStereotypesForBlockCreation );
+			
+			if( theTag != null ){
+				theStereotypeList = theTag.getValue();
+			} else {
+				
+				ConfigurationSettings theSettings = ConfigurationSettings.getInstance();
+				
+				theStereotypeList = theSettings.getProperty( 
+						tagNameForStereotypesForBlockCreation, "Component" );
+			}
+			
+			String[] split = theStereotypeList.split(",");
+			
+			for( String theString : split ){
+			
+				IRPModelElement theStereotypeElement = 
+						GeneralHelpers.findElementWithMetaClassAndName( 
+								"Stereotype", theString.trim(), inTheProject );
+				
+				if( theStereotypeElement != null ){
+					theStereotypes.add( theStereotypeElement );
+				}
+			}
+			
+			Logger.writeLine( "getStereotypesForBlockPartCreation was invoked and found " + theStereotypeList + 
+					", it is returning a list of x" + theStereotypes.size() + " stereotypes");
+		}
+		
+
+		
+		return theStereotypes;
+	}
+	
 	public static void setupFunctionalAnalysisTagsFor(
 			IRPProject theProject,
 			IRPPackage thePackageUnderDev,
@@ -514,7 +567,13 @@ public class FunctionalAnalysisSettings {
 			setPackageTagValueOn( 
 					theRootPackage, 
 					tagNameForPackageForActorsAndTest, 
-					thePackageForActorsAndTest );			
+					thePackageForActorsAndTest );	
+			
+			setStringTagValueOn( 
+					theRootPackage, 
+					tagNameForStereotypesForBlockCreation, 
+					theSettings.getProperty( tagNameForStereotypesForBlockCreation, "LogicalSystem,Component,Sensor,Actuator,ExternalSystem" ) );
+
 		}
 	}
 	
@@ -591,6 +650,7 @@ public class FunctionalAnalysisSettings {
     #171 08-MAR-2017: Added some dormant ops to GeneralHelpers to assist with 3rd party integration (F.J.Chadburn)
     #186 29-MAY-2017: Add context string to getBlockUnderDev to make it clearer for user when selecting (F.J.Chadburn)
     #216 09-JUL-2017: Added a new Add Block/Part command added to the Functional Analysis menus (F.J.Chadburn)
+    #220 12-JUL-2017: Added customisable Stereotype choice to the Block and block/Part creation dialogs (F.J.Chadburn) 
 
     This file is part of SysMLHelperPlugin.
 

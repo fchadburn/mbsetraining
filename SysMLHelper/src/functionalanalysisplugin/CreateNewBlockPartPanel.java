@@ -13,6 +13,7 @@ import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -29,6 +30,7 @@ public class CreateNewBlockPartPanel extends CreateStructuralElementPanel {
 	private IRPClass m_AssemblyBlock;
 	
 	protected JTextField m_ChosenNameTextField = null;
+	protected RhapsodyComboBox m_ChosenStereotype;
 	
 	public static void main(String[] args) {
 		
@@ -96,13 +98,14 @@ public class CreateNewBlockPartPanel extends CreateStructuralElementPanel {
 		setLayout( new BorderLayout(10,10) );
 		setBorder( BorderFactory.createEmptyBorder( 10, 10, 10, 10 ) );
 		
-		add( createBlockChoicePanel( "" ), BorderLayout.PAGE_START );
+		add( createBlockChoicePanel( "" ), BorderLayout.PAGE_START );	    
 		add( createOKCancelPanel(), BorderLayout.PAGE_END );
 	}
 
 	private JPanel createBlockChoicePanel(
 			String theBlockName ){
-		
+	    
+
 		JPanel thePanel = new JPanel();
 		thePanel.setLayout( new BoxLayout(thePanel, BoxLayout.X_AXIS ) );	
 		
@@ -114,6 +117,20 @@ public class CreateNewBlockPartPanel extends CreateStructuralElementPanel {
 		theBlockCheckBox.setSelected( true );
 	    thePanel.add( theBlockCheckBox );
 	    thePanel.add( m_ChosenNameTextField );
+	    
+		List<IRPModelElement> theStereotypes = 
+				FunctionalAnalysisSettings.getStereotypesForBlockPartCreation( 
+						m_RootPackage.getProject() );
+
+		m_ChosenStereotype = new RhapsodyComboBox( theStereotypes, false );
+		
+		if( theStereotypes.size() > 0 ){
+			// set to first value in list
+			m_ChosenStereotype.setSelectedRhapsodyItem( theStereotypes.get( 1 ) );			
+		}
+		
+		thePanel.add( new JLabel( "  Stereotype as: " ) );
+		thePanel.add( m_ChosenStereotype );
 	    
 		return thePanel;
 	}
@@ -196,7 +213,6 @@ public class CreateNewBlockPartPanel extends CreateStructuralElementPanel {
 				String theName = m_ChosenNameTextField.getText();
 				
 				IRPClass theClass = m_RootPackage.addClass( theName );
-				theClass.changeTo( "Block" );
 				theClass.highLightElement();
 				
 				IRPProject theProject = theClass.getProject();
@@ -212,14 +228,36 @@ public class CreateNewBlockPartPanel extends CreateStructuralElementPanel {
 				
 				thePart.setOtherClass( theClass );
 				
+				IRPModelElement theSelectedStereotype = m_ChosenStereotype.getSelectedRhapsodyItem();
+				
+				if( theSelectedStereotype != null && 
+					theSelectedStereotype instanceof IRPStereotype ){
+					
+					try {
+						theClass.setStereotype( (IRPStereotype) theSelectedStereotype );
+						
+					} catch (Exception e) {
+						Logger.writeLine("Exception in CreateNewBlockPartPanel.performAction, unable to apply " + 
+								theSelectedStereotype.getName() + " to " + Logger.elementInfo( theClass ) );	
+					}
+					
+					try {
+						thePart.setStereotype( (IRPStereotype) theSelectedStereotype );
+						
+					} catch (Exception e) {
+						Logger.writeLine("Exception in CreateNewBlockPartPanel.performAction, unable to apply " + 
+								theSelectedStereotype.getName() + " to " + Logger.elementInfo( thePart ) );	
+					}
+				}
+				
+				theClass.changeTo( "Block" );
+				
 				// Try and find ElapsedTime actor part 				
 				IRPInstance theElapsedTimePart = 
 						getElapsedTimeActorPartFor( m_AssemblyBlock );
 				
-				Logger.writeLine("Got here");
 				if( theElapsedTimePart != null ){
 					
-					Logger.writeLine("Got here2");
 					IRPClassifier theElapsedTimeActor = 
 							theElapsedTimePart.getOtherClass();
 					
@@ -272,6 +310,7 @@ public class CreateNewBlockPartPanel extends CreateStructuralElementPanel {
 
     Change history:
     #216 09-JUL-2017: Added a new Add Block/Part command added to the Functional Analysis menus (F.J.Chadburn)
+    #220 12-JUL-2017: Added customisable Stereotype choice to the Block and block/Part creation dialogs (F.J.Chadburn) 
 
     This file is part of SysMLHelperPlugin.
 

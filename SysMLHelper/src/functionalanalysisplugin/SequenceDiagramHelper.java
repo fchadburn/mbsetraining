@@ -218,7 +218,8 @@ public class SequenceDiagramHelper {
 				
 				IRPInstance thePart = (IRPInstance) iterator.next();
 				IRPClassifier theType = thePart.getOtherClass();
-				theMsg += theType.getName() + "\n"; 
+				theMsg += thePart.getName() + "." + theType.getName() + 
+						" (" + theType.getUserDefinedMetaClass() + ")\n"; 
 			}
 					
 			isCreateSD = UserInterfaceHelpers.askAQuestion( theMsg );
@@ -243,8 +244,8 @@ public class SequenceDiagramHelper {
 
 				if( GeneralHelpers.hasStereotypeCalled( "TestDriver", thePart ) ){
 
-					IRPClassifier theType = thePart.getOtherClass();
-					theSD.addNewNodeForElement( theType, xPos, yPos, nWidth, nHeight );
+					//IRPClassifier theType = thePart.getOtherClass();
+					theSD.addNewNodeForElement( thePart, xPos, yPos, nWidth, nHeight );
 					xPos=xPos+nWidth+xGap;
 				}
 			}
@@ -255,7 +256,7 @@ public class SequenceDiagramHelper {
 				IRPClassifier theType = thePart.getOtherClass();
 
 				if( theType instanceof IRPActor ){
-					theSD.addNewNodeForElement( theType, xPos, yPos, nWidth, nHeight );
+					theSD.addNewNodeForElement( thePart, xPos, yPos, nWidth, nHeight );
 					xPos=xPos+nWidth+xGap;
 				}
 			}
@@ -268,7 +269,7 @@ public class SequenceDiagramHelper {
 				if( !( theType instanceof IRPActor ) &&
 					!GeneralHelpers.hasStereotypeCalled( "TestDriver", thePart ) ){
 
-					theSD.addNewNodeForElement( theType, xPos, yPos, nWidth, nHeight );
+					theSD.addNewNodeForElement( thePart, xPos, yPos, nWidth, nHeight );
 					xPos=xPos+nWidth+xGap;
 				}
 			}
@@ -290,6 +291,7 @@ public class SequenceDiagramHelper {
     #187 29-MAY-2017: Provide option to re-create «AutoShow» sequence diagram when adding new actor (F.J.Chadburn)
     #209 04-JUL-2017: Populate requirements for SD(s) based on messages now supported with Dialog (F.J.Chadburn)
     #216 09-JUL-2017: Added a new Add Block/Part command added to the Functional Analysis menus (F.J.Chadburn)
+    #223 12-JUL-2017: Change life-lines on simulated <<AutoShow>> SD to show Parts rather than Blocks (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 
