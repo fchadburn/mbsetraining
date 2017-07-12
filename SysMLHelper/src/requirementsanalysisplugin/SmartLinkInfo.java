@@ -298,58 +298,7 @@ public class SmartLinkInfo {
 					theRelationInfo,
 					false );
 		}
-		
-
 	}
-/*
-	private void populateDependencyOnDiagram(
-			IRPDependency theDependency,
-			IRPGraphElement theStartGraphEl, 
-			IRPGraphElement theEndGraphEl ){
-		
-		if( theStartGraphEl.getDiagram().equals( theEndGraphEl.getDiagram() )){
-
-			IRPDiagram theDiagram = theStartGraphEl.getDiagram();
-			
-			String theMsg = "Create a graphEdge for " + Logger.elementInfo( theDependency ) + " from " + 
-					Logger.elementInfo( theStartGraphEl.getModelObject() ) + " to " + 
-					Logger.elementInfo( theEndGraphEl.getModelObject() ) + " on " +
-					Logger.elementInfo( theDiagram ) + "?";
-
-			@SuppressWarnings("unchecked")
-			List<IRPGraphElement> theExistingGraphEls =
-			theDiagram.getCorrespondingGraphicElements( theDependency ).toList();
-
-			if( theExistingGraphEls.isEmpty() ){
-
-				Logger.writeLine( theMsg );
-				
-				if( theStartGraphEl instanceof IRPGraphNode && theEndGraphEl instanceof IRPGraphNode){
-
-					IRPGraphNode theStartNode = (IRPGraphNode)theStartGraphEl;
-					IRPGraphNode theEndNode = (IRPGraphNode)theEndGraphEl;
-
-					IRPGraphEdge theGraphEdge = 
-							theDiagram.addNewEdgeForElement(
-									theDependency, 
-									theStartNode, 
-									getSourceElementX( theStartNode ), 
-									getSourceElementY( theStartNode ), 
-									theEndNode, 
-									getSourceElementX( theEndNode ), 
-									getSourceElementY( theEndNode ));
-
-				} else {
-					Logger.writeLine("Warning in populateDependencyOnDiagram, the graphEls are not all graph nodes");
-				}
-
-			}
-		} else {
-			Logger.writeLine("Error in populateDependencyOnDiagram, the graphEls are not on the same diagram");
-		}
-		
-
-	}*/
 	
 	protected int getSourceElementX( IRPGraphElement theGraphEl ){
 		
@@ -360,7 +309,7 @@ public class SmartLinkInfo {
 			if (theGraphEl instanceof IRPGraphNode){
 				GraphNodeInfo theNodeInfo = new GraphNodeInfo( (IRPGraphNode) theGraphEl );
 				
-				x = theNodeInfo.getTopLeftX() + 20;
+				x = theNodeInfo.getMiddleX();
 				
 			} else if (theGraphEl instanceof IRPGraphEdge){
 				GraphEdgeInfo theNodeInfo = new GraphEdgeInfo( (IRPGraphEdge) theGraphEl );
@@ -383,7 +332,7 @@ public class SmartLinkInfo {
 			if (theGraphEl instanceof IRPGraphNode){
 				GraphNodeInfo theNodeInfo = new GraphNodeInfo( (IRPGraphNode) theGraphEl );
 				
-				y = theNodeInfo.getTopLeftY() + 20;
+				y = theNodeInfo.getMiddleY();
 				
 			} else if (theGraphEl instanceof IRPGraphEdge){
 				GraphEdgeInfo theNodeInfo = new GraphEdgeInfo( (IRPGraphEdge) theGraphEl );
@@ -404,7 +353,8 @@ public class SmartLinkInfo {
     Change history:
     #163 05-FEB-2017: Add new menus to Smart link: Start and Smart link: End (F.J.Chadburn)
     #204 18-JUN-2017: Refine menu for invoking Smart Link panel and add FlowPort/EventReceptions support (F.J.Chadburn)
-    
+    #221 12-JUL-2017: Fixed Smart Link dialog to draw from middle of IRPGraphNodes rather than top left (F.J.Chadburn)
+
     This file is part of SysMLHelperPlugin.
 
     SysMLHelperPlugin is free software: you can redistribute it and/or modify
