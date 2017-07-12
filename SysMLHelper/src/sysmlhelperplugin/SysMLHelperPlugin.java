@@ -291,6 +291,33 @@ public class SysMLHelperPlugin extends RPUserPlugin {
 					Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking MBSE Method: General\\Select Dependent element(s)\\Refines");
 				}
 				
+			} else if (menuItem.equals(m_configSettings.getString("sysmlhelperplugin.SelectDependsOnDeriveReqtOnlyElementsMenu"))){
+
+				try { 					
+					Set<IRPModelElement> theCombinedSet = 
+							GeneralHelpers.getSetOfElementsFromCombiningThe(
+									theSelectedEls, theGraphEls );
+					
+					DependencySelector.selectDependsOnElementsFor( 
+							theCombinedSet, "deriveReqt" );
+
+				} catch (Exception e) {
+					Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking MBSE Method: General\\Select Depends On element(s)\\Derive Requirement");
+				}
+
+			} else if (menuItem.equals(m_configSettings.getString("sysmlhelperplugin.SelectDependentDeriveReqtOnlyElementsMenu"))){
+
+				try {
+					Set<IRPModelElement> theCombinedSet = 
+							GeneralHelpers.getSetOfElementsFromCombiningThe(
+									theSelectedEls, theGraphEls );
+
+					DependencySelector.selectDependentElementsFor( 
+							theCombinedSet, "deriveReqt" );
+
+				} catch (Exception e) {
+					Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking MBSE Method: General\\Select Dependent element(s)\\Derive Requirement");
+				}				
 			} else if (menuItem.equals(m_configSettings.getString("sysmlhelperplugin.SetupGatewayProjectMenu"))){
 
 				if (theSelectedEl instanceof IRPProject){
@@ -431,6 +458,7 @@ public class SysMLHelperPlugin extends RPUserPlugin {
     #166 15-FEB-2017: Corrected Copyright information to 2017 (F.J.Chadburn)
     #172 02-APR-2017: Added new General Utilities > Select Dependent element(s) option (F.J.Chadburn)
     #207 25-JUN-2017: Significant bolstering of Select Depends On/Dependent element(s) menus (F.J.Chadburn)
+    #219 12-JUL-2017: Added Select Depends On element(s)\Derive Requirement menus for deriveReqt relations (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 
