@@ -1,5 +1,5 @@
 [Helpers]
-numberOfElements=10
+numberOfElements=11
 
 #REM: Definition of the plug-in
 name1=InvokeRequirementsAnalysisHelper
@@ -81,6 +81,14 @@ applicableTo10=Requirement
 isVisible10=1
 DLLServerCompatible10=1
 
+#REM: Add pop-up menu
+name11=MBSE Method: Requirements Analysis\Roll up traceability to the transition
+isPluginCommand11=1
+command11=InvokeRequirementsAnalysisHelper
+applicableTo11=Transition,DefaultTransition
+isVisible11=1
+DLLServerCompatible11=1
+
 #REM Copyright (C) 2016-2017  MBSE Training and Consulting Limited (www.executablembse.com)
 #REM
 #REM Change history:
@@ -95,6 +103,7 @@ DLLServerCompatible10=1
 #REM #178 29-MAY-2017: Update hep files so menus appear for ValueProperty (8.2) replacement of Attributes (F.J.Chadburn)
 #REM #204 18-JUN-2017: Refine menu for invoking Smart Link panel and add FlowPort/EventReceptions support (F.J.Chadburn)
 #REM #205 18-JUN-2017: Removed Perform rename in browser for elements on ADs from menus to simply (F.J.Chadburn)
+#REM #224 25-AUG-2017: Added new menu to roll up traceability to the transition and populate on STM (F.J.Chadburn)
 #REM
 #REM This file is part of SysMLHelperPlugin.
 #REM

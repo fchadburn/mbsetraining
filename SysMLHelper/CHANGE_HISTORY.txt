@@ -356,4 +356,10 @@ UNDER DEV RELEASE 2.1.k (09-JUL-2017)
 ----------------------------------------------------------------------------------
 UNDER DEV RELEASE 2.1.l (12-JUL-2017)
 ----------------------------------------------------------------------------------
+#224 25-AUG-2017: Added new menu to roll up traceability to the transition and populate on STM (F.J.Chadburn)
+#225 25-AUG-2017: Add check that pre-conditions with text must trace to at least one requirement (F.J.Chadburn)
+#226 25-AUG-2017: Fixed exception when creating FunctionalBlockHierarchy and the RD already exists (F.J.Chadburn)
+----------------------------------------------------------------------------------
+UNDER DEV RELEASE 2.1.m (25-AUG-2017)
+----------------------------------------------------------------------------------
 
