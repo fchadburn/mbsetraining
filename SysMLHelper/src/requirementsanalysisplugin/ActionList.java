@@ -20,21 +20,9 @@ public class ActionList extends ArrayList<ActionInfo> {
 		
 		for (IRPModelElement theEl : candidateEls) {
 			
-			if (theEl instanceof IRPState){
-				
-				this.add(new ActionInfo(theEl));
-				
-			} else if (theEl instanceof IRPTransition){
-				
-				IRPTransition theTransition = (IRPTransition)theEl;
-				
-				IRPGuard theGuard = theTransition.getItsGuard();
-				 
-				// only check transitions that have guards, e.g. []
-				if (theGuard != null){
-					this.add(new ActionInfo(theEl));
-				}
-			}	
+			if( ActionInfo.isTraceabilityNeededFor( theEl )){
+				this.add( new ActionInfo( theEl ) );
+			}
 		}
 	}
 
@@ -156,11 +144,12 @@ public class ActionList extends ArrayList<ActionInfo> {
 }
 
 /**
- * Copyright (C) 2016  MBSE Training and Consulting Limited (www.executablembse.com)
+ * Copyright (C) 2016-2017  MBSE Training and Consulting Limited (www.executablembse.com)
 
     Change history:
     #004 10-APR-2016: Re-factored projects into single workspace (F.J.Chadburn)
-    
+    #225 25-AUG-2017: Add check that pre-conditions with text must trace to at least one requirement (F.J.Chadburn)
+
     This file is part of SysMLHelperPlugin.
 
     SysMLHelperPlugin is free software: you can redistribute it and/or modify

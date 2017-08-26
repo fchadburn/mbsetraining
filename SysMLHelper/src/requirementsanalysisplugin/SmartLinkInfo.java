@@ -1,11 +1,8 @@
 package requirementsanalysisplugin;
 
-import functionalanalysisplugin.GraphEdgeInfo;
-import functionalanalysisplugin.GraphNodeInfo;
 import generalhelpers.GeneralHelpers;
 import generalhelpers.Logger;
 import generalhelpers.TraceabilityHelper;
-
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -20,7 +17,7 @@ public class SmartLinkInfo {
 	private int m_CountRelationsNeeded;
 	private Set<RelationInfo> m_RelationInfos;
 	
-	SmartLinkInfo(
+	public SmartLinkInfo(
 			List<IRPModelElement> theStartLinkEls,
 			List<IRPGraphElement> theStartLinkGraphEls,
 			List<IRPModelElement> theEndLinkEls,
@@ -110,7 +107,7 @@ public class SmartLinkInfo {
 			if( relationInfo.getExistingStereotypedDependency() == null ){
 				m_CountRelationsNeeded++;
 			}
-		}
+		}		
 	}
 
 	private boolean performPopulateOnDiagram(
@@ -162,14 +159,25 @@ public class SmartLinkInfo {
 									theDiagram.addNewEdgeForElement(
 											existingDependency, 
 											theStartNode, 
-											getSourceElementX( theStartNode ), 
-											getSourceElementY( theStartNode ), 
+											GraphElInfo.getMidX( theStartNode ), 
+											GraphElInfo.getMidY( theStartNode ), 
 											theEndNode, 
-											getSourceElementX( theEndNode ), 
-											getSourceElementY( theEndNode ));
+											GraphElInfo.getMidX( theEndNode ), 
+											GraphElInfo.getMidY( theEndNode ));
 
+								} else if( theStartGraphEl instanceof IRPGraphEdge && 
+										   theEndGraphEl instanceof IRPGraphNode ){
+									
+									IRPCollection theGraphEls = 
+											RequirementsAnalysisPlugin.getRhapsodyApp().createNewCollection();
+
+									theGraphEls.addGraphicalItem( theStartGraphEl );
+									theGraphEls.addGraphicalItem( theEndGraphEl );
+									
+									theDiagram.completeRelations( theGraphEls, 0);	
+									
 								} else {
-									Logger.writeLine("Warning in populateDependencyOnDiagram, the graphEls are not all graph nodes");
+									Logger.writeLine("Warning in populateDependencyOnDiagram, the graphEls are not handled types for drawing relations");
 								}
 							}
 
@@ -299,52 +307,6 @@ public class SmartLinkInfo {
 					false );
 		}
 	}
-	
-	protected int getSourceElementX( IRPGraphElement theGraphEl ){
-		
-		int x = 10;
-		
-		if( theGraphEl != null ){
-
-			if (theGraphEl instanceof IRPGraphNode){
-				GraphNodeInfo theNodeInfo = new GraphNodeInfo( (IRPGraphNode) theGraphEl );
-				
-				x = theNodeInfo.getMiddleX();
-				
-			} else if (theGraphEl instanceof IRPGraphEdge){
-				GraphEdgeInfo theNodeInfo = new GraphEdgeInfo( (IRPGraphEdge) theGraphEl );
-				
-				x = theNodeInfo.getMidX();
-			}
-		} else {
-			x = 20; // default is top right
-		}
-		
-		return x;
-	}
-	
-	protected int getSourceElementY( IRPGraphElement theGraphEl ){
-		
-		int y = 10;
-		
-		if( theGraphEl != null ){
-
-			if (theGraphEl instanceof IRPGraphNode){
-				GraphNodeInfo theNodeInfo = new GraphNodeInfo( (IRPGraphNode) theGraphEl );
-				
-				y = theNodeInfo.getMiddleY();
-				
-			} else if (theGraphEl instanceof IRPGraphEdge){
-				GraphEdgeInfo theNodeInfo = new GraphEdgeInfo( (IRPGraphEdge) theGraphEl );
-				
-				y = theNodeInfo.getMidY();
-			}
-		} else {
-			y = 20; // default is top right
-		}
-		
-		return y;
-	}	
 }
 
 /**
@@ -354,7 +316,8 @@ public class SmartLinkInfo {
     #163 05-FEB-2017: Add new menus to Smart link: Start and Smart link: End (F.J.Chadburn)
     #204 18-JUN-2017: Refine menu for invoking Smart Link panel and add FlowPort/EventReceptions support (F.J.Chadburn)
     #221 12-JUL-2017: Fixed Smart Link dialog to draw from middle of IRPGraphNodes rather than top left (F.J.Chadburn)
-
+    #224 25-AUG-2017: Added new menu to roll up traceability to the transition and populate on STM (F.J.Chadburn)
+    
     This file is part of SysMLHelperPlugin.
 
     SysMLHelperPlugin is free software: you can redistribute it and/or modify

@@ -2,23 +2,12 @@ package requirementsanalysisplugin;
 
 import generalhelpers.GeneralHelpers;
 import generalhelpers.Logger;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
 import com.telelogic.rhapsody.core.*;
    
 public class RequirementsHelper {
-	
-	public static void main(String[] args) {
-		IRPApplication theRhpApp = RhapsodyAppServer.getActiveRhapsodyApplication();
-		
-		@SuppressWarnings("unchecked")
-		List<IRPGraphElement> theGraphEls = theRhpApp.getSelectedGraphElements().toList();
-		
-		createNewRequirementsFor(theGraphEls);
-	}
  	
 	private static List<IRPModelElement> getElementsThatFlowInto(
 			IRPModelElement theElement, 
@@ -71,9 +60,6 @@ public class RequirementsHelper {
 		
 		IRPModelElement theModelObject = theGraphEl.getModelObject();
 		IRPDiagram theDiagram = theGraphEl.getDiagram();
-		IRPCollection theCollection = RhapsodyAppServer.getActiveRhapsodyApplication().createNewCollection();
-
-		IRPRequirement theReqt = null;
 		
 		if( theModelObject != null ){
 			
@@ -119,42 +105,56 @@ public class RequirementsHelper {
 				}
 				
 				IRPModelElement theReqtOwner = theDiagram;
-				
+
 				if( theReqtOwner instanceof IRPActivityDiagram ){
 					theReqtOwner = theDiagram.getOwner();
 				}
-				
-				theReqt = addNewRequirementTracedTo( theModelObject, theReqtOwner, theText );	
-				
-				IRPGraphicalProperty theGraphicalProperty = null;
-				
-				if (theGraphEl instanceof IRPGraphNode){
-					theGraphicalProperty = theGraphEl.getGraphicalProperty("Position");
-				} else if (theGraphEl instanceof IRPGraphEdge){
-					theGraphicalProperty = theGraphEl.getGraphicalProperty("TargetPosition");
+
+				IRPDependency theDependency = 
+						addNewRequirementTracedTo( theModelObject, theReqtOwner, theText );	
+
+				IRPRequirement theReqt = (IRPRequirement) theDependency.getDependsOn();
+
+				int x = GraphElInfo.getMidX( theGraphEl );
+				int y = GraphElInfo.getMidY( theGraphEl );
+
+				IRPGraphNode theGraphNode = theDiagram.addNewNodeForElement(
+						theReqt, x+100, y+70, 300, 100 );
+
+				if( theGraphEl instanceof IRPGraphNode ){
+
+					IRPGraphNode theStartNode = (IRPGraphNode)theGraphEl;
+
+					theDiagram.addNewEdgeForElement(
+							theDependency, 
+							theStartNode, 
+							x, 
+							y, 
+							theGraphNode, 
+							GraphElInfo.getMidX( theGraphNode ), 
+							GraphElInfo.getMidY( theGraphNode ));
+
+				} else if( theGraphEl instanceof IRPGraphEdge ){
+
+					IRPCollection theGraphEls = 
+							RequirementsAnalysisPlugin.getRhapsodyApp().createNewCollection();
+
+					theGraphEls.addGraphicalItem( theGraphEl );
+					theGraphEls.addGraphicalItem( theGraphNode );
+
+					theDiagram.completeRelations( theGraphEls, 0);	
+
+				} else {
+					Logger.writeLine("Warning in populateDependencyOnDiagram, the graphEls are not handled types for drawing relations");
 				}
-				
-				if (theGraphicalProperty != null){
-					String theValue = theGraphicalProperty.getValue();
-					String[] thePosition = theValue.split(",");
 
-					int x = Integer.parseInt(thePosition[0]);
-					int y = Integer.parseInt(thePosition[1]);
-
-					IRPGraphNode theGraphNode = theDiagram.addNewNodeForElement(theReqt, x+100, y+150, 300, 100);
-
-					theCollection.addGraphicalItem(theGraphEl);
-					theCollection.addGraphicalItem(theGraphNode);
-
-					theDiagram.completeRelations(theCollection, 0);
-				}	
 			} // theActionText == null
 		} else { // theModelObject == null
 			Logger.writeLine("theModelObject == null");
 		}
 	}
 
-	private static IRPRequirement addNewRequirementTracedTo(
+	private static IRPDependency addNewRequirementTracedTo(
 			IRPModelElement theModelObject, 
 			IRPModelElement toOwner,
 			String theText) {
@@ -179,7 +179,7 @@ public class RequirementsHelper {
 				" with the text '" + theText + "' related to " + 
 				Logger.elementInfo(theModelObject) + " with a " + Logger.elementInfo(theDep));
 		
-		return theReqt;
+		return theDep;
 	}
 			
 	public static void createNewRequirementsFor(List<IRPGraphElement> theGraphEls){

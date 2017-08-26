@@ -1,5 +1,6 @@
 package requirementsanalysisplugin;
 
+import generalhelpers.GeneralHelpers;
 import generalhelpers.Logger;
 
 import java.util.ArrayList;
@@ -24,10 +25,54 @@ public class ActionInfo {
 	private IRPModelElement theElement = null;
 	private String currentUnadornedName = "Unspecified";
 	
-	private final List<String> elementTypesNeedingTraceability = Arrays.asList("Action", "AcceptEventAction", "EventState", "TimeEvent", "Transition");
+	private final List<String> elementTypesNeedingTraceability = 
+			Arrays.asList("Action", "AcceptEventAction", "EventState", "TimeEvent", "Transition", "Constraint");
+	
+	public static boolean isTraceabilityNeededFor( 
+			IRPModelElement theEl ){
+	
+		boolean isTraceabilityNeeded = false;
+		
+		if( theEl instanceof IRPState ){
+			
+			isTraceabilityNeeded = true;
+			
+		} else if( theEl instanceof IRPTransition ){
+			
+			IRPTransition theTransition = (IRPTransition)theEl;
+			
+			IRPGuard theGuard = theTransition.getItsGuard();
+			 
+			// only check transitions that have guards, e.g. []
+			isTraceabilityNeeded = ( theGuard != null );
+			
+		} else if( theEl instanceof IRPConstraint ){
+			
+			IRPConstraint theConstraint = (IRPConstraint)theEl;
+			
+			String theSpecification = theConstraint.getSpecification();
+			
+			if( GeneralHelpers.hasStereotypeCalled( "Precondition", theEl ) ){
+				
+				isTraceabilityNeeded = 
+						!theSpecification.isEmpty() &&
+						!theSpecification.equals( "<type any pre-conditions else delete from model>" );
+								
+			} else if( GeneralHelpers.hasStereotypeCalled( "Postcondition", theEl ) ){
+			
+				isTraceabilityNeeded = 
+						!theSpecification.isEmpty() &&
+						!theSpecification.equals( "<type any post-conditions else delete from model>" );
+			}
+		}
+		
+		return isTraceabilityNeeded;
+	}
 	
 	public ActionInfo(IRPModelElement theElement) {
+		
 		super();
+		
 		this.theElement = theElement;
 		this.oldName = theElement.getName();		
 		 
@@ -38,7 +83,9 @@ public class ActionInfo {
 			
 			this.isRenameNeeded = false;
 
-		} else if (theElement instanceof IRPState || theElement instanceof IRPTransition){
+		} else if (theElement instanceof IRPState || 
+				   theElement instanceof IRPTransition || 
+				   theElement instanceof IRPConstraint ){
 			
 			if (theElement instanceof IRPState){
 				
@@ -61,7 +108,7 @@ public class ActionInfo {
 					this.desiredName = null;
 				}
 				
-			} else if (theElement instanceof IRPTransition){
+			} else if (theElement instanceof IRPTransition || theElement instanceof IRPConstraint){
 				
 				this.theType = theElement.getMetaClass();
 				this.desiredName = null; 
@@ -84,34 +131,42 @@ public class ActionInfo {
 			} else {
 				this.isRenameNeeded = false;
 			}
-			
-			// check for requirements
-			List<IRPRequirement> theReqts = getRequirementsThatDependOn( theElement );
-		
-			if (theReqts.isEmpty()){
-				
-				if (elementTypesNeedingTraceability.contains(theType)){
-					this.isTraceabilityFailure = true;
-					Logger.writeLine( theElement.getName() + " has no traceability to a requirement" );
-					
-					if (theType.equals("Transition")){
-						this.theComment = "No traceability (on Transition with Guard [])";
-					} else {
-						this.theComment = "No traceability";
-					}
-				} else {					
-					this.isTraceabilityFailure = false;
-					Logger.writeLine( theElement.getName() + " was not checked for traceability to a requirement" );
-					this.theComment = "No traceability found but not a failure";
-				}
-
-			} else {
-				this.isTraceabilityFailure = false;
-			}
-			
-			this.isTraceabilityChecked = true;
-			
 		}
+		
+		if( isTraceabilityNeededFor( theElement ) ){
+			performTraceabilityCheckFor( theElement );
+		}
+	}
+
+	private void performTraceabilityCheckFor(
+			IRPModelElement theElement ){
+		
+		// check for requirements
+		List<IRPRequirement> theReqts = getRequirementsThatDependOn( theElement );
+
+		if (theReqts.isEmpty()){
+			
+			if (elementTypesNeedingTraceability.contains(theType)){
+				this.isTraceabilityFailure = true;
+				Logger.writeLine( theElement.getName() + " has no traceability to a requirement" );
+				
+				if (theType.equals("Transition")){
+					this.theComment = "No traceability (on Transition with Guard [])";
+				} else {
+					this.theComment = "No traceability";
+				}
+			} else {					
+				this.isTraceabilityFailure = false;
+				Logger.writeLine( theElement.getName() + " was not checked for traceability to a requirement" );
+				this.theComment = "No traceability found but not a failure";
+			}
+
+		} else {
+			this.isTraceabilityFailure = false;
+		}
+		
+		this.isTraceabilityChecked = true;		
+
 	}
 	
 	private List<IRPRequirement> getRequirementsThatDependOn(IRPModelElement theElement){
@@ -225,11 +280,12 @@ public class ActionInfo {
 }
 
 /**
- * Copyright (C) 2016  MBSE Training and Consulting Limited (www.executablembse.com)
+ * Copyright (C) 2016-2017  MBSE Training and Consulting Limited (www.executablembse.com)
 
     Change history:
     #004 10-APR-2016: Re-factored projects into single workspace (F.J.Chadburn)
-    
+    #225 25-AUG-2017: Add check that pre-conditions with text must trace to at least one requirement (F.J.Chadburn)
+
     This file is part of SysMLHelperPlugin.
 
     SysMLHelperPlugin is free software: you can redistribute it and/or modify

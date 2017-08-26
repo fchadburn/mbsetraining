@@ -165,7 +165,7 @@ public class ActivityDiagramChecker extends JFrame{
 					IRPModelElement theEl = theInfo.getTheElement();
 					 
 					Logger.writeLine("Highlighting " + Logger.elementInfo(theEl) + " on the diagram.");
-					RequirementsAnalysisPlugin.getRhapsodyApp().highLightElement(theEl);
+					theEl.highLightElement();
 				}
 			}
 		};
@@ -192,11 +192,12 @@ public class ActivityDiagramChecker extends JFrame{
 }
 
 /**
- * Copyright (C) 2016  MBSE Training and Consulting Limited (www.executablembse.com)
+ * Copyright (C) 2016-2017  MBSE Training and Consulting Limited (www.executablembse.com)
 
     Change history:
     #004 10-APR-2016: Re-factored projects into single workspace (F.J.Chadburn)
-    
+    #225 25-AUG-2017: Add check that pre-conditions with text must trace to at least one requirement (F.J.Chadburn)
+
     This file is part of SysMLHelperPlugin.
 
     SysMLHelperPlugin is free software: you can redistribute it and/or modify

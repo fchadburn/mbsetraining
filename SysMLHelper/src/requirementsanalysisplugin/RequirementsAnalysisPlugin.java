@@ -173,7 +173,17 @@ public class RequirementsAnalysisPlugin extends RPUserPlugin {
 				} catch (Exception e) {
 					Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking SmartLinkPanel.launchTheEndLinkPanel");
 				}
-				
+			} else if (menuItem.equals(m_configSettings.getString( "requirementsanalysisplugin.RollUpTraceabilityUpToTransitionLevel" ))){
+
+				try {
+					if( theSelectedGraphEls != null ){
+						IRPGraphElement theSelectedGraphEl = theSelectedGraphEls.get( 0 );
+						PopulateTransitionRequirementsPanel.launchThePanel( theSelectedGraphEl );
+					}
+
+				} catch (Exception e) {
+					Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking SmartLinkPanel.launchTheEndLinkPanel");
+				}				
 			} else {
 				Logger.writeLine(theSelectedEl, " was invoked with menuItem='" + menuItem + "'");
 			}
@@ -215,6 +225,7 @@ public class RequirementsAnalysisPlugin extends RPUserPlugin {
     #110 06-NOV-2016: PluginVersion now comes from Config.properties file, rather than hard wired (F.J.Chadburn)
     #155 25-JAN-2017: Added new panel to find and delete Gateway Deleted_At_High_Level req'ts with Rhp 8.2 (F.J.Chadburn)
     #163 05-FEB-2017: Add new menus to Smart link: Start and Smart link: End (F.J.Chadburn)
+    #224 25-AUG-2017: Added new menu to roll up traceability to the transition and populate on STM (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

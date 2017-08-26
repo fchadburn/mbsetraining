@@ -157,24 +157,16 @@ public class DiagramElementList extends HashSet<DiagramElementInfo> {
 			String[] theMetaClasses ){
 		
 		boolean isMatchFound = false;
-		
-		Logger.writeLine("doesElementMatchOneOfTheTypes was invoked...");
-		
+				
 		for( String theMetaClass : theMetaClasses ){ 
 			
 			if( theEl.getMetaClass().equals( theMetaClass ) ){
 				
-				Logger.writeLine("doesElementMatchOneOfTheTypes invoked for " + Logger.elementInfo( theEl ) + " with match found to a " + theMetaClass );
 				isMatchFound = true;
 				break;
-			} else {
-				Logger.writeLine("doesElementMatchOneOfTheTypes invoked for " + Logger.elementInfo( theEl ) + " with no match found to a " + theMetaClass );
-
 			}
 		}
 		
-		Logger.writeLine("...doesElementMatchOneOfTheTypes has completed (returning " + isMatchFound + ")" );
-
 		return isMatchFound;
 	}
 	
@@ -243,7 +235,8 @@ public class DiagramElementList extends HashSet<DiagramElementInfo> {
     Change history:
     #163 05-FEB-2017: Add new menus to Smart link: Start and Smart link: End (F.J.Chadburn)
     #204 18-JUN-2017: Refine menu for invoking Smart Link panel and add FlowPort/EventReceptions support (F.J.Chadburn)
-    
+    #224 25-AUG-2017: Added new menu to roll up traceability to the transition and populate on STM (F.J.Chadburn)
+
     This file is part of SysMLHelperPlugin.
 
     SysMLHelperPlugin is free software: you can redistribute it and/or modify
