@@ -1289,6 +1289,26 @@ public class GeneralHelpers {
 			Logger.writeLine( "Error: Unable to find element with name " + toBlockWithName );
 		}
 	}
+	
+	public static IRPClass findOwningClassIfOneExistsFor( 
+			IRPModelElement theModelEl ){
+		
+		IRPModelElement theOwner = theModelEl.getOwner();
+		IRPClass theResult = null;
+		
+		if( ( theOwner != null ) &&
+			!( theOwner instanceof IRPProject ) ){
+			
+			if( theOwner.getMetaClass().equals("Class") ){
+
+				theResult = (IRPClass) theOwner;
+			} else {
+				theResult = findOwningClassIfOneExistsFor( theOwner );
+			}
+		}
+
+		return theResult;
+	}
 }
 
 /**
@@ -1327,6 +1347,7 @@ public class GeneralHelpers {
     #207 25-JUN-2017: Significant bolstering of Select Depends On/Dependent element(s) menus (F.J.Chadburn)
     #213 09-JUL-2017: Add dialogs to auto-connect «publish»/«subscribe» FlowPorts for white-box simulation (F.J.Chadburn)
     #216 09-JUL-2017: Added a new Add Block/Part command added to the Functional Analysis menus (F.J.Chadburn)
+    #224 25-AUG-2017: Added new menu to roll up traceability to the transition and populate on STM (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 
