@@ -786,10 +786,16 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
 			
 			if( theReqtsPkg != null && theReqtsPkg instanceof IRPPackage ){
 				
-				IRPObjectModelDiagram theRD = 
-						((IRPPackage) theReqtsPkg).addObjectModelDiagram( "RD - " + theName );
+				// Don't create RD if one already exists
+				String theRDName = "RD - " + theName;
 				
-				theRD.changeTo( "Requirements Diagram" );
+				IRPModelElement theRD = 
+						GeneralHelpers.getExistingOrCreateNewElementWith(
+								theRDName, "ObjectModelDiagram", theReqtsPkg );
+				
+				if( theRD != null ){					
+					theRD.changeTo( "Requirements Diagram" );
+				}
 			}
 			
 			if( m_SimulationType==SimulationType.FullSim || 
@@ -1020,6 +1026,7 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
     #214 09-JUL-2017: Tweak Link from TimeActor to be a new term "connector" when creating block hierarchy (F.J.Chadburn)
     #216 09-JUL-2017: Added a new Add Block/Part command added to the Functional Analysis menus (F.J.Chadburn)
     #220 12-JUL-2017: Added customisable Stereotype choice to the Block and block/Part creation dialogs (F.J.Chadburn) 
+    #226 25-AUG-2017: Fixed exception when creating FunctionalBlockHierarchy and the RD already exists (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

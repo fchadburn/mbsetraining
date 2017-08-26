@@ -556,7 +556,8 @@ public abstract class CreateTracedElementPanel extends JPanel {
 				
 			} else if( orTheModelElement.getMetaClass().equals("StatechartDiagram") ){
 		
-				IRPModelElement theOwner = findOwningClassIfOneExistsFor( orTheModelElement );
+				IRPModelElement theOwner = 
+						GeneralHelpers.findOwningClassIfOneExistsFor( orTheModelElement );
 				
 				Logger.writeLine( theOwner, "is the Owner");
 				
@@ -577,26 +578,7 @@ public abstract class CreateTracedElementPanel extends JPanel {
 		return theBlock;
 	}
 	
-	static private IRPClass findOwningClassIfOneExistsFor( 
-			IRPModelElement theModelEl ){
-		
-		IRPModelElement theOwner = theModelEl.getOwner();
-		IRPClass theResult = null;
-		
-		if( ( theOwner != null ) &&
-			!( theOwner instanceof IRPProject ) ){
-			
-			if( theOwner.getMetaClass().equals("Class") ){
 
-				theResult = (IRPClass) theOwner;
-				Logger.writeLine( "findOwningClassIfOneExistsFor has found " + Logger.elementInfo( theResult ) );
-			} else {
-				theResult = findOwningClassIfOneExistsFor( theOwner );
-			}
-		}
-
-		return theResult;
-	}
 	
 	protected IRPAttribute addAttributeTo( 
 			IRPClassifier theClassifier, 
@@ -657,6 +639,7 @@ public abstract class CreateTracedElementPanel extends JPanel {
     #199 05-JUN-2017: Improved create event panel consistency to name event Tbd if no text provided (F.J.Chadburn)
     #200 05-JUN-2017: Hide Populate on diagram check-boxes if context is not valid (F.J.Chadburn)
     #209 04-JUL-2017: Populate requirements for SD(s) based on messages now supported with Dialog (F.J.Chadburn)
+    #224 25-AUG-2017: Added new menu to roll up traceability to the transition and populate on STM (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

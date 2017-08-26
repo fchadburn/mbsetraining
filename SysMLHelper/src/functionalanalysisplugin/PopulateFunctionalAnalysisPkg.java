@@ -28,7 +28,8 @@ public class PopulateFunctionalAnalysisPkg extends PopulatePkg {
 		
 		if (theSelectedEl instanceof IRPProject){
 
-			copyActivityDiagrams( (IRPProject) theSelectedEl );
+
+			createFunctionalAnalysisPkg( (IRPProject) theSelectedEl, SimulationType.FullSim );
 		}
 	}
 	

@@ -87,13 +87,15 @@ public class GraphNodeInfo {
 	public int getMiddleX(){
 		
 		PolygonInfo thePolygonInfo = new PolygonInfo( m_GraphNode );		
-		return thePolygonInfo.getValueAt( 3 ) - thePolygonInfo.getValueAt( 1 );
+		int val = thePolygonInfo.getValueAt( 1 ) + ( ( thePolygonInfo.getValueAt( 3 ) - thePolygonInfo.getValueAt( 1 ) ) / 2 );
+		return val;
 	}
 	
 	public int getMiddleY(){
 		
 		PolygonInfo thePolygonInfo = new PolygonInfo( m_GraphNode );		
-		return thePolygonInfo.getValueAt( 8 ) - thePolygonInfo.getValueAt( 2 );
+		int val = thePolygonInfo.getValueAt( 2 ) + ( ( thePolygonInfo.getValueAt(8 ) - thePolygonInfo.getValueAt( 2 ) ) / 2 );
+		return val;
 	}
 }
 
@@ -103,7 +105,8 @@ public class GraphNodeInfo {
     Change history:
     #019 15-MAY-2016: (new) Improvements to Functional Analysis Block default naming approach (F.J.Chadburn)
     #212 04-JUL-2017: Added a MergeActors helper, currently only invoked via Eclipse (F.J.Chadburn) 
-
+    #224 25-AUG-2017: Added new menu to roll up traceability to the transition and populate on STM (F.J.Chadburn)
+    
     This file is part of SysMLHelperPlugin.
 
     SysMLHelperPlugin is free software: you can redistribute it and/or modify
