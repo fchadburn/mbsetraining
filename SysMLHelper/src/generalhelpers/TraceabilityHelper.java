@@ -23,11 +23,12 @@ public class TraceabilityHelper {
 			if( theDependsOn instanceof IRPRequirement ){
 				
 				IRPStereotype theStereotype = 
-						GeneralHelpers.getStereotypeAppliedTo( theDependencyOnSource, ".*" );
+						GeneralHelpers.getStereotypeAppliedTo( 
+								theDependencyOnSource, ".*" );
 				
 				if( theStereotype != null ){
 					addStereotypedDependencyIfOneDoesntExist(
-							toTheElement, theDependsOn, theStereotype.getName() );
+							toTheElement, theDependsOn, theStereotype );
 				}
 				
 			}
@@ -94,7 +95,7 @@ public class TraceabilityHelper {
 	public static IRPDependency addStereotypedDependencyIfOneDoesntExist(
 			IRPModelElement fromElement, 
 			IRPModelElement toElement,
-			String stereotypeName ){
+			IRPStereotype theStereotype ){
 		
 		IRPDependency theDependency = null;
 		
@@ -102,19 +103,37 @@ public class TraceabilityHelper {
 				countStereotypedDependencies(
 						fromElement, 
 						toElement, 
-						stereotypeName );
+						theStereotype.getName() );
 		
 		if( isExistingFoundCount==0 ){
 			theDependency = fromElement.addDependencyTo( toElement );
-			theDependency.addStereotype( stereotypeName, "Dependency" );
+			theDependency.setStereotype( theStereotype );
 			
-			Logger.writeLine( "Added a «" + stereotypeName + "» dependency to " + 
-					Logger.elementInfo( fromElement ) + " (to " + Logger.elementInfo( toElement ) + ")" );
+			Logger.writeLine( "Added a «" + theStereotype.getName() + "» dependency to " + 
+					Logger.elementInfo( fromElement ) + 
+					" (to " + Logger.elementInfo( toElement ) + ")" );				
 		} else {
-			Logger.writeLine( "Skipped adding a «" + stereotypeName + "» dependency to " + Logger.elementInfo( fromElement ) + 
+			Logger.writeLine( "Skipped adding a «" + theStereotype.getName() + "» dependency to " + Logger.elementInfo( fromElement ) + 
 					" (to " + Logger.elementInfo( toElement ) + 
 					") as " + isExistingFoundCount + " already exists" );
 		}
+		
+		return theDependency;
+	}
+	
+	public static IRPDependency addAutoRippleDependencyIfOneDoesntExist(
+			IRPModelElement fromElement, 
+			IRPModelElement toElement ){
+		
+		IRPStereotype theAutoRippleStereotype = 
+				GeneralHelpers.getExistingStereotype( 
+						"AutoRipple", fromElement.getProject() );
+		
+		IRPDependency theDependency =
+				TraceabilityHelper.addStereotypedDependencyIfOneDoesntExist(
+						fromElement, 
+						toElement, 
+						theAutoRippleStereotype );
 		
 		return theDependency;
 	}
@@ -216,6 +235,7 @@ public class TraceabilityHelper {
     #160 25-JAN-2017: Minor fixes to code found during development (F.J.Chadburn)
     #163 05-FEB-2017: Add new menus to Smart link: Start and Smart link: End (F.J.Chadburn)
     #175 02-APR-2017: Improved flowPort creation to copy req'ts traceability from attribute to flow-port (F.J.Chadburn)
+    #227 06-SEP-2017: Increased robustness to stop smart link panel using non new term version of <<refine>> (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

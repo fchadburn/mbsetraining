@@ -300,21 +300,60 @@ public class GeneralHelpers {
 
 		return theEl;
 	}
-
-	public static void applyExistingStereotype(
+	
+	public static IRPStereotype applyExistingStereotype(
 			String withTheName, 
-			IRPModelElement toTheEl){
+			IRPModelElement toTheEl ){
 		
-		IRPStereotype theStereotype = 
-				(IRPStereotype) toTheEl.getProject().findNestedElementRecursive(
-						withTheName, "Stereotype");
+		IRPStereotype theChosenStereotype = 
+				getExistingStereotype( withTheName, toTheEl.getProject() );
 		
-		if (theStereotype != null){
-			toTheEl.setStereotype(theStereotype);
-			//Logger.writeLine(theStereotype, "was applied to " + Logger.elementInfo(toTheEl));
+		if( theChosenStereotype != null ){
+			toTheEl.setStereotype( theChosenStereotype );
 		} else {
-			Logger.writeLine("Warning: Unable to find a stereotype with name " + withTheName + " in applyExistingStereotype");
+			Logger.writeLine("Warning in applyExistingStereotype, unable to find stereotype <<" + 
+					withTheName + ">> underneath " + Logger.elementInfo( toTheEl.getProject() ) );
 		}
+		
+		return theChosenStereotype;
+	}
+	
+	public static IRPStereotype getExistingStereotype(
+			String withTheName,
+			IRPModelElement underneathTheEl ){
+
+		List<IRPModelElement> theStereotypeEls = 
+				GeneralHelpers.findElementsWithMetaClassAndName(
+						"Stereotype", withTheName, underneathTheEl );
+		
+		IRPStereotype theChosenStereotype = null;
+		boolean isNewTermFound = false;
+		
+		for( IRPModelElement theStereotypeEl : theStereotypeEls ){
+			
+			IRPStereotype theStereotype = (IRPStereotype)theStereotypeEl;
+			
+			// Favour new term stereotypes
+			if( theStereotype.getIsNewTerm()==1 ){
+				isNewTermFound = true;
+				theChosenStereotype = theStereotype;
+				
+				if( theStereotypeEls.size() > 1 ){
+					
+					Logger.writeLine("getExistingStereotype has chosen " + Logger.elementInfo( theStereotype ) + 
+							" as it is a new term (there were x" + 
+							theStereotypeEls.size() + " stereotypes with the same name)");
+				}
+			} else if( !isNewTermFound ){
+				theChosenStereotype = theStereotype;
+			}
+		}
+		
+		if( theChosenStereotype == null ){
+			Logger.writeLine("Warning: Unable to find a stereotype with name " + withTheName + " in getExistingStereotype");
+		}
+		
+		return theChosenStereotype;
 	}
 	
 	public static IRPStereotype getStereotypeIn(
@@ -325,7 +364,8 @@ public class GeneralHelpers {
 		IRPStereotype theStereotype = null;
 		
 		IRPModelElement thePkg = 
-				theProject.findElementsByFullName( ownedByPackageName, "Package" );
+				theProject.findElementsByFullName( 
+						ownedByPackageName, "Package" );
 		
 		if( thePkg == null ){
 			
@@ -349,19 +389,15 @@ public class GeneralHelpers {
 				String theValue = theTag.getValue();
 				
 				Logger.writeLine( "Read value of " + theValue + " from " + Logger.elementInfo( theTag ) );
+
+				theStereotype = getExistingStereotype( theValue, theProject );
 				
-				IRPModelElement theModelElement = 
-						GeneralHelpers.findElementWithMetaClassAndName( 
-								"Stereotype", theValue, theProject );
-				
-				if( theModelElement == null ){
+				if( theStereotype == null ){
 					Logger.writeLine( "Error in getStereotypeForActionTracing, no Stereotyped called " + theValue + " was found" );
 
 					theStereotype = selectAndPersistStereotype( theProject, thePkg, theTag );
 
-				} else if( theModelElement instanceof IRPStereotype ){
-					
-					theStereotype = (IRPStereotype)theModelElement;
+				} else {				
 					Logger.writeLine( "Using " + Logger.elementInfo( theStereotype ) + " for action tracing" );
 				}
 			}
@@ -1348,6 +1384,7 @@ public class GeneralHelpers {
     #213 09-JUL-2017: Add dialogs to auto-connect «publish»/«subscribe» FlowPorts for white-box simulation (F.J.Chadburn)
     #216 09-JUL-2017: Added a new Add Block/Part command added to the Functional Analysis menus (F.J.Chadburn)
     #224 25-AUG-2017: Added new menu to roll up traceability to the transition and populate on STM (F.J.Chadburn)
+    #227 06-SEP-2017: Increased robustness to stop smart link panel using non new term version of <<refine>> (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 
