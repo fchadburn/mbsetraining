@@ -168,7 +168,8 @@ public abstract class CreateTracedElementPanel extends JPanel {
 			
 			theOperation.setBody( "OM_RETURN( " + theAttributeName + " );" );
 			
-			TraceabilityHelper.addStereotypedDependencyIfOneDoesntExist( theAttribute, theOperation, "AutoRipple" );
+			TraceabilityHelper.addAutoRippleDependencyIfOneDoesntExist( 
+					theAttribute, theOperation );
 
 			IRPClassifier theType = findTypeCalled( "int" );
 			
@@ -640,6 +641,7 @@ public abstract class CreateTracedElementPanel extends JPanel {
     #200 05-JUN-2017: Hide Populate on diagram check-boxes if context is not valid (F.J.Chadburn)
     #209 04-JUL-2017: Populate requirements for SD(s) based on messages now supported with Dialog (F.J.Chadburn)
     #224 25-AUG-2017: Added new menu to roll up traceability to the transition and populate on STM (F.J.Chadburn)
+    #227 06-SEP-2017: Increased robustness to stop smart link panel using non new term version of <<refine>> (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

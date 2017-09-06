@@ -423,10 +423,13 @@ public class CreateDerivedRequirementPanel extends CreateTracedElementPanel {
 							Logger.writeLine("Warning in performAction, no upstream requirement was selected");
 							
 						} else {
+							IRPStereotype theDeriveReqtStereotype = 
+									GeneralHelpers.getExistingStereotype( "deriveReqt", theRequirement.getProject() );
+
 							for (IRPRequirement theUpstreamReqt : theUpstreamReqts) {
 								
 								TraceabilityHelper.addStereotypedDependencyIfOneDoesntExist(
-										theRequirement, theUpstreamReqt, "deriveReqt");
+										theRequirement, theUpstreamReqt, theDeriveReqtStereotype );
 								
 								if( m_PopulateOnDiagramCheckBox.isSelected() ){
 									@SuppressWarnings("unchecked")
@@ -468,8 +471,13 @@ public class CreateDerivedRequirementPanel extends CreateTracedElementPanel {
 			IRPRequirement theRequirement,
 			IRPModelElement theSourceModelObject ){
 		
-		// Add a derive dependency if the source element is an accept event or call operation
-		if ( theSourceModelObject instanceof IRPCallOperation ){
+		IRPStereotype theDeriveStereotype = 
+				GeneralHelpers.getExistingStereotype( 
+						"derive", theRequirement.getProject() );
+		
+		// Add a derive dependency if the source element is an 
+		// accept event or call operation
+		if( theSourceModelObject instanceof IRPCallOperation ){
 
 			IRPCallOperation theCallOp = (IRPCallOperation)theSourceModelObject;
 
@@ -478,10 +486,10 @@ public class CreateDerivedRequirementPanel extends CreateTracedElementPanel {
 			if( theOperation != null ){
 
 				TraceabilityHelper.addStereotypedDependencyIfOneDoesntExist(
-						theCallOp, theRequirement, "derive");
+						theCallOp, theRequirement, theDeriveStereotype );
 				
 				TraceabilityHelper.addStereotypedDependencyIfOneDoesntExist(
-						theOperation, theRequirement, "derive");
+						theOperation, theRequirement, theDeriveStereotype );
 
 			} else {
 				Logger.writeLine("Skipped adding derive dependencies as no Operation found for the call operation");
@@ -497,10 +505,10 @@ public class CreateDerivedRequirementPanel extends CreateTracedElementPanel {
 			if( theEvent != null ){
 
 				TraceabilityHelper.addStereotypedDependencyIfOneDoesntExist(
-						theAcceptEventAction, theRequirement, "derive");
+						theAcceptEventAction, theRequirement, theDeriveStereotype );
 				
 				TraceabilityHelper.addStereotypedDependencyIfOneDoesntExist(
-						theEvent, theRequirement, "derive");
+						theEvent, theRequirement, theDeriveStereotype );
 
 			} else {
 				Logger.writeLine("Skipped adding derive dependencies as no Event was found for the accept event action");
@@ -522,10 +530,10 @@ public class CreateDerivedRequirementPanel extends CreateTracedElementPanel {
 					if( theEvent != null ){
 						
 						TraceabilityHelper.addStereotypedDependencyIfOneDoesntExist(
-								theState, theRequirement, "derive");
+								theState, theRequirement, theDeriveStereotype );
 						
 						TraceabilityHelper.addStereotypedDependencyIfOneDoesntExist(
-									theEvent, theRequirement, "derive");
+									theEvent, theRequirement, theDeriveStereotype );
 
 					} else {
 						Logger.writeLine("Skipped adding derive dependencies as no event found for " + Logger.elementInfo(theState));
@@ -548,7 +556,7 @@ public class CreateDerivedRequirementPanel extends CreateTracedElementPanel {
 				    theSourceModelObject instanceof IRPAttribute ){
 
 			TraceabilityHelper.addStereotypedDependencyIfOneDoesntExist(
-					theSourceModelObject, theRequirement, "derive");
+					theSourceModelObject, theRequirement, theDeriveStereotype );
 
 		} else {
 			Logger.writeLine("Warning in addDeriveRelationsTo, " + Logger.elementInfo( theSourceModelObject ) + " was not handled");
@@ -615,6 +623,7 @@ public class CreateDerivedRequirementPanel extends CreateTracedElementPanel {
     #134 02-DEC-2016: Fix issue with Derive requirement dialog not launching (F.J.Chadburn)
     #188 29-MAY-2017: Tweak Derive downstream requirement to work on right-clicking reqt on IBD or UCD (F.J.Chadburn)
     #209 04-JUL-2017: Populate requirements for SD(s) based on messages now supported with Dialog (F.J.Chadburn)
+    #227 06-SEP-2017: Increased robustness to stop smart link panel using non new term version of <<refine>> (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

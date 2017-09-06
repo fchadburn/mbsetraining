@@ -1108,8 +1108,8 @@ public class CreateIncomingEventPanel extends CreateTracedElementPanel {
 								theClassifier, m_AttributeNameTextField.getText(), "0", selectedReqtsList );
 					}
 					
-					TraceabilityHelper.addStereotypedDependencyIfOneDoesntExist(
-							theAttribute, theReception, "AutoRipple" );
+					TraceabilityHelper.addAutoRippleDependencyIfOneDoesntExist(
+							theAttribute, theReception );
 
 					if( m_CreateSendEventViaPanel.isSelected() ){
 						
@@ -1253,6 +1253,7 @@ public class CreateIncomingEventPanel extends CreateTracedElementPanel {
     #200 05-JUN-2017: Hide Populate on diagram check-boxes if context is not valid (F.J.Chadburn)
     #201 05-JUN-2017: Highlight attribute post-event creation to ease potential for flow-port creation (F.J.Chadburn)
     #210 04-JUL-2017: Fixed a bug stopping event creation dialog launching when populate check-box shown (F.J.Chadburn)
+    #227 06-SEP-2017: Increased robustness to stop smart link panel using non new term version of <<refine>> (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 
