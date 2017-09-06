@@ -113,6 +113,29 @@ public class PortCreator {
 			thePort.setType( theAttribute.getType() );
 			thePort.setPortDirection( "In" );
 
+			IRPModelElement thePortOwner = thePort.getOwner();
+			
+			if( thePortOwner instanceof IRPClassifier ){
+				
+				IRPClassifier theClassifier = (IRPClassifier)thePortOwner;
+				
+				String theChangeEventName = "ch" + GeneralHelpers.capitalize(theAttribute.getName());
+				
+				Logger.writeLine("Ensure there is a change event reception called " + 
+						theChangeEventName + " on " + Logger.elementInfo( theClassifier ) );
+				
+				IRPModelElement theReception = GeneralHelpers.getExistingOrCreateNewElementWith(
+						theChangeEventName,
+						"Reception",
+						theClassifier );
+				
+				TraceabilityHelper.addAutoRippleDependencyIfOneDoesntExist( 
+						theAttribute, theReception );
+				
+			} else {
+				Logger.writeLine("Error in createSubscribeFlowportFor, element is not a classifier");
+			}
+			
 			IRPStereotype existingStereotype = 
 					GeneralHelpers.getStereotypeCalled( "publish", theAttribute );
 
@@ -143,7 +166,9 @@ public class PortCreator {
 		if( thePort == null ){
 			Logger.writeLine( "Creating an flowport for " + Logger.elementInfo( theAttribute ) + " called " + theDesiredPortName );
 			thePort = (IRPSysMLPort) theAttribute.getOwner().addNewAggr( "FlowPort", theDesiredPortName );
-			TraceabilityHelper.addStereotypedDependencyIfOneDoesntExist( theAttribute, thePort, "AutoRipple" );
+			
+			TraceabilityHelper.addAutoRippleDependencyIfOneDoesntExist( 
+					theAttribute, thePort );
 						
 		} else if( !thePort.getName().equals( theDesiredPortName ) ){ // does port require renaming?
 			
@@ -279,7 +304,7 @@ public class PortCreator {
 
 				boolean isTransition =
 						theDependsOn instanceof IRPTransition;
-
+				
 				if( isCheckOperation || isReception || isFlowPort || isTransition ){
 
 					if( !theElementOwner.equals( theAttributeOwner ) ){
@@ -347,6 +372,8 @@ public class PortCreator {
     #192 05-JUN-2017: Widened DeleteAttributeAndRelatedElementsMenu support to work with flow-ports as well (F.J.Chadburn)
     #193 05-JUN-2017: Added Transitions to «AutoRipple» list so they're also cleaned up when attribute is deleted (F.J.Chadburn)
     #213 09-JUL-2017: Add dialogs to auto-connect «publish»/«subscribe» FlowPorts for white-box simulation (F.J.Chadburn)
+    #227 06-SEP-2017: Increased robustness to stop smart link panel using non new term version of <<refine>> (F.J.Chadburn)
+    #228 06-SEP-2017: Refine subscribe port creation to include change event reception creation (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 
