@@ -45,12 +45,8 @@ public class SmartLinkInfo {
 
 		if( m_StartLinkElements.areElementsAllReqts() ){
 
-			IRPModelElement theStereotypeEl = theRhpProject.findNestedElementRecursive(
-					"deriveReqt", "Stereotype");
-
-			if( theStereotypeEl != null && theStereotypeEl instanceof IRPStereotype ){
-				m_RelationType = (IRPStereotype)theStereotypeEl;
-			}
+			m_RelationType = GeneralHelpers.getExistingStereotype(
+					"deriveReqt", theRhpProject );
 
 		} else if( m_StartLinkElements.areElementsAllDeriveDependencySources() ){
 
@@ -94,9 +90,7 @@ public class SmartLinkInfo {
 					if( isPopulatePossibleForRelation ){
 						m_IsPopulatePossible = true;
 					}
-
 				}
-
 			}
 		}
 		
@@ -296,10 +290,9 @@ public class SmartLinkInfo {
 			if( theDependency == null ){
 				
 				theDependency = TraceabilityHelper.addStereotypedDependencyIfOneDoesntExist(
-							theRelationInfo.getStartElement().getElement(), 
-							theRelationInfo.getEndElement().getElement(), 
-							m_RelationType.getName() );
-	
+						theRelationInfo.getStartElement().getElement(), 
+						theRelationInfo.getEndElement().getElement(), 
+						m_RelationType );
 			}
 			
 			performPopulateOnDiagram(
@@ -317,7 +310,8 @@ public class SmartLinkInfo {
     #204 18-JUN-2017: Refine menu for invoking Smart Link panel and add FlowPort/EventReceptions support (F.J.Chadburn)
     #221 12-JUL-2017: Fixed Smart Link dialog to draw from middle of IRPGraphNodes rather than top left (F.J.Chadburn)
     #224 25-AUG-2017: Added new menu to roll up traceability to the transition and populate on STM (F.J.Chadburn)
-    
+    #227 06-SEP-2017: Increased robustness to stop smart link panel using non new term version of <<refine>> (F.J.Chadburn)
+
     This file is part of SysMLHelperPlugin.
 
     SysMLHelperPlugin is free software: you can redistribute it and/or modify
