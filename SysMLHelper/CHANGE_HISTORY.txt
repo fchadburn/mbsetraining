@@ -362,4 +362,8 @@ UNDER DEV RELEASE 2.1.l (12-JUL-2017)
 ----------------------------------------------------------------------------------
 UNDER DEV RELEASE 2.1.m (25-AUG-2017)
 ----------------------------------------------------------------------------------
-
+#227 06-SEP-2017: Increased robustness to stop smart link panel using non new term version of <<refine>> (F.J.Chadburn)
+#228 06-SEP-2017: Refine the auto <<Subscribe>> port creation to include creating change event reception (F.J.Chadburn)
+----------------------------------------------------------------------------------
+UNDER DEV RELEASE 2.1.n (06-SEP-2017)
+----------------------------------------------------------------------------------
