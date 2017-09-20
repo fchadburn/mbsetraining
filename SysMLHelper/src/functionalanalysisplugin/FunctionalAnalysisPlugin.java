@@ -243,7 +243,15 @@ public class FunctionalAnalysisPlugin extends RPUserPlugin {
 					} catch (Exception e) {
 						Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking OperationCreator.createTestCaseFor");
 					}
-				} 
+				} else if (theSelectedEl instanceof IRPSequenceDiagram){
+					
+					try {
+						TestCaseCreator.createTestCaseFor( (IRPSequenceDiagram) theSelectedEl );
+						
+					} catch (Exception e) {
+						Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking TestCaseCreator.createTestCaseFor");
+					}
+				}
 
 			} else if (menuItem.equals(m_configSettings.getString("functionalanalysisplugin.AddNewActorToPackageMenu"))){
 
@@ -419,6 +427,7 @@ public class FunctionalAnalysisPlugin extends RPUserPlugin {
     #209 04-JUL-2017: Populate requirements for SD(s) based on messages now supported with Dialog (F.J.Chadburn)
     #216 09-JUL-2017: Added a new Add Block/Part command added to the Functional Analysis menus (F.J.Chadburn)
     #222 12-JUL-2017: Allow AddNewBlockPartToPackageMenu to work when right-clicking IBDs and BDDs (F.J.Chadburn) 			
+    #230 20-SEP-2017: Initial alpha trial for create test case script from a sequence diagram (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

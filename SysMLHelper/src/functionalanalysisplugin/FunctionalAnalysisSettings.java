@@ -350,6 +350,57 @@ public class FunctionalAnalysisSettings {
 
 		return theBlockUnderDev;
 	}
+
+	public static IRPClass getTestBlock(
+			IRPClass withInstanceUnderTheBlock ){
+	
+		@SuppressWarnings("unchecked")
+		List<IRPModelElement> theCandidateParts = 
+				withInstanceUnderTheBlock.getNestedElementsByMetaClass( "Instance", 1 ).toList();
+					
+		IRPClass theTestBlock = null;
+		
+		for( IRPModelElement theCandidatePart : theCandidateParts ) {
+			
+			IRPInstance theInstance = (IRPInstance)theCandidatePart;
+			IRPClassifier theClassifier = theInstance.getOtherClass();
+			
+			// don't add actors or test driver
+			if( theClassifier != null && 
+				theClassifier instanceof IRPClass &&
+				GeneralHelpers.hasStereotypeCalled( "TestDriver", theClassifier ) ){
+				
+				theTestBlock = (IRPClass) theClassifier;
+			}
+		}
+		
+		return theTestBlock;
+	}
+	
+	public static List<IRPActor> getActors(
+			IRPClass withInstancesUnderTheBlock ){
+	
+		@SuppressWarnings("unchecked")
+		List<IRPModelElement> theCandidateParts = 
+				withInstancesUnderTheBlock.getNestedElementsByMetaClass( "Instance", 1 ).toList();
+					
+		List<IRPActor> theActors = new ArrayList<IRPActor>();
+		
+		for( IRPModelElement theCandidatePart : theCandidateParts ) {
+			
+			IRPInstance theInstance = (IRPInstance)theCandidatePart;
+			IRPClassifier theClassifier = theInstance.getOtherClass();
+			
+			// only add actors
+			if( theClassifier != null && 
+				theClassifier instanceof IRPActor ){
+				
+				theActors.add( (IRPActor) theClassifier );
+			}
+		}
+		
+		return theActors;
+	}
 	
 	public static boolean getTagBooleanValue(
 			IRPProject inTheProject, String forTagName, boolean withDefault ){
@@ -651,6 +702,7 @@ public class FunctionalAnalysisSettings {
     #186 29-MAY-2017: Add context string to getBlockUnderDev to make it clearer for user when selecting (F.J.Chadburn)
     #216 09-JUL-2017: Added a new Add Block/Part command added to the Functional Analysis menus (F.J.Chadburn)
     #220 12-JUL-2017: Added customisable Stereotype choice to the Block and block/Part creation dialogs (F.J.Chadburn) 
+    #230 20-SEP-2017: Initial alpha trial for create test case script from a sequence diagram (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

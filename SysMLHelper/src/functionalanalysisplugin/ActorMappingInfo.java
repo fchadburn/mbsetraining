@@ -1,5 +1,6 @@
 package functionalanalysisplugin;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import generalhelpers.GeneralHelpers;
@@ -84,7 +85,8 @@ public class ActorMappingInfo {
 		m_ActorNameTextField.setText( theProposedActorName );
 	}
 	
-	private static IRPLink getExistingLinkBetweenBaseClassifiersOf(
+	@SuppressWarnings("unchecked")
+	static IRPLink getExistingLinkBetweenBaseClassifiersOf(
 			IRPClassifier theClassifier, 
 			IRPClassifier andTheClassifier ){
 		
@@ -97,13 +99,13 @@ public class ActorMappingInfo {
 
 		if( theFAPackage != null && theFAPackage instanceof IRPPackage ){
 			
-			@SuppressWarnings("unchecked")
-			List<IRPClassifier> theOtherEndsBases = 
-					andTheClassifier.getBaseClassifiers().toList();
+			List<IRPClassifier> theOtherEndsBases = new ArrayList<>();
+			theOtherEndsBases.add( andTheClassifier );
+			theOtherEndsBases.addAll( andTheClassifier.getBaseClassifiers().toList() );
 			
-			@SuppressWarnings("unchecked")
-			List<IRPClassifier> theSourcesBases = 
-				theClassifier.getBaseClassifiers().toList();
+			List<IRPClassifier> theSourcesBases = new ArrayList<>();
+			theSourcesBases.add( theClassifier );
+			theSourcesBases.addAll( theClassifier.getBaseClassifiers().toList() );
 			
 			List<IRPClass> theBuildingBlocks = 
 					FunctionalAnalysisSettings.getBuildingBlocks( 
@@ -113,7 +115,6 @@ public class ActorMappingInfo {
 				
 				Logger.writeLine("Found theBuildingBlock: " + Logger.elementInfo( theBuildingBlock ) );
 				
-				@SuppressWarnings("unchecked")
 				List<IRPLink> theLinks = theBuildingBlock.getLinks().toList();
 			
 				for( IRPLink theLink : theLinks ){
@@ -427,6 +428,7 @@ public class ActorMappingInfo {
     #135 02-DEC-2016: Avoid port proliferation in inheritance tree for actors/system (F.J.Chadburn)
     #149 18-DEC-2016: Improve robustness to allow actor part creation if no TestDriver is present (F.J.Chadburn)
     #187 29-MAY-2017: Provide option to re-create «AutoShow» sequence diagram when adding new actor (F.J.Chadburn)
+    #230 20-SEP-2017: Initial alpha trial for create test case script from a sequence diagram (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 
