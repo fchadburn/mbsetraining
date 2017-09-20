@@ -367,3 +367,8 @@ UNDER DEV RELEASE 2.1.m (25-AUG-2017)
 ----------------------------------------------------------------------------------
 UNDER DEV RELEASE 2.1.n (06-SEP-2017)
 ----------------------------------------------------------------------------------
+#229 20-SEP-2017: Add re-layout dependencies on diagram(s) menu to ease beautifying when req't tracing (F.J.Chadburn)
+#230 20-SEP-2017: Initial alpha trial for create test case script from a sequence diagram (F.J.Chadburn)
+----------------------------------------------------------------------------------
+UNDER DEV RELEASE 2.1.o (20-SEP-2017)
+----------------------------------------------------------------------------------

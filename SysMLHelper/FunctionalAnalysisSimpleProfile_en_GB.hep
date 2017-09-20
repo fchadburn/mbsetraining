@@ -101,7 +101,7 @@ DLLServerCompatible12=1
 name13=MBSE Method: Functional Analysis\Create new TestCase for «TestDriver»
 isPluginCommand13=1
 command13=InvokeFunctionalAnalysisHelper
-applicableTo13=Block
+applicableTo13=Block,SequenceDiagram
 isVisible13=0
 DLLServerCompatible13=1
 
@@ -205,6 +205,7 @@ DLLServerCompatible21=1
 #REM #216 09-JUL-2017: Added a new Add Block/Part command added to the Functional Analysis menus (F.J.Chadburn)
 #REM #217 09-JUL-2017: Refined the menus to say Create an attribute/flow-port/check operation (F.J.Chadburn)
 #REM #222 12-JUL-2017: Allow AddNewBlockPartToPackageMenu to work when right-clicking IBDs and BDDs (F.J.Chadburn)
+#REM #230 20-SEP-2017: Initial alpha trial for create test case script from a sequence diagram (F.J.Chadburn)
 #REM
 #REM This file is part of SysMLHelperPlugin.
 #REM
