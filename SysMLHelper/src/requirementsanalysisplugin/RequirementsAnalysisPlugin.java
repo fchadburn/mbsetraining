@@ -183,7 +183,48 @@ public class RequirementsAnalysisPlugin extends RPUserPlugin {
 
 				} catch (Exception e) {
 					Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking SmartLinkPanel.launchTheEndLinkPanel");
-				}				
+				}	
+			} else if (menuItem.equals(m_configSettings.getString( "requirementsanalysisplugin.layoutDependencies" ))){
+
+				try {
+					if( theSelectedGraphEls.size() > 0 ){
+						
+						LayoutHelper.centerDependenciesForTheGraphEls( 
+								theSelectedGraphEls );
+
+					} else if( theSelectedEl.getMetaClass().equals( "ActivityDiagramGE" ) ){
+						
+						LayoutHelper.centerDependenciesForTheDiagram( 
+								(IRPDiagram) theSelectedEl );
+
+					} else if( theSelectedEl.getMetaClass().equals( "ActivityDiagram" ) ){
+						
+						@SuppressWarnings("unchecked")
+						List<IRPModelElement> theDiagrams = 
+								theSelectedEl.getNestedElementsByMetaClass( "ActivityDiagramGE", 0 ).toList();
+						
+						if( theDiagrams.size()==1 ){
+							
+							LayoutHelper.centerDependenciesForTheDiagram( 
+									(IRPDiagram) theDiagrams.get( 0 ) );
+						} else {
+							Logger.writeLine( "Error in OnMenuItemSelect, unable to find an ActivityDiagramGE" );
+						}
+
+					} else if( theSelectedEl instanceof IRPDiagram ){
+
+						LayoutHelper.centerDependenciesForTheDiagram( 
+								(IRPDiagram) theSelectedEl );
+						
+					} else if( theSelectedEl instanceof IRPPackage ){
+						
+						LayoutHelper.centerDependenciesForThePackage( 
+								(IRPPackage) theSelectedEl );
+					}
+
+				} catch (Exception e) {
+					Logger.writeLine( "Error: Exception in OnMenuItemSelect when invoking LayoutHelper" );
+				}
 			} else {
 				Logger.writeLine(theSelectedEl, " was invoked with menuItem='" + menuItem + "'");
 			}
@@ -226,6 +267,7 @@ public class RequirementsAnalysisPlugin extends RPUserPlugin {
     #155 25-JAN-2017: Added new panel to find and delete Gateway Deleted_At_High_Level req'ts with Rhp 8.2 (F.J.Chadburn)
     #163 05-FEB-2017: Add new menus to Smart link: Start and Smart link: End (F.J.Chadburn)
     #224 25-AUG-2017: Added new menu to roll up traceability to the transition and populate on STM (F.J.Chadburn)
+    #229 20-SEP-2017: Add re-layout dependencies on diagram(s) menu to ease beautifying when req't tracing (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 
