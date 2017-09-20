@@ -1,5 +1,5 @@
 [Helpers]
-numberOfElements=11
+numberOfElements=12
 
 #REM: Definition of the plug-in
 name1=InvokeRequirementsAnalysisHelper
@@ -89,6 +89,14 @@ applicableTo11=Transition,DefaultTransition
 isVisible11=1
 DLLServerCompatible11=1
 
+#REM: Add pop-up menu
+name12=MBSE Method: Requirements Analysis\Re-layout dependencies on diagram(s)
+isPluginCommand12=1
+command12=InvokeRequirementsAnalysisHelper
+applicableTo12=Package,Dependency,Satisfaction,Derivation,Refinement,Verification,ActivityDiagram,ObjectModelDiagram,Block Definition Diagram,Internal Block Diagram,Statechart,SequenceDiagram,UseCaseDiagram,
+isVisible12=1
+DLLServerCompatible12=1
+
 #REM Copyright (C) 2016-2017  MBSE Training and Consulting Limited (www.executablembse.com)
 #REM
 #REM Change history:
@@ -104,6 +112,7 @@ DLLServerCompatible11=1
 #REM #204 18-JUN-2017: Refine menu for invoking Smart Link panel and add FlowPort/EventReceptions support (F.J.Chadburn)
 #REM #205 18-JUN-2017: Removed Perform rename in browser for elements on ADs from menus to simply (F.J.Chadburn)
 #REM #224 25-AUG-2017: Added new menu to roll up traceability to the transition and populate on STM (F.J.Chadburn)
+#REM #229 20-SEP-2017: Add re-layout dependencies on diagram(s) menu to ease beautifying when req't tracing (F.J.Chadburn)
 #REM
 #REM This file is part of SysMLHelperPlugin.
 #REM
