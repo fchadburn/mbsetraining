@@ -372,3 +372,12 @@ UNDER DEV RELEASE 2.1.n (06-SEP-2017)
 ----------------------------------------------------------------------------------
 UNDER DEV RELEASE 2.1.o (20-SEP-2017)
 ----------------------------------------------------------------------------------
+#231 27-SEP-2017: Enhanced tooltip now shows the req't text when hovering over traceability relations (F.J.Chadburn)
+#232 27-SEP-2017: Improve move unclaimed req'ts needs so that it handles read-only packages better (F.J.Chadburn)
+#234 27-SEP-2017: DesignSynthesisProfile no longer sets property to hide part/Object name on IBD (F.J.Chadburn)
+#235 27-SEP-2017: FunctionalAnalysisProfile now sets ObjectModelGe::flowPort::ShowName to Name only (F.J.Chadburn)
+#236 27-SEP-2017: Improved Add new Block/Part... dialog to allow naming of part (F.J.Chadburn)
+#237 27-SEP-2017: Resolved Java path problems with Entry in certain versions of Eclipse (F.J.Chadburn)
+----------------------------------------------------------------------------------
+UNDER DEV RELEASE 2.1.p (27-SEP-2017)
+----------------------------------------------------------------------------------
