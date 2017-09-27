@@ -1,10 +1,10 @@
-I-Logix-RPY-Archive version 8.13.0 C++ 9794446
+I-Logix-RPY-Archive version 8.13.0 C++ 9803352
 { IProfile 
 	- _id = GUID 8867afa3-3659-4a6e-a860-1fc1426764d7;
 	- _myState = 8192;
 	- _properties = { IPropertyContainer 
 		- Subjects = { IRPYRawContainer 
-			- size = 2;
+			- size = 1;
 			- value = 
 			{ IPropertySubject 
 				- _Name = "Model";
@@ -30,38 +30,13 @@ I-Logix-RPY-Archive version 8.13.0 C++ 9794446
 					}
 				}
 			}
-			{ IPropertySubject 
-				- _Name = "ObjectModelGe";
-				- Metaclasses = { IRPYRawContainer 
-					- size = 1;
-					- value = 
-					{ IPropertyMetaclass 
-						- _Name = "Object";
-						- Properties = { IRPYRawContainer 
-							- size = 2;
-							- value = 
-							{ IProperty 
-								- _Name = "Compartments";
-								- _Value = "Operation";
-								- _Type = MultiLine;
-							}
-							{ IProperty 
-								- _Name = "ShowName";
-								- _Value = "Type";
-								- _Type = Enum;
-								- _ExtraTypeInfo = "Full_path,Relative,Name_only,Type,Label";
-							}
-						}
-					}
-				}
-			}
 		}
 	}
 	- _name = "DesignSynthesisProfile";
-	- _modifiedTimeWeak = 3.3.2017::12:3:22;
+	- _modifiedTimeWeak = 9.27.2017::13:0:28;
 	- _lastID = 4;
-	- weakCGTime = 3.3.2017::12:3:22;
-	- strongCGTime = 3.3.2017::12:3:22;
+	- weakCGTime = 9.27.2017::13:0:28;
+	- strongCGTime = 9.27.2017::13:0:28;
 	- _defaultComposite = GUID 44661a52-2513-44fc-ab8c-2012103b2418;
 	- _eventsBaseID = -1;
 	- Classes = { IRPYRawContainer 
@@ -71,9 +46,9 @@ I-Logix-RPY-Archive version 8.13.0 C++ 9794446
 			- _id = GUID 44661a52-2513-44fc-ab8c-2012103b2418;
 			- _myState = 40960;
 			- _name = "TopLevel";
-			- _modifiedTimeWeak = 2.15.2017::22:2:48;
-			- weakCGTime = 2.15.2017::22:2:48;
-			- strongCGTime = 2.15.2017::22:2:48;
+			- _modifiedTimeWeak = 3.3.2017::12:3:22;
+			- weakCGTime = 3.3.2017::12:3:22;
+			- strongCGTime = 3.3.2017::12:3:22;
 			- _multiplicity = "";
 			- _itsStateChart = { IHandle 
 				- _m2Class = "";

@@ -1,10 +1,10 @@
-I-Logix-RPY-Archive version 8.13.0 C++ 9794446
+I-Logix-RPY-Archive version 8.13.0 C++ 9803352
 { IProfile 
 	- _id = GUID 5fffd2f7-d270-486c-9552-bf45c4bc162a;
 	- _myState = 8192;
 	- _properties = { IPropertyContainer 
 		- Subjects = { IRPYRawContainer 
-			- size = 3;
+			- size = 4;
 			- value = 
 			{ IPropertySubject 
 				- _Name = "Activity";
@@ -79,12 +79,32 @@ I-Logix-RPY-Archive version 8.13.0 C++ 9794446
 					}
 				}
 			}
+			{ IPropertySubject 
+				- _Name = "ObjectModelGe";
+				- Metaclasses = { IRPYRawContainer 
+					- size = 1;
+					- value = 
+					{ IPropertyMetaclass 
+						- _Name = "flowPort";
+						- Properties = { IRPYRawContainer 
+							- size = 1;
+							- value = 
+							{ IProperty 
+								- _Name = "ShowName";
+								- _Value = "Name";
+								- _Type = Enum;
+								- _ExtraTypeInfo = "Name,NameAndType,Type,Label,None";
+							}
+						}
+					}
+				}
+			}
 		}
 	}
 	- _name = "FunctionalAnalysisSimpleProfile";
-	- _modifiedTimeWeak = 2.15.2017::22:3:3;
-	- weakCGTime = 2.15.2017::22:3:3;
-	- strongCGTime = 2.15.2017::22:3:3;
+	- _modifiedTimeWeak = 9.27.2017::13:2:1;
+	- weakCGTime = 9.27.2017::13:2:1;
+	- strongCGTime = 9.27.2017::13:2:1;
 	- _defaultComposite = GUID 182593a7-c333-487b-8a81-dad887aa955a;
 	- _eventsBaseID = -1;
 	- Classes = { IRPYRawContainer 
@@ -94,9 +114,9 @@ I-Logix-RPY-Archive version 8.13.0 C++ 9794446
 			- _id = GUID 182593a7-c333-487b-8a81-dad887aa955a;
 			- _myState = 40960;
 			- _name = "TopLevel";
-			- _modifiedTimeWeak = 11.9.2016::7:16:34;
-			- weakCGTime = 11.9.2016::7:16:34;
-			- strongCGTime = 11.9.2016::7:16:34;
+			- _modifiedTimeWeak = 2.15.2017::22:3:3;
+			- weakCGTime = 2.15.2017::22:3:3;
+			- strongCGTime = 2.15.2017::22:3:3;
 			- _multiplicity = "";
 			- _itsStateChart = { IHandle 
 				- _m2Class = "";
