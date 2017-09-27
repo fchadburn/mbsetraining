@@ -16,7 +16,6 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-
 import com.telelogic.rhapsody.core.*;
 
 public class CreateNewBlockPartPanel extends CreateStructuralElementPanel {
@@ -29,7 +28,9 @@ public class CreateNewBlockPartPanel extends CreateStructuralElementPanel {
 	private IRPPackage m_RootPackage;
 	private IRPClass m_AssemblyBlock;
 	
-	protected JTextField m_ChosenNameTextField = null;
+	protected JTextField m_BlockNameTextField = null;
+	protected JTextField m_PartNameTextField = null;
+	
 	protected RhapsodyComboBox m_ChosenStereotype;
 	
 	public static void main(String[] args) {
@@ -98,31 +99,22 @@ public class CreateNewBlockPartPanel extends CreateStructuralElementPanel {
 		setLayout( new BorderLayout(10,10) );
 		setBorder( BorderFactory.createEmptyBorder( 10, 10, 10, 10 ) );
 		
-		add( createBlockChoicePanel( "" ), BorderLayout.PAGE_START );	    
+		add( createBlockChoicePanel( "" ), BorderLayout.PAGE_START );
+		add( createStereotypePanel(), BorderLayout.CENTER );	    
 		add( createOKCancelPanel(), BorderLayout.PAGE_END );
 	}
 
-	private JPanel createBlockChoicePanel(
-			String theBlockName ){
-	    
-
+	private JPanel createStereotypePanel(){
+		
 		JPanel thePanel = new JPanel();
 		thePanel.setLayout( new BoxLayout(thePanel, BoxLayout.X_AXIS ) );	
-		
-		m_ChosenNameTextField = new JTextField();
-		m_ChosenNameTextField.setPreferredSize( new Dimension( 300, 20 ) );
-
-		JCheckBox theBlockCheckBox = new JCheckBox( "Create block called:" );
-		    
-		theBlockCheckBox.setSelected( true );
-	    thePanel.add( theBlockCheckBox );
-	    thePanel.add( m_ChosenNameTextField );
-	    
+			    
 		List<IRPModelElement> theStereotypes = 
 				FunctionalAnalysisSettings.getStereotypesForBlockPartCreation( 
 						m_RootPackage.getProject() );
 
 		m_ChosenStereotype = new RhapsodyComboBox( theStereotypes, false );
+		m_ChosenStereotype.setMaximumSize( new Dimension( 250, 20 ) );
 		
 		if( theStereotypes.size() > 0 ){
 			// set to first value in list
@@ -135,6 +127,31 @@ public class CreateNewBlockPartPanel extends CreateStructuralElementPanel {
 		return thePanel;
 	}
 	
+	private JPanel createBlockChoicePanel(
+			String theBlockName ){
+
+		JPanel thePanel = new JPanel();
+		thePanel.setLayout( new BoxLayout(thePanel, BoxLayout.X_AXIS ) );	
+		
+		m_BlockNameTextField = new JTextField();
+		m_BlockNameTextField.setPreferredSize( new Dimension( 150, 20 ) );
+
+		JCheckBox theBlockCheckBox = new JCheckBox( "Create block called:" );
+		    
+		theBlockCheckBox.setSelected( true );
+	    thePanel.add( theBlockCheckBox );
+	    thePanel.add( m_BlockNameTextField );
+	    
+	    thePanel.add( new JLabel(" with part name (leave blank for default): ") );
+	    
+		m_PartNameTextField = new JTextField();
+		m_PartNameTextField.setPreferredSize( new Dimension( 150, 20 ) );
+		
+		thePanel.add( m_PartNameTextField );
+	    
+		return thePanel;
+	}
+	
 	@Override
 	protected boolean checkValidity(
 			boolean isMessageEnabled) {
@@ -142,30 +159,57 @@ public class CreateNewBlockPartPanel extends CreateStructuralElementPanel {
 		boolean isValid = true;
 		String errorMsg = "";
 		
-		String theChosenName = m_ChosenNameTextField.getText();
+		String theBlockName = m_BlockNameTextField.getText();
 		
-		if ( theChosenName.trim().isEmpty() ){
+		if ( theBlockName.trim().isEmpty() ){
 			
 			errorMsg += "Please choose a valid name for the Block";
 			isValid = false;
 			
 		} else {
 			boolean isLegalBlockName = 
-					GeneralHelpers.isLegalName( theChosenName );
+					GeneralHelpers.isLegalName( theBlockName );
 			
 			if( !isLegalBlockName ){
 				
-				errorMsg += theChosenName + " is not legal as an identifier representing an executable Block\n";				
+				errorMsg += theBlockName + " is not legal as an identifier representing an executable Block\n";				
 				isValid = false;
 				
 			} else if( !GeneralHelpers.isElementNameUnique(
-							theChosenName, 
+							theBlockName, 
 							"Class", 
 							m_RootPackage, 
 							1 ) ){
 
-				errorMsg += "Unable to proceed as the Block name '" + theChosenName + "' is not unique";
+				errorMsg += "Unable to proceed as the Block name '" + theBlockName + "' is not unique";
 				isValid = false;
+				
+			} else {
+				
+				String thePartName = m_PartNameTextField.getText();
+				
+				if ( !thePartName.trim().isEmpty() ){
+					
+					boolean isLegalPartName = 
+							GeneralHelpers.isLegalName( thePartName );
+					
+					if( !isLegalPartName ){
+						
+						errorMsg += thePartName + " is not legal as an identifier representing an executable Part\n";				
+						isValid = false;
+						
+					} else if( !GeneralHelpers.isElementNameUnique(
+									thePartName, 
+									"Object", 
+									m_AssemblyBlock, 
+									0 ) ){
+
+						errorMsg += "Unable to proceed as the Part name '" + thePartName + "' is not unique for " + 
+								Logger.elementInfo( m_AssemblyBlock );
+						
+						isValid = false;
+					}
+				}
 			}
 		}
 		
@@ -210,10 +254,10 @@ public class CreateNewBlockPartPanel extends CreateStructuralElementPanel {
 			
 			if( m_RootPackage != null ){
 				
-				String theName = m_ChosenNameTextField.getText();
+				String theName = m_BlockNameTextField.getText();
 				
 				IRPClass theClass = m_RootPackage.addClass( theName );
-				theClass.highLightElement();
+				theClass.highLightElement();				
 				
 				IRPProject theProject = theClass.getProject();
 
@@ -222,11 +266,14 @@ public class CreateNewBlockPartPanel extends CreateStructuralElementPanel {
 						"TimeElapsedBlock", 
 						theProject );
 				
+				String thePartName = m_PartNameTextField.getText().trim();
+							
 				IRPInstance thePart = 
 						(IRPInstance) m_AssemblyBlock.addNewAggr(
-								"Part", "" );
+								"Part", thePartName );
 				
 				thePart.setOtherClass( theClass );
+				thePart.highLightElement();
 				
 				IRPModelElement theSelectedStereotype = m_ChosenStereotype.getSelectedRhapsodyItem();
 				
@@ -311,7 +358,8 @@ public class CreateNewBlockPartPanel extends CreateStructuralElementPanel {
     Change history:
     #216 09-JUL-2017: Added a new Add Block/Part command added to the Functional Analysis menus (F.J.Chadburn)
     #220 12-JUL-2017: Added customisable Stereotype choice to the Block and block/Part creation dialogs (F.J.Chadburn) 
-
+    #236 27-SEP-2017: Improved Add new Block/Part... dialog to allow naming of part (F.J.Chadburn)
+    
     This file is part of SysMLHelperPlugin.
 
     SysMLHelperPlugin is free software: you can redistribute it and/or modify
