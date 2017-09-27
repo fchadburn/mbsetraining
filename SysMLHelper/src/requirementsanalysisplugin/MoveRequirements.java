@@ -59,25 +59,41 @@ public class MoveRequirements {
 			
 		} else {
 			
-			List<IRPModelElement> thePackages = 
+			List<IRPModelElement> thePackageEls = 
 					new ArrayList<IRPModelElement>(
 							GeneralHelpers.findModelElementsNestedUnder(
 									theProject, "Package", theGatewayStereotypeName) );
 			
-			Object[] options = new Object[thePackages.size()];
+			List<IRPModelElement> theWritablePackages = new ArrayList<>();
+			
+			for( IRPModelElement thePackageEl : thePackageEls ){
+				
+				IRPPackage thePackage = (IRPPackage)thePackageEl;
+				
+				if( thePackage.getIsUnresolved()==0 && 
+					thePackage.isReadOnly()==0 ){
+				
+					theWritablePackages.add( thePackage );
+				}
+			}
+					
+			Object[] options = new Object[theWritablePackages.size()];
 			
 			for (int i = 0; i < options.length; i++) {
-				String theOptionName =  thePackages.get(i).getName() + " in " + thePackages.get(i).getOwner().getFullPathName();
+				String theOptionName =  theWritablePackages.get(i).getName() + " in " + 
+						theWritablePackages.get(i).getOwner().getFullPathName();
 				options[i] = theOptionName;
 			}
 			
 			JDialog.setDefaultLookAndFeelDecorated(true);
 			
-			if (thePackages.isEmpty()){
+			if (theWritablePackages.isEmpty()){
 				
-				String theMsg = "Nothing to do as no Gateway imported packages were found.\n"
-						      + "Recommendation is to first Add high-level requirements to\n" 
-						      + "the model using the Gateway to create the package(s).";
+				String theMsg = "Nothing to do as no writeable Gateway imported packages were found.\n" +
+						"Recommendation is to either:\n" +
+						"a) Add high-level requirements to the model using the Gateway to create the package(s), or\n" +
+						"b) Create your own package with a from<X> stereotype to minimic the Gateway, or\n" + 
+						"c) Assess whether there are existing from<X> stereotyped packages that are present but not writable and correct the situation.\n";
 				
 				Logger.writeLine(theMsg);
 				JOptionPane.showMessageDialog(null, theMsg);
@@ -164,6 +180,7 @@ public class MoveRequirements {
     #043 03-JUL-2016: Add Derive downstream reqt for CallOps, InterfaceItems and Event Actions (F.J.Chadburn)
     #121 25-NOV-2016: Move unclaimed requirements ready for Gateway synch now copes with duplicate names (F.J.Chadburn)
     #170 08-MAR-2017: Tweak to Add new requirement on ADs to add to same owner as user created (F.J.Chadburn)
+    #232 27-SEP-2017: Improve move unclaimed req'ts needs so that it handles read-only packages better (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 
