@@ -379,16 +379,37 @@ public class SysMLHelperPlugin extends RPUserPlugin {
 	}
 	
 	public String traceabilityReportHtml(String guid) {
-		String retval = "";
-		IRPModelElement modelElement = SysMLHelperPlugin.getActiveProject().findElementByGUID(guid);
 		
-		if (modelElement==null){
-			Logger.writeLine("Unable to find an element with guid=" + guid);
+		String retval = "";
+		
+		IRPModelElement modelElement = 
+				SysMLHelperPlugin.getActiveProject().findElementByGUID( guid );
+		
+		if( modelElement==null ){
+			Logger.writeLine( "Unable to find an element with guid=" + guid );
 		}
 
 		if(modelElement != null) {
-
-			List<IRPRequirement> theTracedReqts = getRequirementsThatTraceFrom(modelElement);
+			
+			List<IRPRequirement> theTracedReqts;
+			
+			if( modelElement instanceof IRPDependency ){
+				
+				IRPDependency theDep = (IRPDependency) modelElement;
+				IRPModelElement theDependsOn = theDep.getDependsOn();
+				
+				if( theDependsOn != null && 
+					theDependsOn instanceof IRPRequirement ){
+					
+					// Display text of the requirement that the dependency traces to
+					theTracedReqts = new ArrayList<>();
+					theTracedReqts.add( (IRPRequirement) theDependsOn );
+				} else {
+					theTracedReqts = getRequirementsThatTraceFrom( modelElement );
+				}
+			} else {
+				theTracedReqts = getRequirementsThatTraceFrom( modelElement );
+			}
 
 			if (theTracedReqts.isEmpty()){
 
@@ -459,6 +480,7 @@ public class SysMLHelperPlugin extends RPUserPlugin {
     #172 02-APR-2017: Added new General Utilities > Select Dependent element(s) option (F.J.Chadburn)
     #207 25-JUN-2017: Significant bolstering of Select Depends On/Dependent element(s) menus (F.J.Chadburn)
     #219 12-JUL-2017: Added Select Depends On element(s)\Derive Requirement menus for deriveReqt relations (F.J.Chadburn)
+    #231 27-SEP-2017: Enhanced tooltip now shows the req't text when hovering over traceability relations (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 
