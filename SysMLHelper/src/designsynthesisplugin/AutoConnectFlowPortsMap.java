@@ -22,7 +22,7 @@ public class AutoConnectFlowPortsMap extends HashMap<IRPInstance, AutoConnectFlo
 		
 		Set<AutoConnectFlowPortsInfo> theMatches = new HashSet<AutoConnectFlowPortsInfo>();
 		
-		for( Entry<IRPInstance, AutoConnectFlowPortsInfo> entry : this.entrySet() ){
+		for( java.util.Map.Entry<IRPInstance, AutoConnectFlowPortsInfo> entry : this.entrySet() ){
 		
 			AutoConnectFlowPortsInfo theValue = entry.getValue();
 			
@@ -39,7 +39,7 @@ public class AutoConnectFlowPortsMap extends HashMap<IRPInstance, AutoConnectFlo
 		
 		List<IRPInstance> theMatches = new ArrayList<IRPInstance>();
 		
-		for( Entry<IRPInstance, AutoConnectFlowPortsInfo> entry : this.entrySet() ){
+		for( java.util.Map.Entry<IRPInstance, AutoConnectFlowPortsInfo> entry : this.entrySet() ){
 		
 			IRPInstance theKey = entry.getKey();
 			AutoConnectFlowPortsInfo theValue = entry.getValue();
@@ -73,6 +73,7 @@ public class AutoConnectFlowPortsMap extends HashMap<IRPInstance, AutoConnectFlo
 
     Change history:
     #213 09-JUL-2017: Add dialogs to auto-connect «publish»/«subscribe» FlowPorts for white-box simulation (F.J.Chadburn)
+    #237 27-SEP-2017: Resolved Java path problems with Entry in certain versions of Eclipse (F.J.Chadburn)
         
     This file is part of SysMLHelperPlugin.
 
