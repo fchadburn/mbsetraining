@@ -29,13 +29,26 @@ public class LayoutHelper {
 			IRPGraphElement theSourceGraphEl = theEdgeToRedraw.getSource();
 			IRPGraphElement theTargetGraphEl = theEdgeToRedraw.getTarget();
 			
-			int startX = GraphElInfo.getMidX( theSourceGraphEl );
-			int startY = GraphElInfo.getMidY( theSourceGraphEl );
-			int endX = GraphElInfo.getMidX( theTargetGraphEl );
-			int endY = GraphElInfo.getMidY( theTargetGraphEl );				
+			IRPModelElement theModelObject = theEdgeToRedraw.getModelObject();
 			
-			theEdgeToRedraw.setGraphicalProperty( "SourcePosition", startX + "," + startY );
-			theEdgeToRedraw.setGraphicalProperty( "TargetPosition", endX + "," + endY );
+			if( theSourceGraphEl != null && 
+				theTargetGraphEl != null &&
+				theModelObject != null &
+				theModelObject instanceof IRPDependency ){
+				
+				drawDependencyToMidPointsFor(
+						(IRPDependency) theModelObject, 
+						theSourceGraphEl, 
+						theTargetGraphEl, 
+						theEdgeToRedraw.getDiagram() );
+				
+				IRPCollection theCollection = 
+						RequirementsAnalysisPlugin.getRhapsodyApp().createNewCollection();
+				
+				theCollection.addGraphicalItem( theEdgeToRedraw );
+				
+				theEdgeToRedraw.getDiagram().removeGraphElements( theCollection );
+			}
 		}
 	}
 	
@@ -125,6 +138,43 @@ public class LayoutHelper {
 			}
 		}
 	}
+	
+	static public void drawDependencyToMidPointsFor(
+			IRPDependency existingDependency, 
+			IRPGraphElement theStartGraphEl,
+			IRPGraphElement theEndGraphEl, 
+			IRPDiagram theDiagram ){
+		
+		if( theStartGraphEl instanceof IRPGraphNode && 
+			theEndGraphEl instanceof IRPGraphNode ){
+
+			IRPGraphNode theStartNode = (IRPGraphNode)theStartGraphEl;
+			IRPGraphNode theEndNode = (IRPGraphNode)theEndGraphEl;
+
+			theDiagram.addNewEdgeForElement(
+					existingDependency, 
+					theStartNode, 
+					GraphElInfo.getMidX( theStartNode ), 
+					GraphElInfo.getMidY( theStartNode ), 
+					theEndNode, 
+					GraphElInfo.getMidX( theEndNode ), 
+					GraphElInfo.getMidY( theEndNode ));
+
+		} else if( theStartGraphEl instanceof IRPGraphEdge || 
+				   theEndGraphEl instanceof IRPGraphEdge ){
+			
+			IRPCollection theGraphEls = 
+					RequirementsAnalysisPlugin.getRhapsodyApp().createNewCollection();
+
+			theGraphEls.addGraphicalItem( theStartGraphEl );
+			theGraphEls.addGraphicalItem( theEndGraphEl );
+			
+			theDiagram.completeRelations( theGraphEls, 0);	
+			
+		} else {
+			Logger.writeLine("Warning in redrawDependencyToMidPointsFor, the graphEls are not handled types for drawing relations");
+		}
+	}
 }
 
 /**
@@ -132,6 +182,7 @@ public class LayoutHelper {
 
     Change history:
     #229 20-SEP-2017: Add re-layout dependencies on diagram(s) menu to ease beautifying when req't tracing (F.J.Chadburn)
+    #242 04-OCT-2017: Get re-layout dependencies on diagrams(s) menu to centre on graph edges properly (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

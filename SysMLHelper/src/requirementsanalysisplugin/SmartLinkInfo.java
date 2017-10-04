@@ -58,6 +58,10 @@ public class SmartLinkInfo {
 			m_RelationType = GeneralHelpers.getStereotypeIn( 
 					theRhpProject, "traceabilityTypeToUseForUseCases", "RequirementsAnalysisPkg" );
 
+		} else if( m_StartLinkElements.areElementsAllVerificationDependencySources() ){
+
+			m_RelationType = GeneralHelpers.getExistingStereotype( "verify", theRhpProject );
+			
 		} else if( m_StartLinkElements.areElementsAllSatisfyDependencySources() ){
 
 			m_RelationType = GeneralHelpers.getStereotypeIn( 
@@ -144,35 +148,11 @@ public class SmartLinkInfo {
 							
 							if( !isJustCheckWithoutDoing ){
 
-								if( theStartGraphEl instanceof IRPGraphNode && 
-									theEndGraphEl instanceof IRPGraphNode ){
-
-									IRPGraphNode theStartNode = (IRPGraphNode)theStartGraphEl;
-									IRPGraphNode theEndNode = (IRPGraphNode)theEndGraphEl;
-
-									theDiagram.addNewEdgeForElement(
-											existingDependency, 
-											theStartNode, 
-											GraphElInfo.getMidX( theStartNode ), 
-											GraphElInfo.getMidY( theStartNode ), 
-											theEndNode, 
-											GraphElInfo.getMidX( theEndNode ), 
-											GraphElInfo.getMidY( theEndNode ));
-
-								} else if( theStartGraphEl instanceof IRPGraphEdge && 
-										   theEndGraphEl instanceof IRPGraphNode ){
-									
-									IRPCollection theGraphEls = 
-											RequirementsAnalysisPlugin.getRhapsodyApp().createNewCollection();
-
-									theGraphEls.addGraphicalItem( theStartGraphEl );
-									theGraphEls.addGraphicalItem( theEndGraphEl );
-									
-									theDiagram.completeRelations( theGraphEls, 0);	
-									
-								} else {
-									Logger.writeLine("Warning in populateDependencyOnDiagram, the graphEls are not handled types for drawing relations");
-								}
+								LayoutHelper.drawDependencyToMidPointsFor(
+										existingDependency, 
+										theStartGraphEl, 
+										theEndGraphEl,
+										theDiagram );
 							}
 
 						} else {
@@ -311,6 +291,8 @@ public class SmartLinkInfo {
     #221 12-JUL-2017: Fixed Smart Link dialog to draw from middle of IRPGraphNodes rather than top left (F.J.Chadburn)
     #224 25-AUG-2017: Added new menu to roll up traceability to the transition and populate on STM (F.J.Chadburn)
     #227 06-SEP-2017: Increased robustness to stop smart link panel using non new term version of <<refine>> (F.J.Chadburn)
+    #242 04-OCT-2017: Get re-layout dependencies on diagrams(s) menu to centre on graph edges properly (F.J.Chadburn)
+    #243 04-OCT-2017: Added ability to do smart link from a testcase to create a Verification (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

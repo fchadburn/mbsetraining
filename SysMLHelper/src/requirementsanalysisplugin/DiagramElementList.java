@@ -130,6 +130,24 @@ public class DiagramElementList extends HashSet<DiagramElementInfo> {
 		return isMatchFoundForAll;
 	}
 	
+	public boolean areElementsAllVerificationDependencySources(){
+
+		boolean isMatchFoundForAll = true;
+		
+		for( DiagramElementInfo theEl : this ){
+			
+			if( !theEl.getElement().getUserDefinedMetaClass().equals("Test Case") ){
+				
+				isMatchFoundForAll = false;
+				break;
+			}
+		}
+		
+		Logger.writeLine( "areElementsAllVerificationDependencySources is returning " + isMatchFoundForAll );
+		
+		return isMatchFoundForAll;
+	}
+	
 	public boolean areElementsAllReqts(){
 		
 		final String[] reqtMetaClasses = { "Requirement" };
@@ -236,6 +254,7 @@ public class DiagramElementList extends HashSet<DiagramElementInfo> {
     #163 05-FEB-2017: Add new menus to Smart link: Start and Smart link: End (F.J.Chadburn)
     #204 18-JUN-2017: Refine menu for invoking Smart Link panel and add FlowPort/EventReceptions support (F.J.Chadburn)
     #224 25-AUG-2017: Added new menu to roll up traceability to the transition and populate on STM (F.J.Chadburn)
+    #243 04-OCT-2017: Added ability to do smart link from a testcase to create a Verification (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

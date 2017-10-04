@@ -2,6 +2,7 @@ package requirementsanalysisplugin;
 
 import generalhelpers.ConfigurationSettings;
 import generalhelpers.Logger;
+import generalhelpers.UserInterfaceHelpers;
 
 import java.util.List;
 
@@ -10,7 +11,6 @@ import com.telelogic.rhapsody.core.*;
 public class RequirementsAnalysisPlugin extends RPUserPlugin {
   
 	protected static IRPApplication m_rhpApplication = null;
-	protected static IRPProject m_rhpProject = null;
 	protected static ConfigurationSettings m_configSettings = null;
 	
 	// plug-in is loaded
@@ -34,11 +34,7 @@ public class RequirementsAnalysisPlugin extends RPUserPlugin {
 	
 	public static IRPProject getActiveProject(){
 		
-		if (m_rhpProject==null){
-			m_rhpProject = getRhapsodyApp().activeProject();
-		}
-		
-		return m_rhpProject;
+		return getRhapsodyApp().activeProject();
 	}
 	
 	// For use with Tables
@@ -47,30 +43,44 @@ public class RequirementsAnalysisPlugin extends RPUserPlugin {
 		//Logger.writeLine("Was invoked with guid " + guid);
 		String theSpec = "Not found";
 		
-		IRPModelElement theEl = getActiveProject().findElementByGUID(guid);
-		
-		if (theEl != null){
+		try {
+			@SuppressWarnings("rawtypes")
+			List theAppIDs = RhapsodyAppServer.getActiveRhapsodyApplicationIDList();
 			
-			if (theEl instanceof IRPRequirement){
+			if( theAppIDs.size() == 1 ){
+	
+				IRPProject theRhpProject = RhapsodyAppServer.getActiveRhapsodyApplication().activeProject();
+				IRPModelElement theEl = theRhpProject.findElementByGUID(guid);
 				
-				IRPRequirement theReq = (IRPRequirement)theEl;
-				theSpec = theReq.getSpecification();
-				
-			} else if (theEl instanceof IRPDependency){
-				
-				IRPDependency theDep = (IRPDependency)theEl;
-				IRPModelElement theDependsOn = theDep.getDependsOn();
-				
-				if (theDependsOn instanceof IRPRequirement){
+				if (theEl != null){
 					
-					IRPRequirement theReq = (IRPRequirement)theDependsOn;
-					theSpec = theReq.getSpecification();
-					
-					Logger.writeLine(theDependsOn, "is the depends on with the text '" + theSpec + "'");
+					if (theEl instanceof IRPRequirement){
+						
+						IRPRequirement theReq = (IRPRequirement)theEl;
+						theSpec = theReq.getSpecification();
+						
+					} else if (theEl instanceof IRPDependency){
+						
+						IRPDependency theDep = (IRPDependency)theEl;
+						IRPModelElement theDependsOn = theDep.getDependsOn();
+						
+						if (theDependsOn instanceof IRPRequirement){
+							
+							IRPRequirement theReq = (IRPRequirement)theDependsOn;
+							theSpec = theReq.getSpecification();
+							
+							Logger.writeLine(theDependsOn, "is the depends on with the text '" + theSpec + "'");
+						}
+					}
+				} else {
+					Logger.writeLine("Error: getRequirementSpecificationText unable to find element with guid=" + guid);
 				}
 			}
-		} else {
-			Logger.writeLine("Error: getRequirementSpecificationText unable to find element with guid=" + guid);
+			
+
+
+		} catch (Exception e) {
+			Logger.writeLine("Unhandled exception in getRequirementSpecificationText");
 		}
 
 		return theSpec;
@@ -79,158 +89,161 @@ public class RequirementsAnalysisPlugin extends RPUserPlugin {
 	// called when the plug-in pop-up menu (if applicable) is selected
 	public void OnMenuItemSelect(String menuItem) {
 	
-		IRPModelElement theSelectedEl = getRhapsodyApp().getSelectedElement();
-		IRPProject theActiveProject = getRhapsodyApp().activeProject();
-		
-		@SuppressWarnings("unchecked")
-		List<IRPGraphElement> theSelectedGraphEls = getRhapsodyApp().getSelectedGraphElements().toList();
-		@SuppressWarnings("unchecked")
-		List<IRPModelElement> theSelectedEls = getRhapsodyApp().getListOfSelectedElements().toList();
+		if( UserInterfaceHelpers.checkOKToRunAndWarnUserIfNot() ){
+			IRPModelElement theSelectedEl = getRhapsodyApp().getSelectedElement();
+			IRPProject theActiveProject = getRhapsodyApp().activeProject();
+			
+			@SuppressWarnings("unchecked")
+			List<IRPGraphElement> theSelectedGraphEls = getRhapsodyApp().getSelectedGraphElements().toList();
+			@SuppressWarnings("unchecked")
+			List<IRPModelElement> theSelectedEls = getRhapsodyApp().getListOfSelectedElements().toList();
 
-		Logger.writeLine("Starting ("+ theSelectedEls.size() + " elements were selected) ...");
-		
-		if( !theSelectedEls.isEmpty() ){
-			//selElemName = theSelectedEl.getName();	
-						
-			if (menuItem.equals(m_configSettings.getString( "requirementsanalysisplugin.CreateNestedADMenu" ))){
+			Logger.writeLine("Starting ("+ theSelectedEls.size() + " elements were selected) ...");
+			
+			if( !theSelectedEls.isEmpty() ){
+				//selElemName = theSelectedEl.getName();	
+							
+				if (menuItem.equals(m_configSettings.getString( "requirementsanalysisplugin.CreateNestedADMenu" ))){
 
-				try {
-					NestedActivityDiagram.createNestedActivityDiagramsFor( theSelectedEls );
+					try {
+						NestedActivityDiagram.createNestedActivityDiagramsFor( theSelectedEls );
 
-				} catch (Exception e) {
-					Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking NestedActivityDiagram.createNestedActivityDiagramsFor");
-				}
-
-			} else if (menuItem.equals(m_configSettings.getString( "requirementsanalysisplugin.ReportOnNamingAndTraceabilityMenu" ))){
-
-				try {
-					ActivityDiagramChecker.createActivityDiagramCheckersFor( theSelectedEls );
-					
-				} catch (Exception e) {
-					Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking new ActivityDiagramChecker.createActivityDiagramCheckersFor");
-				}
-
-				
-			} else if (menuItem.equals(m_configSettings.getString( "requirementsanalysisplugin.MoveUnclaimedReqtsMenu" ))){
-
-				try {
-					MoveRequirements.moveUnclaimedRequirementsReadyForGatewaySync( theSelectedEls, theActiveProject );
-
-				} catch (Exception e) {
-					Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking MoveRequirements.moveUnclaimedRequirementsReadyForGatewaySync");
-				}
-
-				
-			} else if (menuItem.equals(m_configSettings.getString( "requirementsanalysisplugin.CreateNewRequirementMenu" ))){
-
-				try {
-					Logger.writeLine("Creating new requirements");
-					RequirementsHelper.createNewRequirementsFor( theSelectedGraphEls );
-
-				} catch (Exception e) {
-					Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking RequirementsHelper.createNewRequirementsFor");
-				}
-
-			} else if (menuItem.equals(m_configSettings.getString( "requirementsanalysisplugin.PerformRenameInBrowserMenu" ))){
-
-				try {				
-					RenameActions.performRenamesFor( theSelectedEls );
-
-				} catch (Exception e) {
-					Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking RenameActions.performRenamesFor");
-				}
-				
-			} else if (menuItem.equals(m_configSettings.getString( "requirementsanalysisplugin.UpdateNestedADNamesMenu" ))){
-
-				try {				
-					NestedActivityDiagram.renameNestedActivityDiagramsFor( theSelectedEls );
-
-				} catch (Exception e) {
-					Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking NestedActivityDiagram.renameNestedActivityDiagramsFor");
-				}	
-
-			} else if (menuItem.equals(m_configSettings.getString( "requirementsanalysisplugin.DeleteTaggedAsDeletedAtHighLevelMenu" ))){
-
-				try {
-					MarkedAsDeletedPanel.launchThePanel( theSelectedEls );
-
-				} catch (Exception e) {
-					Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking MarkedAsDeletedPanel.launchThePanel");
-				}
-			} else if (menuItem.equals(m_configSettings.getString( "requirementsanalysisplugin.StartLinkMenu" ))){
-
-				try {
-					SmartLinkPanel.launchTheStartLinkPanel( theSelectedEls, theSelectedGraphEls );
-
-				} catch (Exception e) {
-					Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking SmartLinkPanel.launchTheStartLinkPanel");
-				}
-			} else if (menuItem.equals(m_configSettings.getString( "requirementsanalysisplugin.EndLinkMenu" ))){
-
-				try {				
-					SmartLinkPanel.launchTheEndLinkPanel( theSelectedEls, theSelectedGraphEls );
-
-				} catch (Exception e) {
-					Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking SmartLinkPanel.launchTheEndLinkPanel");
-				}
-			} else if (menuItem.equals(m_configSettings.getString( "requirementsanalysisplugin.RollUpTraceabilityUpToTransitionLevel" ))){
-
-				try {
-					if( theSelectedGraphEls != null ){
-						IRPGraphElement theSelectedGraphEl = theSelectedGraphEls.get( 0 );
-						PopulateTransitionRequirementsPanel.launchThePanel( theSelectedGraphEl );
+					} catch (Exception e) {
+						Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking NestedActivityDiagram.createNestedActivityDiagramsFor");
 					}
 
-				} catch (Exception e) {
-					Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking SmartLinkPanel.launchTheEndLinkPanel");
-				}	
-			} else if (menuItem.equals(m_configSettings.getString( "requirementsanalysisplugin.layoutDependencies" ))){
+				} else if (menuItem.equals(m_configSettings.getString( "requirementsanalysisplugin.ReportOnNamingAndTraceabilityMenu" ))){
 
-				try {
-					if( theSelectedGraphEls.size() > 0 ){
+					try {
+						ActivityDiagramChecker.createActivityDiagramCheckersFor( theSelectedEls );
 						
-						LayoutHelper.centerDependenciesForTheGraphEls( 
-								theSelectedGraphEls );
+					} catch (Exception e) {
+						Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking new ActivityDiagramChecker.createActivityDiagramCheckersFor");
+					}
 
-					} else if( theSelectedEl.getMetaClass().equals( "ActivityDiagramGE" ) ){
-						
-						LayoutHelper.centerDependenciesForTheDiagram( 
-								(IRPDiagram) theSelectedEl );
+					
+				} else if (menuItem.equals(m_configSettings.getString( "requirementsanalysisplugin.MoveUnclaimedReqtsMenu" ))){
 
-					} else if( theSelectedEl.getMetaClass().equals( "ActivityDiagram" ) ){
-						
-						@SuppressWarnings("unchecked")
-						List<IRPModelElement> theDiagrams = 
-								theSelectedEl.getNestedElementsByMetaClass( "ActivityDiagramGE", 0 ).toList();
-						
-						if( theDiagrams.size()==1 ){
-							
-							LayoutHelper.centerDependenciesForTheDiagram( 
-									(IRPDiagram) theDiagrams.get( 0 ) );
-						} else {
-							Logger.writeLine( "Error in OnMenuItemSelect, unable to find an ActivityDiagramGE" );
+					try {
+						MoveRequirements.moveUnclaimedRequirementsReadyForGatewaySync( theSelectedEls, theActiveProject );
+
+					} catch (Exception e) {
+						Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking MoveRequirements.moveUnclaimedRequirementsReadyForGatewaySync");
+					}
+
+					
+				} else if (menuItem.equals(m_configSettings.getString( "requirementsanalysisplugin.CreateNewRequirementMenu" ))){
+
+					try {
+						Logger.writeLine("Creating new requirements");
+						RequirementsHelper.createNewRequirementsFor( theSelectedGraphEls );
+
+					} catch (Exception e) {
+						Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking RequirementsHelper.createNewRequirementsFor");
+					}
+
+				} else if (menuItem.equals(m_configSettings.getString( "requirementsanalysisplugin.PerformRenameInBrowserMenu" ))){
+
+					try {				
+						RenameActions.performRenamesFor( theSelectedEls );
+
+					} catch (Exception e) {
+						Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking RenameActions.performRenamesFor");
+					}
+					
+				} else if (menuItem.equals(m_configSettings.getString( "requirementsanalysisplugin.UpdateNestedADNamesMenu" ))){
+
+					try {				
+						NestedActivityDiagram.renameNestedActivityDiagramsFor( theSelectedEls );
+
+					} catch (Exception e) {
+						Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking NestedActivityDiagram.renameNestedActivityDiagramsFor");
+					}	
+
+				} else if (menuItem.equals(m_configSettings.getString( "requirementsanalysisplugin.DeleteTaggedAsDeletedAtHighLevelMenu" ))){
+
+					try {
+						MarkedAsDeletedPanel.launchThePanel( theSelectedEls );
+
+					} catch (Exception e) {
+						Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking MarkedAsDeletedPanel.launchThePanel");
+					}
+				} else if (menuItem.equals(m_configSettings.getString( "requirementsanalysisplugin.StartLinkMenu" ))){
+
+					try {
+						SmartLinkPanel.launchTheStartLinkPanel( theSelectedEls, theSelectedGraphEls );
+
+					} catch (Exception e) {
+						Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking SmartLinkPanel.launchTheStartLinkPanel");
+					}
+				} else if (menuItem.equals(m_configSettings.getString( "requirementsanalysisplugin.EndLinkMenu" ))){
+
+					try {				
+						SmartLinkPanel.launchTheEndLinkPanel( theSelectedEls, theSelectedGraphEls );
+
+					} catch (Exception e) {
+						Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking SmartLinkPanel.launchTheEndLinkPanel");
+					}
+				} else if (menuItem.equals(m_configSettings.getString( "requirementsanalysisplugin.RollUpTraceabilityUpToTransitionLevel" ))){
+
+					try {
+						if( theSelectedGraphEls != null ){
+							IRPGraphElement theSelectedGraphEl = theSelectedGraphEls.get( 0 );
+							PopulateTransitionRequirementsPanel.launchThePanel( theSelectedGraphEl );
 						}
 
-					} else if( theSelectedEl instanceof IRPDiagram ){
+					} catch (Exception e) {
+						Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking SmartLinkPanel.launchTheEndLinkPanel");
+					}	
+				} else if (menuItem.equals(m_configSettings.getString( "requirementsanalysisplugin.layoutDependencies" ))){
 
-						LayoutHelper.centerDependenciesForTheDiagram( 
-								(IRPDiagram) theSelectedEl );
-						
-					} else if( theSelectedEl instanceof IRPPackage ){
-						
-						LayoutHelper.centerDependenciesForThePackage( 
-								(IRPPackage) theSelectedEl );
+					try {
+						if( theSelectedGraphEls.size() > 0 ){
+							
+							LayoutHelper.centerDependenciesForTheGraphEls( 
+									theSelectedGraphEls );
+
+						} else if( theSelectedEl.getMetaClass().equals( "ActivityDiagramGE" ) ){
+							
+							LayoutHelper.centerDependenciesForTheDiagram( 
+									(IRPDiagram) theSelectedEl );
+
+						} else if( theSelectedEl.getMetaClass().equals( "ActivityDiagram" ) ){
+							
+							@SuppressWarnings("unchecked")
+							List<IRPModelElement> theDiagrams = 
+									theSelectedEl.getNestedElementsByMetaClass( "ActivityDiagramGE", 0 ).toList();
+							
+							if( theDiagrams.size()==1 ){
+								
+								LayoutHelper.centerDependenciesForTheDiagram( 
+										(IRPDiagram) theDiagrams.get( 0 ) );
+							} else {
+								Logger.writeLine( "Error in OnMenuItemSelect, unable to find an ActivityDiagramGE" );
+							}
+
+						} else if( theSelectedEl instanceof IRPDiagram ){
+
+							LayoutHelper.centerDependenciesForTheDiagram( 
+									(IRPDiagram) theSelectedEl );
+							
+						} else if( theSelectedEl instanceof IRPPackage ){
+							
+							LayoutHelper.centerDependenciesForThePackage( 
+									(IRPPackage) theSelectedEl );
+						}
+
+					} catch (Exception e) {
+						Logger.writeLine( "Error: Exception in OnMenuItemSelect when invoking LayoutHelper" );
 					}
-
-				} catch (Exception e) {
-					Logger.writeLine( "Error: Exception in OnMenuItemSelect when invoking LayoutHelper" );
+				} else {
+					Logger.writeLine(theSelectedEl, " was invoked with menuItem='" + menuItem + "'");
 				}
-			} else {
-				Logger.writeLine(theSelectedEl, " was invoked with menuItem='" + menuItem + "'");
-			}
-		} // else No selected element
+			} // else No selected element
 
-		Logger.writeLine("... completed");
+			Logger.writeLine("... completed");
+		}
+
 	}
 	
 	public boolean RhpPluginCleanup() {
@@ -268,6 +281,7 @@ public class RequirementsAnalysisPlugin extends RPUserPlugin {
     #163 05-FEB-2017: Add new menus to Smart link: Start and Smart link: End (F.J.Chadburn)
     #224 25-AUG-2017: Added new menu to roll up traceability to the transition and populate on STM (F.J.Chadburn)
     #229 20-SEP-2017: Add re-layout dependencies on diagram(s) menu to ease beautifying when req't tracing (F.J.Chadburn)
+    #239 04-OCT-2017: Improve warning/behaviour if multiple Rhapsodys are open or user switches app (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 
