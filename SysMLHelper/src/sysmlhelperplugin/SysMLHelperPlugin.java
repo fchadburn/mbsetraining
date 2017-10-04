@@ -15,7 +15,6 @@ import com.telelogic.rhapsody.core.*;
 public class SysMLHelperPlugin extends RPUserPlugin {
 
 	static protected IRPApplication m_rhpApplication = null;
-	static protected IRPProject m_rhpProject = null;
 	static protected ConfigurationSettings m_configSettings = null;
 	
 	final String legalNotice = 
@@ -63,283 +62,282 @@ public class SysMLHelperPlugin extends RPUserPlugin {
 	
 	public static IRPProject getActiveProject(){
 	 	
-		if (m_rhpProject==null){
-			m_rhpProject = getRhapsodyApp().activeProject();
-		}
-		
-		return m_rhpProject;
+		return getRhapsodyApp().activeProject();
 	} 
 	
 	// called when the plug-in pop-up menu  is selected
 	public void OnMenuItemSelect(String menuItem) {
 		
-		IRPApplication theRhpApp = SysMLHelperPlugin.getRhapsodyApp();
-		
-		IRPModelElement theSelectedEl = theRhpApp.getSelectedElement();
+		if( UserInterfaceHelpers.checkOKToRunAndWarnUserIfNot() ){
+			IRPApplication theRhpApp = SysMLHelperPlugin.getRhapsodyApp();
+			
+			IRPModelElement theSelectedEl = theRhpApp.getSelectedElement();
 
-		@SuppressWarnings("unchecked")
-		List<IRPModelElement> theSelectedEls = 
-				theRhpApp.getListOfSelectedElements().toList();
+			@SuppressWarnings("unchecked")
+			List<IRPModelElement> theSelectedEls = 
+					theRhpApp.getListOfSelectedElements().toList();
 
-		@SuppressWarnings("unchecked")
-		List<IRPGraphElement> theGraphEls = 
-				theRhpApp.getSelectedGraphElements().toList();
+			@SuppressWarnings("unchecked")
+			List<IRPGraphElement> theGraphEls = 
+					theRhpApp.getSelectedGraphElements().toList();
 
-		Logger.writeLine("Starting ("+ theSelectedEls.size() + " elements were selected) ...");
+			Logger.writeLine("Starting ("+ theSelectedEls.size() + " elements were selected) ...");
 
-		if( !theSelectedEls.isEmpty() ){
+			if( !theSelectedEls.isEmpty() ){
 
-			if (menuItem.equals(m_configSettings.getString("sysmlhelperplugin.CreateRAStructureMenu"))){
+				if (menuItem.equals(m_configSettings.getString("sysmlhelperplugin.CreateRAStructureMenu"))){
 
-				if (theSelectedEl instanceof IRPProject){
-					try { 
-						PopulateRequirementsAnalysisPkg.createRequirementsAnalysisPkg( (IRPProject) theSelectedEl ); 
+					if (theSelectedEl instanceof IRPProject){
+						try { 
+							PopulateRequirementsAnalysisPkg.createRequirementsAnalysisPkg( (IRPProject) theSelectedEl ); 
 
-					} catch (Exception e) {
-						Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking PopulateRequirementsAnalysisPkg.createRequirementsAnalysisPkg");
+						} catch (Exception e) {
+							Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking PopulateRequirementsAnalysisPkg.createRequirementsAnalysisPkg");
+						}
 					}
-				}
-			} else if (menuItem.equals(m_configSettings.getString("sysmlhelperplugin.CreateFullSimFAStructureMenu"))){
+				} else if (menuItem.equals(m_configSettings.getString("sysmlhelperplugin.CreateFullSimFAStructureMenu"))){
 
-				if (theSelectedEl instanceof IRPProject){
-					try { 
-						PopulateFunctionalAnalysisPkg.createFunctionalAnalysisPkg( (IRPProject) theSelectedEl, SimulationType.FullSim ); 
+					if (theSelectedEl instanceof IRPProject){
+						try { 
+							PopulateFunctionalAnalysisPkg.createFunctionalAnalysisPkg( (IRPProject) theSelectedEl, SimulationType.FullSim ); 
 
-					} catch (Exception e) {
-						Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking PopulateFunctionalAnalysisPkg.createFunctionalAnalysisPkg");
+						} catch (Exception e) {
+							Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking PopulateFunctionalAnalysisPkg.createFunctionalAnalysisPkg");
+						}
 					}
-				}
-			} else if (menuItem.equals(m_configSettings.getString("sysmlhelperplugin.CreateSimpleSimFAStructureMenu"))){
+				} else if (menuItem.equals(m_configSettings.getString("sysmlhelperplugin.CreateSimpleSimFAStructureMenu"))){
 
-				if (theSelectedEl instanceof IRPProject){
-					try { 
-						PopulateFunctionalAnalysisPkg.createFunctionalAnalysisPkg( (IRPProject) theSelectedEl, SimulationType.SimpleSim ); 
+					if (theSelectedEl instanceof IRPProject){
+						try { 
+							PopulateFunctionalAnalysisPkg.createFunctionalAnalysisPkg( (IRPProject) theSelectedEl, SimulationType.SimpleSim ); 
 
-					} catch (Exception e) {
-						Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking PopulateFunctionalAnalysisPkg.createFunctionalAnalysisPkg");
+						} catch (Exception e) {
+							Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking PopulateFunctionalAnalysisPkg.createFunctionalAnalysisPkg");
+						}
 					}
-				}
-			} else if (menuItem.equals(m_configSettings.getString("sysmlhelperplugin.CreateNoSimFAStructureMenu"))){
+				} else if (menuItem.equals(m_configSettings.getString("sysmlhelperplugin.CreateNoSimFAStructureMenu"))){
 
-				if (theSelectedEl instanceof IRPProject){
-					try { 
-						PopulateFunctionalAnalysisPkg.createFunctionalAnalysisPkg( (IRPProject) theSelectedEl, SimulationType.NoSim ); 
+					if (theSelectedEl instanceof IRPProject){
+						try { 
+							PopulateFunctionalAnalysisPkg.createFunctionalAnalysisPkg( (IRPProject) theSelectedEl, SimulationType.NoSim ); 
 
-					} catch (Exception e) {
-						Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking PopulateFunctionalAnalysisPkg.createFunctionalAnalysisPkg");
+						} catch (Exception e) {
+							Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking PopulateFunctionalAnalysisPkg.createFunctionalAnalysisPkg");
+						}
 					}
-				}
-			} else if (menuItem.equals(m_configSettings.getString("sysmlhelperplugin.CreateDSStructureMenu"))){
+				} else if (menuItem.equals(m_configSettings.getString("sysmlhelperplugin.CreateDSStructureMenu"))){
 
-				if (theSelectedEl instanceof IRPProject){
-					try { 
-						PopulateDesignSynthesisPkg.createDesignSynthesisPkg( (IRPProject) theSelectedEl ); 
+					if (theSelectedEl instanceof IRPProject){
+						try { 
+							PopulateDesignSynthesisPkg.createDesignSynthesisPkg( (IRPProject) theSelectedEl ); 
 
-					} catch (Exception e) {
-						Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking PopulateDesignSynthesisPkg.createDesignSynthesisPkg");
+						} catch (Exception e) {
+							Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking PopulateDesignSynthesisPkg.createDesignSynthesisPkg");
+						}
 					}
-				}
-			} else if (menuItem.equals(m_configSettings.getString("sysmlhelperplugin.QuickHyperlinkMenu"))){
+				} else if (menuItem.equals(m_configSettings.getString("sysmlhelperplugin.QuickHyperlinkMenu"))){
 
-				try { 
-					IRPHyperLink theHyperLink = (IRPHyperLink) theSelectedEl.addNewAggr("HyperLink", "");
-					theHyperLink.setDisplayOption(HYPNameType.RP_HYP_NAMETEXT, "");
-					theHyperLink.highLightElement();
-					theHyperLink.openFeaturesDialog(0);
-
-				} catch (Exception e) {
-					Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking MBSE Method: General\\Quick hyperlink");
-				}
-				
-			} else if (menuItem.equals(m_configSettings.getString("sysmlhelperplugin.SelectDependsOnElementsMenu"))){
-
-				try { 					
-					Set<IRPModelElement> theCombinedSet = 
-							GeneralHelpers.getSetOfElementsFromCombiningThe(
-									theSelectedEls, theGraphEls );
-					
-					DependencySelector.selectDependsOnElementsFor( 
-							theCombinedSet, null );
-
-				} catch (Exception e) {
-					Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking MBSE Method: General\\Select Depends On element(s)\\All");
-				}
-
-			} else if (menuItem.equals(m_configSettings.getString("sysmlhelperplugin.SelectDependentElementsMenu"))){
-
-				try {
-					Set<IRPModelElement> theCombinedSet = 
-							GeneralHelpers.getSetOfElementsFromCombiningThe(
-									theSelectedEls, theGraphEls );
-
-					DependencySelector.selectDependentElementsFor( 
-							theCombinedSet, null );
-
-				} catch (Exception e) {
-					Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking MBSE Method: General\\Select Dependent element(s)\\All");
-				}
-
-			} else if (menuItem.equals(m_configSettings.getString("sysmlhelperplugin.SelectDependsOnDeriveOnlyElementsMenu"))){
-
-				try { 					
-					Set<IRPModelElement> theCombinedSet = 
-							GeneralHelpers.getSetOfElementsFromCombiningThe(
-									theSelectedEls, theGraphEls );
-					
-					DependencySelector.selectDependsOnElementsFor( 
-							theCombinedSet, "derive" );
-
-				} catch (Exception e) {
-					Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking MBSE Method: General\\Select Depends On element(s)\\Derives");
-				}
-
-			} else if (menuItem.equals(m_configSettings.getString("sysmlhelperplugin.SelectDependentDeriveOnlyElementsMenu"))){
-
-				try {
-					Set<IRPModelElement> theCombinedSet = 
-							GeneralHelpers.getSetOfElementsFromCombiningThe(
-									theSelectedEls, theGraphEls );
-
-					DependencySelector.selectDependentElementsFor( 
-							theCombinedSet, "derive" );
-
-				} catch (Exception e) {
-					Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking MBSE Method: General\\Select Dependent element(s)\\Derives");
-				}
-				
-			} else if (menuItem.equals(m_configSettings.getString("sysmlhelperplugin.SelectDependsOnSatisfyOnlyElementsMenu"))){
-
-				try { 					
-					Set<IRPModelElement> theCombinedSet = 
-							GeneralHelpers.getSetOfElementsFromCombiningThe(
-									theSelectedEls, theGraphEls );
-					
-					DependencySelector.selectDependsOnElementsFor( 
-							theCombinedSet, "satisfy" );
-
-				} catch (Exception e) {
-					Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking MBSE Method: General\\Select Depends On element(s)\\Satisfies");
-				}
-
-			} else if (menuItem.equals(m_configSettings.getString("sysmlhelperplugin.SelectDependentSatisfyOnlyElementsMenu"))){
-
-				try {
-					Set<IRPModelElement> theCombinedSet = 
-							GeneralHelpers.getSetOfElementsFromCombiningThe(
-									theSelectedEls, theGraphEls );
-
-					DependencySelector.selectDependentElementsFor( 
-							theCombinedSet, "satisfy" );
-
-				} catch (Exception e) {
-					Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking MBSE Method: General\\Select Dependent element(s)\\Satisfies");
-				}
-				
-			} else if (menuItem.equals(m_configSettings.getString("sysmlhelperplugin.SelectDependsOnVerifyOnlyElementsMenu"))){
-
-				try { 					
-					Set<IRPModelElement> theCombinedSet = 
-							GeneralHelpers.getSetOfElementsFromCombiningThe(
-									theSelectedEls, theGraphEls );
-					
-					DependencySelector.selectDependsOnElementsFor( 
-							theCombinedSet, "verify" );
-
-				} catch (Exception e) {
-					Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking MBSE Method: General\\Select Depends On element(s)\\Verifies");
-				}
-
-			} else if (menuItem.equals(m_configSettings.getString("sysmlhelperplugin.SelectDependentVerifyOnlyElementsMenu"))){
-
-				try {
-					Set<IRPModelElement> theCombinedSet = 
-							GeneralHelpers.getSetOfElementsFromCombiningThe(
-									theSelectedEls, theGraphEls );
-
-					DependencySelector.selectDependentElementsFor( 
-							theCombinedSet, "verify" );
-
-				} catch (Exception e) {
-					Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking MBSE Method: General\\Select Dependent element(s)\\Verifies");
-				}
-
-			} else if (menuItem.equals(m_configSettings.getString("sysmlhelperplugin.SelectDependsOnRefineOnlyElementsMenu"))){
-
-				try { 					
-					Set<IRPModelElement> theCombinedSet = 
-							GeneralHelpers.getSetOfElementsFromCombiningThe(
-									theSelectedEls, theGraphEls );
-					
-					DependencySelector.selectDependsOnElementsFor( 
-							theCombinedSet, "refine" );
-
-				} catch (Exception e) {
-					Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking MBSE Method: General\\Select Depends On element(s)\\Refines");
-				}
-
-			} else if (menuItem.equals(m_configSettings.getString("sysmlhelperplugin.SelectDependentRefineOnlyElementsMenu"))){
-
-				try {
-					Set<IRPModelElement> theCombinedSet = 
-							GeneralHelpers.getSetOfElementsFromCombiningThe(
-									theSelectedEls, theGraphEls );
-
-					DependencySelector.selectDependentElementsFor( 
-							theCombinedSet, "refine" );
-
-				} catch (Exception e) {
-					Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking MBSE Method: General\\Select Dependent element(s)\\Refines");
-				}
-				
-			} else if (menuItem.equals(m_configSettings.getString("sysmlhelperplugin.SelectDependsOnDeriveReqtOnlyElementsMenu"))){
-
-				try { 					
-					Set<IRPModelElement> theCombinedSet = 
-							GeneralHelpers.getSetOfElementsFromCombiningThe(
-									theSelectedEls, theGraphEls );
-					
-					DependencySelector.selectDependsOnElementsFor( 
-							theCombinedSet, "deriveReqt" );
-
-				} catch (Exception e) {
-					Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking MBSE Method: General\\Select Depends On element(s)\\Derive Requirement");
-				}
-
-			} else if (menuItem.equals(m_configSettings.getString("sysmlhelperplugin.SelectDependentDeriveReqtOnlyElementsMenu"))){
-
-				try {
-					Set<IRPModelElement> theCombinedSet = 
-							GeneralHelpers.getSetOfElementsFromCombiningThe(
-									theSelectedEls, theGraphEls );
-
-					DependencySelector.selectDependentElementsFor( 
-							theCombinedSet, "deriveReqt" );
-
-				} catch (Exception e) {
-					Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking MBSE Method: General\\Select Dependent element(s)\\Derive Requirement");
-				}				
-			} else if (menuItem.equals(m_configSettings.getString("sysmlhelperplugin.SetupGatewayProjectMenu"))){
-
-				if (theSelectedEl instanceof IRPProject){
 					try { 
-						CreateGatewayProjectPanel.launchThePanel( (IRPProject)theSelectedEl, ".*.rqtf$" );
+						IRPHyperLink theHyperLink = (IRPHyperLink) theSelectedEl.addNewAggr("HyperLink", "");
+						theHyperLink.setDisplayOption(HYPNameType.RP_HYP_NAMETEXT, "");
+						theHyperLink.highLightElement();
+						theHyperLink.openFeaturesDialog(0);
 
 					} catch (Exception e) {
-						Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking CreateGatewayProjectPanel.launchThePanel");
-					}					
-				}
-			} else if (menuItem.equals(m_configSettings.getString("sysmlhelperplugin.AddRelativeUnitMenu"))){
+						Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking MBSE Method: General\\Quick hyperlink");
+					}
+					
+				} else if (menuItem.equals(m_configSettings.getString("sysmlhelperplugin.SelectDependsOnElementsMenu"))){
 
-				try { 
-					RelativeUnitHandler.browseAndAddUnit( theSelectedEl.getProject(), true );
+					try { 					
+						Set<IRPModelElement> theCombinedSet = 
+								GeneralHelpers.getSetOfElementsFromCombiningThe(
+										theSelectedEls, theGraphEls );
+						
+						DependencySelector.selectDependsOnElementsFor( 
+								theCombinedSet, null );
 
-				} catch (Exception e) {
-					Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking RelativeUnitHandler.browseAndAddUnit");
-				}									
-			}					
+					} catch (Exception e) {
+						Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking MBSE Method: General\\Select Depends On element(s)\\All");
+					}
+
+				} else if (menuItem.equals(m_configSettings.getString("sysmlhelperplugin.SelectDependentElementsMenu"))){
+
+					try {
+						Set<IRPModelElement> theCombinedSet = 
+								GeneralHelpers.getSetOfElementsFromCombiningThe(
+										theSelectedEls, theGraphEls );
+
+						DependencySelector.selectDependentElementsFor( 
+								theCombinedSet, null );
+
+					} catch (Exception e) {
+						Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking MBSE Method: General\\Select Dependent element(s)\\All");
+					}
+
+				} else if (menuItem.equals(m_configSettings.getString("sysmlhelperplugin.SelectDependsOnDeriveOnlyElementsMenu"))){
+
+					try { 					
+						Set<IRPModelElement> theCombinedSet = 
+								GeneralHelpers.getSetOfElementsFromCombiningThe(
+										theSelectedEls, theGraphEls );
+						
+						DependencySelector.selectDependsOnElementsFor( 
+								theCombinedSet, "derive" );
+
+					} catch (Exception e) {
+						Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking MBSE Method: General\\Select Depends On element(s)\\Derives");
+					}
+
+				} else if (menuItem.equals(m_configSettings.getString("sysmlhelperplugin.SelectDependentDeriveOnlyElementsMenu"))){
+
+					try {
+						Set<IRPModelElement> theCombinedSet = 
+								GeneralHelpers.getSetOfElementsFromCombiningThe(
+										theSelectedEls, theGraphEls );
+
+						DependencySelector.selectDependentElementsFor( 
+								theCombinedSet, "derive" );
+
+					} catch (Exception e) {
+						Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking MBSE Method: General\\Select Dependent element(s)\\Derives");
+					}
+					
+				} else if (menuItem.equals(m_configSettings.getString("sysmlhelperplugin.SelectDependsOnSatisfyOnlyElementsMenu"))){
+
+					try { 					
+						Set<IRPModelElement> theCombinedSet = 
+								GeneralHelpers.getSetOfElementsFromCombiningThe(
+										theSelectedEls, theGraphEls );
+						
+						DependencySelector.selectDependsOnElementsFor( 
+								theCombinedSet, "satisfy" );
+
+					} catch (Exception e) {
+						Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking MBSE Method: General\\Select Depends On element(s)\\Satisfies");
+					}
+
+				} else if (menuItem.equals(m_configSettings.getString("sysmlhelperplugin.SelectDependentSatisfyOnlyElementsMenu"))){
+
+					try {
+						Set<IRPModelElement> theCombinedSet = 
+								GeneralHelpers.getSetOfElementsFromCombiningThe(
+										theSelectedEls, theGraphEls );
+
+						DependencySelector.selectDependentElementsFor( 
+								theCombinedSet, "satisfy" );
+
+					} catch (Exception e) {
+						Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking MBSE Method: General\\Select Dependent element(s)\\Satisfies");
+					}
+					
+				} else if (menuItem.equals(m_configSettings.getString("sysmlhelperplugin.SelectDependsOnVerifyOnlyElementsMenu"))){
+
+					try { 					
+						Set<IRPModelElement> theCombinedSet = 
+								GeneralHelpers.getSetOfElementsFromCombiningThe(
+										theSelectedEls, theGraphEls );
+						
+						DependencySelector.selectDependsOnElementsFor( 
+								theCombinedSet, "verify" );
+
+					} catch (Exception e) {
+						Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking MBSE Method: General\\Select Depends On element(s)\\Verifies");
+					}
+
+				} else if (menuItem.equals(m_configSettings.getString("sysmlhelperplugin.SelectDependentVerifyOnlyElementsMenu"))){
+
+					try {
+						Set<IRPModelElement> theCombinedSet = 
+								GeneralHelpers.getSetOfElementsFromCombiningThe(
+										theSelectedEls, theGraphEls );
+
+						DependencySelector.selectDependentElementsFor( 
+								theCombinedSet, "verify" );
+
+					} catch (Exception e) {
+						Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking MBSE Method: General\\Select Dependent element(s)\\Verifies");
+					}
+
+				} else if (menuItem.equals(m_configSettings.getString("sysmlhelperplugin.SelectDependsOnRefineOnlyElementsMenu"))){
+
+					try { 					
+						Set<IRPModelElement> theCombinedSet = 
+								GeneralHelpers.getSetOfElementsFromCombiningThe(
+										theSelectedEls, theGraphEls );
+						
+						DependencySelector.selectDependsOnElementsFor( 
+								theCombinedSet, "refine" );
+
+					} catch (Exception e) {
+						Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking MBSE Method: General\\Select Depends On element(s)\\Refines");
+					}
+
+				} else if (menuItem.equals(m_configSettings.getString("sysmlhelperplugin.SelectDependentRefineOnlyElementsMenu"))){
+
+					try {
+						Set<IRPModelElement> theCombinedSet = 
+								GeneralHelpers.getSetOfElementsFromCombiningThe(
+										theSelectedEls, theGraphEls );
+
+						DependencySelector.selectDependentElementsFor( 
+								theCombinedSet, "refine" );
+
+					} catch (Exception e) {
+						Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking MBSE Method: General\\Select Dependent element(s)\\Refines");
+					}
+					
+				} else if (menuItem.equals(m_configSettings.getString("sysmlhelperplugin.SelectDependsOnDeriveReqtOnlyElementsMenu"))){
+
+					try { 					
+						Set<IRPModelElement> theCombinedSet = 
+								GeneralHelpers.getSetOfElementsFromCombiningThe(
+										theSelectedEls, theGraphEls );
+						
+						DependencySelector.selectDependsOnElementsFor( 
+								theCombinedSet, "deriveReqt" );
+
+					} catch (Exception e) {
+						Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking MBSE Method: General\\Select Depends On element(s)\\Derive Requirement");
+					}
+
+				} else if (menuItem.equals(m_configSettings.getString("sysmlhelperplugin.SelectDependentDeriveReqtOnlyElementsMenu"))){
+
+					try {
+						Set<IRPModelElement> theCombinedSet = 
+								GeneralHelpers.getSetOfElementsFromCombiningThe(
+										theSelectedEls, theGraphEls );
+
+						DependencySelector.selectDependentElementsFor( 
+								theCombinedSet, "deriveReqt" );
+
+					} catch (Exception e) {
+						Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking MBSE Method: General\\Select Dependent element(s)\\Derive Requirement");
+					}				
+				} else if (menuItem.equals(m_configSettings.getString("sysmlhelperplugin.SetupGatewayProjectMenu"))){
+
+					if (theSelectedEl instanceof IRPProject){
+						try { 
+							CreateGatewayProjectPanel.launchThePanel( (IRPProject)theSelectedEl, ".*.rqtf$" );
+
+						} catch (Exception e) {
+							Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking CreateGatewayProjectPanel.launchThePanel");
+						}					
+					}
+				} else if (menuItem.equals(m_configSettings.getString("sysmlhelperplugin.AddRelativeUnitMenu"))){
+
+					try { 
+						RelativeUnitHandler.browseAndAddUnit( theSelectedEl.getProject(), true );
+
+					} catch (Exception e) {
+						Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking RelativeUnitHandler.browseAndAddUnit");
+					}									
+				}					
+			}
+
+			Logger.writeLine("... completed");
 		}
 
-		Logger.writeLine("... completed");
 	}
 
 	// if true is returned the plugin will be unloaded
@@ -378,24 +376,17 @@ public class SysMLHelperPlugin extends RPUserPlugin {
 		return theReqts;
 	}
 	
-	public String traceabilityReportHtml(String guid) {
+	public String traceabilityReportHtml( IRPModelElement theModelEl ) {
 		
 		String retval = "";
-		
-		IRPModelElement modelElement = 
-				SysMLHelperPlugin.getActiveProject().findElementByGUID( guid );
-		
-		if( modelElement==null ){
-			Logger.writeLine( "Unable to find an element with guid=" + guid );
-		}
 
-		if(modelElement != null) {
+		if( theModelEl != null ){
 			
 			List<IRPRequirement> theTracedReqts;
 			
-			if( modelElement instanceof IRPDependency ){
+			if( theModelEl instanceof IRPDependency ){
 				
-				IRPDependency theDep = (IRPDependency) modelElement;
+				IRPDependency theDep = (IRPDependency) theModelEl;
 				IRPModelElement theDependsOn = theDep.getDependsOn();
 				
 				if( theDependsOn != null && 
@@ -405,13 +396,13 @@ public class SysMLHelperPlugin extends RPUserPlugin {
 					theTracedReqts = new ArrayList<>();
 					theTracedReqts.add( (IRPRequirement) theDependsOn );
 				} else {
-					theTracedReqts = getRequirementsThatTraceFrom( modelElement );
+					theTracedReqts = getRequirementsThatTraceFrom( theModelEl );
 				}
 			} else {
-				theTracedReqts = getRequirementsThatTraceFrom( modelElement );
+				theTracedReqts = getRequirementsThatTraceFrom( theModelEl );
 			}
 
-			if (theTracedReqts.isEmpty()){
+			if( theTracedReqts.isEmpty() ){
 
 				retval = "<br>This element has no traceability to requirements<br><br>";
 			} else {
@@ -419,7 +410,7 @@ public class SysMLHelperPlugin extends RPUserPlugin {
 				retval += "<table border=\"1\">";			
 				retval += "<tr><td><b>ID</b></td><td><b>Specification</b></td></tr>";
 
-				for (IRPRequirement theReqt : theTracedReqts) {
+				for( IRPRequirement theReqt : theTracedReqts ){
 					retval += "<tr><td>" + theReqt.getName() + "</td><td>"+ theReqt.getSpecification() +"</tr>";
 				}
 
@@ -432,24 +423,41 @@ public class SysMLHelperPlugin extends RPUserPlugin {
 	
 	public String InvokeTooltipFormatter(String html) {
 
-		String guidStr = html.substring(1, html.indexOf(']'));
+		String theOutput = html;
 		
-		IRPModelElement object = SysMLHelperPlugin.getActiveProject().findElementByGUID(guidStr);
-		
-		if (object != null) {
-			guidStr = object.getGUID();
+		try{
+			@SuppressWarnings("rawtypes")
+			List theAppIDs = RhapsodyAppServer.getActiveRhapsodyApplicationIDList();
+			
+			if( theAppIDs.size() == 1 ){
+	
+				IRPProject theRhpProject = RhapsodyAppServer.getActiveRhapsodyApplication().activeProject();
+				
+				String guidStr = html.substring(1, html.indexOf(']'));
+				
+				IRPModelElement theModelEl = theRhpProject.findElementByGUID( guidStr );
+				
+				if( theModelEl != null ){
+					guidStr = theModelEl.getGUID();
+				}
+
+				html = html.substring(html.indexOf(']') + 1);
+				
+				String thePart1 =  html.substring(
+						0,
+						html.indexOf("[[<b>Dependencies:</b>"));
+				
+				String thePart2 = traceabilityReportHtml( theModelEl );
+				String thePart3 = html.substring(html.lastIndexOf("[[<b>Dependencies:</b>") - 1);
+			
+				theOutput = thePart1 + thePart2 + thePart3;
+			}
+			
+		} catch (Exception e) {
+			Logger.writeLine("Unhandled exception in InvokeTooltipFormatter");
 		}
 
-		html = html.substring(html.indexOf(']') + 1);
-		
-		String thePart1 =  html.substring(
-				0,
-				html.indexOf("[[<b>Dependencies:</b>"));
-		
-		String thePart2 = traceabilityReportHtml(guidStr);
-		String thePart3 = html.substring(html.lastIndexOf("[[<b>Dependencies:</b>") - 1);
-		
-		return thePart1+thePart2+thePart3;
+		return theOutput;
 	}
 
 	@Override
@@ -481,6 +489,7 @@ public class SysMLHelperPlugin extends RPUserPlugin {
     #207 25-JUN-2017: Significant bolstering of Select Depends On/Dependent element(s) menus (F.J.Chadburn)
     #219 12-JUL-2017: Added Select Depends On element(s)\Derive Requirement menus for deriveReqt relations (F.J.Chadburn)
     #231 27-SEP-2017: Enhanced tooltip now shows the req't text when hovering over traceability relations (F.J.Chadburn)
+    #239 04-OCT-2017: Improve warning/behaviour if multiple Rhapsodys are open or user switches app (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 
