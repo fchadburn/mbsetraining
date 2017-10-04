@@ -1,4 +1,4 @@
-I-Logix-RPY-Archive version 8.13.0 C++ 9794446
+I-Logix-RPY-Archive version 8.13.0 C++ 9803352
 { IProfile 
 	- _id = GUID ee68d643-007f-404c-89e5-7c61c7008170;
 	- _myState = 8192;
@@ -83,7 +83,7 @@ I-Logix-RPY-Archive version 8.13.0 C++ 9794446
 							- value = 
 							{ IProperty 
 								- _Name = "ActivityDiagramToolbar";
-								- _Value = "Action,AcceptEventAction,SendAction,AcceptTimeEvent,InterruptibleRegion,CallBehavior,InitialFlow,ControlFlow,DecisionNode,MergeNode,DiagramConnector,ForkConnector,JoinConnector,ActivityFinal,FlowFInal,Requirement,Derivation";
+								- _Value = "Action,AcceptEventAction,SendAction,AcceptTimeEvent,InterruptibleRegion,CallBehavior,InitialFlow,ControlFlow,DecisionNode,MergeNode,DiagramConnector,ForkConnector,JoinConnector,ActivityFinal,FlowFInal,Requirement,Derivation,Use Case Precondition,Use Case Postcondition,Use Case Description";
 								- _Type = String;
 							}
 							{ IProperty 
@@ -134,10 +134,181 @@ I-Logix-RPY-Archive version 8.13.0 C++ 9794446
 		}
 	}
 	- _name = "RequirementsAnalysisProfile";
-	- _modifiedTimeWeak = 3.3.2017::11:55:35;
+	- _modifiedTimeWeak = 10.4.2017::12:41:24;
 	- _lastID = 41;
-	- weakCGTime = 3.3.2017::11:55:35;
-	- strongCGTime = 3.3.2017::11:55:35;
+	- Declaratives = { IRPYRawContainer 
+		- size = 3;
+		- value = 
+		{ IStereotype 
+			- _id = GUID 34fe92a9-12ad-47ba-8b71-267d96981595;
+			- _myState = 8192;
+			- _properties = { IPropertyContainer 
+				- Subjects = { IRPYRawContainer 
+					- size = 2;
+					- value = 
+					{ IPropertySubject 
+						- _Name = "Format";
+						- Metaclasses = { IRPYRawContainer 
+							- size = 1;
+							- value = 
+							{ IPropertyMetaclass 
+								- _Name = "Comment";
+								- Properties = { IRPYRawContainer 
+									- size = 2;
+									- value = 
+									{ IProperty 
+										- _Name = "Fill.FillColor";
+										- _Value = "255,255,255";
+										- _Type = Color;
+									}
+									{ IProperty 
+										- _Name = "Line.LineColor";
+										- _Value = "0,128,128";
+										- _Type = Color;
+									}
+								}
+							}
+						}
+					}
+					{ IPropertySubject 
+						- _Name = "Model";
+						- Metaclasses = { IRPYRawContainer 
+							- size = 1;
+							- value = 
+							{ IPropertyMetaclass 
+								- _Name = "Stereotype";
+								- Properties = { IRPYRawContainer 
+									- size = 1;
+									- value = 
+									{ IProperty 
+										- _Name = "Name";
+										- _Value = "Use Case Description";
+										- _Type = String;
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			- _name = "UseCaseDescription";
+			- _modifiedTimeWeak = 10.3.2017::15:43:28;
+			- _m2Classes = { IRPYRawContainer 
+				- size = 1;
+				- value = "Comment"; 
+			}
+		}
+		{ IStereotype 
+			- _id = GUID 15f55265-92ce-4339-97f3-da4b3e9ee5b7;
+			- _myState = 8192;
+			- _properties = { IPropertyContainer 
+				- Subjects = { IRPYRawContainer 
+					- size = 2;
+					- value = 
+					{ IPropertySubject 
+						- _Name = "Format";
+						- Metaclasses = { IRPYRawContainer 
+							- size = 1;
+							- value = 
+							{ IPropertyMetaclass 
+								- _Name = "Constraint";
+								- Properties = { IRPYRawContainer 
+									- size = 1;
+									- value = 
+									{ IProperty 
+										- _Name = "Line.LineColor";
+										- _Value = "0,128,128";
+										- _Type = Color;
+									}
+								}
+							}
+						}
+					}
+					{ IPropertySubject 
+						- _Name = "Model";
+						- Metaclasses = { IRPYRawContainer 
+							- size = 1;
+							- value = 
+							{ IPropertyMetaclass 
+								- _Name = "Stereotype";
+								- Properties = { IRPYRawContainer 
+									- size = 1;
+									- value = 
+									{ IProperty 
+										- _Name = "Name";
+										- _Value = "Use Case Postcondition";
+										- _Type = String;
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			- _name = "UseCasePostcondition";
+			- _modifiedTimeWeak = 10.3.2017::20:51:49;
+			- _m2Classes = { IRPYRawContainer 
+				- size = 1;
+				- value = "Constraint"; 
+			}
+		}
+		{ IStereotype 
+			- _id = GUID a5a53e2a-9ba0-4cc5-8c5d-1ca5ed05f67b;
+			- _myState = 8192;
+			- _properties = { IPropertyContainer 
+				- Subjects = { IRPYRawContainer 
+					- size = 2;
+					- value = 
+					{ IPropertySubject 
+						- _Name = "Format";
+						- Metaclasses = { IRPYRawContainer 
+							- size = 1;
+							- value = 
+							{ IPropertyMetaclass 
+								- _Name = "Constraint";
+								- Properties = { IRPYRawContainer 
+									- size = 1;
+									- value = 
+									{ IProperty 
+										- _Name = "Line.LineColor";
+										- _Value = "0,128,128";
+										- _Type = Color;
+									}
+								}
+							}
+						}
+					}
+					{ IPropertySubject 
+						- _Name = "Model";
+						- Metaclasses = { IRPYRawContainer 
+							- size = 1;
+							- value = 
+							{ IPropertyMetaclass 
+								- _Name = "Stereotype";
+								- Properties = { IRPYRawContainer 
+									- size = 1;
+									- value = 
+									{ IProperty 
+										- _Name = "Name";
+										- _Value = "Use Case Precondition";
+										- _Type = String;
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			- _name = "UseCasePrecondition";
+			- _modifiedTimeWeak = 10.3.2017::20:51:51;
+			- _m2Classes = { IRPYRawContainer 
+				- size = 1;
+				- value = "Constraint"; 
+			}
+		}
+	}
+	- weakCGTime = 10.4.2017::12:41:24;
+	- strongCGTime = 10.3.2017::13:54:6;
 	- _defaultComposite = GUID 47ada376-b4c8-4895-8007-9fe51d77a548;
 	- _eventsBaseID = -1;
 	- Classes = { IRPYRawContainer 
@@ -147,9 +318,9 @@ I-Logix-RPY-Archive version 8.13.0 C++ 9794446
 			- _id = GUID 47ada376-b4c8-4895-8007-9fe51d77a548;
 			- _myState = 40960;
 			- _name = "TopLevel";
-			- _modifiedTimeWeak = 2.15.2017::22:3:17;
-			- weakCGTime = 2.15.2017::22:3:17;
-			- strongCGTime = 2.15.2017::22:3:17;
+			- _modifiedTimeWeak = 10.4.2017::11:17:59;
+			- weakCGTime = 10.4.2017::11:17:59;
+			- strongCGTime = 10.3.2017::13:54:6;
 			- _multiplicity = "";
 			- StateCharts = { IRPYRawContainer 
 				- size = 1;
@@ -158,9 +329,9 @@ I-Logix-RPY-Archive version 8.13.0 C++ 9794446
 					- _id = GUID 366b4e03-1300-4cda-a456-4b8b4d0f0171;
 					- _myState = 8192;
 					- _name = "template_for_act";
-					- _modifiedTimeWeak = 2.15.2017::22:3:13;
+					- _modifiedTimeWeak = 10.3.2017::13:55:0;
 					- _lastID = 4;
-					- weakCGTime = 2.15.2017::22:3:13;
+					- weakCGTime = 10.3.2017::13:55:0;
 					- strongCGTime = 1.31.2016::17:20:59;
 					- _multiplicity = "";
 					- _itsStateChart = { IHandle 
@@ -234,14 +405,10 @@ I-Logix-RPY-Archive version 8.13.0 C++ 9794446
 										- value = 
 										{ IHandle 
 											- _m2Class = "IStereotype";
-											- _filename = "PredefinedTypes.sbs";
-											- _subsystem = "PredefinedTypes";
-											- _class = "";
-											- _name = "Precondition";
-											- _id = GUID 715a7b7a-1415-4d0c-a068-7dd1c3afd014;
+											- _id = GUID a5a53e2a-9ba0-4cc5-8c5d-1ca5ed05f67b;
 										}
 									}
-									- _modifiedTimeWeak = 4.9.2016::19:46:20;
+									- _modifiedTimeWeak = 10.3.2017::13:55:0;
 									- _lastID = 2;
 									- _body = "<type any pre-conditions else delete from model>";
 									- Anchors = { IRPYRawContainer 
@@ -268,14 +435,10 @@ I-Logix-RPY-Archive version 8.13.0 C++ 9794446
 										- value = 
 										{ IHandle 
 											- _m2Class = "IStereotype";
-											- _filename = "PredefinedTypes.sbs";
-											- _subsystem = "PredefinedTypes";
-											- _class = "";
-											- _name = "Postcondition";
-											- _id = GUID 295c57d9-76e8-4c96-a1ce-4cd5d85b9fe6;
+											- _id = GUID 15f55265-92ce-4339-97f3-da4b3e9ee5b7;
 										}
 									}
-									- _modifiedTimeWeak = 4.9.2016::19:46:28;
+									- _modifiedTimeWeak = 10.3.2017::13:55:0;
 									- _lastID = 2;
 									- _body = "<type any post-conditions else delete from model>";
 									- Anchors = { IRPYRawContainer 
@@ -294,7 +457,7 @@ I-Logix-RPY-Archive version 8.13.0 C++ 9794446
 									}
 								}
 							}
-							- _modifiedTimeWeak = 4.9.2016::19:46:28;
+							- _modifiedTimeWeak = 10.3.2017::13:55:0;
 							- _parent = ;
 							- _defaultTrans = GUID 252e7520-b1a0-4977-aaeb-15ae6e4798bf;
 						}
@@ -337,7 +500,7 @@ I-Logix-RPY-Archive version 8.13.0 C++ 9794446
 							- _defaultTrans = ;
 						}
 					}
-					- _version = 7.17.2016::9:43:59;
+					- _version = 10.3.2017::14:54:54;
 					- _baseVersion = 1.2.1990::0:0:0;
 					- _diagram = GUID 0a690dfb-d082-48a8-918f-773aa75b20d7;
 					- Views = { IRPYRawContainer 
@@ -658,8 +821,8 @@ I-Logix-RPY-Archive version 8.13.0 C++ 9794446
 								}
 							}
 							- _name = "activitydiagram_0";
-							- _modifiedTimeWeak = 2.15.2017::22:3:13;
-							- _lastModifiedTime = "2.15.2017::22:3:17";
+							- _modifiedTimeWeak = 10.3.2017::13:54:32;
+							- _lastModifiedTime = "10.3.2017::13:54:54";
 							- _graphicChart = { CGIStateChart 
 								- _id = GUID 510d5383-844f-482d-b927-6684f707df4a;
 								- m_type = 0;
@@ -3905,22 +4068,91 @@ Tips:
 			- _myState = 8192;
 			- _properties = { IPropertyContainer 
 				- Subjects = { IRPYRawContainer 
-					- size = 1;
+					- size = 2;
 					- value = 
 					{ IPropertySubject 
-						- _Name = "Model";
+						- _Name = "General";
 						- Metaclasses = { IRPYRawContainer 
 							- size = 1;
 							- value = 
 							{ IPropertyMetaclass 
-								- _Name = "TableLayout";
+								- _Name = "Graphics";
 								- Properties = { IRPYRawContainer 
 									- size = 1;
 									- value = 
 									{ IProperty 
+										- _Name = "TableHeaderMenuAlignment";
+										- _Value = "Right";
+										- _Type = Enum;
+										- _ExtraTypeInfo = "Left,Right";
+									}
+								}
+							}
+						}
+					}
+					{ IPropertySubject 
+						- _Name = "Model";
+						- Metaclasses = { IRPYRawContainer 
+							- size = 2;
+							- value = 
+							{ IPropertyMetaclass 
+								- _Name = "TableLayout";
+								- Properties = { IRPYRawContainer 
+									- size = 3;
+									- value = 
+									{ IProperty 
 										- _Name = "CollapseFirstColumn";
-										- _Value = "False";
+										- _Value = "True";
 										- _Type = Bool;
+									}
+									{ IProperty 
+										- _Name = "ContextTableColumnNameFormat";
+										- _Value = "$(Property) in $(Context)";
+										- _Type = String;
+									}
+									{ IProperty 
+										- _Name = "UserDefinedImplementationXML";
+										- _Value = "<COLUMN id=\"3\">
+<IMPLEMENTATION>
+	<CLASSPATH>
+	</CLASSPATH>
+	<IMPORTS>
+		<IMPORT>com.telelogic.rhapsody.core.IRPApplication</IMPORT>
+		<IMPORT>com.telelogic.rhapsody.core.IRPModelElement</IMPORT>
+		<IMPORT>com.telelogic.rhapsody.core.IRPTableView</IMPORT>
+		<IMPORT>java.util.List</IMPORT>
+	</IMPORTS>
+	<USER-DEFINED-METHOD isUserDefinedMethod=\"TRUE\">getRequirementSpecificationText</USER-DEFINED-METHOD>
+	<ALLOW-SELECTOR>FALSE</ALLOW-SELECTOR>
+	<ALLOW-NEW>FALSE</ALLOW-NEW>
+	<DISPLAY-PROPERTY></DISPLAY-PROPERTY>
+	<RETURN-TYPE>String</RETURN-TYPE>
+	<GETTER>
+		<CODE></CODE>
+	</GETTER>
+	<SETTER>
+		<CODE></CODE>
+	</SETTER>
+	<PICKER>
+		<CODE></CODE>
+	</PICKER>
+</IMPLEMENTATION>
+</COLUMN>
+";
+										- _Type = String;
+									}
+								}
+							}
+							{ IPropertyMetaclass 
+								- _Name = "TableView";
+								- Properties = { IRPYRawContainer 
+									- size = 1;
+									- value = 
+									{ IProperty 
+										- _Name = "ChangeSelectionOnEnterTo";
+										- _Value = "down";
+										- _Type = Enum;
+										- _ExtraTypeInfo = "left, right, up, down";
 									}
 								}
 							}
@@ -3929,7 +4161,7 @@ Tips:
 				}
 			}
 			- _name = "TableL - Use case refinement relations";
-			- _modifiedTimeWeak = 10.15.2015::21:32:35;
+			- _modifiedTimeWeak = 10.4.2017::12:41:24;
 			- TableElementTypes = { IRPYRawContainer 
 				- size = 1;
 				- value = 
@@ -3994,6 +4226,22 @@ Tips:
 				}
 			}
 			- m_RelationTable = 1;
+			- m_CollapseFirstColumn = 1;
+			- TableFromElementTypes = { IRPYRawContainer 
+				- size = 1;
+				- value = 
+				{ TableDataDefinition 
+					- _myTable = { IHandle 
+						- _m2Class = "ITableLayout";
+						- _id = GUID e077fcf1-591a-4048-86c9-e41aeb061c50;
+					}
+					- _modelElement = { IHandle 
+						- _m2Class = "";
+					}
+					- _name = "UseCase";
+					- _DataType = 2;
+				}
+			}
 			- TableToElementTypes = { IRPYRawContainer 
 				- size = 1;
 				- value = 
