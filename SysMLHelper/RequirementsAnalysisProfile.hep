@@ -69,7 +69,7 @@ DLLServerCompatible8=1
 name9=MBSE Method: Requirements Analysis\Start link to a requirement
 isPluginCommand9=1
 command9=InvokeRequirementsAnalysisHelper
-applicableTo9=State,Transition,Comment,AcceptEventAction,SendAction,AcceptTimeEvent,Constraint,Precondition,Postcondition,ControlFlow,Attribute,ValueProperty,Operation,Event,Reception,FlowPort,UseCase,Requirement
+applicableTo9=State,Transition,Comment,AcceptEventAction,SendAction,AcceptTimeEvent,Constraint,Precondition,Postcondition,ControlFlow,Attribute,ValueProperty,Operation,Event,Reception,FlowPort,UseCase,Requirement,Test Case
 isVisible9=1
 DLLServerCompatible9=1
 
@@ -113,6 +113,7 @@ DLLServerCompatible12=1
 #REM #205 18-JUN-2017: Removed Perform rename in browser for elements on ADs from menus to simply (F.J.Chadburn)
 #REM #224 25-AUG-2017: Added new menu to roll up traceability to the transition and populate on STM (F.J.Chadburn)
 #REM #229 20-SEP-2017: Add re-layout dependencies on diagram(s) menu to ease beautifying when req't tracing (F.J.Chadburn)
+#REM #243 04-OCT-2017: Added ability to do smart link from a testcase to create a Verification (F.J.Chadburn)
 #REM
 #REM This file is part of SysMLHelperPlugin.
 #REM

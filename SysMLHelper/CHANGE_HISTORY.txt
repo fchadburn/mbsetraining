@@ -381,3 +381,12 @@ UNDER DEV RELEASE 2.1.o (20-SEP-2017)
 ----------------------------------------------------------------------------------
 UNDER DEV RELEASE 2.1.p (27-SEP-2017)
 ----------------------------------------------------------------------------------
+#238 04-OCT-2017: Improve ability to add new UC pre or post conditions to the AD (F.J.Chadburn)
+#239 04-OCT-2017: Improve warning/behaviour if multiple Rhapsodys are open or user switches app (F.J.Chadburn)
+#240 04-OCT-2017: Prevent commands running in the SysMLHelper model to avoid accidental damage (F.J.Chadburn)
+#241 04-OCT-2017: Fixed TableL - Use case refinement relations so that it works as expected post 8.2 (F.J.Chadburn)
+#242 04-OCT-2017: Get re-layout dependencies on diagrams(s) menu to centre on graph edges properly (F.J.Chadburn)
+#243 04-OCT-2017: Added ability to do smart link from a testcase to create a Verification (F.J.Chadburn)
+----------------------------------------------------------------------------------
+UNDER DEV RELEASE 2.1.q (04-OCT-2017)
+----------------------------------------------------------------------------------
