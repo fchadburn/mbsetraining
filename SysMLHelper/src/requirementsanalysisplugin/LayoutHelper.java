@@ -145,10 +145,6 @@ public class LayoutHelper {
 			IRPGraphElement theEndGraphEl, 
 			IRPDiagram theDiagram ){
 		
-		Logger.writeLine("drawDependencyToMidPointsFor invoked for " + Logger.elementInfo(existingDependency) +
-				"between " + Logger.elementInfo( theStartGraphEl.getModelObject() ) + " and " +
-				Logger.elementInfo( theEndGraphEl.getModelObject() ) + " on " + Logger.elementInfo(theDiagram));
-		
 		if( theStartGraphEl instanceof IRPGraphNode && 
 			theEndGraphEl instanceof IRPGraphNode ){
 
@@ -166,23 +162,15 @@ public class LayoutHelper {
 
 		} else if( theStartGraphEl instanceof IRPGraphEdge || 
 				   theEndGraphEl instanceof IRPGraphEdge ){
-			
-			Logger.writeLine("Populating relations");
-			
-			try {
-				IRPCollection theGraphEls = 
-						RequirementsAnalysisPlugin.getRhapsodyApp().createNewCollection();
 
-				theGraphEls.addGraphicalItem( theStartGraphEl );
-				theGraphEls.addGraphicalItem( theEndGraphEl );
-				
-				theDiagram.completeRelations( theGraphEls, 0);	
-			} catch (Exception e) {
-				Logger.writeLine("Oops");
-			}
-			
+			IRPCollection theGraphEls = 
+					RequirementsAnalysisPlugin.getRhapsodyApp().createNewCollection();
 
-			
+			theGraphEls.addGraphicalItem( theStartGraphEl );
+			theGraphEls.addGraphicalItem( theEndGraphEl );
+
+			theDiagram.completeRelations( theGraphEls, 0);	
+
 		} else {
 			Logger.writeLine("Warning in redrawDependencyToMidPointsFor, the graphEls are not handled types for drawing relations");
 		}
