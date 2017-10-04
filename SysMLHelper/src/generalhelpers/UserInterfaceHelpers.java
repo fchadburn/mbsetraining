@@ -6,7 +6,7 @@ import java.util.List;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 
-import com.telelogic.rhapsody.core.IRPModelElement;
+import com.telelogic.rhapsody.core.*;
 
 public class UserInterfaceHelpers {
 
@@ -89,6 +89,40 @@ public class UserInterfaceHelpers {
 		
 		return theEl;
 	}
+	
+	public static boolean checkOKToRunAndWarnUserIfNot(){
+		
+		boolean isOK = true;
+		 
+		@SuppressWarnings("rawtypes")
+		List theAppIDs = RhapsodyAppServer.getActiveRhapsodyApplicationIDList();
+		
+		if( theAppIDs.size() > 1 ){
+			
+			UserInterfaceHelpers.showWarningDialog( "The SysMLHelper has detected that there are x" + 
+					theAppIDs.size() + " Rhapsody clients running. \n" +
+					"The helpers are disabled to avoid the danger of writing to the wrong model.\n" +
+					"You need to close the clients you're not using and try running the command again.\n" +
+					"If the commands are not working, then you may need to reload the plugin by exiting\n" +
+					"and re-starting Rhapsody with the model you want it to work on.");
+
+			isOK = false;
+			
+		} else {
+			
+			IRPApplication theRhpApp = RhapsodyAppServer.getActiveRhapsodyApplication();
+			IRPProject theRhpProject = theRhpApp.activeProject();
+			
+			if( theRhpProject.getName().equals("SysMLHelper")){
+				
+				UserInterfaceHelpers.showWarningDialog(
+						"The SysMLHelper commands cannot be run in the SysMLHelper project.");
+				isOK = false;
+			}
+		}
+		
+		return isOK;
+	}
 }
 
 /**
@@ -100,6 +134,7 @@ public class UserInterfaceHelpers {
     #017 11-MAY-2016: Double-click now works with both nested and hyper-linked diagrams (F.J.Chadburn)
     #029 01-JUN-2016: Add Warning Dialog helper to UserInterfaceHelpers (F.J.Chadburn)
     #173 02-APR-2017: cleanUpAutoRippleDependencies now gives an information rather than warning dialog (F.J.Chadburn)
+    #239 04-OCT-2017: Improve warning/behaviour if multiple Rhapsodys are open or user switches app (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 
