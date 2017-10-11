@@ -390,3 +390,8 @@ UNDER DEV RELEASE 2.1.p (27-SEP-2017)
 ----------------------------------------------------------------------------------
 UNDER DEV RELEASE 2.1.q (04-OCT-2017)
 ----------------------------------------------------------------------------------
+#244 11-OCT-2017: Default ADs to Analysis mode to better support call operation parameter sync (F.J.Chadburn)
+#245 11-OCT-2017: Fixed exception on CallOperation action drop when using detailed ADs with Ops (F.J.Chadburn)
+----------------------------------------------------------------------------------
+UNDER DEV RELEASE 2.1.r (11-OCT-2017)
+----------------------------------------------------------------------------------
