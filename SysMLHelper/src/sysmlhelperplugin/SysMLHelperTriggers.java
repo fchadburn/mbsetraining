@@ -19,12 +19,9 @@ import requirementsanalysisplugin.NestedActivityDiagram;
 import com.telelogic.rhapsody.core.*;
 
 public class SysMLHelperTriggers extends RPApplicationListener {
-
-	IRPApplication theApp = null;
 	
 	public SysMLHelperTriggers(IRPApplication app) {
 		Logger.writeLine("SysMLHelperPlugin is Loaded - Listening for Events\n"); 
-		theApp = app;
 	}
 
 	public boolean afterAddElement(
@@ -47,89 +44,94 @@ public class SysMLHelperTriggers extends RPApplicationListener {
 					IRPStereotype theExistingGatewayStereotype = getStereotypeAppliedTo(theDependent, "from.*");
 					
 					if (theExistingGatewayStereotype != null){
-						
+
 						modelElement.setStereotype(theExistingGatewayStereotype);
 						modelElement.changeTo("Derive Requirement");
 					}			
 				}
 			} else if (modelElement != null && 
-					   modelElement instanceof IRPCallOperation && 
-					   FunctionalAnalysisSettings.getIsCallOperationSupportEnabled(
-							   modelElement.getProject() ) ){
+					modelElement instanceof IRPCallOperation && 
+					FunctionalAnalysisSettings.getIsCallOperationSupportEnabled(
+							modelElement.getProject() ) ){
 				
-				IRPCallOperation theCallOp = (IRPCallOperation)modelElement;
-				IRPInterfaceItem theOp = theCallOp.getOperation();
-				
-				IRPModelElement packageUnderDevTag = 
-						theApp.activeProject().findNestedElementRecursive(
-								"packageUnderDev", "Tag" );
-				
-				if( packageUnderDevTag != null ){
+				if( UserInterfaceHelpers.checkOKToRunAndWarnUserIfNot() ){
 
-					@SuppressWarnings("unchecked")
-					List<IRPGraphElement> theSelectedGraphEls = 
-							theApp.getSelectedGraphElements().toList();
+					IRPApplication theRhpApp = 
+							RhapsodyAppServer.getActiveRhapsodyApplication();
 
-					if( theOp == null ){
-						IRPClass theBlock = 
-								FunctionalAnalysisSettings.getBlockUnderDev(
-										modelElement.getProject(),
-										"Which Block do you want to add operation to:");
+					IRPCallOperation theCallOp = (IRPCallOperation)modelElement;
+					IRPInterfaceItem theOp = theCallOp.getOperation();
 
-						if (theBlock != null){
-							boolean answer = UserInterfaceHelpers.askAQuestion(
-									"Do you want to add an Operation to " + 
-									Logger.elementInfo( theBlock ) + "?");
+					IRPModelElement packageUnderDevTag = 
+							modelElement.getProject().findNestedElementRecursive(
+									"packageUnderDev", "Tag" );
 
-							if( answer==true ){
+					if( packageUnderDevTag != null ){
 
-								Set<IRPRequirement> theReqts = new HashSet<IRPRequirement>();
+						Set<IRPRequirement> theReqts = new HashSet<IRPRequirement>();
 
+						IRPDiagram theDiagram = theRhpApp.getDiagramOfSelectedElement();
+
+						if( theDiagram != null ){ 
+							
+							@SuppressWarnings("unchecked")
+							List<IRPGraphElement> theSelectedGraphEls = 
+									theDiagram.getCorrespondingGraphicElements( theCallOp ).toList();
+							
+							if( theSelectedGraphEls != null &&
+								theSelectedGraphEls.size() > 0 ){
+								
+								IRPGraphElement theSelectedGraphEl =
+										theSelectedGraphEls.get( 0 );
+								
 								CreateOperationPanel.launchThePanel( 
-										theSelectedGraphEls.get(0), 
+										theSelectedGraphEl, 
 										theReqts, 
-										theApp.activeProject() );
+										theRhpApp.activeProject() );
+							}
+						} // else probably drag from browser
+					}
+
+					if( theOp != null ){
+						
+						// Use the operation name for the COA if possible
+						try {
+							String theProposedName = 
+									GeneralHelpers.determineUniqueNameBasedOn( 
+											GeneralHelpers.toMethodName( theOp.getName() ), 
+											"CallOperation", 
+											theCallOp.getOwner() );
+
+							theCallOp.setName( theProposedName );
+
+						} catch( Exception e ) {
+							Logger.writeLine( theCallOp, "Error: Cannot rename Call Operation to match Operation" );
+						}
+						
+						// If the operation has an Activity Diagram under it, then populate an RTF 
+						// description with a link to the lower diagram
+						IRPFlowchart theAD = theOp.getActivityDiagram();
+
+						if( theAD != null ){
+							
+							IRPActivityDiagram theFC = theAD.getFlowchartDiagram();
+							
+							if( theFC != null ){
+								Logger.writeLine("Creating Hyperlinks in Description of COA");
+								
+								IRPCollection targets = theRhpApp.createNewCollection();
+								
+								targets.setSize( 2 );
+								targets.setModelElement( 1, theOp );
+								targets.setModelElement( 2, theFC );
+								
+								String rtfText = "{\\rtf1\\fbidis\\ansi\\ansicpg1255\\deff0\\deflang1037{\\fonttbl{\\f0\\fnil\\fcharset0 Arial;}}\n{\\colortbl;\\red0\\green0\\blue255;}\n\\viewkind4\\uc1 " + 
+										"\\pard\\ltrpar\\qc\\fs18 Function: \\cf1\\ul\\protect " + theOp.getName() + "\\cf0\\ulnone\\protect0\\par" + 
+										"\\pard\\ltrpar\\qc\\fs18 Decomposed by: \\cf1\\ul\\protect " + theFC.getName() + "\\cf0\\ulnone\\protect0\\par\n}";
+								
+								theCallOp.setDescriptionAndHyperlinks( rtfText, targets );
 							}
 						}
-					} // Operation already exists, i.e. element was dragged on so do nothing
-				}
-
-				// Use the operation name for the COA if possible
-				try {
-					String theProposedName = 
-							GeneralHelpers.determineUniqueNameBasedOn( 
-									GeneralHelpers.toMethodName( theOp.getName() ), 
-									"CallOperation", 
-									theCallOp.getOwner() );
-
-					theCallOp.setName( theProposedName );
-
-				} catch( Exception e ) {
-					Logger.writeLine( theCallOp, "Error: Cannot rename Call Operation to match Operation" );
-				}
-
-				// If the operation has an Activity Diagram under it, then populate an RTF 
-				// description with a link to the lower diagram
-				IRPFlowchart theAD = theOp.getActivityDiagram();
-
-				if( theAD != null ){
-					
-					IRPActivityDiagram theFC = theAD.getFlowchartDiagram();
-					
-					if( theFC != null ){
-						Logger.writeLine("Creating Hyperlinks in Description of COA");
-						
-						IRPCollection targets = theApp.createNewCollection();
-						
-						targets.setSize( 2 );
-						targets.setModelElement( 1, theOp );
-						targets.setModelElement( 2, theFC );
-						
-						String rtfText = "{\\rtf1\\fbidis\\ansi\\ansicpg1255\\deff0\\deflang1037{\\fonttbl{\\f0\\fnil\\fcharset0 Arial;}}\n{\\colortbl;\\red0\\green0\\blue255;}\n\\viewkind4\\uc1 " + 
-								"\\pard\\ltrpar\\qc\\fs18 Function: \\cf1\\ul\\protect " + theOp.getName() + "\\cf0\\ulnone\\protect0\\par" + 
-								"\\pard\\ltrpar\\qc\\fs18 Decomposed by: \\cf1\\ul\\protect " + theFC.getName() + "\\cf0\\ulnone\\protect0\\par\n}";
-						
-						theCallOp.setDescriptionAndHyperlinks( rtfText, targets );
 					}
 				}
 			}
@@ -438,6 +440,7 @@ public class SysMLHelperTriggers extends RPApplicationListener {
     #157 25-JAN-2017: Add additional protection to afterAddElement trigger for IRPCallOperation (F.J.Chadburn)
     #161 05-FEB-2017: Support nested diagram links in CallOperation description (F.J.Chadburn) 
     #186 29-MAY-2017: Add context string to getBlockUnderDev to make it clearer for user when selecting (F.J.Chadburn)
+    #245 11-OCT-2017: Fixed exception on CallOperation action drop when using detailed ADs with Ops (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 
