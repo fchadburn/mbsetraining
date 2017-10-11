@@ -112,22 +112,27 @@ public class CreateOperationPanel extends CreateTracedElementPanel {
 						inProject,
 						"Which Block do you want to add the Operation to?" );
 				
-				JFrame.setDefaultLookAndFeelDecorated( true );
-				
-				JFrame frame = new JFrame(
-						"Create an operation on " + Logger.elementInfo( theBlock ) );
-				
-				frame.setDefaultCloseOperation( JFrame.DISPOSE_ON_CLOSE );
-				
-				CreateOperationPanel thePanel = new CreateOperationPanel(
-						selectedDiagramEl,
-						withReqtsAlsoAdded,
-						theBlock );
+				if( theBlock != null ){
+					
+					theBlock.highLightElement();
+					
+					JFrame.setDefaultLookAndFeelDecorated( true );
+					
+					JFrame frame = new JFrame(
+							"Create an operation on " + Logger.elementInfo( theBlock ) );
+					
+					frame.setDefaultCloseOperation( JFrame.DISPOSE_ON_CLOSE );
+					
+					CreateOperationPanel thePanel = new CreateOperationPanel(
+							selectedDiagramEl,
+							withReqtsAlsoAdded,
+							theBlock );
 
-				frame.setContentPane( thePanel );
-				frame.pack();
-				frame.setLocationRelativeTo( null );
-				frame.setVisible( true );
+					frame.setContentPane( thePanel );
+					frame.pack();
+					frame.setLocationRelativeTo( null );
+					frame.setVisible( true );
+				}
 			}
 		});
 	}
@@ -291,7 +296,14 @@ public class CreateOperationPanel extends CreateTracedElementPanel {
 						
 						Logger.writeLine("Setting the " + Logger.elementInfo(theCallOp) + " to " + Logger.elementInfo(theOperation) );
 						theCallOp.setOperation( theOperation );
-						theCallOp.setName( theOperation.getName() );
+						
+						String theProposedName = 
+								GeneralHelpers.determineUniqueNameBasedOn( 
+										GeneralHelpers.toMethodName( theOperation.getName() ), 
+										"CallOperation", 
+										theCallOp.getOwner() );
+						
+						theCallOp.setName( theProposedName );
 					}
 				} else {
 					addTraceabilityDependenciesTo( theOperation, m_RequirementsPanel.getSelectedRequirementsList() );
@@ -332,6 +344,7 @@ public class CreateOperationPanel extends CreateTracedElementPanel {
     #154 25-JAN-2017: Improved robustness by adding isLegalName check to CreateOperationPanel (F.J.Chadburn)
     #186 29-MAY-2017: Add context string to getBlockUnderDev to make it clearer for user when selecting (F.J.Chadburn)
     #196 05-JUN-2017: Enhanced create traced element dialogs to be context aware for blocks/parts (F.J.Chadburn)
+    #245 11-OCT-2017: Fixed exception on CallOperation action drop when using detailed ADs with Ops (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

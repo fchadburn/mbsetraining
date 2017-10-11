@@ -343,6 +343,8 @@ public class CopyActivityDiagramsPanel extends CreateStructuralElementPanel {
 		IRPDependency theDependency = theNewFlowchart.addDependencyTo( theFlowchart );
 		theDependency.changeTo("Refinement");
 		
+		theNewFlowchart.setIsAnalysisOnly( 1 ); // to allow call op parameter sync-ing
+		
 		Logger.writeLine(theDependency, "was added between " + Logger.elementInfo( theNewFlowchart ) + 
 				" and " + Logger.elementInfo( theFlowchart ) );
 		
@@ -380,6 +382,7 @@ public class CopyActivityDiagramsPanel extends CreateStructuralElementPanel {
     #122 25-NOV-2016: Scroll-bar added to Copy AD dialog to enable it to scale to large number of ADs (F.J.Chadburn)
     #128 25-NOV-2016: Improved usability/speed of Copy AD dialog by providing user choice to open diagrams (F.J.Chadburn)
     #143 18-DEC-2016: Add separate tag to enable/disable conversion to detailed option in Copy AD dialog (F.J.Chadburn)
+    #244 11-OCT-2017: Default ADs to Analysis mode to better support call operation parameter sync (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 
