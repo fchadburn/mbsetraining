@@ -137,6 +137,7 @@ public class NestedActivityDiagram {
 		if (theTemplate != null){
 			Logger.writeLine("Found template for " + Logger.elementInfo(theTemplate));
 			IRPFlowchart theFlowchart = (IRPFlowchart) theTemplate.clone(theName, forUseCase);
+			theFlowchart.setIsAnalysisOnly( 1 ); // so that call op right-click parameter sync menus appear
 			theFlowchart.highLightElement();
 			Logger.writeLine(theFlowchart, "was created under " + Logger.elementInfo( theFlowchart.getOwner() ) );
 			
@@ -157,7 +158,8 @@ public class NestedActivityDiagram {
     #004 10-APR-2016: Re-factored projects into single workspace (F.J.Chadburn)
     #080 28-JUL-2016: Added activity diagram name to the create AD dialog for use cases (F.J.Chadburn)
     #102 03-NOV-2016: Add right-click menu to auto update names of ADs from UC names (F.J.Chadburn)
-       
+    #244 11-OCT-2017: Default ADs to Analysis mode to better support call operation parameter sync (F.J.Chadburn)
+   
     This file is part of SysMLHelperPlugin.
 
     SysMLHelperPlugin is free software: you can redistribute it and/or modify
