@@ -96,6 +96,9 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
 		
 		if (response == JOptionPane.YES_OPTION) {
 			
+			final String theAppID = 
+					FunctionalAnalysisPlugin.getRhapsodyApp().getApplicationConnectionString();
+			
 			javax.swing.SwingUtilities.invokeLater(new Runnable() {
 
 				@Override
@@ -109,8 +112,7 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
 
 					CreateFunctionalBlockPackagePanel thePanel = 
 							new CreateFunctionalBlockPackagePanel(
-									theRootPackage, 
-									theRequirementsAnalysisPkg, 
+									theAppID, 
 									withSimulationType );
 
 					frame.setContentPane( thePanel );
@@ -123,13 +125,17 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
 	}
 
 	CreateFunctionalBlockPackagePanel(
-			IRPPackage theRootPackage,
-			IRPPackage theRequirementsAnalysisPkg,
+			String appID,
 			final SimulationType withSimulationType ){
+		
 		super();
 		
-		m_RootPackage = theRootPackage;
-		m_RequirementsAnalysisPkg = theRequirementsAnalysisPkg;
+		IRPApplication theRhpApp = RhapsodyAppServer.getActiveRhapsodyApplicationByID( appID );
+		IRPProject theRhpPrj = theRhpApp.activeProject();
+		
+		// It is assumed that the existence of these will be checked by caller
+		m_RootPackage = (IRPPackage) theRhpPrj.findElementsByFullName("FunctionalAnalysisPkg", "Package");
+		m_RequirementsAnalysisPkg = (IRPPackage) theRhpPrj.findElementsByFullName( "RequirementsAnalysisPkg", "Package" );
 		m_SimulationType = withSimulationType;
 		
 		setLayout( new BorderLayout() );
@@ -994,7 +1000,7 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
 }
 
 /**
- * Copyright (C) 2016-2017  MBSE Training and Consulting Limited (www.executablembse.com)
+ * Copyright (C) 2016-2018  MBSE Training and Consulting Limited (www.executablembse.com)
 
     Change history:
     #023 30-MAY-2016: Added form to support validation checks for analysis block hierarchy creation (F.J.Chadburn) 
@@ -1027,6 +1033,7 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
     #216 09-JUL-2017: Added a new Add Block/Part command added to the Functional Analysis menus (F.J.Chadburn)
     #220 12-JUL-2017: Added customisable Stereotype choice to the Block and block/Part creation dialogs (F.J.Chadburn) 
     #226 25-AUG-2017: Fixed exception when creating FunctionalBlockHierarchy and the RD already exists (F.J.Chadburn)
+    #247 08-APR-2018: Fix threading issue crashing functional block hierarchy creation in 8.3 (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 
