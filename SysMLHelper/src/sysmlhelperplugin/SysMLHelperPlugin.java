@@ -18,7 +18,7 @@ public class SysMLHelperPlugin extends RPUserPlugin {
 	static protected ConfigurationSettings m_configSettings = null;
 	
 	final String legalNotice = 
-			"Copyright (C) 2015-2017  MBSE Training and Consulting Limited (www.executablembse.com)"
+			"Copyright (C) 2015-2018  MBSE Training and Consulting Limited (www.executablembse.com)"
 			+ "\n"
 			+ "SysMLHelperPlugin is free software: you can redistribute it and/or modify "
 			+ "it under the terms of the GNU General Public License as published by "
@@ -467,7 +467,7 @@ public class SysMLHelperPlugin extends RPUserPlugin {
 }
 
 /**
- * Copyright (C) 2016-2017  MBSE Training and Consulting Limited (www.executablembse.com)
+ * Copyright (C) 2016-2018  MBSE Training and Consulting Limited (www.executablembse.com)
 
     Change history:
     #001 31-MAR-2016: Added ListenForRhapsodyTriggers (F.J.Chadburn)
@@ -490,6 +490,7 @@ public class SysMLHelperPlugin extends RPUserPlugin {
     #219 12-JUL-2017: Added Select Depends On element(s)\Derive Requirement menus for deriveReqt relations (F.J.Chadburn)
     #231 27-SEP-2017: Enhanced tooltip now shows the req't text when hovering over traceability relations (F.J.Chadburn)
     #239 04-OCT-2017: Improve warning/behaviour if multiple Rhapsodys are open or user switches app (F.J.Chadburn)
+    #248 08-APR-2018: Update copyright notice year to 2018 (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 
