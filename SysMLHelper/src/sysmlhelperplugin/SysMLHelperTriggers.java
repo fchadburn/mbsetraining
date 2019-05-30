@@ -1,9 +1,9 @@
 package sysmlhelperplugin;
 
 import functionalanalysisplugin.CreateOperationPanel;
-import functionalanalysisplugin.FunctionalAnalysisSettings;
 import generalhelpers.GeneralHelpers;
 import generalhelpers.Logger;
+import generalhelpers.StereotypeAndPropertySettings;
 import generalhelpers.UserInterfaceHelpers;
 
 import java.util.ArrayList;
@@ -23,117 +23,47 @@ public class SysMLHelperTriggers extends RPApplicationListener {
 	public SysMLHelperTriggers(IRPApplication app) {
 		Logger.writeLine("SysMLHelperPlugin is Loaded - Listening for Events\n"); 
 	}
-
+	
+	public static void main(String[] args) {
+		
+		IRPApplication theRhpApp = RhapsodyAppServer.getActiveRhapsodyApplication();
+		
+		IRPModelElement theSelectedEl = theRhpApp.getSelectedElement();
+		
+		afterAddForRequirement( (IRPRequirement) theSelectedEl );
+	}
+	
 	public boolean afterAddElement(
 			IRPModelElement modelElement) {
 
 		boolean doDefault = false;
 		
 		try {
-			if (modelElement != null && 
+			StereotypeAndPropertySettings.setSavedInSeparateDirectoryIfAppropriateFor( 
+					modelElement );
+			
+			if( modelElement != null && 
+				modelElement instanceof IRPRequirement ){
+				
+				afterAddForRequirement( modelElement );
+				
+			} else if( modelElement != null && 
+					modelElement instanceof IRPClass && 
+					GeneralHelpers.hasStereotypeCalled( "Interface", modelElement )){
+				
+				Logger.writeLine("Interface=" + Logger.elementInfo(modelElement));
+				afterAddForInterface( modelElement );
+										
+			} else if (modelElement != null && 
 				modelElement instanceof IRPDependency && 
 				modelElement.getUserDefinedMetaClass().equals("Derive Requirement")){
 				
-				IRPDependency theDependency = (IRPDependency)modelElement;
-				Logger.writeLine(modelElement, "was found");
+				afterAddForDeriveRequirement( (IRPDependency) modelElement );
 				
-				IRPModelElement theDependent = theDependency.getDependent();
-				
-				if (theDependent instanceof IRPRequirement){
-					
-					IRPStereotype theExistingGatewayStereotype = getStereotypeAppliedTo(theDependent, "from.*");
-					
-					if (theExistingGatewayStereotype != null){
-
-						modelElement.setStereotype(theExistingGatewayStereotype);
-						modelElement.changeTo("Derive Requirement");
-					}			
-				}
 			} else if (modelElement != null && 
-					modelElement instanceof IRPCallOperation && 
-					FunctionalAnalysisSettings.getIsCallOperationSupportEnabled(
-							modelElement.getProject() ) ){
+					modelElement instanceof IRPCallOperation ){
 				
-				if( UserInterfaceHelpers.checkOKToRunAndWarnUserIfNot() ){
-
-					IRPApplication theRhpApp = 
-							RhapsodyAppServer.getActiveRhapsodyApplication();
-
-					IRPCallOperation theCallOp = (IRPCallOperation)modelElement;
-					IRPInterfaceItem theOp = theCallOp.getOperation();
-
-					IRPModelElement packageUnderDevTag = 
-							modelElement.getProject().findNestedElementRecursive(
-									"packageUnderDev", "Tag" );
-
-					if( packageUnderDevTag != null ){
-
-						Set<IRPRequirement> theReqts = new HashSet<IRPRequirement>();
-
-						IRPDiagram theDiagram = theRhpApp.getDiagramOfSelectedElement();
-
-						if( theDiagram != null ){ 
-							
-							@SuppressWarnings("unchecked")
-							List<IRPGraphElement> theSelectedGraphEls = 
-									theDiagram.getCorrespondingGraphicElements( theCallOp ).toList();
-							
-							if( theSelectedGraphEls != null &&
-								theSelectedGraphEls.size() > 0 ){
-								
-								IRPGraphElement theSelectedGraphEl =
-										theSelectedGraphEls.get( 0 );
-								
-								CreateOperationPanel.launchThePanel( 
-										theSelectedGraphEl, 
-										theReqts, 
-										theRhpApp.activeProject() );
-							}
-						} // else probably drag from browser
-					}
-
-					if( theOp != null ){
-						
-						// Use the operation name for the COA if possible
-						try {
-							String theProposedName = 
-									GeneralHelpers.determineUniqueNameBasedOn( 
-											GeneralHelpers.toMethodName( theOp.getName() ), 
-											"CallOperation", 
-											theCallOp.getOwner() );
-
-							theCallOp.setName( theProposedName );
-
-						} catch( Exception e ) {
-							Logger.writeLine( theCallOp, "Error: Cannot rename Call Operation to match Operation" );
-						}
-						
-						// If the operation has an Activity Diagram under it, then populate an RTF 
-						// description with a link to the lower diagram
-						IRPFlowchart theAD = theOp.getActivityDiagram();
-
-						if( theAD != null ){
-							
-							IRPActivityDiagram theFC = theAD.getFlowchartDiagram();
-							
-							if( theFC != null ){
-								Logger.writeLine("Creating Hyperlinks in Description of COA");
-								
-								IRPCollection targets = theRhpApp.createNewCollection();
-								
-								targets.setSize( 2 );
-								targets.setModelElement( 1, theOp );
-								targets.setModelElement( 2, theFC );
-								
-								String rtfText = "{\\rtf1\\fbidis\\ansi\\ansicpg1255\\deff0\\deflang1037{\\fonttbl{\\f0\\fnil\\fcharset0 Arial;}}\n{\\colortbl;\\red0\\green0\\blue255;}\n\\viewkind4\\uc1 " + 
-										"\\pard\\ltrpar\\qc\\fs18 Function: \\cf1\\ul\\protect " + theOp.getName() + "\\cf0\\ulnone\\protect0\\par" + 
-										"\\pard\\ltrpar\\qc\\fs18 Decomposed by: \\cf1\\ul\\protect " + theFC.getName() + "\\cf0\\ulnone\\protect0\\par\n}";
-								
-								theCallOp.setDescriptionAndHyperlinks( rtfText, targets );
-							}
-						}
-					}
-				}
+				afterAddForCallOperation( (IRPCallOperation) modelElement );
 			}
 
 		} catch( Exception e ){
@@ -142,35 +72,191 @@ public class SysMLHelperTriggers extends RPApplicationListener {
 
 		return doDefault;
 	}
-	
-	public static IRPStereotype getStereotypeAppliedTo(
-			IRPModelElement theElement, 
-			String thatMatchesRegEx){
+
+	private static void afterAddForCallOperation(
+			IRPCallOperation theCallOp ){
+
+		// only do move if property is set
+		boolean isEnabled = 
+				StereotypeAndPropertySettings.getIsCallOperationSupportEnabled(
+						theCallOp );
 		
-		IRPStereotype foundStereotype = null;
-		
-		@SuppressWarnings("unchecked")
-		List<IRPStereotype> theStereotypes = theElement.getStereotypes().toList();
-		
-		int count=0;
-		
-		for (IRPStereotype theStereotype : theStereotypes) {
+		if( isEnabled && UserInterfaceHelpers.checkOKToRunAndWarnUserIfNot() ){
+
+			IRPApplication theRhpApp = 
+					RhapsodyAppServer.getActiveRhapsodyApplication();
+
+			IRPInterfaceItem theOp = theCallOp.getOperation();
+
+//			IRPModelElement packageUnderDevTag = 
+//					FunctionalAnalysisSettings.getPackageUnderDev( 
+//							theCallOp );
 			
-			count++;
-			
-			String theName = theStereotype.getName();
-			
-			if (theName.matches(thatMatchesRegEx)){
-				foundStereotype = theStereotype;
-				
-				if (count > 1){
-					Logger.writeLine("Error in getStereotypeAppliedTo related to " + Logger.elementInfo(theElement) + " count=" + count);
+//			IRPModelElement packageUnderDevTag = 
+//					modelElement.getProject().findNestedElementRecursive(
+//							"packageUnderDev", "Tag" );
+
+//			if( packageUnderDevTag != null ){
+
+//				Set<IRPRequirement> theReqts = new HashSet<IRPRequirement>();
+
+				IRPDiagram theDiagram = theRhpApp.getDiagramOfSelectedElement();
+
+				if( theDiagram != null ){ 
+
+					CreateOperationPanel.launchThePanel();
+					/*
+					@SuppressWarnings("unchecked")
+					List<IRPGraphElement> theSelectedGraphEls = 
+					theDiagram.getCorrespondingGraphicElements( theCallOp ).toList();
+
+					if( theSelectedGraphEls != null &&
+							theSelectedGraphEls.size() > 0 ){
+
+						IRPGraphElement theSelectedGraphEl =
+								theSelectedGraphEls.get( 0 );
+
+						CreateOperationPanel.launchThePanel( 
+								theSelectedGraphEl, 
+								theReqts, 
+								theRhpApp.activeProject() );
+					}*/
+				} // else probably drag from browser
+//			}
+
+			if( theOp != null ){
+
+				// Use the operation name for the COA if possible
+				try {
+					String theProposedName = 
+							GeneralHelpers.determineUniqueNameBasedOn( 
+									GeneralHelpers.toMethodName( theOp.getName(), 40 ), 
+									"CallOperation", 
+									theCallOp.getOwner() );
+
+					theCallOp.setName( theProposedName );
+
+				} catch( Exception e ) {
+					Logger.writeLine( theCallOp, "Error: Cannot rename Call Operation to match Operation" );
 				}
-			}		
+
+				// If the operation has an Activity Diagram under it, then populate an RTF 
+				// description with a link to the lower diagram
+				IRPFlowchart theAD = theOp.getActivityDiagram();
+
+				if( theAD != null ){
+
+					IRPActivityDiagram theFC = theAD.getFlowchartDiagram();
+
+					if( theFC != null ){
+						Logger.writeLine("Creating Hyperlinks in Description of COA");
+
+						IRPCollection targets = theRhpApp.createNewCollection();
+
+						targets.setSize( 2 );
+						targets.setModelElement( 1, theOp );
+						targets.setModelElement( 2, theFC );
+
+						String rtfText = "{\\rtf1\\fbidis\\ansi\\ansicpg1255\\deff0\\deflang1037{\\fonttbl{\\f0\\fnil\\fcharset0 Arial;}}\n{\\colortbl;\\red0\\green0\\blue255;}\n\\viewkind4\\uc1 " + 
+								"\\pard\\ltrpar\\qc\\fs18 Function: \\cf1\\ul\\protect " + theOp.getName() + "\\cf0\\ulnone\\protect0\\par" + 
+								"\\pard\\ltrpar\\qc\\fs18 Decomposed by: \\cf1\\ul\\protect " + theFC.getName() + "\\cf0\\ulnone\\protect0\\par\n}";
+
+						theCallOp.setDescriptionAndHyperlinks( rtfText, targets );
+					}
+				}
+			}
 		}
-		
-		return foundStereotype;
+
 	}
+
+	private void afterAddForDeriveRequirement(
+			IRPDependency theDependency ){
+				
+		IRPModelElement theDependent = theDependency.getDependent();
+		
+		if( theDependent instanceof IRPRequirement ){
+			
+			IRPStereotype theExistingGatewayStereotype = 
+					GeneralHelpers.getStereotypeAppliedTo(
+							theDependent, "from.*" );
+			
+			if( theExistingGatewayStereotype != null ){
+
+				theDependency.setStereotype( theExistingGatewayStereotype );
+				theDependency.changeTo( "Derive Requirement" );
+			}			
+		}
+	}
+
+	private void afterAddForInterface(
+			IRPModelElement modelElement ){
+		
+		Logger.writeLine("Got here");
+		
+		// only do move if property is set
+		boolean isEnabled = 
+				StereotypeAndPropertySettings.getIsEnableAutoMoveOfInterfaces(
+						modelElement );
+		
+
+		
+		if( isEnabled ){
+			Logger.writeLine("Got here3");
+
+			ElementMover theElementMover = new ElementMover( 
+					modelElement, 
+					StereotypeAndPropertySettings.getInterfacesPackageStereotype( modelElement ) );
+			
+			theElementMover.performMove();
+		}
+	}
+
+	private static void afterAddForRequirement(
+			IRPModelElement modelElement ){
+		
+		// only do move if property is set
+		boolean isEnabled = 
+				StereotypeAndPropertySettings.getIsEnableAutoMoveOfRequirements(
+						modelElement );
+
+		if( isEnabled ){
+
+			RequirementMover theElementMover = new RequirementMover( modelElement );
+			
+			if( theElementMover.isMovePossible() ){
+				theElementMover.performMove();
+			}
+		}
+	}
+	
+//	public static IRPStereotype getStereotypeAppliedTo(
+//			IRPModelElement theElement, 
+//			String thatMatchesRegEx){
+//		
+//		IRPStereotype foundStereotype = null;
+//		
+//		@SuppressWarnings("unchecked")
+//		List<IRPStereotype> theStereotypes = theElement.getStereotypes().toList();
+//		
+//		int count=0;
+//		
+//		for (IRPStereotype theStereotype : theStereotypes) {
+//			
+//			count++;
+//			
+//			String theName = theStereotype.getName();
+//			
+//			if (theName.matches(thatMatchesRegEx)){
+//				foundStereotype = theStereotype;
+//				
+//				if (count > 1){
+//					Logger.writeLine("Error in getStereotypeAppliedTo related to " + Logger.elementInfo(theElement) + " count=" + count);
+//				}
+//			}		
+//		}
+//		
+//		return foundStereotype;
+//	}
 	
 	@Override
 	public boolean afterProjectClose(String bstrProjectName) {
@@ -230,7 +316,8 @@ public class SysMLHelperTriggers extends RPApplicationListener {
 				if (theAnswer==true){
 					Logger.writeLine("User chose to create a new activity diagram");
 					NestedActivityDiagram.createNestedActivityDiagram( 
-							(IRPUseCase)pModelElement, "AD - " + pModelElement.getName());
+							(IRPUseCase)pModelElement, "AD - " + pModelElement.getName(),
+							"SysMLHelper.RequirementsAnalysis.TemplateForActivityDiagram" );
 				}
 
 				theReturn = true; // don't launch the Features  window									

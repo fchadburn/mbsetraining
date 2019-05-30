@@ -18,7 +18,7 @@ public class SysMLHelperPlugin extends RPUserPlugin {
 	static protected ConfigurationSettings m_configSettings = null;
 	
 	final String legalNotice = 
-			"Copyright (C) 2015-2018  MBSE Training and Consulting Limited (www.executablembse.com)"
+			"Copyright (C) 2015-2019  MBSE Training and Consulting Limited (www.executablembse.com)"
 			+ "\n"
 			+ "SysMLHelperPlugin is free software: you can redistribute it and/or modify "
 			+ "it under the terms of the GNU General Public License as published by "
@@ -39,8 +39,10 @@ public class SysMLHelperPlugin extends RPUserPlugin {
 		// keep the application interface for later use
 		m_rhpApplication = theRhapsodyApp;
 		
-		m_configSettings = ConfigurationSettings.getInstance();
-
+		m_configSettings = new ConfigurationSettings(
+				"SysMLHelper.properties", 
+				"SysMLHelper_MessagesBundle" );
+		
 		String msg = "The SysMLHelperProfile plugin V" + m_configSettings.getProperty("PluginVersion") + " was loaded successfully.\n" + legalNotice +
 				"\nNew right-click 'MBSE Method' commands have been added.";
 		
@@ -70,6 +72,7 @@ public class SysMLHelperPlugin extends RPUserPlugin {
 		
 		if( UserInterfaceHelpers.checkOKToRunAndWarnUserIfNot() ){
 			IRPApplication theRhpApp = SysMLHelperPlugin.getRhapsodyApp();
+			IRPProject theRhpPrj = theRhpApp.activeProject();
 			
 			IRPModelElement theSelectedEl = theRhpApp.getSelectedElement();
 
@@ -89,7 +92,24 @@ public class SysMLHelperPlugin extends RPUserPlugin {
 
 					if (theSelectedEl instanceof IRPProject){
 						try { 
-							PopulateRequirementsAnalysisPkg.createRequirementsAnalysisPkg( (IRPProject) theSelectedEl ); 
+							PopulateRequirementsAnalysisPkg.createRequirementsAnalysisPkg(
+									(IRPProject) theSelectedEl,
+									m_configSettings ); 
+
+						} catch (Exception e) {
+							Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking PopulateRequirementsAnalysisPkg.createRequirementsAnalysisPkg");
+						}
+					}
+				} else if (menuItem.equals(m_configSettings.getString("sysmlhelperplugin.SetupRAProperties"))){
+
+					if (theSelectedEl instanceof IRPPackage){
+						
+						try { 					    	
+					    	m_configSettings.setPropertiesValuesRequestedInConfigFile( 
+					    			theRhpPrj,
+					    			"setPropertyForRequirementsAnalysisModel" );
+
+							//PopulateRequirementsAnalysisPkg.createRequirementsAnalysisPkg( (IRPProject) theSelectedEl ); 
 
 						} catch (Exception e) {
 							Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking PopulateRequirementsAnalysisPkg.createRequirementsAnalysisPkg");
@@ -99,7 +119,7 @@ public class SysMLHelperPlugin extends RPUserPlugin {
 
 					if (theSelectedEl instanceof IRPProject){
 						try { 
-							PopulateFunctionalAnalysisPkg.createFunctionalAnalysisPkg( (IRPProject) theSelectedEl, SimulationType.FullSim ); 
+							PopulateFunctionalAnalysisPkg.createFunctionalAnalysisPkg( (IRPProject) theSelectedEl, SimulationType.FullSim, m_configSettings ); 
 
 						} catch (Exception e) {
 							Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking PopulateFunctionalAnalysisPkg.createFunctionalAnalysisPkg");
@@ -109,7 +129,7 @@ public class SysMLHelperPlugin extends RPUserPlugin {
 
 					if (theSelectedEl instanceof IRPProject){
 						try { 
-							PopulateFunctionalAnalysisPkg.createFunctionalAnalysisPkg( (IRPProject) theSelectedEl, SimulationType.SimpleSim ); 
+							PopulateFunctionalAnalysisPkg.createFunctionalAnalysisPkg( (IRPProject) theSelectedEl, SimulationType.SimpleSim, m_configSettings ); 
 
 						} catch (Exception e) {
 							Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking PopulateFunctionalAnalysisPkg.createFunctionalAnalysisPkg");
@@ -119,7 +139,7 @@ public class SysMLHelperPlugin extends RPUserPlugin {
 
 					if (theSelectedEl instanceof IRPProject){
 						try { 
-							PopulateFunctionalAnalysisPkg.createFunctionalAnalysisPkg( (IRPProject) theSelectedEl, SimulationType.NoSim ); 
+							PopulateFunctionalAnalysisPkg.createFunctionalAnalysisPkg( (IRPProject) theSelectedEl, SimulationType.NoSim, m_configSettings ); 
 
 						} catch (Exception e) {
 							Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking PopulateFunctionalAnalysisPkg.createFunctionalAnalysisPkg");
@@ -318,7 +338,7 @@ public class SysMLHelperPlugin extends RPUserPlugin {
 
 					if (theSelectedEl instanceof IRPProject){
 						try { 
-							CreateGatewayProjectPanel.launchThePanel( (IRPProject)theSelectedEl, ".*.rqtf$" );
+							CreateGatewayProjectPanel.launchThePanel( (IRPProject)theSelectedEl, ".*.rqtf$", m_configSettings );
 
 						} catch (Exception e) {
 							Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking CreateGatewayProjectPanel.launchThePanel");
