@@ -1,9 +1,9 @@
 package requirementsanalysisplugin;
 
+import functionalanalysisplugin.SequenceDiagramHelper;
 import generalhelpers.ConfigurationSettings;
 import generalhelpers.Logger;
 import generalhelpers.UserInterfaceHelpers;
-
 import java.util.List;
 
 import com.telelogic.rhapsody.core.*;
@@ -17,10 +17,13 @@ public class RequirementsAnalysisPlugin extends RPUserPlugin {
 	public void RhpPluginInit(final IRPApplication theRhapsodyApp) {
 		
 		m_rhpApplication = theRhapsodyApp;	
-		m_configSettings = ConfigurationSettings.getInstance();
+		
+		m_configSettings = new ConfigurationSettings(
+				"SysMLHelper.properties", 
+				"SysMLHelper_MessagesBundle" );
 		
 		String msg = "The RequirementsAnalysisPlugin component of the SysMLHelperPlugin V" + m_configSettings.getProperty("PluginVersion") + " was loaded successfully. New right-click 'MBSE Method' commands have been added.";		
-		Logger.writeLine(msg); 
+		Logger.writeLine( msg ); 
 	}
 
 	public static IRPApplication getRhapsodyApp(){
@@ -73,14 +76,14 @@ public class RequirementsAnalysisPlugin extends RPUserPlugin {
 						}
 					}
 				} else {
-					Logger.writeLine("Error: getRequirementSpecificationText unable to find element with guid=" + guid);
+					Logger.error("Error: getRequirementSpecificationText unable to find element with guid=" + guid );
 				}
 			}
 			
 
 
 		} catch (Exception e) {
-			Logger.writeLine("Unhandled exception in getRequirementSpecificationText");
+			Logger.error("Unhandled exception in getRequirementSpecificationText" );
 		}
 
 		return theSpec;
@@ -98,7 +101,7 @@ public class RequirementsAnalysisPlugin extends RPUserPlugin {
 			@SuppressWarnings("unchecked")
 			List<IRPModelElement> theSelectedEls = getRhapsodyApp().getListOfSelectedElements().toList();
 
-			Logger.writeLine("Starting ("+ theSelectedEls.size() + " elements were selected) ...");
+			Logger.info( "Starting ("+ theSelectedEls.size() + " elements were selected) ..." );
 			
 			if( !theSelectedEls.isEmpty() ){
 				//selElemName = theSelectedEl.getName();	
@@ -109,7 +112,7 @@ public class RequirementsAnalysisPlugin extends RPUserPlugin {
 						NestedActivityDiagram.createNestedActivityDiagramsFor( theSelectedEls );
 
 					} catch (Exception e) {
-						Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking NestedActivityDiagram.createNestedActivityDiagramsFor");
+						Logger.error("Error: Exception in OnMenuItemSelect when invoking NestedActivityDiagram.createNestedActivityDiagramsFor" );
 					}
 
 				} else if (menuItem.equals(m_configSettings.getString( "requirementsanalysisplugin.ReportOnNamingAndTraceabilityMenu" ))){
@@ -118,7 +121,7 @@ public class RequirementsAnalysisPlugin extends RPUserPlugin {
 						ActivityDiagramChecker.createActivityDiagramCheckersFor( theSelectedEls );
 						
 					} catch (Exception e) {
-						Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking new ActivityDiagramChecker.createActivityDiagramCheckersFor");
+						Logger.error("Error: Exception in OnMenuItemSelect when invoking new ActivityDiagramChecker.createActivityDiagramCheckersFor" );
 					}
 
 					
@@ -128,18 +131,17 @@ public class RequirementsAnalysisPlugin extends RPUserPlugin {
 						MoveRequirements.moveUnclaimedRequirementsReadyForGatewaySync( theSelectedEls, theActiveProject );
 
 					} catch (Exception e) {
-						Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking MoveRequirements.moveUnclaimedRequirementsReadyForGatewaySync");
+						Logger.error("Error: Exception in OnMenuItemSelect when invoking MoveRequirements.moveUnclaimedRequirementsReadyForGatewaySync" );
 					}
 
 					
 				} else if (menuItem.equals(m_configSettings.getString( "requirementsanalysisplugin.CreateNewRequirementMenu" ))){
 
 					try {
-						Logger.writeLine("Creating new requirements");
 						RequirementsHelper.createNewRequirementsFor( theSelectedGraphEls );
 
 					} catch (Exception e) {
-						Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking RequirementsHelper.createNewRequirementsFor");
+						Logger.error("Error: Exception in OnMenuItemSelect when invoking RequirementsHelper.createNewRequirementsFor" );
 					}
 
 				} else if (menuItem.equals(m_configSettings.getString( "requirementsanalysisplugin.PerformRenameInBrowserMenu" ))){
@@ -148,7 +150,7 @@ public class RequirementsAnalysisPlugin extends RPUserPlugin {
 						RenameActions.performRenamesFor( theSelectedEls );
 
 					} catch (Exception e) {
-						Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking RenameActions.performRenamesFor");
+						Logger.error("Error: Exception in OnMenuItemSelect when invoking RenameActions.performRenamesFor" );
 					}
 					
 				} else if (menuItem.equals(m_configSettings.getString( "requirementsanalysisplugin.UpdateNestedADNamesMenu" ))){
@@ -157,7 +159,7 @@ public class RequirementsAnalysisPlugin extends RPUserPlugin {
 						NestedActivityDiagram.renameNestedActivityDiagramsFor( theSelectedEls );
 
 					} catch (Exception e) {
-						Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking NestedActivityDiagram.renameNestedActivityDiagramsFor");
+						Logger.error("Error: Exception in OnMenuItemSelect when invoking NestedActivityDiagram.renameNestedActivityDiagramsFor" );
 					}	
 
 				} else if (menuItem.equals(m_configSettings.getString( "requirementsanalysisplugin.DeleteTaggedAsDeletedAtHighLevelMenu" ))){
@@ -166,15 +168,15 @@ public class RequirementsAnalysisPlugin extends RPUserPlugin {
 						MarkedAsDeletedPanel.launchThePanel( theSelectedEls );
 
 					} catch (Exception e) {
-						Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking MarkedAsDeletedPanel.launchThePanel");
+						Logger.error("Error: Exception in OnMenuItemSelect when invoking MarkedAsDeletedPanel.launchThePanel" );
 					}
 				} else if (menuItem.equals(m_configSettings.getString( "requirementsanalysisplugin.StartLinkMenu" ))){
 
 					try {
-						SmartLinkPanel.launchTheStartLinkPanel( theSelectedEls, theSelectedGraphEls );
+						SmartLinkPanel.selectStartLinkEls( theSelectedEls, theSelectedGraphEls );
 
 					} catch (Exception e) {
-						Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking SmartLinkPanel.launchTheStartLinkPanel");
+						Logger.error("Error: Exception in OnMenuItemSelect when invoking SmartLinkPanel.launchTheStartLinkPanel" );
 					}
 				} else if (menuItem.equals(m_configSettings.getString( "requirementsanalysisplugin.EndLinkMenu" ))){
 
@@ -182,7 +184,7 @@ public class RequirementsAnalysisPlugin extends RPUserPlugin {
 						SmartLinkPanel.launchTheEndLinkPanel( theSelectedEls, theSelectedGraphEls );
 
 					} catch (Exception e) {
-						Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking SmartLinkPanel.launchTheEndLinkPanel");
+						Logger.error("Error: Exception in OnMenuItemSelect when invoking SmartLinkPanel.launchTheEndLinkPanel" );
 					}
 				} else if (menuItem.equals(m_configSettings.getString( "requirementsanalysisplugin.RollUpTraceabilityUpToTransitionLevel" ))){
 
@@ -193,7 +195,7 @@ public class RequirementsAnalysisPlugin extends RPUserPlugin {
 						}
 
 					} catch (Exception e) {
-						Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking SmartLinkPanel.launchTheEndLinkPanel");
+						Logger.error("Error: Exception in OnMenuItemSelect when invoking SmartLinkPanel.launchTheEndLinkPanel" );
 					}	
 				} else if (menuItem.equals(m_configSettings.getString( "requirementsanalysisplugin.layoutDependencies" ))){
 
@@ -219,7 +221,7 @@ public class RequirementsAnalysisPlugin extends RPUserPlugin {
 								LayoutHelper.centerDependenciesForTheDiagram( 
 										(IRPDiagram) theDiagrams.get( 0 ) );
 							} else {
-								Logger.writeLine( "Error in OnMenuItemSelect, unable to find an ActivityDiagramGE" );
+								Logger.error( "Error in OnMenuItemSelect, unable to find an ActivityDiagramGE" );
 							}
 
 						} else if( theSelectedEl instanceof IRPDiagram ){
@@ -234,14 +236,37 @@ public class RequirementsAnalysisPlugin extends RPUserPlugin {
 						}
 
 					} catch (Exception e) {
-						Logger.writeLine( "Error: Exception in OnMenuItemSelect when invoking LayoutHelper" );
+						Logger.error( "Error: Exception in OnMenuItemSelect when invoking LayoutHelper" );
 					}
+					
+				} else if (menuItem.equals(m_configSettings.getString("requirementsanalysisplugin.PopulateRequirementsForSDsMenu"))){
+
+					if (theSelectedEl instanceof IRPSequenceDiagram){
+						try {
+							PopulateRelatedRequirementsPanel.launchThePanel( (IRPSequenceDiagram) theSelectedEl );
+
+						} catch (Exception e) {
+							Logger.error("Error: Exception in OnMenuItemSelect when invoking SequenceDiagramHelper.populateRequirementsForSequenceDiagramsBasedOn" );
+						}
+					}
+					
+				} else if (menuItem.equals(m_configSettings.getString("requirementsanalysisplugin.UpdateVerificationDependenciesForSDsMenu"))){
+
+					if (!theSelectedEls.isEmpty()){
+						try {
+							SequenceDiagramHelper.updateVerificationsForSequenceDiagramsBasedOn( theSelectedEls );
+
+						} catch (Exception e) {
+							Logger.error("Error: Exception in OnMenuItemSelect when invoking SequenceDiagramHelper.updateVerificationsForSequenceDiagramsBasedOn" );
+						}
+					}				
+
 				} else {
 					Logger.writeLine(theSelectedEl, " was invoked with menuItem='" + menuItem + "'");
 				}
 			} // else No selected element
 
-			Logger.writeLine("... completed");
+			Logger.info("... completed" );
 		}
 
 	}
@@ -265,7 +290,7 @@ public class RequirementsAnalysisPlugin extends RPUserPlugin {
 }
 
 /**
- * Copyright (C) 2016-2017  MBSE Training and Consulting Limited (www.executablembse.com)
+ * Copyright (C) 2016-2019  MBSE Training and Consulting Limited (www.executablembse.com)
 
     Change history:
     #004 10-APR-2016: Re-factored projects into single workspace (F.J.Chadburn)    
@@ -282,6 +307,8 @@ public class RequirementsAnalysisPlugin extends RPUserPlugin {
     #224 25-AUG-2017: Added new menu to roll up traceability to the transition and populate on STM (F.J.Chadburn)
     #229 20-SEP-2017: Add re-layout dependencies on diagram(s) menu to ease beautifying when req't tracing (F.J.Chadburn)
     #239 04-OCT-2017: Improve warning/behaviour if multiple Rhapsodys are open or user switches app (F.J.Chadburn)
+    #252 29-MAY-2019: Implement generic features for profile/settings loading (F.J.Chadburn)
+    #257 11-SEP-2018: Move populate requirements/update verifications for SD(s) menus to Reqts menu (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

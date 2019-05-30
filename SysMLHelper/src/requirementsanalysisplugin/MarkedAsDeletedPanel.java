@@ -24,6 +24,7 @@ import com.telelogic.rhapsody.core.*;
 import generalhelpers.CreateStructuralElementPanel;
 import generalhelpers.Logger;
 import generalhelpers.NamedElementMap;
+import generalhelpers.UserInterfaceHelpers;
 
 public class MarkedAsDeletedPanel extends CreateStructuralElementPanel{
 
@@ -36,6 +37,9 @@ public class MarkedAsDeletedPanel extends CreateStructuralElementPanel{
 	public static void launchThePanel(
 			final List<IRPModelElement> theSelectedEls ){
 		
+		final String theAppID = 
+				UserInterfaceHelpers.getAppIDIfSingleRhpRunningAndWarnUserIfNot();
+
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 
 			@Override
@@ -58,7 +62,7 @@ public class MarkedAsDeletedPanel extends CreateStructuralElementPanel{
 				frame.setDefaultCloseOperation( JFrame.DISPOSE_ON_CLOSE );
 
 				MarkedAsDeletedPanel thePanel = 
-						new MarkedAsDeletedPanel( theSelectedEls );
+						new MarkedAsDeletedPanel( theSelectedEls, theAppID );
 
 				frame.setContentPane( thePanel );
 				frame.pack();
@@ -69,7 +73,10 @@ public class MarkedAsDeletedPanel extends CreateStructuralElementPanel{
 	}
 	
 	MarkedAsDeletedPanel(
-			List<IRPModelElement> theSelectedEls ){
+			List<IRPModelElement> theSelectedEls,
+			String theAppID ){
+		
+		super( theAppID );
 		
 		setLayout( new BorderLayout(10,10) );
 		setBorder( BorderFactory.createEmptyBorder( 10, 10, 10, 10 ) );
@@ -131,7 +138,6 @@ public class MarkedAsDeletedPanel extends CreateStructuralElementPanel{
 			JScrollPane theScrollPane = new JScrollPane(list);
 			theScrollPane.setBounds(1,1,16,58);
 			
-
 		    theScrollPane.setVerticalScrollBarPolicy( ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		    
 		    JLabel theStartLabel = new JLabel("The following " + m_FoundReqts.size() + " requirements have the tag '" + "Deleted_At_High_Level" + "' applied:\n");
@@ -213,11 +219,12 @@ public class MarkedAsDeletedPanel extends CreateStructuralElementPanel{
 }
 
 /**
- * Copyright (C) 2017  MBSE Training and Consulting Limited (www.executablembse.com)
+ * Copyright (C) 2017-2019  MBSE Training and Consulting Limited (www.executablembse.com)
 
     Change history:
     #155 25-JAN-2017: Added new panel to find and delete Gateway Deleted_At_High_Level req'ts with Rhp 8.2 (F.J.Chadburn)
-    
+    #256 29-MAY-2019: Rewrite to Java Swing dialog launching to make thread safe between versions (F.J.Chadburn)
+
     This file is part of SysMLHelperPlugin.
 
     SysMLHelperPlugin is free software: you can redistribute it and/or modify

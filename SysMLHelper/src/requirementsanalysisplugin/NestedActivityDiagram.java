@@ -2,11 +2,13 @@ package requirementsanalysisplugin;
 
 import generalhelpers.GeneralHelpers;
 import generalhelpers.Logger;
+import generalhelpers.StereotypeAndPropertySettings;
+import generalhelpers.UserInterfaceHelpers;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 
 import com.telelogic.rhapsody.core.*;
@@ -14,6 +16,17 @@ import com.telelogic.rhapsody.core.*;
 public class NestedActivityDiagram {
 
 	private final static String m_Prefix = "AD - ";
+	
+	// for test only
+	public static void main(String[] args) {
+		IRPApplication theRhpApp = RhapsodyAppServer.getActiveRhapsodyApplication();
+
+		@SuppressWarnings("unchecked")
+		List<IRPModelElement> theSelectedEls = 
+			theRhpApp.getListOfSelectedElements().toList();
+
+		NestedActivityDiagram.createNestedActivityDiagramsFor( theSelectedEls );
+	}
 	
 	public static void renameNestedActivityDiagramsFor(
 			List<IRPModelElement> theSelectedEls){
@@ -23,9 +36,10 @@ public class NestedActivityDiagram {
 		List<IRPActivityDiagram> theADs = 
 				GeneralHelpers.buildListOfActivityDiagramsFor( theSelectedEls );
 		
-		Logger.writeLine("There are " + theADs.size() + " Activity Diagrams nested under the selected list");
+		Logger.info( "There are " + theADs.size() + 
+				" Activity Diagrams nested under the selected list" );
 
-		for (IRPActivityDiagram theAD : theADs) {
+		for( IRPActivityDiagram theAD : theADs ){
 			
 			IRPModelElement theOwner = theAD.getOwner();
 			IRPModelElement theOwnersOwner = theOwner.getOwner();
@@ -37,33 +51,32 @@ public class NestedActivityDiagram {
 				String thePreferredName = m_Prefix + theUseCaseName;
 				
 				if( theOwner.getName().equals( thePreferredName ) ){
-					Logger.writeLine("Determined that " + Logger.elementInfo( theOwner ) + 
-							" already matches " + Logger.elementInfo( theOwnersOwner ));
+					Logger.info( "Determined that " + Logger.elementInfo( theOwner ) + 
+							" already matches " + Logger.elementInfo( theOwnersOwner ) );
 				} else {
 					theNewNameMappings.put( (IRPFlowchart) theOwner, thePreferredName );	
 				}
 			}
 		}
 		
-		JDialog.setDefaultLookAndFeelDecorated(true);
-
-		if (theNewNameMappings.isEmpty()){
-			String theMsg = "Nothing to do. The checker has determined that the " + theADs.size() +
-					" activity diagrams are correctly named.";
-
-			JOptionPane.showMessageDialog(null, theMsg, "Update activity diagram names", JOptionPane.INFORMATION_MESSAGE);
-
+		if( theNewNameMappings.isEmpty() ){
+	
+			UserInterfaceHelpers.showInformationDialog( 
+					"Nothing to do. The checker has determined that the " + 
+					theADs.size() + " activity diagrams are correctly named." );
+			
 		} else {
-			String theMsg = "The checker has determined that " + theNewNameMappings.size() + " of the " + 
-					theADs.size() + " activity diagrams " + "require renaming to match the use cases:\n";
+			String theMsg = "The checker has determined that " + theNewNameMappings.size() + 
+					" of the " + theADs.size() + " activity diagrams require " +
+					"renaming to match the use cases:\n";
 			
 			int count = 0;
 			
-			for (Map.Entry<IRPFlowchart, String> entry : theNewNameMappings.entrySet()){
+			for( Map.Entry<IRPFlowchart, String> entry : theNewNameMappings.entrySet() ){
 			
 				count++;
 				
-				if (count > 10){
+				if( count > 10 ){
 					theMsg = theMsg + "...\n";
 				} else {
 					theMsg = theMsg + Logger.elementInfo(entry.getKey()) + "\n";
@@ -104,62 +117,105 @@ public class NestedActivityDiagram {
 		}
 	}
 	
-	public static void createNestedActivityDiagramsFor(List<IRPModelElement> theElements){
+	public static void createNestedActivityDiagramsFor(
+			List<IRPModelElement> theElements ){
 		 
-		for (IRPModelElement theElement : theElements) {
+		for( IRPModelElement theElement : theElements ){
 			
-			if (theElement instanceof IRPUseCase){
-				Logger.writeLine("Creating a nested Activity Diagram underneath " + Logger.elementInfo(theElement));
-				createNestedActivityDiagram( (IRPUseCase)theElement, m_Prefix + theElement.getName() );
+			if( theElement instanceof IRPUseCase ){
+				
+				Logger.info( "Creating a nested Activity Diagram underneath " + 
+						Logger.elementInfo( theElement ) );
+				
+				createNestedActivityDiagram( 
+						(IRPUseCase)theElement, 
+						m_Prefix + theElement.getName(), 
+						"SysMLHelper.RequirementsAnalysis.TemplateForActivityDiagram" );
 			} 
 		}
 	}
 	
 	public static void createNestedActivityDiagram(
-			IRPUseCase forUseCase, String withUnadornedName ){
+			IRPClassifier forClassifier, 
+			String withUnadornedName,
+			String basedOnPropertyKey ){
 		
 		String theName = withUnadornedName;
 		 
 		// check if existing AD with same name
-		IRPFlowchart theAD = (IRPFlowchart) forUseCase.findNestedElement( theName , "ActivityDiagram");
+		IRPFlowchart theAD = (IRPFlowchart) forClassifier.findNestedElement( 
+				theName, 
+				"ActivityDiagram" );
+		
 		int count = 0;
 		
 		while (theAD != null){
 			
-			Logger.writeLine(forUseCase, "already has a nested activity diagram called " + theName);
+			Logger.warning( Logger.elementInfo( forClassifier ) + " already has a nested activity diagram called " + theName );
 			count++;
 			theName = withUnadornedName + " " + count;
-			theAD = (IRPFlowchart) forUseCase.findNestedElement( theName , "ActivityDiagram");
+			theAD = (IRPFlowchart) forClassifier.findNestedElement( theName , "ActivityDiagram" );
 		}
 		
-		IRPModelElement theTemplate = forUseCase.getProject().findNestedElementRecursive("template_for_act", "ActivityDiagram");
+		IRPModelElement theTemplate = null;
 		
-		if (theTemplate != null){
-			Logger.writeLine("Found template for " + Logger.elementInfo(theTemplate));
-			IRPFlowchart theFlowchart = (IRPFlowchart) theTemplate.clone(theName, forUseCase);
-			theFlowchart.setIsAnalysisOnly( 1 ); // so that call op right-click parameter sync menus appear
-			theFlowchart.highLightElement();
-			Logger.writeLine(theFlowchart, "was created under " + Logger.elementInfo( theFlowchart.getOwner() ) );
+		try {
+			theTemplate = 
+					StereotypeAndPropertySettings.getTemplateForActivityDiagram( 
+							forClassifier,
+							basedOnPropertyKey );
+		} catch (Exception e) {
+			Logger.writeLine("Exception trying to find template based on property " + basedOnPropertyKey);
+		}
+		
+		IRPFlowchart theFlowchart = null;
+		
+		if( theTemplate != null ){
+			
+			try {
+				theFlowchart = (IRPFlowchart) theTemplate.clone( theName, forClassifier );
+				Logger.writeLine( "the cloned flowchart is " + Logger.elementInfo( theFlowchart ) );
+
+			} catch (Exception e) {
+				Logger.writeLine("Exception while cloning");
+			}
+
+		} else {
+			Logger.writeLine("Warning, Could not find template so creating fresh AD");
+			theFlowchart = forClassifier.addActivityDiagram();
+			theFlowchart.setName( theName );
 			
 			IRPStatechartDiagram theStatechart = theFlowchart.getStatechartDiagram();
-			theStatechart.createGraphics();
-			theStatechart.openDiagram();
+
+			try {
+				theStatechart.createGraphics();
+
+			} catch (Exception e) {
+				Logger.writeLine("Exception creating graphics");
+			}
+		}
+		
+		if( theFlowchart != null ){
+			
+			theFlowchart.setIsAnalysisOnly( 1 ); // so that call op right-click parameter sync menus appear
+			IRPStatechartDiagram theStatechart = theFlowchart.getStatechartDiagram();
+			theStatechart.highLightElement();
 			theFlowchart.setAsMainBehavior();
-		} else {
-			Logger.writeLine("Error, Could not find template");
 		}
 	}
 }
 
 /**
- * Copyright (C) 2016  MBSE Training and Consulting Limited (www.executablembse.com)
+ * Copyright (C) 2016-2019  MBSE Training and Consulting Limited (www.executablembse.com)
 
     Change history:
     #004 10-APR-2016: Re-factored projects into single workspace (F.J.Chadburn)
     #080 28-JUL-2016: Added activity diagram name to the create AD dialog for use cases (F.J.Chadburn)
     #102 03-NOV-2016: Add right-click menu to auto update names of ADs from UC names (F.J.Chadburn)
     #244 11-OCT-2017: Default ADs to Analysis mode to better support call operation parameter sync (F.J.Chadburn)
-   
+    #252 29-MAY-2019: Implement generic features for profile/settings loading (F.J.Chadburn)
+    #256 29-MAY-2019: Rewrite to Java Swing dialog launching to make thread safe between versions (F.J.Chadburn)
+
     This file is part of SysMLHelperPlugin.
 
     SysMLHelperPlugin is free software: you can redistribute it and/or modify

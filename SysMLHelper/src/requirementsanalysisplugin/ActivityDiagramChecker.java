@@ -8,6 +8,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JDialog;
@@ -30,6 +31,15 @@ public class ActivityDiagramChecker extends JFrame{
     
 	private static final long serialVersionUID = 1L;
 
+	public static void main(String[] args) {
+	
+		List<IRPModelElement> theEls = new ArrayList<IRPModelElement>();
+		
+		theEls.add( RhapsodyAppServer.getActiveRhapsodyApplication().getSelectedElement() );
+		
+		createActivityDiagramCheckersFor( theEls );
+	}
+	
 	public ActivityDiagramChecker(IRPActivityDiagram theAD){
 
 		try {
@@ -192,11 +202,12 @@ public class ActivityDiagramChecker extends JFrame{
 }
 
 /**
- * Copyright (C) 2016-2017  MBSE Training and Consulting Limited (www.executablembse.com)
+ * Copyright (C) 2016-2019  MBSE Training and Consulting Limited (www.executablembse.com)
 
     Change history:
     #004 10-APR-2016: Re-factored projects into single workspace (F.J.Chadburn)
     #225 25-AUG-2017: Add check that pre-conditions with text must trace to at least one requirement (F.J.Chadburn)
+    #256 29-MAY-2019: Rewrite to Java Swing dialog launching to make thread safe between versions (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

@@ -7,6 +7,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+
 import com.telelogic.rhapsody.core.*;
 
 import generalhelpers.CreateStructuralElementPanel;
@@ -26,30 +27,54 @@ public class SmartLinkPanel extends CreateStructuralElementPanel {
 	private static List<IRPModelElement> m_StartLinkEls;
 	private static List<IRPGraphElement> m_StartLinkGraphEls;
 	
-	public static void launchTheStartLinkPanel(
+	public static void main(String[] args) {
+		
+		IRPApplication theRhpApp = RhapsodyAppServer.getActiveRhapsodyApplication();
+		@SuppressWarnings("unused")
+		IRPProject theRhpPrj = theRhpApp.activeProject();
+
+		@SuppressWarnings("unused")
+		IRPModelElement theSelectedEl = theRhpApp.getSelectedElement();
+
+		@SuppressWarnings("unchecked")
+		List<IRPModelElement> theSelectedEls = 
+		theRhpApp.getListOfSelectedElements().toList();
+
+		@SuppressWarnings("unchecked")
+		List<IRPGraphElement> theSelectedGraphEls = 
+		theRhpApp.getSelectedGraphElements().toList();
+		
+		selectStartLinkEls( theSelectedEls, theSelectedGraphEls );
+	}
+	
+	public static void selectStartLinkEls(
 			final List<IRPModelElement> theStartLinkEls,
 			final List<IRPGraphElement> theStartLinkGraphEls ){
 		
 		if( !theStartLinkEls.isEmpty() ){
 			
-			Logger.writeLine("The following " + theStartLinkEls.size() + " elements were selected in Start Link command:");
+			Logger.info( "The following " + theStartLinkEls.size() + 
+					" elements were selected in Start Link command:" );
 
 			for( IRPModelElement theStartLinkEl : theStartLinkEls ){
-				Logger.writeLine( Logger.elementInfo( theStartLinkEl ) ); 
+				Logger.info( Logger.elementInfo( theStartLinkEl ) ); 
 			}
 			
 			m_StartLinkEls = theStartLinkEls;
 			m_StartLinkGraphEls = theStartLinkGraphEls;
 			
 		} else {
-			Logger.writeLine("Error in SmartLinkPanel.launchTheStartLinkPanel, no elements were selected");
+			Logger.error( "Error in SmartLinkPanel.launchTheStartLinkPanel, " +
+					"no elements were selected" );
 		}
-		
 	}
 	
 	public static void launchTheEndLinkPanel(
 			final List<IRPModelElement> theEndLinkEls,
 			final List<IRPGraphElement> theEndLinkGraphEls){
+		
+		final String theAppID = 
+				UserInterfaceHelpers.getAppIDIfSingleRhpRunningAndWarnUserIfNot();
 		
 		if( m_StartLinkEls == null || m_StartLinkEls.isEmpty() ){
 			
@@ -78,6 +103,7 @@ public class SmartLinkPanel extends CreateStructuralElementPanel {
 
 					SmartLinkPanel thePanel = 
 							new SmartLinkPanel( 
+									theAppID,
 									m_StartLinkEls, 
 									m_StartLinkGraphEls, 
 									theEndLinkEls, 
@@ -93,10 +119,13 @@ public class SmartLinkPanel extends CreateStructuralElementPanel {
 	}
 	
 	public SmartLinkPanel(
+		String theAppID,
 		List<IRPModelElement> theStartLinkEls,
 		List<IRPGraphElement> theStartLinkGraphEls,
 		List<IRPModelElement> theEndLinkEls,
 		List<IRPGraphElement> theEndLinkGraphEls ){
+		
+		super( theAppID );
 		
 		boolean isCyclical = false;
 		
@@ -169,20 +198,22 @@ public class SmartLinkPanel extends CreateStructuralElementPanel {
 				}
 				
 			} else {
-				Logger.writeLine("Error in SmartLinkPanel.performAction, checkValidity returned false");
+				Logger.error( "Error in SmartLinkPanel.performAction, " +
+						"checkValidity returned false" );
 			}	
 		} catch (Exception e) {
-			Logger.writeLine("Error, unhandled exception detected in SmartLinkPanel.performAction");
+			Logger.error( "Error, unhandled exception detected in SmartLinkPanel.performAction" );
 		}	
 	}
 }
 
 /**
- * Copyright (C) 2017  MBSE Training and Consulting Limited (www.executablembse.com)
+ * Copyright (C) 2017-2019  MBSE Training and Consulting Limited (www.executablembse.com)
 
     Change history:
     #163 05-FEB-2017: Add new menus to Smart link: Start and Smart link: End (F.J.Chadburn)
-    
+    #256 29-MAY-2019: Rewrite to Java Swing dialog launching to make thread safe between versions (F.J.Chadburn)
+
     This file is part of SysMLHelperPlugin.
 
     SysMLHelperPlugin is free software: you can redistribute it and/or modify

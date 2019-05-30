@@ -2,10 +2,13 @@ package requirementsanalysisplugin;
 
 import generalhelpers.GeneralHelpers;
 import generalhelpers.Logger;
+import generalhelpers.StereotypeAndPropertySettings;
 import generalhelpers.TraceabilityHelper;
+
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
 import com.telelogic.rhapsody.core.*;
 
 public class SmartLinkInfo {
@@ -41,8 +44,11 @@ public class SmartLinkInfo {
 		
 		m_IsPopulatePossible = false;
 		
+		
 		IRPProject theRhpProject = RequirementsAnalysisPlugin.getActiveProject();
 
+		IRPModelElement contextEl = theEndLinkEls.get(0);
+		
 		if( m_StartLinkElements.areElementsAllReqts() ){
 
 			m_RelationType = GeneralHelpers.getExistingStereotype(
@@ -50,13 +56,13 @@ public class SmartLinkInfo {
 
 		} else if( m_StartLinkElements.areElementsAllDeriveDependencySources() ){
 
-			m_RelationType = GeneralHelpers.getStereotypeIn( 
-					theRhpProject, "traceabilityTypeToUseForActions", "RequirementsAnalysisPkg" );
+			m_RelationType = StereotypeAndPropertySettings.getStereotypeToUseForActions( 
+					contextEl );
 
 		} else if( m_StartLinkElements.areElementsAllRefinementDependencySources() ){
 
-			m_RelationType = GeneralHelpers.getStereotypeIn( 
-					theRhpProject, "traceabilityTypeToUseForUseCases", "RequirementsAnalysisPkg" );
+			m_RelationType = StereotypeAndPropertySettings.getStereotypeToUseForUseCases( 
+					contextEl );
 
 		} else if( m_StartLinkElements.areElementsAllVerificationDependencySources() ){
 
@@ -64,16 +70,17 @@ public class SmartLinkInfo {
 			
 		} else if( m_StartLinkElements.areElementsAllSatisfyDependencySources() ){
 
-			m_RelationType = GeneralHelpers.getStereotypeIn( 
-					theRhpProject, "traceabilityTypeToUseForFunctions", "FunctionalAnalysisPkg" );
+			m_RelationType = StereotypeAndPropertySettings.getStereotypeToUseForFunctions( 
+					contextEl );
 
 		} else {
 
 			m_RelationType = null;
-			Logger.writeLine("Unable to find relation type");
+			Logger.error( "Unable to find relation type" );
 		}
 		
-		Logger.writeLine("SmartLinkInfo: Determined that relation type needed is " + Logger.elementInfo(m_RelationType));
+		Logger.info( "SmartLinkInfo: Determined that relation type needed is " + 
+				Logger.elementInfo( m_RelationType ) );
 		
 		if( m_RelationType != null ){
 			
@@ -138,7 +145,7 @@ public class SmartLinkInfo {
 
 						if( theExistingGraphEls.isEmpty() ){
 
-							Logger.writeLine( "Determined graphEdge needed for " + 
+							Logger.info( "Determined graphEdge needed for " + 
 									Logger.elementInfo( m_RelationType ) + " from " + 
 									Logger.elementInfo( theStartGraphEl.getModelObject() ) + " to " + 
 									Logger.elementInfo( theEndGraphEl.getModelObject() ) + " on " +
@@ -157,7 +164,7 @@ public class SmartLinkInfo {
 
 						} else {
 							
-							Logger.writeLine( "Determined graphEdge for " + 
+							Logger.info( "Determined graphEdge for " + 
 									Logger.elementInfo( m_RelationType ) + " already exists from " + 
 									Logger.elementInfo( theStartGraphEl.getModelObject() ) + " to " + 
 									Logger.elementInfo( theEndGraphEl.getModelObject() ) + " on " +
@@ -254,7 +261,7 @@ public class SmartLinkInfo {
 				m_StartLinkElements.areElementsAllDeriveDependencySources() && 
 				m_EndLinkElements.areElementsAllReqts();
 		
-		Logger.writeLine( "isDeriveDependencyNeeded is returning " + isNeeded );
+		Logger.info( "isDeriveDependencyNeeded is returning " + isNeeded );
 		
 		return isNeeded;
 	}
@@ -283,7 +290,7 @@ public class SmartLinkInfo {
 }
 
 /**
- * Copyright (C) 2017  MBSE Training and Consulting Limited (www.executablembse.com)
+ * Copyright (C) 2017-2019  MBSE Training and Consulting Limited (www.executablembse.com)
 
     Change history:
     #163 05-FEB-2017: Add new menus to Smart link: Start and Smart link: End (F.J.Chadburn)
@@ -293,6 +300,7 @@ public class SmartLinkInfo {
     #227 06-SEP-2017: Increased robustness to stop smart link panel using non new term version of <<refine>> (F.J.Chadburn)
     #242 04-OCT-2017: Get re-layout dependencies on diagrams(s) menu to centre on graph edges properly (F.J.Chadburn)
     #243 04-OCT-2017: Added ability to do smart link from a testcase to create a Verification (F.J.Chadburn)
+    #252 29-MAY-2019: Implement generic features for profile/settings loading (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

@@ -2,9 +2,14 @@ package requirementsanalysisplugin;
 
 import generalhelpers.GeneralHelpers;
 import generalhelpers.Logger;
+import generalhelpers.StereotypeAndPropertySettings;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
+import sysmlhelperplugin.RequirementMover;
+
 import com.telelogic.rhapsody.core.*;
    
 public class RequirementsHelper {
@@ -72,7 +77,8 @@ public class RequirementsHelper {
 				
 				if( theRelations.isEmpty() ){
 						
-					theText = getCreateRequirementTextForPrefixing( theModelObject.getProject() ) + theActionText;				
+					theText = StereotypeAndPropertySettings.getCreateRequirementTextForPrefixing( 
+							theModelObject ) + theActionText;				
 					
 				} else {
 					
@@ -145,12 +151,16 @@ public class RequirementsHelper {
 					theDiagram.completeRelations( theGraphEls, 0);	
 
 				} else {
-					Logger.writeLine("Warning in populateDependencyOnDiagram, the graphEls are not handled types for drawing relations");
+					Logger.warning( "Warning in populateDependencyOnDiagram, " +
+							"the graphEls are not handled types for drawing relations" );
 				}
+				
+				RequirementMover theElementMover = new RequirementMover( theReqt );
+				theElementMover.performMove();
 
 			} // theActionText == null
 		} else { // theModelObject == null
-			Logger.writeLine("theModelObject == null");
+			Logger.error( "theModelObject == null" );
 		}
 	}
 
@@ -165,8 +175,9 @@ public class RequirementsHelper {
 
 		IRPDependency theDep = theModelObject.addDependencyTo( theReqt );
 
-		IRPStereotype theDependencyStereotype = GeneralHelpers.getStereotypeIn( 
-				toOwner.getProject(), "traceabilityTypeToUseForActions", "RequirementsAnalysisPkg" );
+		IRPStereotype theDependencyStereotype = 
+				StereotypeAndPropertySettings.getStereotypeToUseForActions(
+						theModelObject );
 		
 		if( theDependencyStereotype != null ){
 			
@@ -175,9 +186,10 @@ public class RequirementsHelper {
 			theDep.addStereotype("derive", "Dependency");				
 		}
 		
-		Logger.writeLine("Created a Requirement called " + theReqt.getName() + 
+		Logger.info( "Created a Requirement called " + theReqt.getName() + 
 				" with the text '" + theText + "' related to " + 
-				Logger.elementInfo(theModelObject) + " with a " + Logger.elementInfo(theDep));
+				Logger.elementInfo( theModelObject ) + " with a " + 
+				Logger.elementInfo( theDep ) );
 		
 		return theDep;
 	}
@@ -189,41 +201,10 @@ public class RequirementsHelper {
 			createNewRequirementFor( theGraphEl );
 		}
 	}
-	
-	private static String getCreateRequirementTextForPrefixing(IRPProject inTheProject){
-		
-		String theText = "The feature shall ";
-		
-		String thePackageName = "RequirementsAnalysisPkg";
-		final String tagName = "createRequirementTextForPrefixing";	
-		
-		IRPModelElement theReqtsAnalysisPkg = inTheProject.findElementsByFullName(thePackageName, "Package");
-		
-		if (theReqtsAnalysisPkg==null){
-			Logger.writeLine("Error in getCreateRequirementTextForPrefixing, no " + thePackageName + " was found");
-			
-		} else {
-			
-			IRPTag theTag = theReqtsAnalysisPkg.getTag( tagName );
-			
-			if (theTag != null){
-				theText = theTag.getValue();
-				
-				//#005 10-APR-2016: Support ProductName substitution in reqt text tag (F.J.Chadburn)
-				theText = theText.replaceAll("ProjectName", inTheProject.getName());
-			} else {
-				Logger.writeLine("Warning in getCreateRequirementTextForPrefixing, no tag called " + tagName + " was found so creating one");	
-				IRPTag theNewTag = (IRPTag) theReqtsAnalysisPkg.addNewAggr("Tag", tagName);
-				theReqtsAnalysisPkg.setTagValue(theNewTag, theText);
-			}
-		}
-		
-		return theText;
-	}
 }
 
 /**
- * Copyright (C) 2016-2017  MBSE Training and Consulting Limited (www.executablembse.com)
+ * Copyright (C) 2016-2019  MBSE Training and Consulting Limited (www.executablembse.com)
 
     Change history:
     #004 10-APR-2016: Re-factored projects into single workspace (F.J.Chadburn)
@@ -232,6 +213,8 @@ public class RequirementsHelper {
     #072 25-JUL-2016: Improved robustness when graphEls that don't have model elements are selected (F.J.Chadburn)
     #163 05-FEB-2017: Add new menus to Smart link: Start and Smart link: End (F.J.Chadburn)
     #170 08-MAR-2017: Tweak to Add new requirement on ADs to add to same owner as user created (F.J.Chadburn)
+    #253 11-SEP-2018: Move from using tags to properties to control plugin behaviour (F.J.Chadburn)
+    #249 29-MAY-2019: First official version of new ExecutableMBSEProfile  (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

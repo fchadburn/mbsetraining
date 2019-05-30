@@ -28,7 +28,9 @@ public class PopulateRequirementsAnalysisPkg extends PopulatePkg {
 		}
 	}
 	
-	public static void createRequirementsAnalysisPkg(IRPProject forProject){
+	public static void createRequirementsAnalysisPkg(
+			IRPProject forProject,
+			ConfigurationSettings theConfigSettings ){
 		
 		final String rootPackageName = "RequirementsAnalysisPkg";
 		Boolean ok = true;
@@ -58,13 +60,14 @@ public class PopulateRequirementsAnalysisPkg extends PopulatePkg {
 						"Do you initially want to simplify the 'Add New' menu for just\n" + 
 				        "use case and requirements analysis?");
 		    	
-		    	populateRequirementsAnalysisPkg(forProject);
+		    	populateRequirementsAnalysisPkg(forProject, theConfigSettings);
 				
 				if (theAnswer==true){
 					applySimpleMenuStereotype(forProject);
 				}
 				
-				CreateGatewayProjectPanel.launchThePanel( forProject, "^RequirementsAnalysisPkg.rqtf$" );
+				CreateGatewayProjectPanel.launchThePanel( 
+						forProject, "^RequirementsAnalysisPkg.rqtf$", theConfigSettings );
 				
 		    } else {
 		    	Logger.writeLine("Cancelled by user");
@@ -72,7 +75,9 @@ public class PopulateRequirementsAnalysisPkg extends PopulatePkg {
 		}
 	}
 	
-	static public IRPPackage populateRequirementsAnalysisPkg(IRPProject forProject) {
+	static public IRPPackage populateRequirementsAnalysisPkg(
+			IRPProject forProject,
+			ConfigurationSettings theConfigSettings ) {
 		
 		addProfileIfNotPresent("SysML", forProject);		
 		addProfileIfNotPresent("GlobalPreferencesProfile", forProject);
@@ -90,9 +95,7 @@ public class PopulateRequirementsAnalysisPkg extends PopulatePkg {
 					
 			deleteIfPresent( "Structure1", "StructureDiagram", forProject );
 			deleteIfPresent( "Default", "Package", forProject );
-			
-	    	ConfigurationSettings theConfigSettings = ConfigurationSettings.getInstance();
-	    	
+				    	
 	    	theConfigSettings.setPropertiesValuesRequestedInConfigFile( 
 	    			forProject,
 	    			"setPropertyForRequirementsAnalysisModel" );
@@ -126,7 +129,7 @@ public class PopulateRequirementsAnalysisPkg extends PopulatePkg {
 }
 
 /**
- * Copyright (C) 2016  MBSE Training and Consulting Limited (www.executablembse.com)
+ * Copyright (C) 20162-2019  MBSE Training and Consulting Limited (www.executablembse.com)
 
     Change history:
     #002 05-APR-2016: Improved robustness of copying .types file (F.J.Chadburn)
@@ -139,6 +142,7 @@ public class PopulateRequirementsAnalysisPkg extends PopulatePkg {
     #091 23-AUG-2016: Turn off the Activity::General::AutoSelectControlOrObjectFlow property by default (F.J.Chadburn)
     #100 14-SEP-2016: Add option to create RequirementsAnalysisPkg if FunctionalAnalysisPkg not possible (F.J.Chadburn)
     #142 18-DEC-2016: Project properties now set via config.properties, e.g., to easily switch off backups (F.J.Chadburn)
+    #252 29-MAY-2019: Implement generic features for profile/settings loading (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

@@ -27,6 +27,7 @@ import com.telelogic.rhapsody.core.*;
 import functionalanalysisplugin.RequirementSelectionPanel;
 import generalhelpers.GeneralHelpers;
 import generalhelpers.Logger;
+import generalhelpers.StereotypeAndPropertySettings;
 import generalhelpers.TraceabilityHelper;
 
 public class PopulateTransitionRequirementsPanel extends JPanel {
@@ -238,10 +239,7 @@ public class PopulateTransitionRequirementsPanel extends JPanel {
 		Set<IRPRequirement> theDependsOns = new HashSet<>();
 		
 		IRPStereotype theDependencyStereotype = 
-				GeneralHelpers.getStereotypeIn( 
-						theTransition.getProject(), 
-						"traceabilityTypeToUseForFunctions", 
-						"FunctionalAnalysisPkg" );
+				StereotypeAndPropertySettings.getStereotypeToUseForFunctions( theTransition );
 				
 		IRPModelElement theOwner = 
 				GeneralHelpers.findOwningClassIfOneExistsFor( 
@@ -444,10 +442,11 @@ public class PopulateTransitionRequirementsPanel extends JPanel {
 }
 
 /**
- * Copyright (C) 2017  MBSE Training and Consulting Limited (www.executablembse.com)
+ * Copyright (C) 20172-2019  MBSE Training and Consulting Limited (www.executablembse.com)
 
     Change history:
     #224 25-AUG-2017: Added new menu to roll up traceability to the transition and populate on STM (F.J.Chadburn)
+    #252 29-MAY-2019: Implement generic features for profile/settings loading (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

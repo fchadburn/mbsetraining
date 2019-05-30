@@ -1,7 +1,9 @@
 package requirementsanalysisplugin;
 
+import executablembse.ExecutableMBSE_RPUserPlugin;
 import generalhelpers.GeneralHelpers;
 import generalhelpers.Logger;
+import generalhelpers.UserInterfaceHelpers;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -14,7 +16,21 @@ import javax.swing.JOptionPane;
 import com.telelogic.rhapsody.core.*;
  
 public class MoveRequirements {
-	 
+	
+	public static void main(String[] args) {
+	
+		IRPApplication theRhpApp = ExecutableMBSE_RPUserPlugin.getRhapsodyApp();
+		IRPProject theRhpPrj = theRhpApp.activeProject();
+
+		@SuppressWarnings("unchecked")
+		List<IRPModelElement> theSelectedEls = 
+			theRhpApp.getListOfSelectedElements().toList();
+		
+		moveUnclaimedRequirementsReadyForGatewaySync(
+				theSelectedEls, 
+				theRhpPrj );
+	}
+	
 	public static Set<IRPModelElement> buildSetOfUnclaimedRequirementsBasedOn(
 			List<IRPModelElement> theSelectedEls, 
 			String theGatewayStereotypeName) {
@@ -40,22 +56,24 @@ public class MoveRequirements {
 	}
 	
 	public static void moveUnclaimedRequirementsReadyForGatewaySync(
-			List<IRPModelElement> theSelectedEls, IRPProject theProject){
+			List<IRPModelElement> theSelectedEls, 
+			IRPProject theProject ){
 		
 		String theGatewayStereotypeName = "from.*";
 		
 		Set<IRPModelElement> theUnclaimedReqts = 
-				buildSetOfUnclaimedRequirementsBasedOn( theSelectedEls, theGatewayStereotypeName );
+				buildSetOfUnclaimedRequirementsBasedOn( 
+						theSelectedEls, 
+						theGatewayStereotypeName );
 		
-		Logger.writeLine(theUnclaimedReqts.size() + " requirements unclaimed by the Gateway were found");
+		Logger.info( theUnclaimedReqts.size() + 
+				" requirements unclaimed by the Gateway were found" );
 		
-		if (theUnclaimedReqts.isEmpty()){
+		if( theUnclaimedReqts.isEmpty() ){
 			
 			String theMsg = "Nothing to do as there were no unclaimed requirements found";
 		
-			JOptionPane.showMessageDialog(null, theMsg);
-			
-			Logger.writeLine("Nothing to do as there were no unclaimed requirements were found");
+			UserInterfaceHelpers.showInformationDialog( theMsg );
 			
 		} else {
 			
@@ -80,9 +98,13 @@ public class MoveRequirements {
 			Object[] options = new Object[theWritablePackages.size()];
 			
 			for (int i = 0; i < options.length; i++) {
-				String theOptionName =  theWritablePackages.get(i).getName() + " in " + 
-						theWritablePackages.get(i).getOwner().getFullPathName();
-				options[i] = theOptionName;
+				
+				IRPPackage thePackage = (IRPPackage) theWritablePackages.get(i);
+				Logger.writeLine("thePackage = " + thePackage.getFullPathNameIn());
+				
+//				String theOptionName =  theWritablePackages.get(i).getName() + " in " + 
+//						theWritablePackages.get(i).getOwner().getFullPathName();
+				options[i] = thePackage.getFullPathNameIn();
 			}
 			
 			JDialog.setDefaultLookAndFeelDecorated(true);
@@ -95,7 +117,8 @@ public class MoveRequirements {
 						"b) Create your own package with a from<X> stereotype to minimic the Gateway, or\n" + 
 						"c) Assess whether there are existing from<X> stereotyped packages that are present but not writable and correct the situation.\n";
 				
-				Logger.writeLine(theMsg);
+				Logger.info( theMsg );
+				
 				JOptionPane.showMessageDialog(null, theMsg);
 
 			} else {
@@ -112,7 +135,7 @@ public class MoveRequirements {
 				
 				if (theChoice == null){
 					
-					Logger.writeLine("Operation was cancelled by user with no changes made.");
+					Logger.info( "Operation was cancelled by user with no changes made." );
 					
 				} else {			
 					
@@ -141,16 +164,17 @@ public class MoveRequirements {
 								String uniqueName = GeneralHelpers.determineUniqueNameBasedOn( 
 										theReqt.getName(), "Requirement", thePackage );
 								
-								Logger.writeLine("Warning: Same name as " + Logger.elementInfo( theReqt ) 
-										+ " already exists under " + Logger.elementInfo(thePackage) + ", hence element was renamed to " + uniqueName );
+								Logger.warning( "Warning: Same name as " + Logger.elementInfo( theReqt ) 
+										+ " already exists under " + Logger.elementInfo(thePackage) + 
+										", hence element was renamed to " + uniqueName );
 								
 								theReqt.setName( uniqueName );
 
 							}
 
-							Logger.writeLine("Moving " + Logger.elementInfo( theReqt ) + " from " 
-									+ Logger.elementInfo(theReqt.getOwner()) + " to " + Logger.elementInfo(thePackage) 
-									+ " and applying " + Logger.elementInfo(theStereotypeToApply));
+							Logger.info( "Moving " + Logger.elementInfo( theReqt ) + " from " 
+									+ Logger.elementInfo( theReqt.getOwner() ) + " to " + Logger.elementInfo( thePackage ) 
+									+ " and applying " + Logger.elementInfo( theStereotypeToApply ) );
 							
 							theReqt.setOwner( thePackage );
 							theReqt.addStereotype(theStereotypeToApply.getName(), "Requirement");
@@ -161,10 +185,11 @@ public class MoveRequirements {
 									theReqt, theStereotypeToApply );
 						}
 						
-						Logger.writeLine("Finished (" + count + " requirements were moved out of " + theUnclaimedReqts.size() + ")");
+						Logger.info( "Finished (" + count + 
+								" requirements were moved out of " + theUnclaimedReqts.size() + ")" );
 						
 					} else {
-						Logger.writeLine("Cancelled due to user choice not to continue with the move.");
+						Logger.info( "Cancelled due to user choice not to continue with the move." );
 					}
 				}			
 			}
@@ -173,7 +198,7 @@ public class MoveRequirements {
 }
 
 /**
- * Copyright (C) 2016-2017  MBSE Training and Consulting Limited (www.executablembse.com)
+ * Copyright (C) 2016-2019  MBSE Training and Consulting Limited (www.executablembse.com)
 
     Change history:
     #004 10-APR-2016: Re-factored projects into single workspace (F.J.Chadburn)
@@ -181,6 +206,7 @@ public class MoveRequirements {
     #121 25-NOV-2016: Move unclaimed requirements ready for Gateway synch now copes with duplicate names (F.J.Chadburn)
     #170 08-MAR-2017: Tweak to Add new requirement on ADs to add to same owner as user created (F.J.Chadburn)
     #232 27-SEP-2017: Improve move unclaimed req'ts needs so that it handles read-only packages better (F.J.Chadburn)
+    #256 29-MAY-2019: Rewrite to Java Swing dialog launching to make thread safe between versions (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 
