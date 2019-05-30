@@ -1,0 +1,69 @@
+I-Logix-RPY-Archive version 8.13.0 C++ 9794446
+{ ISubsystem 
+	- _id = GUID 59abfe70-d700-405f-8667-e68cddde4ba4;
+	- _myState = 8192;
+	- _name = "NotUsedPkg";
+	- _modifiedTimeWeak = 1.9.2019::12:40:24;
+	- EmbededFiles = { IRPYRawContainer 
+		- size = 5;
+		- value = 
+		{ IEmbededFile 
+			- _id = GUID 378a14b9-cdbd-4587-9111-2eb818cb8be2;
+			- _name = "SysMLHelperProfile.hep";
+			- _modifiedTimeWeak = 1.2.1990::0:0:0;
+			- _MayNeedToRelocate = 0;
+			- _LastKnownFullPath = "C:\\Users\\frase\\IBM\\Rational\\Rhapsody\\8.2\\Share\\Profiles\\SysMLHelper\\SysMLHelper_rpy\\SysMLHelperProfile.hep";
+		}
+		{ IEmbededFile 
+			- _id = GUID ceaaf592-0899-4a3f-9663-523a4ae97b08;
+			- _name = "RequirementsAnalysisProfile.hep";
+			- _modifiedTimeWeak = 1.2.1990::0:0:0;
+			- _MayNeedToRelocate = 0;
+			- _LastKnownFullPath = "C:\\Users\\frase\\IBM\\Rational\\Rhapsody\\8.2\\Share\\Profiles\\SysMLHelper\\SysMLHelper_rpy\\RequirementsAnalysisProfile.hep";
+		}
+		{ IEmbededFile 
+			- _id = GUID a1ee4044-3107-4e83-8069-588dd46d2e9e;
+			- _name = "FunctionalAnalysisProfile.hep";
+			- _modifiedTimeWeak = 1.2.1990::0:0:0;
+			- _MayNeedToRelocate = 0;
+			- _LastKnownFullPath = "C:\\Users\\frase\\IBM\\Rational\\Rhapsody\\8.2\\Share\\Profiles\\SysMLHelper\\SysMLHelper_rpy\\FunctionalAnalysisProfile.hep";
+		}
+		{ IEmbededFile 
+			- _id = GUID bb9ac863-058f-4971-8319-1a0de7a855d0;
+			- _name = "FunctionalAnalysisSimpleProfile.hep";
+			- _modifiedTimeWeak = 1.2.1990::0:0:0;
+			- _MayNeedToRelocate = 0;
+			- _LastKnownFullPath = "C:\\Users\\frase\\IBM\\Rational\\Rhapsody\\8.2\\Share\\Profiles\\SysMLHelper\\SysMLHelper_rpy\\FunctionalAnalysisSimpleProfile.hep";
+		}
+		{ IEmbededFile 
+			- _id = GUID 48ccc5b2-1fe1-4416-b224-850952116cd0;
+			- _name = "DesignSynthesisProfile.hep";
+			- _modifiedTimeWeak = 1.2.1990::0:0:0;
+			- _MayNeedToRelocate = 0;
+			- _LastKnownFullPath = "C:\\Users\\frase\\IBM\\Rational\\Rhapsody\\8.2\\Share\\Profiles\\SysMLHelper\\SysMLHelper_rpy\\DesignSynthesisProfile.hep";
+		}
+	}
+	- weakCGTime = 1.9.2019::12:40:24;
+	- strongCGTime = 1.9.2019::12:36:33;
+	- _defaultComposite = GUID f650fc65-b462-453b-bb8f-042d15134fbf;
+	- _eventsBaseID = -1;
+	- Classes = { IRPYRawContainer 
+		- size = 1;
+		- value = 
+		{ IClass 
+			- _id = GUID f650fc65-b462-453b-bb8f-042d15134fbf;
+			- _myState = 40960;
+			- _name = "TopLevel";
+			- _modifiedTimeWeak = 1.2.1990::0:0:0;
+			- weakCGTime = 1.2.1990::0:0:0;
+			- strongCGTime = 1.2.1990::0:0:0;
+			- _multiplicity = "";
+			- _itsStateChart = { IHandle 
+				- _m2Class = "";
+			}
+			- _classModifier = Unspecified;
+		}
+	}
+	- _configurationRelatedTime = 1.1.1970::0:0:0;
+}
+

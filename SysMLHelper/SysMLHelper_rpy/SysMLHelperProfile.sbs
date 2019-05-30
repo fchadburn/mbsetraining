@@ -17,9 +17,9 @@ I-Logix-RPY-Archive version 8.13.0 C++ 9794446
 							- size = 1;
 							- value = 
 							{ IProperty 
-								- _Name = "AdditionalHelpersFiles";
-								- _Value = "$OMROOT/Profiles/SysMLHelper/SysMLHelper.hep";
-								- _Type = String;
+								- _Name = "PropertyFile";
+								- _Value = "$OMROOT\\Profiles\\SysMLHelper\\properties\\SysMLHelper.prp";
+								- _Type = File;
 							}
 						}
 					}
@@ -40,9 +40,9 @@ I-Logix-RPY-Archive version 8.13.0 C++ 9794446
 		}
 	}
 	- _name = "SysMLHelperProfile";
-	- _modifiedTimeWeak = 2.15.2017::22:3:24;
-	- weakCGTime = 2.15.2017::22:3:24;
-	- strongCGTime = 2.15.2017::22:3:24;
+	- _modifiedTimeWeak = 1.9.2019::12:35:58;
+	- weakCGTime = 1.9.2019::12:35:58;
+	- strongCGTime = 1.9.2019::12:35:58;
 	- _defaultComposite = GUID 9b558c07-f4d8-4d66-9711-aaf94ada3d07;
 	- _eventsBaseID = -1;
 	- Classes = { IRPYRawContainer 
@@ -52,9 +52,9 @@ I-Logix-RPY-Archive version 8.13.0 C++ 9794446
 			- _id = GUID 9b558c07-f4d8-4d66-9711-aaf94ada3d07;
 			- _myState = 40960;
 			- _name = "TopLevel";
-			- _modifiedTimeWeak = 2.13.2016::21:39:44;
-			- weakCGTime = 2.13.2016::21:39:44;
-			- strongCGTime = 2.13.2016::21:39:44;
+			- _modifiedTimeWeak = 10.29.2018::11:28:15;
+			- weakCGTime = 10.29.2018::11:28:15;
+			- strongCGTime = 10.29.2018::11:28:15;
 			- _multiplicity = "";
 			- _itsStateChart = { IHandle 
 				- _m2Class = "";
