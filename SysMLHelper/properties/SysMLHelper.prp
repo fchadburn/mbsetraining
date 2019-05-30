@@ -1,0 +1,4 @@
+Include "SysMLHelper_ExistingProperties.prp"
+Include "SysMLHelper_NewProperties.prp"
+Include "SysMLHelper_Perspectives.prp"
+end

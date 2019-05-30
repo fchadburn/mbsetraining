@@ -1,0 +1,69 @@
+Subject SysMLHelper
+        Metaclass General
+		Property StoreUnitInSeparateDirectoryNewTerms String "12 Reqts Analysis - Use Case Package,21 Funct Analysis - Scenarios Package,23 Funct Analysis - Interfaces Package"
+		Property DontCreateSeparateUnitNewTerms String ""
+		Property ActorPackageStereotype String "11 Reqts Analysis - Actor Package"
+		Property UseCasePackageStereotype String "12 Reqts Analysis - Use Case Package"
+		Property UseCasePackageWorkingStereotype String "12 Reqts Analysis - Working Copy Package"
+		Property RequirementPackageStereotype String "13 Reqts Analysis - Requirement Package"
+		Property SimulationPackageStereotype String "21 Funct Analysis - Scenarios Package"
+		Property DesignPackageStereotype String "22 Funct Analysis - Design Package"
+		Property InterfacesPackageStereotype String "23 Funct Analysis - Interfaces Package"
+		Property TestPackageStereotype String "24 Funct Analysis - Test Package"
+		Property ElapsedTimeBlockStereotype String "ElapsedTimeBlock"
+		Property ElapsedTimeActorStereotype String "ElapsedTimeGenerator"
+		Property TestbenchStereotype String "Testbench"          
+	end
+	Metaclass RequirementsAnalysis
+		Property CreateRequirementTextForPrefixing String "The feature shall allow the"
+		Property NewTermForUseCaseDiagram String "Enhanced Use Case Diagram"
+		Property TemplateForActivityDiagram String "template_for_act"
+		Property TraceabilityTypeToUseForActions String "derive"
+		Property TraceabilityTypeToUseForUseCases String "refine"
+		Property DefaultActorsForUseCaseDiagram String "Driver,Environment"
+		Property DefaultActorPackageName String "ActorPkg"
+		Property DefaultUseCasePackageName String "FeatureA"
+		Property IsEnableAutoMoveOfRequirements Bool "True"
+		Property IsEnableGatewayTypes Bool "False"
+		Property UseCaseNoteText String "Draw use cases and actors.
+
+1. A use case is a set of sequences of actions, including variants, that yield an observable result of value to an actor.
+
+2. Use case diagrams provide a high level context view of use cases and how they relate to actor(s).
+
+3. You need to choose your system boundary/context to draw this diagram. Actors are outside the system under design. 
+
+4. Consider running a use case workshop to create this; i.e. use this for requirement elicitation and as an opportunity to get stakeholder buy-in.
+
+5. Use cases contain sunny and rainy day scenarios. Ask questions: Does this use case have alternate scenarios? Do I need to consolidate scenarios into use cases?
+
+6. Don't use this diagram to functionally decompose the system. Keep use cases as end-to-end usages. Use case steps can be described using other behavioral diagrams, e.g., right-click and use the helper menu to create a nested activity diagram for a use case.
+
+7. A «refine» tool has been added to drawing toolbar in case you need to show relationships to multiple higher level requirements  that the use case is aiming to achieve (e.g. marketing goals).
+
+8.  Don't use relations between use cases unless you have a real need (i.e. you've actually written the use cases and can see the relations).
+
+9. You can delete this Note, if you want."
+	end
+	Metaclass FunctionalAnalysis
+		Property TraceabilityTypeToUseForFunctions String "satisfy"
+		Property StereotypesForBlockCreation String ""
+		Property IsConvertToDetailedADOptionEnabled Bool "True"
+		Property IsConvertToDetailedADOptionWantedByDefault Bool "True"
+		Property IsEnableAutoMoveOfInterfaces Bool "True"
+		Property IsMaintainProvidedAndRequiredInterfaces Bool "True"
+		Property IsCreateSDWithAutoShowApplied Bool "True"
+		Property IsCreateSDWithTestDriverLifeline Bool "False"
+		Property IsAllowInheritanceChoices Bool "False"
+	end
+end
+Subject General
+	Metaclass Graphics
+		Property IsPopulateOptionHidden Bool "True"
+		Property IsPopulateWantedByDefault Bool "False"
+		Property IsSendEventViaPanelOptionEnabled Bool "True"
+		Property IsSendEventViaPanelWantedByDefault Bool "False"
+		Property IsCallOperationSupportEnabled Bool "True"
+	end
+end
+end

@@ -1,0 +1,40 @@
+Subject Dialog
+Metaclass All
+Property PropertiesPerspectives MultiLine "
+<Perspectives>
+			<Perspective> SysMLHelper
+				<Pages>
+					<Page> Setup
+						<Properties>
+							<Property> SysMLHelper::RequirementsAnalysis::CreateRequirementTextForPrefixing </Property>
+							<Property> SysMLHelper::RequirementsAnalysis::NewTermForUseCaseDiagram </Property>
+							<Property> SysMLHelper::RequirementsAnalysis::TemplateForActivityDiagram </Property>
+							<Property> SysMLHelper::RequirementsAnalysis::TraceabilityTypeToUseForActions </Property>
+							<Property> SysMLHelper::RequirementsAnalysis::TraceabilityTypeToUseForUseCases </Property>
+							<Property> SysMLHelper::RequirementsAnalysis::DefaultActorsForUseCaseDiagram </Property>
+							<Property> SysMLHelper::RequirementsAnalysis::DefaultActorPackageName </Property>
+							<Property> SysMLHelper::RequirementsAnalysis::DefaultUseCasePackageName </Property>
+							<Property> SysMLHelper::RequirementsAnalysis::IsEnableAutoMoveOfRequirements </Property>
+							<Property> SysMLHelper::RequirementsAnalysis::IsEnableGatewayTypes </Property>
+							<Property> SysMLHelper::RequirementsAnalysis::UseCaseNoteText </Property>
+							<Property> SysMLHelper::FunctionalAnalysis::TraceabilityTypeToUseForFunctions </Property>
+							<Property> SysMLHelper::FunctionalAnalysis::StereotypesForBlockCreation </Property>
+							<Property> SysMLHelper::FunctionalAnalysis::IsConvertToDetailedADOptionEnabled </Property>
+							<Property> SysMLHelper::FunctionalAnalysis::IsConvertToDetailedADOptionWantedByDefault </Property>
+							<Property> SysMLHelper::FunctionalAnalysis::IsEnableAutoMoveOfInterfaces </Property>
+							<Property> SysMLHelper::FunctionalAnalysis::IsApplyAutoShowToSequenceDiagramTemplate </Property>
+							<Property> SysMLHelper::FunctionalAnalysis::IsMaintainProvidedAndRequiredInterfaces </Property>
+							<Property> General::Graphics::IsPopulateOptionHidden </Property>
+							<Property> General::Graphics::IsPopulateWantedByDefault </Property>
+							<Property> General::Graphics::IsSendEventViaPanelOptionEnabled </Property>
+							<Property> General::Graphics::IsSendEventViaPanelWantedByDefault </Property>
+							<Property> General::Graphics::IsCallOperationSupportEnabled </Property>
+						</Properties>
+					</Page>
+				</Pages>
+			</Perspective> 
+</Perspectives>"
+
+end
+end
+end
