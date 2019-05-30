@@ -1,10 +1,12 @@
 package functionalanalysisplugin;
 
 import functionalanalysisplugin.PopulateFunctionalAnalysisPkg.SimulationType;
+import generalhelpers.ConfigurationSettings;
 import generalhelpers.CreateGatewayProjectPanel;
 import generalhelpers.CreateStructuralElementPanel;
 import generalhelpers.GeneralHelpers;
 import generalhelpers.Logger;
+import generalhelpers.StereotypeAndPropertySettings;
 import generalhelpers.UserInterfaceHelpers;
 
 import java.awt.BorderLayout;
@@ -46,6 +48,7 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
 	private JCheckBox m_TestDriverCheckBox;
 	private SimulationType m_SimulationType;
 	private RhapsodyComboBox m_ChosenStereotype;
+	private ConfigurationSettings m_ConfigSettings;
 	
 	/**
 	 * 
@@ -55,7 +58,8 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
 	public static void launchThePanel(
 			final IRPPackage theRootPackage,
 			final IRPPackage theRequirementsAnalysisPkg,
-			final SimulationType withSimulationType ) {
+			final SimulationType withSimulationType,
+			final ConfigurationSettings andConfigSettings ) {
 		
 		String introText = null;
 		
@@ -113,7 +117,8 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
 					CreateFunctionalBlockPackagePanel thePanel = 
 							new CreateFunctionalBlockPackagePanel(
 									theAppID, 
-									withSimulationType );
+									withSimulationType,
+									andConfigSettings );
 
 					frame.setContentPane( thePanel );
 					frame.pack();
@@ -126,9 +131,12 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
 
 	CreateFunctionalBlockPackagePanel(
 			String appID,
-			final SimulationType withSimulationType ){
+			final SimulationType withSimulationType,
+			ConfigurationSettings theConfigSettings ){
 		
-		super();
+		super( appID );
+		
+		m_ConfigSettings = theConfigSettings;
 		
 		IRPApplication theRhpApp = RhapsodyAppServer.getActiveRhapsodyApplicationByID( appID );
 		IRPProject theRhpPrj = theRhpApp.activeProject();
@@ -221,11 +229,14 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
         thePanel.add( m_BlockNameTextField );			
         
 		List<IRPModelElement> theStereotypes = 
-				FunctionalAnalysisSettings.getStereotypesForBlockPartCreation( 
+				StereotypeAndPropertySettings.getStereotypesForBlockPartCreation( 
 						m_RootPackage.getProject() );
 
 		m_ChosenStereotype = new RhapsodyComboBox( theStereotypes, false );
-		m_ChosenStereotype.setSelectedRhapsodyItem( theStereotypes.get( 1 ) );
+		
+		if( !theStereotypes.isEmpty() ){
+			m_ChosenStereotype.setSelectedRhapsodyItem( theStereotypes.get( 0 ) );			
+		}
 		
 		thePanel.add( new JLabel( "  Stereotype as: " ) );
 		thePanel.add( m_ChosenStereotype );
@@ -251,7 +262,8 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
 			isValid = false;
 			
 		} else {
-			boolean isLegalBlockName = GeneralHelpers.isLegalName( theChosenBlockName );
+			boolean isLegalBlockName = 
+					GeneralHelpers.isLegalName( theChosenBlockName, m_RootPackage );
 			
 			if (!isLegalBlockName){
 				
@@ -272,7 +284,8 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
 					
 					if (actorChoice.isSelected()){
 						
-						boolean isLegalActorName = GeneralHelpers.isLegalName( theChosenActorName );
+						boolean isLegalActorName = 
+								GeneralHelpers.isLegalName( theChosenActorName, m_RootPackage );
 						
 						if (!isLegalActorName){
 							errorMsg += theChosenActorName + "is not legal as an identifier representing an executable actor\n";
@@ -350,16 +363,15 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
 				JTextField theActorNameTextField = new JTextField();
 				theActorNameTextField.setPreferredSize( new Dimension( 200, 20 ));
 				
-				RhapsodyComboBox theInheritedActorComboBox = new RhapsodyComboBox(theExistingActors, false);			
-				theInheritedActorComboBox.setPreferredSize(new Dimension(100, 20));
+				RhapsodyComboBox theInheritedActorComboBox = new RhapsodyComboBox( theExistingActors, false );			
+				theInheritedActorComboBox.setPreferredSize( new Dimension( 100, 20 ) );
 				
 				ActorMappingInfo theMappingInfo = 
 						new ActorMappingInfo(
 								theInheritedActorComboBox, 
 								theActorCheckBox, 
 								theActorNameTextField, 
-								(IRPActor)theActor,
-								
+								(IRPActor)theActor,								
 								theActor.getProject() );
 				
 				theMappingInfo.updateToBestActorNamesBasedOn( theBlockName );
@@ -420,16 +432,17 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
 	    return thePanel;
 	}
 	
-	private static void addAComponentWith(
+	public static void addAComponentWith(
 			String theName,
 			IRPPackage theBlockTestPackage, 
-			IRPClass theUsageDomainBlock ){
+			IRPClass theUsageDomainBlock,
+			String theSimulationMode ){
 		
 		IRPComponent theComponent = 
 				(IRPComponent) theBlockTestPackage.addNewAggr(
 						"Component", theName + "_EXE");
 		
-		theComponent.setPropertyValue("Activity.General.SimulationMode", "StateOriented");
+		theComponent.setPropertyValue("Activity.General.SimulationMode", theSimulationMode);
 
 		IRPConfiguration theConfiguration = (IRPConfiguration) theComponent.findConfiguration("DefaultConfig");
 		
@@ -752,12 +765,18 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
 							"RequirementsAnalysisProfile", "Profile" );
 		
 			theRAProfileDependency.addStereotype( "AppliedProfile", "Dependency" );
+
+			IRPClass theSystemAssemblyBlock = 
+					theFunctionalBlockPkg.addClass( theName + "_SystemAssembly" );
+			
+			theSystemAssemblyBlock.changeTo("Block");
 			
 			FunctionalAnalysisSettings.setupFunctionalAnalysisTagsFor( 
-					m_RootPackage.getProject(), 
-					theFunctionalBlockPkg,
+					m_RootPackage,
+					theSystemAssemblyBlock,
 					theInterfacesPkg,
-					theTestPackage );
+					theTestPackage,
+					theBlockPackage );
 			
 			// Populate content for the BlockPkg
 			IRPClass theLogicalSystemBlock = theBlockPackage.addClass( theName );
@@ -815,11 +834,6 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
 				IRPDependency theUsageDep = theTestPackage.addDependencyTo( theInterfacesPkg );
 				theUsageDep.addStereotype( "Usage", "Dependency" );
 			}	
-
-			IRPClass theSystemAssemblyBlock = 
-					theFunctionalBlockPkg.addClass( theName + "_SystemAssembly" );
-			
-			theSystemAssemblyBlock.changeTo("Block");
 
 			// Make the LogicalSystem a part of the SystemAssembly block
 			IRPInstance theLogicalSystemPart = 
@@ -973,7 +987,7 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
 				}
 				
 				// Add a component
-				addAComponentWith( theName, theTestPackage, theSystemAssemblyBlock );
+				addAComponentWith( theName, theTestPackage, theSystemAssemblyBlock, "StateOriented" );
 			}
 			
 			createBDDFor(
@@ -987,11 +1001,10 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
 			
 			CreateGatewayProjectPanel.launchThePanel( 
 					theProject, 
-					"^FunctionalAnalysisPkg.rqtf$" );
+					"^FunctionalAnalysisPkg.rqtf$",
+					m_ConfigSettings );
 			
-			CopyActivityDiagramsPanel.launchThePanel(
-					m_RequirementsAnalysisPkg, 
-					theWorkingPackage);
+			CopyActivityDiagramsPanel.launchThePanel();
 			
 		} else {
 			Logger.writeLine("Error in CreateFunctionalBlockPackagePanel.performAction, checkValidity returned false");
@@ -1000,7 +1013,7 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
 }
 
 /**
- * Copyright (C) 2016-2018  MBSE Training and Consulting Limited (www.executablembse.com)
+ * Copyright (C) 2016-2019  MBSE Training and Consulting Limited (www.executablembse.com)
 
     Change history:
     #023 30-MAY-2016: Added form to support validation checks for analysis block hierarchy creation (F.J.Chadburn) 
@@ -1034,6 +1047,8 @@ public class CreateFunctionalBlockPackagePanel extends CreateStructuralElementPa
     #220 12-JUL-2017: Added customisable Stereotype choice to the Block and block/Part creation dialogs (F.J.Chadburn) 
     #226 25-AUG-2017: Fixed exception when creating FunctionalBlockHierarchy and the RD already exists (F.J.Chadburn)
     #247 08-APR-2018: Fix threading issue crashing functional block hierarchy creation in 8.3 (F.J.Chadburn)
+    #252 29-MAY-2019: Implement generic features for profile/settings loading (F.J.Chadburn)
+    #256 29-MAY-2019: Rewrite to Java Swing dialog launching to make thread safe between versions (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

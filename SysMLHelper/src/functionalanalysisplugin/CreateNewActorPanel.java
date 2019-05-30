@@ -3,10 +3,12 @@ package functionalanalysisplugin;
 import generalhelpers.CreateStructuralElementPanel;
 import generalhelpers.GeneralHelpers;
 import generalhelpers.Logger;
+import generalhelpers.StereotypeAndPropertySettings;
 import generalhelpers.UserInterfaceHelpers;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.BorderFactory;
@@ -31,24 +33,17 @@ public class CreateNewActorPanel extends CreateStructuralElementPanel {
 	private ActorMappingInfo m_ClassifierMappingInfo;
 	private IRPClass m_BlockToConnectTo = null;
 	
-	public static void main(String[] args) {
-		
-		IRPApplication theApp = RhapsodyAppServer.getActiveRhapsodyApplication();
-		launchThePanel( theApp.activeProject() );
+	public static void main(String[] args) {		
+		launchThePanel();
 	}
 	
-	public static void launchThePanel(
-			IRPProject theProject ){
+	public static void launchThePanel(){
 		
-		final IRPPackage thePackageUnderDev = 
-				FunctionalAnalysisSettings.getPackageUnderDev( 
-						theProject );
+		final String theAppID = 
+				UserInterfaceHelpers.getAppIDIfSingleRhpRunningAndWarnUserIfNot();
 
-		final IRPClass theBlockUnderDev = 
-				FunctionalAnalysisSettings.getBlockUnderDev( 
-						theProject, "Which Block/Part do you want to wire the Actor to?" );
-		
-		Logger.writeLine("Add new actor part to " + Logger.elementInfo( thePackageUnderDev ) + " was invoked");
+		Logger.writeLine("Add new actor part" );
+		// to " + Logger.elementInfo( theBlockUnderDev ) + " was invoked");
 		
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 
@@ -57,21 +52,12 @@ public class CreateNewActorPanel extends CreateStructuralElementPanel {
 				
 				JFrame.setDefaultLookAndFeelDecorated( true );
 				
-				String msg;
-				
-				if( theBlockUnderDev != null ){
-					msg = "Create new actor connected to " + Logger.elementInfo( theBlockUnderDev );
-				} else {
-					msg = "Create new actor";
-				}
-				
-				JFrame frame = new JFrame( msg );
+				JFrame frame = new JFrame( "Create new Actor" );
 				
 				frame.setDefaultCloseOperation( JFrame.DISPOSE_ON_CLOSE );
 
 				CreateNewActorPanel thePanel = 
-						new CreateNewActorPanel( 
-								theBlockUnderDev, thePackageUnderDev );
+						new CreateNewActorPanel( theAppID );
 
 				frame.setContentPane( thePanel );
 				frame.pack();
@@ -81,29 +67,54 @@ public class CreateNewActorPanel extends CreateStructuralElementPanel {
 		});
 	}
 	
-	public CreateNewActorPanel(
-			IRPClass forBlockToConnectTo, 
-			IRPPackage theRootPackage ){
+	public CreateNewActorPanel( String theAppID ){
+//			IRPClass forBlockToConnectTo, 
+//			IRPPackage theRootPackage ){
 		
-		super();
-
-		m_RootPackage = theRootPackage;
-		m_BlockToConnectTo = forBlockToConnectTo;
+		super( theAppID );
 		
-		setLayout( new BorderLayout(10,10) );
-		setBorder( BorderFactory.createEmptyBorder( 10, 10, 10, 10 ) );
-		
-		if( m_BlockToConnectTo != null ){
-			add( createActorChoicePanel( m_BlockToConnectTo.getName() ), BorderLayout.PAGE_START );
+		IRPClass theBuildingBlock = 
+				m_ElementContext.getBuildingBlock();
 
-		} else {
-			add( createActorChoicePanel( "" ), BorderLayout.PAGE_START );
+		if( theBuildingBlock == null ){
+			
+			buildUnableToRunDialog( 
+					"Sorry, this helper is unable to run this command because \n" +
+					"there was no execution context or block found in the model. \n " +
+					"You need to add the relevant package structure first." );
+			
+		} else { // theBuildingBlock != null
+			
+			IRPClass theBlock = m_ElementContext.getBlockUnderDev(
+					"Which Block/Part do you want to wire the Actor to?" );
+			
+			if( theBlock == null ){
+				buildUnableToRunDialog( 
+						"Sorry, this helper is unable to run this command because \n" +
+						"there was no execution context or block found in the model. \n " +
+						"You need to add the relevant package structure first." );
+			} else {
+				m_RootPackage = m_ElementContext.getSimulationSettingsPackageBasedOn( theBlock );
+				m_BlockToConnectTo = m_ElementContext.getChosenBlock();
+				
+				setLayout( new BorderLayout(10,10) );
+				setBorder( BorderFactory.createEmptyBorder( 10, 10, 10, 10 ) );
+				
+				if( m_BlockToConnectTo != null ){
+					add( createActorChoicePanel( m_BlockToConnectTo.getName() ), BorderLayout.PAGE_START );
 
+				} else {
+					add( createActorChoicePanel( "" ), BorderLayout.PAGE_START );
+
+				}
+				
+				add( createOKCancelPanel(), BorderLayout.PAGE_END );
+
+			}
 		}
-		
-		add( createOKCancelPanel(), BorderLayout.PAGE_END );
 	}
 
+	@SuppressWarnings("unchecked")
 	private JPanel createActorChoicePanel(String theBlockName){
 		
 		JPanel thePanel = new JPanel();
@@ -112,10 +123,19 @@ public class CreateNewActorPanel extends CreateStructuralElementPanel {
 		m_ChosenNameTextField = new JTextField();
 		m_ChosenNameTextField.setPreferredSize( new Dimension( 300, 20 ) );
 
-		@SuppressWarnings("unchecked")
-		List<IRPModelElement> theExistingActors = 
-				m_RootPackage.getNestedElementsByMetaClass( "Actor", 1 ).toList();
+		List<IRPModelElement> theExistingActors;
 		
+		boolean isAllowInheritanceChoices = 
+				StereotypeAndPropertySettings.getIsAllowInheritanceChoices( m_RootPackage );
+		
+		if( isAllowInheritanceChoices ){
+			
+			theExistingActors = m_RootPackage.getNestedElementsByMetaClass( 
+					"Actor", 1 ).toList();
+		} else {
+			theExistingActors = new ArrayList<>();
+		}
+				
 		RhapsodyComboBox theInheritedActorComboBox = 
 				new RhapsodyComboBox( theExistingActors, false );
 		
@@ -133,12 +153,14 @@ public class CreateNewActorPanel extends CreateStructuralElementPanel {
 		
 		m_ClassifierMappingInfo.updateToBestActorNamesBasedOn( theBlockName );
 		
-	    JLabel theLabel = new JLabel( "Inherit from:" );
-	    
 	    thePanel.add( theActorCheckBox );
 	    thePanel.add( m_ChosenNameTextField );
-	    thePanel.add( theLabel );
-	    thePanel.add( theInheritedActorComboBox );
+	    
+	    if( isAllowInheritanceChoices ){
+		    JLabel theLabel = new JLabel( "Inherit from:" );
+		    thePanel.add( theLabel );
+		    thePanel.add( theInheritedActorComboBox );	    	
+	    }
 	    
 		return thePanel;
 	}
@@ -158,7 +180,7 @@ public class CreateNewActorPanel extends CreateStructuralElementPanel {
 			isValid = false;
 			
 		} else {
-			boolean isLegalBlockName = GeneralHelpers.isLegalName( theChosenName );
+			boolean isLegalBlockName = GeneralHelpers.isLegalName( theChosenName, m_BlockToConnectTo );
 			
 			if (!isLegalBlockName){
 				
@@ -213,7 +235,7 @@ public class CreateNewActorPanel extends CreateStructuralElementPanel {
 }
 
 /**
- * Copyright (C) 2016-2017  MBSE Training and Consulting Limited (www.executablembse.com)
+ * Copyright (C) 2016-2019  MBSE Training and Consulting Limited (www.executablembse.com)
 
     Change history:
     #025 31-MAY-2016: Add new menu and dialog to add a new actor to package under development (F.J.Chadburn)
@@ -225,6 +247,8 @@ public class CreateNewActorPanel extends CreateStructuralElementPanel {
     #186 29-MAY-2017: Add context string to getBlockUnderDev to make it clearer for user when selecting (F.J.Chadburn)
     #187 29-MAY-2017: Provide option to re-create «AutoShow» sequence diagram when adding new actor (F.J.Chadburn)
     #216 09-JUL-2017: Added a new Add Block/Part command added to the Functional Analysis menus (F.J.Chadburn)
+    #252 29-MAY-2019: Implement generic features for profile/settings loading (F.J.Chadburn)
+    #256 29-MAY-2019: Rewrite to Java Swing dialog launching to make thread safe between versions (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

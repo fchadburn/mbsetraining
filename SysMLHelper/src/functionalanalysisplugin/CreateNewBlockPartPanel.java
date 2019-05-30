@@ -3,6 +3,7 @@ package functionalanalysisplugin;
 import generalhelpers.CreateStructuralElementPanel;
 import generalhelpers.GeneralHelpers;
 import generalhelpers.Logger;
+import generalhelpers.StereotypeAndPropertySettings;
 import generalhelpers.UserInterfaceHelpers;
 
 import java.awt.BorderLayout;
@@ -16,6 +17,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+
 import com.telelogic.rhapsody.core.*;
 
 public class CreateNewBlockPartPanel extends CreateStructuralElementPanel {
@@ -27,339 +29,339 @@ public class CreateNewBlockPartPanel extends CreateStructuralElementPanel {
 
 	private IRPPackage m_RootPackage;
 	private IRPClass m_AssemblyBlock;
-	
+
 	protected JTextField m_BlockNameTextField = null;
 	protected JTextField m_PartNameTextField = null;
-	
+
 	protected RhapsodyComboBox m_ChosenStereotype;
-	
+
 	public static void main(String[] args) {
-		
-		IRPApplication theApp = RhapsodyAppServer.getActiveRhapsodyApplication();
-		launchThePanel( theApp.activeProject() );
+		launchThePanel();
 	}
-	
-	public static void launchThePanel(
-			IRPProject theProject ){
-		
-		final IRPPackage thePackageUnderDev = 
-				FunctionalAnalysisSettings.getPackageUnderDev( 
-						theProject );
-		
-		final IRPClass theAssemblyBlock = 
-				FunctionalAnalysisSettings.getBuildingBlock(
-						thePackageUnderDev );
-		
-		final IRPPackage theBlockPkg =
-				FunctionalAnalysisSettings.getPackageForBlocks(
-						theProject );
-		
-		Logger.writeLine("Add new block part to " + Logger.elementInfo( thePackageUnderDev ) + " was invoked");
-		
-		if( theAssemblyBlock == null ){
-			Logger.writeLine("Error in CreateNewBlockPartPanel, unable to find assembly block");
-		} else {
-			javax.swing.SwingUtilities.invokeLater(new Runnable() {
 
-				@Override
-				public void run() {
-					
-					JFrame.setDefaultLookAndFeelDecorated( true );
-					
-					String msg = "Create new Block/Part for " + Logger.elementInfo( theAssemblyBlock );
-					
-					JFrame frame = new JFrame( msg );
-					
-					frame.setDefaultCloseOperation( JFrame.DISPOSE_ON_CLOSE );
+	public static void launchThePanel(){
 
-					CreateNewBlockPartPanel thePanel = 
-							new CreateNewBlockPartPanel( 
-									theBlockPkg,
-									theAssemblyBlock );
+		final String theAppID = 
+				UserInterfaceHelpers.getAppIDIfSingleRhpRunningAndWarnUserIfNot();
 
-					frame.setContentPane( thePanel );
-					frame.pack();
-					frame.setLocationRelativeTo( null );
-					frame.setVisible( true );
-				}
-			});
-		}
+		Logger.writeLine("Add new block part");
 
+		javax.swing.SwingUtilities.invokeLater( new Runnable() {
+
+			@Override
+			public void run() {
+
+				JFrame.setDefaultLookAndFeelDecorated( true );
+
+				JFrame frame = new JFrame( "Create new Block/Part" );
+
+				frame.setDefaultCloseOperation( JFrame.DISPOSE_ON_CLOSE );
+
+				CreateNewBlockPartPanel thePanel = 
+						new CreateNewBlockPartPanel( theAppID );
+
+				frame.setContentPane( thePanel );
+				frame.pack();
+				frame.setLocationRelativeTo( null );
+				frame.setVisible( true );
+			}
+		});
 	}
-	
+
 	public CreateNewBlockPartPanel(
-			IRPPackage thePackageForBlock,
-			IRPClass theAssemblyBlock ){
-		
-		super();
+			String theAppID ){
+		//			IRPPackage thePackageForBlock,
+		//			IRPClass theAssemblyBlock ){
 
-		m_RootPackage = thePackageForBlock;
-		m_AssemblyBlock = theAssemblyBlock;
-		
-		setLayout( new BorderLayout(10,10) );
-		setBorder( BorderFactory.createEmptyBorder( 10, 10, 10, 10 ) );
-		
-		add( createBlockChoicePanel( "" ), BorderLayout.PAGE_START );
-		add( createStereotypePanel(), BorderLayout.CENTER );	    
-		add( createOKCancelPanel(), BorderLayout.PAGE_END );
-	}
+		super( theAppID );
 
-	private JPanel createStereotypePanel(){
-		
-		JPanel thePanel = new JPanel();
-		thePanel.setLayout( new BoxLayout(thePanel, BoxLayout.X_AXIS ) );	
-			    
-		List<IRPModelElement> theStereotypes = 
-				FunctionalAnalysisSettings.getStereotypesForBlockPartCreation( 
-						m_RootPackage.getProject() );
+		IRPClass theBuildingBlock = 
+				m_ElementContext.getBuildingBlock();
 
-		m_ChosenStereotype = new RhapsodyComboBox( theStereotypes, false );
-		m_ChosenStereotype.setMaximumSize( new Dimension( 250, 20 ) );
-		
-		if( theStereotypes.size() > 0 ){
-			// set to first value in list
-			m_ChosenStereotype.setSelectedRhapsodyItem( theStereotypes.get( 1 ) );			
+		if( theBuildingBlock == null ){
+
+			buildUnableToRunDialog( 
+					"Sorry, this helper is unable to run this command because \n" +
+							"there was no execution context or block found in the model. \n " +
+					"You need to add the relevant package structure first." );
+
+		} else { // theBuildingBlock != null
+
+			m_RootPackage = m_ElementContext.getPackageForBlocks();
+			m_AssemblyBlock = m_ElementContext.getBuildingBlock();
+
+			setLayout( new BorderLayout(10,10) );
+			setBorder( BorderFactory.createEmptyBorder( 10, 10, 10, 10 ) );
+
+			add( createBlockChoicePanel( "" ), BorderLayout.PAGE_START );
+			add( createStereotypePanel(), BorderLayout.CENTER );	    
+			add( createOKCancelPanel(), BorderLayout.PAGE_END );
+
+
 		}
-		
-		thePanel.add( new JLabel( "  Stereotype as: " ) );
-		thePanel.add( m_ChosenStereotype );
-	    
-		return thePanel;
 	}
-	
-	private JPanel createBlockChoicePanel(
-			String theBlockName ){
 
-		JPanel thePanel = new JPanel();
-		thePanel.setLayout( new BoxLayout(thePanel, BoxLayout.X_AXIS ) );	
-		
-		m_BlockNameTextField = new JTextField();
-		m_BlockNameTextField.setPreferredSize( new Dimension( 150, 20 ) );
 
-		JCheckBox theBlockCheckBox = new JCheckBox( "Create block called:" );
-		    
-		theBlockCheckBox.setSelected( true );
-	    thePanel.add( theBlockCheckBox );
-	    thePanel.add( m_BlockNameTextField );
-	    
-	    thePanel.add( new JLabel(" with part name (leave blank for default): ") );
-	    
-		m_PartNameTextField = new JTextField();
-		m_PartNameTextField.setPreferredSize( new Dimension( 150, 20 ) );
-		
-		thePanel.add( m_PartNameTextField );
-	    
-		return thePanel;
+
+private JPanel createStereotypePanel(){
+
+	JPanel thePanel = new JPanel();
+	thePanel.setLayout( new BoxLayout(thePanel, BoxLayout.X_AXIS ) );	
+
+	List<IRPModelElement> theStereotypes = 
+			StereotypeAndPropertySettings.getStereotypesForBlockPartCreation( 
+					m_RootPackage.getProject() );
+
+	m_ChosenStereotype = new RhapsodyComboBox( theStereotypes, false );
+	m_ChosenStereotype.setMaximumSize( new Dimension( 250, 20 ) );
+
+	if( theStereotypes.size() > 0 ){
+		// set to first value in list
+		m_ChosenStereotype.setSelectedRhapsodyItem( theStereotypes.get( 0 ) );	
+		Logger.writeLine("Setting default stereotype to " + Logger.elementInfo(theStereotypes.get( 0 )));
 	}
-	
-	@Override
-	protected boolean checkValidity(
-			boolean isMessageEnabled) {
-		
-		boolean isValid = true;
-		String errorMsg = "";
-		
-		String theBlockName = m_BlockNameTextField.getText();
-		
-		if ( theBlockName.trim().isEmpty() ){
-			
-			errorMsg += "Please choose a valid name for the Block";
+
+	thePanel.add( new JLabel( "  Stereotype as: " ) );
+	thePanel.add( m_ChosenStereotype );
+
+	return thePanel;
+}
+
+private JPanel createBlockChoicePanel(
+		String theBlockName ){
+
+	JPanel thePanel = new JPanel();
+	thePanel.setLayout( new BoxLayout(thePanel, BoxLayout.X_AXIS ) );	
+
+	m_BlockNameTextField = new JTextField();
+	m_BlockNameTextField.setPreferredSize( new Dimension( 150, 20 ) );
+
+	JCheckBox theBlockCheckBox = new JCheckBox( "Create block called:" );
+
+	theBlockCheckBox.setSelected( true );
+	thePanel.add( theBlockCheckBox );
+	thePanel.add( m_BlockNameTextField );
+
+	thePanel.add( new JLabel(" with part name (leave blank for default): ") );
+
+	m_PartNameTextField = new JTextField();
+	m_PartNameTextField.setPreferredSize( new Dimension( 150, 20 ) );
+
+	thePanel.add( m_PartNameTextField );
+
+	return thePanel;
+}
+
+@Override
+protected boolean checkValidity(
+		boolean isMessageEnabled) {
+
+	boolean isValid = true;
+	String errorMsg = "";
+
+	String theBlockName = m_BlockNameTextField.getText();
+
+	if ( theBlockName.trim().isEmpty() ){
+
+		errorMsg += "Please choose a valid name for the Block";
+		isValid = false;
+
+	} else {
+		boolean isLegalBlockName = 
+				GeneralHelpers.isLegalName( theBlockName, m_RootPackage );
+
+		if( !isLegalBlockName ){
+
+			errorMsg += theBlockName + " is not legal as an identifier representing an executable Block\n";				
 			isValid = false;
-			
+
+		} else if( !GeneralHelpers.isElementNameUnique(
+				theBlockName, 
+				"Class", 
+				m_RootPackage, 
+				1 ) ){
+
+			errorMsg += "Unable to proceed as the Block name '" + theBlockName + "' is not unique";
+			isValid = false;
+
 		} else {
-			boolean isLegalBlockName = 
-					GeneralHelpers.isLegalName( theBlockName );
-			
-			if( !isLegalBlockName ){
-				
-				errorMsg += theBlockName + " is not legal as an identifier representing an executable Block\n";				
-				isValid = false;
-				
-			} else if( !GeneralHelpers.isElementNameUnique(
-							theBlockName, 
-							"Class", 
-							m_RootPackage, 
-							1 ) ){
 
-				errorMsg += "Unable to proceed as the Block name '" + theBlockName + "' is not unique";
-				isValid = false;
-				
-			} else {
-				
-				String thePartName = m_PartNameTextField.getText();
-				
-				if ( !thePartName.trim().isEmpty() ){
-					
-					boolean isLegalPartName = 
-							GeneralHelpers.isLegalName( thePartName );
-					
-					if( !isLegalPartName ){
-						
-						errorMsg += thePartName + " is not legal as an identifier representing an executable Part\n";				
-						isValid = false;
-						
-					} else if( !GeneralHelpers.isElementNameUnique(
-									thePartName, 
-									"Object", 
-									m_AssemblyBlock, 
-									0 ) ){
+			String thePartName = m_PartNameTextField.getText();
 
-						errorMsg += "Unable to proceed as the Part name '" + thePartName + "' is not unique for " + 
-								Logger.elementInfo( m_AssemblyBlock );
-						
-						isValid = false;
-					}
+			if ( !thePartName.trim().isEmpty() ){
+
+				boolean isLegalPartName = 
+						GeneralHelpers.isLegalName( thePartName, m_AssemblyBlock );
+
+				if( !isLegalPartName ){
+
+					errorMsg += thePartName + " is not legal as an identifier representing an executable Part\n";				
+					isValid = false;
+
+				} else if( !GeneralHelpers.isElementNameUnique(
+						thePartName, 
+						"Object", 
+						m_AssemblyBlock, 
+						0 ) ){
+
+					errorMsg += "Unable to proceed as the Part name '" + thePartName + "' is not unique for " + 
+							Logger.elementInfo( m_AssemblyBlock );
+
+					isValid = false;
 				}
 			}
 		}
-		
-		if (isMessageEnabled && !isValid && errorMsg != null){
-
-			UserInterfaceHelpers.showWarningDialog( errorMsg );
-		}
-		
-		return isValid;
 	}
 
-	private IRPInstance getElapsedTimeActorPartFor(
-			IRPClass theAssemblyBlock ){
-		
-		IRPInstance theElapsedTimePart = null;
-		
-		@SuppressWarnings("unchecked")
-		List<IRPInstance> theInstances = 
-				theAssemblyBlock.getNestedElementsByMetaClass(
-						"Instance", 0 ).toList();
-		
-		for( IRPInstance theInstance : theInstances ){
-			
-			IRPClassifier theClassifier = theInstance.getOtherClass();
-			
-			if( theClassifier != null &&
+	if (isMessageEnabled && !isValid && errorMsg != null){
+
+		UserInterfaceHelpers.showWarningDialog( errorMsg );
+	}
+
+	return isValid;
+}
+
+private IRPInstance getElapsedTimeActorPartFor(
+		IRPClass theAssemblyBlock ){
+
+	IRPInstance theElapsedTimePart = null;
+
+	@SuppressWarnings("unchecked")
+	List<IRPInstance> theInstances = 
+	theAssemblyBlock.getNestedElementsByMetaClass(
+			"Instance", 0 ).toList();
+
+	for( IRPInstance theInstance : theInstances ){
+
+		IRPClassifier theClassifier = theInstance.getOtherClass();
+
+		if( theClassifier != null &&
 				theClassifier instanceof IRPActor &&
 				theClassifier.getName().equals( "ElapsedTime" ) ){
-				
-				theElapsedTimePart = theInstance;
-				break;
-			}
-		}
-		
-		return theElapsedTimePart;
-	}
-	
-	@Override
-	protected void performAction() {
-		
-		if( checkValidity( false ) ){
-			
-			if( m_RootPackage != null ){
-				
-				String theName = m_BlockNameTextField.getText();
-				
-				IRPClass theClass = m_RootPackage.addClass( theName );
-				theClass.highLightElement();				
-				
-				IRPProject theProject = theClass.getProject();
 
-				GeneralHelpers.addGeneralization( 
-						theClass, 
-						"TimeElapsedBlock", 
-						theProject );
-				
-				String thePartName = m_PartNameTextField.getText().trim();
-							
-				IRPInstance thePart = 
-						(IRPInstance) m_AssemblyBlock.addNewAggr(
-								"Part", thePartName );
-				
-				thePart.setOtherClass( theClass );
-				thePart.highLightElement();
-				
-				IRPModelElement theSelectedStereotype = m_ChosenStereotype.getSelectedRhapsodyItem();
-				
-				if( theSelectedStereotype != null && 
+			theElapsedTimePart = theInstance;
+			break;
+		}
+	}
+
+	return theElapsedTimePart;
+}
+
+@Override
+protected void performAction() {
+
+	if( checkValidity( false ) ){
+
+		if( m_RootPackage != null ){
+
+			String theName = m_BlockNameTextField.getText();
+
+			IRPClass theClass = m_RootPackage.addClass( theName );
+			theClass.highLightElement();				
+
+			IRPProject theProject = theClass.getProject();
+
+			GeneralHelpers.addGeneralization( 
+					theClass, 
+					"TimeElapsedBlock", 
+					theProject );
+
+			String thePartName = m_PartNameTextField.getText().trim();
+
+			IRPInstance thePart = 
+					(IRPInstance) m_AssemblyBlock.addNewAggr(
+							"Part", thePartName );
+
+			thePart.setOtherClass( theClass );
+			thePart.highLightElement();
+
+			IRPModelElement theSelectedStereotype = m_ChosenStereotype.getSelectedRhapsodyItem();
+
+			if( theSelectedStereotype != null && 
 					theSelectedStereotype instanceof IRPStereotype ){
-					
-					try {
-						theClass.setStereotype( (IRPStereotype) theSelectedStereotype );
-						
-					} catch (Exception e) {
-						Logger.writeLine("Exception in CreateNewBlockPartPanel.performAction, unable to apply " + 
-								theSelectedStereotype.getName() + " to " + Logger.elementInfo( theClass ) );	
-					}
-					
-					try {
-						thePart.setStereotype( (IRPStereotype) theSelectedStereotype );
-						
-					} catch (Exception e) {
-						Logger.writeLine("Exception in CreateNewBlockPartPanel.performAction, unable to apply " + 
-								theSelectedStereotype.getName() + " to " + Logger.elementInfo( thePart ) );	
-					}
+
+				try {
+					theClass.setStereotype( (IRPStereotype) theSelectedStereotype );
+
+				} catch (Exception e) {
+					Logger.writeLine("Exception in CreateNewBlockPartPanel.performAction, unable to apply " + 
+							theSelectedStereotype.getName() + " to " + Logger.elementInfo( theClass ) );	
 				}
-				
-				theClass.changeTo( "Block" );
-				
-				// Try and find ElapsedTime actor part 				
-				IRPInstance theElapsedTimePart = 
-						getElapsedTimeActorPartFor( m_AssemblyBlock );
-				
-				if( theElapsedTimePart != null ){
-					
-					IRPClassifier theElapsedTimeActor = 
-							theElapsedTimePart.getOtherClass();
-					
-					IRPSysMLPort theActorsElapsedTimePort = 
-							(IRPSysMLPort) GeneralHelpers.findNestedElementUnder( 
-									(IRPClassifier) theElapsedTimeActor,
-									"elapsedTime",
-									"SysMLPort",
-									true );
-							
-					IRPSysMLPort theBlocksElapsedTimePort = 
-							(IRPSysMLPort) GeneralHelpers.findNestedElementUnder( 
-									(IRPClassifier) theClass,
-									"elapsedTime",
-									"SysMLPort",
-									true );
-					
-					if( theActorsElapsedTimePort != null &&
+
+				try {
+					thePart.setStereotype( (IRPStereotype) theSelectedStereotype );
+
+				} catch (Exception e) {
+					Logger.writeLine("Exception in CreateNewBlockPartPanel.performAction, unable to apply " + 
+							theSelectedStereotype.getName() + " to " + Logger.elementInfo( thePart ) );	
+				}
+			}
+
+			theClass.changeTo( "Block" );
+
+			// Try and find ElapsedTime actor part 				
+			IRPInstance theElapsedTimePart = 
+					getElapsedTimeActorPartFor( m_AssemblyBlock );
+
+			if( theElapsedTimePart != null ){
+
+				IRPClassifier theElapsedTimeActor = 
+						theElapsedTimePart.getOtherClass();
+
+				IRPSysMLPort theActorsElapsedTimePort = 
+						(IRPSysMLPort) GeneralHelpers.findNestedElementUnder( 
+								(IRPClassifier) theElapsedTimeActor,
+								"elapsedTime",
+								"SysMLPort",
+								true );
+
+				IRPSysMLPort theBlocksElapsedTimePort = 
+						(IRPSysMLPort) GeneralHelpers.findNestedElementUnder( 
+								(IRPClassifier) theClass,
+								"elapsedTime",
+								"SysMLPort",
+								true );
+
+				if( theActorsElapsedTimePort != null &&
 						theBlocksElapsedTimePort != null ){
-						
-						GeneralHelpers.addConnectorBetweenSysMLPortsIfOneDoesntExist(
-								theActorsElapsedTimePort, 
-								theElapsedTimePart, 
-								theBlocksElapsedTimePort, 
-								thePart );
-						
-					} else {
-						Logger.writeLine("Error in CreateNewBlockPartPanel.performAction(), unable to find elapsedTime ports") ;
-					}
-						
+
+					GeneralHelpers.addConnectorBetweenSysMLPortsIfOneDoesntExist(
+							theActorsElapsedTimePort, 
+							theElapsedTimePart, 
+							theBlocksElapsedTimePort, 
+							thePart );
+
 				} else {
-					Logger.writeLine("Error in CreateNewBlockPartPanel.performAction: Unable to find ElapsedTime actor in project. You may be missing the BasePkg");
+					Logger.writeLine("Error in CreateNewBlockPartPanel.performAction(), unable to find elapsedTime ports") ;
 				}
-				
-				SequenceDiagramHelper.updateAutoShowSequenceDiagramFor( 
-						m_AssemblyBlock );
 
 			} else {
-				Logger.writeLine("Error in CreateNewActorPanel.performAction, unable to find " + Logger.elementInfo( m_RootPackage ) );
+				Logger.writeLine("Error in CreateNewBlockPartPanel.performAction: Unable to find ElapsedTime actor in project. You may be missing the BasePkg");
 			}
-						
+
+			SequenceDiagramHelper.updateAutoShowSequenceDiagramFor( 
+					m_AssemblyBlock );
+
 		} else {
-			Logger.writeLine("Error in CreateNewActorPanel.performAction, checkValidity returned false");
-		}		
-	}	
+			Logger.writeLine("Error in CreateNewActorPanel.performAction, unable to find " + Logger.elementInfo( m_RootPackage ) );
+		}
+
+	} else {
+		Logger.writeLine("Error in CreateNewActorPanel.performAction, checkValidity returned false");
+	}		
+}	
 }
 
 /**
- * Copyright (C) 2017  MBSE Training and Consulting Limited (www.executablembse.com)
+ * Copyright (C) 2017-2019  MBSE Training and Consulting Limited (www.executablembse.com)
 
     Change history:
     #216 09-JUL-2017: Added a new Add Block/Part command added to the Functional Analysis menus (F.J.Chadburn)
     #220 12-JUL-2017: Added customisable Stereotype choice to the Block and block/Part creation dialogs (F.J.Chadburn) 
     #236 27-SEP-2017: Improved Add new Block/Part... dialog to allow naming of part (F.J.Chadburn)
-    
+    #252 29-MAY-2019: Implement generic features for profile/settings loading (F.J.Chadburn)
+    #256 29-MAY-2019: Rewrite to Java Swing dialog launching to make thread safe between versions (F.J.Chadburn)
+
     This file is part of SysMLHelperPlugin.
 
     SysMLHelperPlugin is free software: you can redistribute it and/or modify

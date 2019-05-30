@@ -68,7 +68,7 @@ public class RhapsodyComboBox extends JComboBox<Object>{
 			if( theElement != null && 
 				theElement.equals( toTheElement ) ){
 				
-				setSelectedIndex( i );
+				setSelectedIndex( i+1 );
 				break;
 			}
 		}

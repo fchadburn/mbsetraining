@@ -6,7 +6,6 @@ import generalhelpers.Logger;
 import generalhelpers.TraceabilityHelper;
 import generalhelpers.UserInterfaceHelpers;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -21,7 +20,10 @@ public class FunctionalAnalysisPlugin extends RPUserPlugin {
 	public void RhpPluginInit(final IRPApplication theRhapsodyApp) {
 		
 		m_rhpApplication = theRhapsodyApp;
-		m_configSettings = ConfigurationSettings.getInstance();
+		
+		m_configSettings = new ConfigurationSettings(
+				"SysMLHelper.properties", 
+				"SysMLHelper_MessagesBundle" );		
 		
 		String msg = "The FunctionalAnalysisPlugin component of the SysMLHelperPlugin V" + m_configSettings.getProperty("PluginVersion") 
 				+ " was loaded successfully. New right-click 'MBSE Method' commands have been added.";		
@@ -64,7 +66,7 @@ public class FunctionalAnalysisPlugin extends RPUserPlugin {
 
 					try {
 						if (theSelectedEl instanceof IRPPackage){
-							PopulateFunctionalAnalysisPkg.createFunctionalBlockPackageHierarchy( (IRPPackage)theSelectedEl, SimulationType.FullSim );
+							PopulateFunctionalAnalysisPkg.createFunctionalBlockPackageHierarchy( (IRPPackage)theSelectedEl, SimulationType.FullSim, m_configSettings );
 						}
 
 					} catch (Exception e) {
@@ -75,7 +77,7 @@ public class FunctionalAnalysisPlugin extends RPUserPlugin {
 
 					try {
 						if (theSelectedEl instanceof IRPPackage){
-							PopulateFunctionalAnalysisPkg.createFunctionalBlockPackageHierarchy( (IRPPackage)theSelectedEl, SimulationType.SimpleSim );
+							PopulateFunctionalAnalysisPkg.createFunctionalBlockPackageHierarchy( (IRPPackage)theSelectedEl, SimulationType.SimpleSim, m_configSettings );
 						}
 
 					} catch (Exception e) {
@@ -86,108 +88,78 @@ public class FunctionalAnalysisPlugin extends RPUserPlugin {
 
 					try {
 						if (theSelectedEl instanceof IRPPackage){
-							PopulateFunctionalAnalysisPkg.createFunctionalBlockPackageHierarchy( (IRPPackage)theSelectedEl, SimulationType.NoSim );
+							PopulateFunctionalAnalysisPkg.createFunctionalBlockPackageHierarchy( (IRPPackage)theSelectedEl, SimulationType.NoSim, m_configSettings );
 						}
 
 					} catch (Exception e) {
 						Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking PopulateFunctionalAnalysisPkg.createFunctionalBlockPackageHierarchy (NoSim)");
 					}
 
-				} else if (menuItem.equals(m_configSettings.getString("functionalanalysisplugin.CreateIncomingEventMenu"))){
+				} else if( menuItem.equals( m_configSettings.getString(
+						"functionalanalysisplugin.CreateIncomingEventMenu" ) ) ){
 
-					if( theSelectedGraphEls.isEmpty() && ( 
-							theSelectedEl instanceof IRPClass ||
-							theSelectedEl instanceof IRPInstance ||
-							theSelectedEl instanceof IRPDiagram ) ){
-						
-						Set<IRPRequirement> theReqts = new HashSet<IRPRequirement>();
-						
-						CreateIncomingEventPanel.launchThePanel( 
-								null,
-								theSelectedEl, 
-								theReqts, 
-								theActiveProject );
-						
-					} else if (!theSelectedGraphEls.isEmpty()){
-						try {
-							CreateIncomingEventPanel.createIncomingEventsFor( theActiveProject, theSelectedGraphEls );
+					try{
+						CreateIncomingEventPanel.launchThePanel();
 
-						} catch (Exception e) {
-							Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking OperationCreator.createIncomingEventsFor");
-						}
+					} catch (Exception e) {
+						Logger.writeLine( "Error: Exception in OnMenuItemSelect when invoking " +
+								"CreateIncomingEventPanel.launchThePanel e=" + e.getMessage() );
 					}
 
-				} else if (menuItem.equals(m_configSettings.getString("functionalanalysisplugin.CreateAnOperationMenu"))){
+				} else if( menuItem.equals( m_configSettings.getString(
+						"functionalanalysisplugin.CreateAnOperationMenu" ) ) ){
 
-					if( theSelectedGraphEls.isEmpty() && ( 
-							theSelectedEl instanceof IRPClass ||
-							theSelectedEl instanceof IRPInstance ||
-							theSelectedEl instanceof IRPDiagram ) ){
-						
-						Set<IRPRequirement> theReqts = new HashSet<IRPRequirement>();
-						
-						// only launch a dialog for non requirement elements
-						CreateOperationPanel.launchThePanel(
-								theSelectedEl, 
-								theReqts, 
-								theActiveProject );
-						
-					} else if (!theSelectedGraphEls.isEmpty()){
-						try {
-							CreateOperationPanel.createSystemOperationsFor( theActiveProject, theSelectedGraphEls );
+					try{
+						CreateOperationPanel.launchThePanel();
 
-						} catch (Exception e) {
-							Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking OperationCreator.createSystemOperationsFor");
-						}
+					} catch( Exception e ){
+						Logger.writeLine( "Error: Exception in OnMenuItemSelect when invoking " +
+								"CreateOperationPanel.launchThePanel e=" + e.getMessage() );
 					}
 					
-				} else if (menuItem.equals(m_configSettings.getString("functionalanalysisplugin.CreateOutgoingEventMenu"))){
+				} else if( menuItem.equals( m_configSettings.getString(
+						"functionalanalysisplugin.CreateOutgoingEventMenu" ) ) ){
 
-					if( theSelectedGraphEls.isEmpty() && ( 
-							theSelectedEl instanceof IRPClass ||
-							theSelectedEl instanceof IRPInstance ||
-							theSelectedEl instanceof IRPDiagram ) ){
-						
-						Set<IRPRequirement> theReqts = new HashSet<IRPRequirement>();
-						
-						CreateOutgoingEventPanel.launchThePanel(	
-								null, 
-								theSelectedEl,
-								theReqts,
-								theActiveProject );
-								
-					} else if (!theSelectedGraphEls.isEmpty()){
-						try {
-							CreateOutgoingEventPanel.createOutgoingEventsFor( theActiveProject, theSelectedGraphEls );
-							
-						} catch (Exception e) {
-							Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking OperationCreator.createOutgoingEventsFor");
-						}
+					try{
+						CreateOutgoingEventPanel.launchThePanel( m_configSettings );
+
+					} catch( Exception e ){
+						Logger.writeLine( "Error: Exception in OnMenuItemSelect when invoking " +
+								"CreateOutgoingEventPanel.launchThePanel e=" + e.getMessage() );
 					}
 
-				} else if (menuItem.equals(m_configSettings.getString("functionalanalysisplugin.CreateAttributeMenu"))){
+				} else if( menuItem.equals( m_configSettings.getString(
+						"functionalanalysisplugin.CreateAttributeMenu" ) ) ){
 
-					if( theSelectedGraphEls.isEmpty() && ( 
-							theSelectedEl instanceof IRPClass ||
-							theSelectedEl instanceof IRPInstance ||
-							theSelectedEl instanceof IRPDiagram ) ){
-						
-						Set<IRPRequirement> theReqts = new HashSet<IRPRequirement>();
-						
-						CreateTracedAttributePanel.launchThePanel(
-								null,
-								theSelectedEl, 
-								theReqts, 
-								theActiveProject );
-						
-					} else if (!theSelectedGraphEls.isEmpty()){
-						try {
-							CreateTracedAttributePanel.createSystemAttributesFor( theActiveProject, theSelectedGraphEls );
-							
-						} catch (Exception e) {
-							Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking CreateTracedAttributePanel.createSystemAttributeFor");
-						}
+					try{
+						CreateTracedAttributePanel.launchThePanel( m_configSettings );
+
+					} catch( Exception e ){
+						Logger.writeLine( "Error: Exception in OnMenuItemSelect when invoking " +
+								"CreateOperationPanel.launchThePanel e=" + e.getMessage() );
 					}
+					
+//					if( theSelectedGraphEls.isEmpty() && ( 
+//							theSelectedEl instanceof IRPClass ||
+//							theSelectedEl instanceof IRPInstance ||
+//							theSelectedEl instanceof IRPDiagram ) ){
+//						
+//						Set<IRPRequirement> theReqts = new HashSet<IRPRequirement>();
+//						
+//						CreateTracedAttributePanel.launchThePanel(
+//								null,
+//								theSelectedEl, 
+//								theReqts, 
+//								theActiveProject );
+//						
+//					} else if (!theSelectedGraphEls.isEmpty()){
+//						try {
+//							CreateTracedAttributePanel.createSystemAttributesFor( theActiveProject, theSelectedGraphEls );
+//							
+//						} catch (Exception e) {
+//							Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking CreateTracedAttributePanel.createSystemAttributeFor");
+//						}
+//					}
 
 				} else if (menuItem.equals(m_configSettings.getString("functionalanalysisplugin.UpdateAttributeOrCheckOpMenu"))){
 
@@ -204,20 +176,16 @@ public class FunctionalAnalysisPlugin extends RPUserPlugin {
 						}
 					}
 
-				} else if (menuItem.equals(m_configSettings.getString("functionalanalysisplugin.CreateEventForAttributeMenu"))){
+				} else if( menuItem.equals( m_configSettings.getString(
+						"functionalanalysisplugin.CreateEventForAttributeMenu" ) ) ){
 
-					if ( theSelectedEl instanceof IRPAttribute ){
-						try {
-							Set<IRPRequirement> theReqts = 
-									TraceabilityHelper.getRequirementsThatTraceFrom( theSelectedEl, false );
-							
-							CreateIncomingEventPanel.launchThePanel( 
-									null, (IRPAttribute)theSelectedEl, theReqts, theActiveProject );
-							
-						} catch (Exception e) {
-							Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking UpdateTracedAttributePanel.launchThePanel");
-						}
-					}				
+					try{
+						CreateIncomingEventPanel.launchThePanel();
+
+					} catch( Exception e ){
+						Logger.writeLine( "Error: Exception in OnMenuItemSelect when invoking " +
+								"CreateIncomingEventPanel.launchThePanel, e=" + e.getMessage() );
+					}		
 
 				} else if (menuItem.equals(m_configSettings.getString("functionalanalysisplugin.DeriveDownstreamRequirementMenu"))){
 					
@@ -253,7 +221,7 @@ public class FunctionalAnalysisPlugin extends RPUserPlugin {
 
 					if (theSelectedEl instanceof IRPPackage){
 						try {
-							PopulateFunctionalAnalysisPkg.addNewActorToPackageUnderDevelopement( theSelectedEl ); 
+							CreateNewActorPanel.launchThePanel();
 
 						} catch (Exception e) {
 							Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking PopulateFunctionalAnalysisPkg.addNewActorToPackageUnderDevelopement");
@@ -264,7 +232,7 @@ public class FunctionalAnalysisPlugin extends RPUserPlugin {
 
 					if (theSelectedEl instanceof IRPPackage || theSelectedEl instanceof IRPDiagram ){
 						try {
-							PopulateFunctionalAnalysisPkg.addNewBlockPartToPackageUnderDevelopement( theSelectedEl ); 
+							CreateNewBlockPartPanel.launchThePanel();
 
 						} catch (Exception e) {
 							Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking PopulateFunctionalAnalysisPkg.AddNewBlockPartToPackageMenu");
@@ -275,34 +243,13 @@ public class FunctionalAnalysisPlugin extends RPUserPlugin {
 
 					if (theSelectedEl instanceof IRPPackage){
 						try {
-							PopulateFunctionalAnalysisPkg.copyActivityDiagrams( theActiveProject ); 
+							PopulateFunctionalAnalysisPkg.copyActivityDiagrams( (IRPProject) theSelectedEl ); 
 
 						} catch (Exception e) {
 							Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking PopulateFunctionalAnalysisPkg.CopyActivityDiagramsMenu");
 						}
 					}							
 
-				} else if (menuItem.equals(m_configSettings.getString("functionalanalysisplugin.PopulateRequirementsForSDsMenu"))){
-
-					if (theSelectedEl instanceof IRPSequenceDiagram){
-						try {
-							PopulateRelatedRequirementsPanel.launchThePanel( (IRPSequenceDiagram) theSelectedEl );
-
-						} catch (Exception e) {
-							Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking SequenceDiagramHelper.populateRequirementsForSequenceDiagramsBasedOn");
-						}
-					}
-					
-				} else if (menuItem.equals(m_configSettings.getString("functionalanalysisplugin.UpdateVerificationDependenciesForSDsMenu"))){
-
-					if (!theSelectedEls.isEmpty()){
-						try {
-							SequenceDiagramHelper.updateVerificationsForSequenceDiagramsBasedOn( theSelectedEls );
-
-						} catch (Exception e) {
-							Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking SequenceDiagramHelper.updateVerificationsForSequenceDiagramsBasedOn");
-						}
-					}				
 				} else if (menuItem.equals(m_configSettings.getString("functionalanalysisplugin.DeleteEventsAndRelatedElementsMenu"))){
 
 					try {
@@ -312,26 +259,26 @@ public class FunctionalAnalysisPlugin extends RPUserPlugin {
 						Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking EventDeletion.deleteEventAndRelatedElementsFor");
 					}
 
-				} else if (menuItem.equals(m_configSettings.getString("functionalanalysisplugin.SwitchMenusToMoreDetailedADMenu"))){
-
-					try {
-						if( theSelectedEl instanceof IRPActivityDiagram ){
-							
-							IRPActivityDiagram theAD = (IRPActivityDiagram)theSelectedEl;
-							
-							int isOpen = theAD.isOpen();
-							
-							PopulateFunctionalAnalysisPkg.switchToMoreDetailedAD( 
-									(IRPActivityDiagram)theSelectedEl );
-							
-							if( isOpen==1 ){
-								theAD.highLightElement();
-							}
-						}
-						
-					} catch (Exception e) {
-						Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking MBSE Method: Functional Analysis\\Switch menus to «MoreDetailedAD»");
-					}
+//				} else if (menuItem.equals(m_configSettings.getString("functionalanalysisplugin.SwitchMenusToMoreDetailedADMenu"))){
+//
+//					try {
+//						if( theSelectedEl instanceof IRPActivityDiagram ){
+//							
+//							IRPActivityDiagram theAD = (IRPActivityDiagram)theSelectedEl;
+//							
+//							int isOpen = theAD.isOpen();
+//							
+//							PopulateFunctionalAnalysisPkg.switchToMoreDetailedAD( 
+//									(IRPActivityDiagram)theSelectedEl );
+//							
+//							if( isOpen==1 ){
+//								theAD.highLightElement();
+//							}
+//						}
+//						
+//					} catch (Exception e) {
+//						Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking MBSE Method: Functional Analysis\\Switch menus to «MoreDetailedAD»");
+//					}
 					
 				} else if (menuItem.equals(m_configSettings.getString("functionalanalysisplugin.SwitchMenusToFullSim"))){
 
@@ -396,7 +343,7 @@ public class FunctionalAnalysisPlugin extends RPUserPlugin {
 }
 
 /**
- * Copyright (C) 2016-2017  MBSE Training and Consulting Limited (www.executablembse.com)
+ * Copyright (C) 2016-2019  MBSE Training and Consulting Limited (www.executablembse.com)
 
     Change history:
     #006 02-MAY-2016: Add FunctionalAnalysisPkg helper support (F.J.Chadburn)
@@ -426,6 +373,9 @@ public class FunctionalAnalysisPlugin extends RPUserPlugin {
     #222 12-JUL-2017: Allow AddNewBlockPartToPackageMenu to work when right-clicking IBDs and BDDs (F.J.Chadburn) 			
     #230 20-SEP-2017: Initial alpha trial for create test case script from a sequence diagram (F.J.Chadburn)
     #239 04-OCT-2017: Improve warning/behaviour if multiple Rhapsodys are open or user switches app (F.J.Chadburn)
+    #256 11-SEP-2018: Move populate requirements/update verifications for SD(s) menus to Reqts menu (F.J.Chadburn)
+    #252 29-MAY-2019: Implement generic features for profile/settings loading (F.J.Chadburn)
+    #256 29-MAY-2019: Rewrite to Java Swing dialog launching to make thread safe between versions (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

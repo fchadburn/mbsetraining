@@ -1,9 +1,13 @@
 package functionalanalysisplugin;
 
+import java.util.List;
+import java.util.Set;
+
 import generalhelpers.ConfigurationSettings;
 import generalhelpers.CreateGatewayProjectPanel;
 import generalhelpers.GeneralHelpers;
 import generalhelpers.PopulatePkg;
+import generalhelpers.StereotypeAndPropertySettings;
 import generalhelpers.UserInterfaceHelpers;
 
 import javax.swing.JDialog;
@@ -26,16 +30,30 @@ public class PopulateFunctionalAnalysisPkg extends PopulatePkg {
 		
 		IRPModelElement theSelectedEl = theApp.getSelectedElement();
 		
+//		if( theSelectedEl instanceof IRPPackage ){
+//			PopulateFunctionalAnalysisPkg.copyActivityDiagrams( (IRPPackage)theSelectedEl ); 
+//			
+//		}
+
 		if (theSelectedEl instanceof IRPProject){
 
+			ConfigurationSettings theConfigSettings = new ConfigurationSettings(
+					"SysMLHelper.properties", 
+					"SysMLHelper_MessagesBundle" );
+			
+			PopulateFunctionalAnalysisPkg.createFunctionalAnalysisPkg( 
+					(IRPProject) theSelectedEl, 
+					SimulationType.FullSim, 
+					theConfigSettings ); 
 
-			createFunctionalAnalysisPkg( (IRPProject) theSelectedEl, SimulationType.FullSim );
+//			createFunctionalAnalysisPkg( (IRPProject) theSelectedEl, SimulationType.FullSim );
 		}
 	}
 	
 	public static void createFunctionalAnalysisPkg(
 			IRPProject forProject, 
-			final SimulationType withSimulationType ){
+			final SimulationType withSimulationType,
+			ConfigurationSettings theConfigSettings ){
 		 
 		final String rootPackageName = "FunctionalAnalysisPkg";
 		Boolean ok = true;
@@ -49,7 +67,7 @@ public class PopulateFunctionalAnalysisPkg extends PopulatePkg {
 	    			"Do you want to create a " + withSimulationType + " package stucture underneath it?");
 	    	
 	    	if( answer==true ){
-		    	createFunctionalBlockPackageHierarchy( (IRPPackage)theExistingPkg, withSimulationType );
+		    	createFunctionalBlockPackageHierarchy( (IRPPackage)theExistingPkg, withSimulationType, theConfigSettings );
 	    	}
 
 	    	ok = false;
@@ -93,7 +111,7 @@ public class PopulateFunctionalAnalysisPkg extends PopulatePkg {
 		    	
 		    	if (theRequirementsAnalysisPkg != null){
 		    		
-			    	populateFunctionalAnalysisPkg(forProject, withSimulationType);
+			    	populateFunctionalAnalysisPkg(forProject, withSimulationType, theConfigSettings);
 			    	removeSimpleMenuStereotypeIfPresent(forProject);
 			    	
 			    	forProject.save();
@@ -123,14 +141,14 @@ public class PopulateFunctionalAnalysisPkg extends PopulatePkg {
 				    if (confirm == JOptionPane.YES_OPTION){
 				    	browseAndAddByReferenceIfNotPresent("RequirementsAnalysisPkg", forProject, true);
 				    	
-				    	populateFunctionalAnalysisPkg(forProject, withSimulationType);
+				    	populateFunctionalAnalysisPkg(forProject, withSimulationType, theConfigSettings);
 				    	removeSimpleMenuStereotypeIfPresent(forProject);
 				    	forProject.save();
 				    	
 				    } else if (confirm == JOptionPane.NO_OPTION){
 					    
-				    	PopulateRequirementsAnalysisPkg.populateRequirementsAnalysisPkg(forProject);		
-						CreateGatewayProjectPanel.launchThePanel( forProject, "^RequirementsAnalysisPkg.rqtf$" );
+				    	PopulateRequirementsAnalysisPkg.populateRequirementsAnalysisPkg(forProject, theConfigSettings);		
+						CreateGatewayProjectPanel.launchThePanel( forProject, "^RequirementsAnalysisPkg.rqtf$", theConfigSettings );
 							    
 				    } else {
 				    	Logger.writeLine("Cancelled by user");
@@ -144,7 +162,8 @@ public class PopulateFunctionalAnalysisPkg extends PopulatePkg {
 	}
 		
 	static void populateFunctionalAnalysisPkg(
-			IRPProject forProject, final SimulationType withSimulationType ) {
+			IRPProject forProject, final SimulationType withSimulationType,
+			ConfigurationSettings theConfigSettings ) {
 		
 		addProfileIfNotPresent("SysML", forProject);		
 		addProfileIfNotPresent("GlobalPreferencesProfile", forProject);
@@ -169,20 +188,19 @@ public class PopulateFunctionalAnalysisPkg extends PopulatePkg {
 		
 			deleteIfPresent( "Structure1", "StructureDiagram", forProject );
 	    	deleteIfPresent( "Default", "Package", forProject );
-	    	
-	    	ConfigurationSettings theConfigSettings = ConfigurationSettings.getInstance();
-	    	
+	    		    	
 	    	theConfigSettings.setPropertiesValuesRequestedInConfigFile( 
 	    			forProject,
 	    			"setPropertyForFunctionalAnalysisModel" );
 	    		    	
-	    	createFunctionalBlockPackageHierarchy( theFunctionalAnalysisPkg, withSimulationType );
+	    	createFunctionalBlockPackageHierarchy( theFunctionalAnalysisPkg, withSimulationType, theConfigSettings );
 		}
 	}
 	
 	public static void createFunctionalBlockPackageHierarchy(
 			IRPPackage theRootPackage, 
-			final SimulationType withSimulationType ){
+			final SimulationType withSimulationType,
+			ConfigurationSettings theConfigSettings ){
 		
 		if (theRootPackage.getName().equals("FunctionalAnalysisPkg")){
 			
@@ -202,7 +220,8 @@ public class PopulateFunctionalAnalysisPkg extends PopulatePkg {
 				CreateFunctionalBlockPackagePanel.launchThePanel(
 						theRootPackage, 
 						theRequirementsAnalysisPkg, 
-						withSimulationType );
+						withSimulationType,
+						theConfigSettings );
 			}
 		    
 		} else {
@@ -227,39 +246,113 @@ public class PopulateFunctionalAnalysisPkg extends PopulatePkg {
 				theProject.findElementsByFullName( rootPackageName, "Package" );
 		
 		if( theRootPackage != null ){
-			CreateNewActorPanel.launchThePanel( theProject );
+			CreateNewActorPanel.launchThePanel();
 		}
 	}
 	
-	public static void copyActivityDiagrams(IRPProject forProject){
+	public static void copyActivityDiagrams(
+			IRPPackage theSelectedPkg ){
 		
-    	IRPModelElement theRequirementsAnalysisPkg = 
-    			forProject.findElementsByFullName("RequirementsAnalysisPkg", "Package");
-     	
-    	if (theRequirementsAnalysisPkg==null){
-    		
-			JDialog.setDefaultLookAndFeelDecorated(true);
-
-			JOptionPane.showMessageDialog(
-					null,  
-					"The project does not contain a root RequirementsAnalysisPkg. This package is used by the\n" +
-				    "plugin to populate the Activity Diagrams for functional analysis simulation purposes.\n\n",
-					"Warning",
-					JOptionPane.WARNING_MESSAGE);	
-    	} else {
-    		
-    		IRPPackage theWorkingPackage = 
-    				FunctionalAnalysisSettings.getWorkingPkgUnderDev( forProject );
-    		
-    		if (theWorkingPackage != null){
-        		CopyActivityDiagramsPanel.launchThePanel(
-        				theRequirementsAnalysisPkg, 
-        				theWorkingPackage);    			
-    		} else {
-    			Logger.writeLine("Error in copyActivityDiagrams, no working package was found");
-    		}
-    	}
+		Set<IRPPackage> theSourceUseCasePkgs = 
+				GeneralHelpers.getPullFromPackage( theSelectedPkg );
+					
+		if( theSourceUseCasePkgs.isEmpty() ){
+			
+			List<IRPModelElement> theUseCasePkgsInProject = 
+					GeneralHelpers.findElementsWithMetaClassAndStereotype(
+							"Package", 
+							StereotypeAndPropertySettings.getUseCasePackageStereotype( theSelectedPkg ), 
+							theSelectedPkg.getProject(), 
+							1 );
+			
+			IRPModelElement theSelectedEl =
+					UserInterfaceHelpers.launchDialogToSelectElement(
+							theUseCasePkgsInProject, 
+							"Select a Use Cases package to establish dependency to", 
+							true );
+			
+			if( theSelectedEl != null && 
+					theSelectedEl instanceof IRPPackage ){
+				
+				theSelectedPkg.addDependencyTo( theSelectedEl );
+				theSourceUseCasePkgs.add( (IRPPackage) theSelectedEl );
+			}
+		}
+		
+		if( theSourceUseCasePkgs != null ){
+			String theMsg = "This helper has detected that " + Logger.elementInfo(theSelectedPkg) + " is \n" +
+					"pulling from the following packages: \n";
+			
+			for (IRPModelElement theSourceUseCasePkg : theSourceUseCasePkgs) {
+				theMsg += Logger.elementInfo(theSourceUseCasePkg) + "\n";
+			}
+			
+			theMsg += "\nDo you want to proceed with launching the copy dialog?\n\n";
+			
+			boolean answer = UserInterfaceHelpers.askAQuestion(theMsg);
+			
+			if( answer ){
+				CopyActivityDiagramsPanel.launchThePanel();
+			}
+		}
+				
+//    	IRPModelElement theRequirementsAnalysisPkg = 
+//    			forProject.findElementsByFullName("RequirementsAnalysisPkg", "Package");
+//     	
+//    	if (theRequirementsAnalysisPkg==null){
+//    		
+//			JDialog.setDefaultLookAndFeelDecorated(true);
+//
+//			JOptionPane.showMessageDialog(
+//					null,  
+//					"The project does not contain a root RequirementsAnalysisPkg. This package is used by the\n" +
+//				    "plugin to populate the Activity Diagrams for functional analysis simulation purposes.\n\n",
+//					"Warning",
+//					JOptionPane.WARNING_MESSAGE);	
+//    	} else {
+//    		
+//    		IRPPackage theWorkingPackage = 
+//    				FunctionalAnalysisSettings.getWorkingPkgUnderDev( forPackage );
+//    		
+//    		if (theWorkingPackage != null){
+//        		CopyActivityDiagramsPanel.launchThePanel(
+//        				theRequirementsAnalysisPkg, 
+//        				theWorkingPackage);    			
+//    		} else {
+//    			Logger.writeLine("Error in copyActivityDiagrams, no working package was found");
+//    		}
+//    	}
 	}
+
+//	public static void copyActivityDiagrams(IRPProject forProject){
+//		
+//    	IRPModelElement theRequirementsAnalysisPkg = 
+//    			forProject.findElementsByFullName("RequirementsAnalysisPkg", "Package");
+//     	
+//    	if (theRequirementsAnalysisPkg==null){
+//    		
+//			JDialog.setDefaultLookAndFeelDecorated(true);
+//
+//			JOptionPane.showMessageDialog(
+//					null,  
+//					"The project does not contain a root RequirementsAnalysisPkg. This package is used by the\n" +
+//				    "plugin to populate the Activity Diagrams for functional analysis simulation purposes.\n\n",
+//					"Warning",
+//					JOptionPane.WARNING_MESSAGE);	
+//    	} else {
+//    		
+//    		IRPPackage theWorkingPackage = 
+//    				FunctionalAnalysisSettings.getWorkingPkgUnderDev( forProject );
+//    		
+//    		if (theWorkingPackage != null){
+//        		CopyActivityDiagramsPanel.launchThePanel();
+////        				theRequirementsAnalysisPkg, 
+////        				theWorkingPackage);    			
+//    		} else {
+//    			Logger.writeLine("Error in copyActivityDiagrams, no working package was found");
+//    		}
+//    	}
+//	}
 	
 	public static void switchFunctionalAnalysisPkgProfileFrom(
 			String theProfileName,
@@ -336,13 +429,13 @@ public class PopulateFunctionalAnalysisPkg extends PopulatePkg {
 				theProject.findElementsByFullName( rootPackageName, "Package" );
 		
 		if( theRootPackage != null ){
-			CreateNewBlockPartPanel.launchThePanel( theProject );
+			CreateNewBlockPartPanel.launchThePanel();
 		}
 	}
 }
 
 /**
- * Copyright (C) 2016-2017  MBSE Training and Consulting Limited (www.executablembse.com)
+ * Copyright (C) 2016-2019  MBSE Training and Consulting Limited (www.executablembse.com)
 
     Change history:
     #006 02-MAY-2016: Add FunctionalAnalysisPkg helper support (F.J.Chadburn)
@@ -371,6 +464,8 @@ public class PopulateFunctionalAnalysisPkg extends PopulatePkg {
     #146 18-DEC-2016: Allow block hierarchy creation from project level if there's an existing FA package (F.J.Chadburn)
     #147 18-DEC-2016: Fix Actor part creation not being created in correct place if multiple hierarchies (F.J.Chadburn)
     #216 09-JUL-2017: Added a new Add Block/Part command added to the Functional Analysis menus (F.J.Chadburn)
+    #252 29-MAY-2019: Implement generic features for profile/settings loading (F.J.Chadburn)
+    #256 29-MAY-2019: Rewrite to Java Swing dialog launching to make thread safe between versions (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

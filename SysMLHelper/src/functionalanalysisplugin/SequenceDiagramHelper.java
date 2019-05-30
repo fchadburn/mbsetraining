@@ -2,6 +2,7 @@ package functionalanalysisplugin;
 
 import generalhelpers.GeneralHelpers;
 import generalhelpers.Logger;
+import generalhelpers.StereotypeAndPropertySettings;
 import generalhelpers.TraceabilityHelper;
 import generalhelpers.UserInterfaceHelpers;
 
@@ -13,6 +14,16 @@ import java.util.Set;
 import com.telelogic.rhapsody.core.*;
 
 public class SequenceDiagramHelper {	
+	
+	public static void main(String[] args) {
+		IRPApplication theApp = RhapsodyAppServer.getActiveRhapsodyApplication();
+		@SuppressWarnings("unused")
+		IRPProject theProject = theApp.activeProject();
+		
+		IRPModelElement theEl = theApp.getSelectedElement();
+		
+		updateVerificationsFor((IRPDiagram) theEl);
+	}
 	
 	public static void updateVerificationsForSequenceDiagramsBasedOn(
 			List<IRPModelElement> theSelectedEls){
@@ -112,7 +123,7 @@ public class SequenceDiagramHelper {
 			IRPDependency theDep = theDiagram.addDependencyTo( theReq );
 			theDep.changeTo("Verification");
 			Logger.writeLine(theReq, "added verification link");
-			theDep.highLightElement();
+//			theDep.highLightElement();
 		}
 	}
 	
@@ -143,13 +154,13 @@ public class SequenceDiagramHelper {
 	public static void updateLifelinesToMatchPartsInActiveBuildingBlock(
 			IRPSequenceDiagram theSequenceDiagram ){
 		
-		IRPPackage thePackageUnderDev =
-				FunctionalAnalysisSettings.getPackageUnderDev( theSequenceDiagram.getProject() );
-		
-		if( thePackageUnderDev != null ){
+//		IRPPackage thePackageUnderDev =
+//				FunctionalAnalysisSettings.getPackageUnderDev( theSequenceDiagram );
+//		
+//		if( thePackageUnderDev != null ){
 
 			IRPClass theBuildingBlock = 
-					FunctionalAnalysisSettings.getBuildingBlock( thePackageUnderDev );
+					FunctionalAnalysisSettings.getBuildingBlock( theSequenceDiagram );
 					
 			if( theBuildingBlock != null ){
 				
@@ -161,9 +172,9 @@ public class SequenceDiagramHelper {
 			} else {
 				Logger.writeLine("Error, unable to find building block or tester pkg");
 			}
-		} else {
-			Logger.writeLine( "Error, unable to find thePackageUnderDev" );
-		}
+//		} else {
+//			Logger.writeLine( "Error, unable to find thePackageUnderDev" );
+//		}
 	}
 	
 	public static void updateAutoShowSequenceDiagramFor(
@@ -211,8 +222,8 @@ public class SequenceDiagramHelper {
 		if( theExistingDiagram != null ){
 			
 			String theMsg = Logger.elementInfo( theExistingDiagram ) + " already exists in " + 
-					Logger.elementInfo( inPackage ) + "\nDo you want to recreate it with x" + theParts.size() + 
-					" lifelines for:\n";
+					Logger.elementInfo( inPackage ) + "\nDo you want to recreate it with x" + 
+					theParts.size() + " lifelines for:\n";
 			
 			for( Iterator<IRPInstance> iterator = theParts.iterator(); iterator.hasNext(); ){
 				
@@ -242,11 +253,12 @@ public class SequenceDiagramHelper {
 			// Do Test Driver first
 			for( IRPInstance thePart : theParts ) {
 
-				if( GeneralHelpers.hasStereotypeCalled( "TestDriver", thePart ) ){
+				if( GeneralHelpers.hasStereotypeCalled( "TestDriver", thePart.getOtherClass() ) && 
+					StereotypeAndPropertySettings.getIsCreateSDWithTestDriverLifeline( theSD ) ){
 
 					//IRPClassifier theType = thePart.getOtherClass();
 					theSD.addNewNodeForElement( thePart, xPos, yPos, nWidth, nHeight );
-					xPos=xPos+nWidth+xGap;
+					xPos = xPos + nWidth + xGap;
 				}
 			}
 			
@@ -257,7 +269,7 @@ public class SequenceDiagramHelper {
 
 				if( theType instanceof IRPActor ){
 					theSD.addNewNodeForElement( thePart, xPos, yPos, nWidth, nHeight );
-					xPos=xPos+nWidth+xGap;
+					xPos = xPos + nWidth + xGap;
 				}
 			}
 
@@ -267,20 +279,24 @@ public class SequenceDiagramHelper {
 				IRPClassifier theType = thePart.getOtherClass();
 
 				if( !( theType instanceof IRPActor ) &&
-					!GeneralHelpers.hasStereotypeCalled( "TestDriver", thePart ) ){
+					!GeneralHelpers.hasStereotypeCalled( "TestDriver", theType ) ){
 
 					theSD.addNewNodeForElement( thePart, xPos, yPos, nWidth, nHeight );
-					xPos=xPos+nWidth+xGap;
+					xPos = xPos + nWidth + xGap;
 				}
 			}
 
-			GeneralHelpers.applyExistingStereotype( "AutoShow", theSD );
+			if( StereotypeAndPropertySettings.
+					getIsCreateSDWithAutoShowApplied( theSD ) ){
+				
+				GeneralHelpers.applyExistingStereotype( "AutoShow", theSD );
+			}
 		}
 	}
 }
 
 /**
- * Copyright (C) 2016-2017  MBSE Training and Consulting Limited (www.executablembse.com)
+ * Copyright (C) 2016-2019  MBSE Training and Consulting Limited (www.executablembse.com)
 
     Change history:
     #013 10-MAY-2016: (new) Add support for sequence diagram req't and verification relation population (F.J.Chadburn)
@@ -292,6 +308,7 @@ public class SequenceDiagramHelper {
     #209 04-JUL-2017: Populate requirements for SD(s) based on messages now supported with Dialog (F.J.Chadburn)
     #216 09-JUL-2017: Added a new Add Block/Part command added to the Functional Analysis menus (F.J.Chadburn)
     #223 12-JUL-2017: Change life-lines on simulated <<AutoShow>> SD to show Parts rather than Blocks (F.J.Chadburn)
+    #252 29-MAY-2019: Implement generic features for profile/settings loading (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

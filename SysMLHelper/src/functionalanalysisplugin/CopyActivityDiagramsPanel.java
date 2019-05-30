@@ -3,15 +3,18 @@ package functionalanalysisplugin;
 import generalhelpers.CreateStructuralElementPanel;
 import generalhelpers.GeneralHelpers;
 import generalhelpers.Logger;
+import generalhelpers.StereotypeAndPropertySettings;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
@@ -38,14 +41,19 @@ public class CopyActivityDiagramsPanel extends CreateStructuralElementPanel {
 
 	private Map<IRPUseCase, CopyActivityDiagramsInfo> m_RadioButtonMap = new HashMap<IRPUseCase, CopyActivityDiagramsInfo>();
 	private IRPModelElement m_ToElement = null;
-	private IRPModelElement m_UnderneathTheEl = null;
+	//private IRPModelElement m_UnderneathTheEl = null;
 	private JCheckBox m_ApplyMoreDetailedADCheckBox; 
 	private JCheckBox m_CopyAllCheckBox;
 	private JCheckBox m_OpenDiagramsCheckBox;
 
-	public static void launchThePanel(
-			final IRPModelElement underneathTheEl, 
-			final IRPModelElement toElement){
+	public static void main(String[] args) {
+		launchThePanel();
+	}
+	
+	public static void launchThePanel(){
+		
+		final String theAppID = 
+				FunctionalAnalysisPlugin.getRhapsodyApp().getApplicationConnectionString();
 		
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 
@@ -54,12 +62,12 @@ public class CopyActivityDiagramsPanel extends CreateStructuralElementPanel {
 				
 				JFrame.setDefaultLookAndFeelDecorated( true );
 
-				JFrame frame = new JFrame("Copy Activity Diagams to " + Logger.elementInfo( toElement ));
+				JFrame frame = new JFrame("Copy Activity Diagams");
 				
 				frame.setDefaultCloseOperation( JFrame.DISPOSE_ON_CLOSE );
 
 				CopyActivityDiagramsPanel thePanel = 
-						new CopyActivityDiagramsPanel( underneathTheEl, toElement );
+						new CopyActivityDiagramsPanel( theAppID );
 
 				frame.setContentPane( thePanel );
 				frame.pack();
@@ -69,18 +77,94 @@ public class CopyActivityDiagramsPanel extends CreateStructuralElementPanel {
 		});
 	}
 	
+	private IRPPackage getToPackage( 
+			IRPModelElement fromSelectedEl ){
+		
+		IRPPackage thePkg = null;
+		
+		if( fromSelectedEl instanceof IRPPackage &&
+				GeneralHelpers.hasStereotypeCalled( 
+						StereotypeAndPropertySettings.getUseCasePackageWorkingStereotype( fromSelectedEl ), 
+						fromSelectedEl )){
+			
+			thePkg = (IRPPackage) fromSelectedEl;
+			
+		} else if( fromSelectedEl instanceof IRPPackage && 
+				GeneralHelpers.hasStereotypeCalled( 
+						StereotypeAndPropertySettings.getSimulationPackageStereotype( fromSelectedEl ),
+						fromSelectedEl )){
+			
+			List<IRPModelElement> theWorkingPkgs = 
+					GeneralHelpers.findElementsWithMetaClassAndStereotype(
+							"Package", 
+							StereotypeAndPropertySettings.getUseCasePackageWorkingStereotype( fromSelectedEl ), 
+							fromSelectedEl, 
+							0 ); // not recursive
+			
+			if( theWorkingPkgs.size() == 1 ){
+				thePkg  = (IRPPackage) theWorkingPkgs.get( 0 );
+			}
+		}
+		
+		if( thePkg == null ){
+			
+			@SuppressWarnings("unchecked")
+			List<IRPPackage> theNestedPkgs = 
+					fromSelectedEl.getProject().getNestedElementsByMetaClass(
+							"Package", 1 ).toList();
+
+			for( IRPPackage theNestedPkg : theNestedPkgs ){
+
+				List<IRPModelElement> theDependencies = 
+						GeneralHelpers.findElementsWithMetaClassAndStereotype(
+								"Dependency", "AppliedProfile", theNestedPkg, 0 );
+
+				for (IRPModelElement theDependencyElement : theDependencies) {
+
+					IRPDependency theDependency = (IRPDependency)theDependencyElement;
+					IRPModelElement theDependsOn = theDependency.getDependsOn();
+
+					if (theDependsOn.getName().equals("RequirementsAnalysisProfile")){
+						IRPModelElement theDependent = theDependency.getDependent();
+						thePkg = (IRPPackage) theDependent;
+						break;
+					}
+				}
+			}
+			
+			if( thePkg == null ){
+				Logger.writeLine("Unable to find working package based on " + 
+						Logger.elementInfo( fromSelectedEl ) );
+			}
+		}
+		
+		return thePkg;
+	}
+	
 	@SuppressWarnings("unchecked")
 	public CopyActivityDiagramsPanel(
-			IRPModelElement underneathTheEl, 
-			IRPModelElement toElement) {
+			String appID ) {
 		
-		super();
+		super( appID );
 
-		m_UnderneathTheEl = underneathTheEl;
-		m_ToElement = toElement;
+		IRPApplication theRhpApp = 
+				RhapsodyAppServer.getActiveRhapsodyApplicationByID( appID );
+				
+		IRPModelElement theSelectedEl = theRhpApp.getSelectedElement();
 		
-		List<IRPUseCase> theUseCases = 
-				m_UnderneathTheEl.getNestedElementsByMetaClass("UseCase", 1).toList();	
+		Set<IRPPackage> thePullFromPkgs = 
+				GeneralHelpers.getPullFromPackage( 
+						theSelectedEl );
+		
+		List<IRPUseCase> theUseCases = new ArrayList<IRPUseCase>();
+		
+		for( IRPPackage thePullFromPkg : thePullFromPkgs ){
+			theUseCases.addAll( 
+					thePullFromPkg.getNestedElementsByMetaClass(
+							"UseCase", 1 ).toList() );
+		}
+		
+		m_ToElement = getToPackage( theSelectedEl );
 		
 		for (IRPUseCase theUseCase : theUseCases) {	
 			m_RadioButtonMap.put( theUseCase, new CopyActivityDiagramsInfo( theUseCase ) );
@@ -145,11 +229,11 @@ public class CopyActivityDiagramsPanel extends CreateStructuralElementPanel {
 		theBox.add( m_OpenDiagramsCheckBox );
 		
 		boolean isConvertToDetailedADOptionEnabled = 
-				FunctionalAnalysisSettings.getIsConvertToDetailedADOptionEnabled(
+				StereotypeAndPropertySettings.getIsConvertToDetailedADOptionEnabled(
 						m_ToElement.getProject() );
 		
 		boolean isConvertToDetailedADOptionWantedByDefault = 
-				FunctionalAnalysisSettings.getIsConvertToDetailedADOptionWantedByDefault(
+				StereotypeAndPropertySettings.getIsConvertToDetailedADOptionWantedByDefault(
 						m_ToElement.getProject() );
 		
 		m_ApplyMoreDetailedADCheckBox = new JCheckBox("Switch toolbars and formatting to more detailed AD ready for conversion?");
@@ -224,29 +308,19 @@ public class CopyActivityDiagramsPanel extends CreateStructuralElementPanel {
 			    		Logger.writeLine( "A " + Logger.elementInfo( theDependency ) + " from " + Logger.elementInfo( theNewFlowchart ) + 
 			    				" to " + Logger.elementInfo( theUseCase ) + " has been added to the model." );
 			    		
-			    		IRPGraphNode theNote = theNewFlowchart.addNewNodeByType( "Note", 20, 44, 120, 70 );
-			    		
-			    		theNote.setGraphicalProperty(
-			    				"Text", 
-			    				"This activity model for the use case can be used to generate operations\n" );
-			    		
-			    		theNote.setGraphicalProperty(
-			    				"BackgroundColor",
-			    				"255,0,0" ); // red
+			    		AddNoteTo( theNewFlowchart );
 
 			    		if( m_ApplyMoreDetailedADCheckBox.isSelected() ){
-			    			
-			    			PopulateFunctionalAnalysisPkg.switchToMoreDetailedAD( 
-			    					theNewFlowchart.getFlowchartDiagram() );
+			    			theNewFlowchart.changeTo("ActivityDiagram");
+			    		} else {
+			    			theNewFlowchart.changeTo("Textual Activity Diagram");
 			    		}
 			    		
 			    		createdCount++;
 
 			    		if( m_OpenDiagramsCheckBox.isSelected() ){
 			    			theNewFlowchart.highLightElement();			   
-			    		}
-			    		
-			    		 		
+			    		}	
 				    }
 				}	
 				
@@ -267,9 +341,8 @@ public class CopyActivityDiagramsPanel extends CreateStructuralElementPanel {
 				Logger.writeLine("Error in CreateNewActorPanel.performAction, checkValidity returned false");
 			}	
 		} catch (Exception e) {
-			Logger.writeLine("Error in CopyActivityDiagramsPanel.performAction, unhandled exception was detected");
+			Logger.writeLine("Error in CopyActivityDiagramsPanel.performAction, unhandled exception was detected, e=" + e.getMessage());
 		}
-
 	}
 	
 	private JPanel createCopyADChoicesPanel(){
@@ -348,6 +421,16 @@ public class CopyActivityDiagramsPanel extends CreateStructuralElementPanel {
 		Logger.writeLine(theDependency, "was added between " + Logger.elementInfo( theNewFlowchart ) + 
 				" and " + Logger.elementInfo( theFlowchart ) );
 		
+		AddNoteTo( theNewFlowchart );
+		
+		if( isSwitchToDetailedAD ){	
+			theNewFlowchart.changeTo("ActivityDiagram");
+		}
+		
+		return theNewFlowchart;
+	}
+
+	private void AddNoteTo(IRPFlowchart theNewFlowchart) {
 		IRPGraphNode theNote = theNewFlowchart.addNewNodeByType("Note", 20, 44, 120, 70);
 		
 		theNote.setGraphicalProperty(
@@ -358,13 +441,6 @@ public class CopyActivityDiagramsPanel extends CreateStructuralElementPanel {
 		theNote.setGraphicalProperty(
 				"BackgroundColor",
 				"255,0,0" ); // red
-		
-		if( isSwitchToDetailedAD ){			
-			PopulateFunctionalAnalysisPkg.switchToMoreDetailedAD( 
-					theNewFlowchart.getFlowchartDiagram() ); 
-		}
-		
-		return theNewFlowchart;
 	}
 }
 
@@ -383,6 +459,8 @@ public class CopyActivityDiagramsPanel extends CreateStructuralElementPanel {
     #128 25-NOV-2016: Improved usability/speed of Copy AD dialog by providing user choice to open diagrams (F.J.Chadburn)
     #143 18-DEC-2016: Add separate tag to enable/disable conversion to detailed option in Copy AD dialog (F.J.Chadburn)
     #244 11-OCT-2017: Default ADs to Analysis mode to better support call operation parameter sync (F.J.Chadburn)
+    #252 29-MAY-2019: Implement generic features for profile/settings loading (F.J.Chadburn)
+    #256 29-MAY-2019: Rewrite to Java Swing dialog launching to make thread safe between versions (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

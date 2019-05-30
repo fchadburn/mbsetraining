@@ -1,16 +1,16 @@
 package functionalanalysisplugin;
 
+import generalhelpers.ConfigurationSettings;
 import generalhelpers.GeneralHelpers;
 import generalhelpers.Logger;
+import generalhelpers.StereotypeAndPropertySettings;
 import generalhelpers.UserInterfaceHelpers;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
@@ -29,7 +29,7 @@ import com.telelogic.rhapsody.core.*;
 
 import designsynthesisplugin.PortCreator;
 
-public class CreateTracedAttributePanel extends CreateTracedElementPanel {
+public class CreateTracedAttributePanel extends CopyOfCreateTracedElementPanel {
 
 	/**
 	 * 
@@ -40,116 +40,205 @@ public class CreateTracedAttributePanel extends CreateTracedElementPanel {
 	private JCheckBox m_CheckOperationCheckBox;
 	private String m_CheckOpName;
 	private JCheckBox m_CallOperationIsNeededCheckBox;
-	
+	private ConfigurationSettings m_ConfigSettings;
 	private JRadioButton m_NoFlowPort;
 	private JRadioButton m_PubFlowPort;
 	private JRadioButton m_SubFlowPort;
 	
-	// test only
+//	// test only
+//	public static void main(String[] args) {
+//		
+//		IRPProject theActiveProject = FunctionalAnalysisPlugin.getRhapsodyApp().activeProject();
+//
+//		IRPModelElement theSelectedEl = FunctionalAnalysisPlugin.getRhapsodyApp().getSelectedElement();
+//		
+//		@SuppressWarnings("unchecked")
+//		List<IRPModelElement> theSelectedEls = FunctionalAnalysisPlugin.getRhapsodyApp().getListOfSelectedElements().toList();
+//
+//		@SuppressWarnings("unchecked")
+//		List<IRPGraphElement> theSelectedGraphEls = FunctionalAnalysisPlugin.getRhapsodyApp().getSelectedGraphElements().toList();
+//
+//		Logger.writeLine("Starting ("+ theSelectedEls.size() + " elements were selected) ...");
+//
+//		if( theSelectedGraphEls.isEmpty() && ( 
+//				theSelectedEl instanceof IRPClass ||
+//				theSelectedEl instanceof IRPInstance ||
+//				theSelectedEl instanceof IRPDiagram ) ){
+//			
+//			Set<IRPRequirement> theReqts = new HashSet<IRPRequirement>();
+//			
+//			CreateTracedAttributePanel.launchThePanel(
+//					null,
+//					theSelectedEl, 
+//					theReqts, 
+//					theActiveProject );
+//			
+//		} else if (!theSelectedGraphEls.isEmpty()){
+//			try {
+//				CreateTracedAttributePanel.createSystemAttributesFor( 
+//						theActiveProject, theSelectedGraphEls );
+//				
+//			} catch (Exception e) {
+//				Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking CreateTracedAttributePanel.createSystemAttributeFor");
+//			}
+//		}
+//	}
+	
 	public static void main(String[] args) {
 		
-		IRPProject theActiveProject = FunctionalAnalysisPlugin.getRhapsodyApp().activeProject();
-
-		IRPModelElement theSelectedEl = FunctionalAnalysisPlugin.getRhapsodyApp().getSelectedElement();
+		ConfigurationSettings theConfigSettings = new ConfigurationSettings(
+				"SysMLHelper.properties", 
+				"SysMLHelper_MessagesBundle" );		
 		
-		@SuppressWarnings("unchecked")
-		List<IRPModelElement> theSelectedEls = FunctionalAnalysisPlugin.getRhapsodyApp().getListOfSelectedElements().toList();
-
-		@SuppressWarnings("unchecked")
-		List<IRPGraphElement> theSelectedGraphEls = FunctionalAnalysisPlugin.getRhapsodyApp().getSelectedGraphElements().toList();
-
-		Logger.writeLine("Starting ("+ theSelectedEls.size() + " elements were selected) ...");
-
-		if( theSelectedGraphEls.isEmpty() && ( 
-				theSelectedEl instanceof IRPClass ||
-				theSelectedEl instanceof IRPInstance ||
-				theSelectedEl instanceof IRPDiagram ) ){
-			
-			Set<IRPRequirement> theReqts = new HashSet<IRPRequirement>();
-			
-			CreateTracedAttributePanel.launchThePanel(
-					null,
-					theSelectedEl, 
-					theReqts, 
-					theActiveProject );
-			
-		} else if (!theSelectedGraphEls.isEmpty()){
-			try {
-				CreateTracedAttributePanel.createSystemAttributesFor( 
-						theActiveProject, theSelectedGraphEls );
-				
-			} catch (Exception e) {
-				Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking CreateTracedAttributePanel.createSystemAttributeFor");
-			}
-		}
+		launchThePanel( theConfigSettings );
 	}
 	
-	public static void createSystemAttributesFor(
-			IRPProject theActiveProject,
-			List<IRPGraphElement> theSelectedGraphEls) {
-		
-		Set<IRPModelElement> theMatchingEls = 
-				GeneralHelpers.findModelElementsIn( theSelectedGraphEls, "Requirement" );
-		
-		// cast to IRPRequirement
-		@SuppressWarnings("unchecked")
-		Set<IRPRequirement> theSelectedReqts = (Set<IRPRequirement>)(Set<?>) theMatchingEls;
-		
-		if (GeneralHelpers.doUnderlyingModelElementsIn( theSelectedGraphEls, "Requirement" )){
-			
-			// only requirements are selected hence assume only a single operation is needed
-			launchThePanel(	theSelectedGraphEls.get(0), null, theSelectedReqts, theActiveProject );
-		} else {
-			
-			// launch a dialog for each selected element that is not a requirement
-			for (IRPGraphElement theGraphEl : theSelectedGraphEls) {
-				
-				IRPModelElement theModelObject = theGraphEl.getModelObject();
-				
-				if (theModelObject != null && !(theModelObject instanceof IRPRequirement)){
-					
-					// only launch a dialog for non requirement elements
-					launchThePanel(	theGraphEl, null, theSelectedReqts, theActiveProject );
-				}		
+	public static void launchThePanel(
+			final ConfigurationSettings theConfigSettings ){
+
+		final String theAppID = 
+				UserInterfaceHelpers.getAppIDIfSingleRhpRunningAndWarnUserIfNot();
+
+		javax.swing.SwingUtilities.invokeLater( new Runnable(){
+
+			@Override
+			public void run() {
+
+				JFrame.setDefaultLookAndFeelDecorated( true );
+
+				UserInterfaceHelpers.setLookAndFeel();
+
+				JFrame frame = new JFrame(
+						"Create attribute/flow-port/check operation" );
+
+				frame.setDefaultCloseOperation( JFrame.DISPOSE_ON_CLOSE );
+
+				CreateTracedAttributePanel thePanel = new CreateTracedAttributePanel(
+						theAppID, 
+						theConfigSettings );
+
+				frame.setContentPane( thePanel );
+				frame.pack();
+				frame.setLocationRelativeTo( null );
+				frame.setVisible( true );
 			}
-		}
+		});
 	}
+//	public static void createSystemAttributesFor(
+//			IRPProject theActiveProject,
+//			List<IRPGraphElement> theSelectedGraphEls) {
+//		
+//		Set<IRPModelElement> theMatchingEls = 
+//				GeneralHelpers.findModelElementsIn( theSelectedGraphEls, "Requirement" );
+//		
+//		// cast to IRPRequirement
+//		@SuppressWarnings("unchecked")
+//		Set<IRPRequirement> theSelectedReqts = (Set<IRPRequirement>)(Set<?>) theMatchingEls;
+//		
+//		if (GeneralHelpers.doUnderlyingModelElementsIn( theSelectedGraphEls, "Requirement" )){
+//			
+//			// only requirements are selected hence assume only a single operation is needed
+//			launchThePanel(	theSelectedGraphEls.get(0), null, theSelectedReqts, theActiveProject );
+//		} else {
+//			
+//			// launch a dialog for each selected element that is not a requirement
+//			for (IRPGraphElement theGraphEl : theSelectedGraphEls) {
+//				
+//				IRPModelElement theModelObject = theGraphEl.getModelObject();
+//				
+//				if (theModelObject != null && !(theModelObject instanceof IRPRequirement)){
+//					
+//					// only launch a dialog for non requirement elements
+//					launchThePanel(	theGraphEl, null, theSelectedReqts, theActiveProject );
+//				}		
+//			}
+//		}
+//	}
 	
 	public CreateTracedAttributePanel(
-			IRPGraphElement forSourceGraphElement, 
-			final Set<IRPRequirement> withReqtsAlsoAdded,
-			IRPClassifier onTargetBlock) {
+			String theAppID,
+			ConfigurationSettings theConfigSettings ){
 		
-		super( forSourceGraphElement, withReqtsAlsoAdded, onTargetBlock, onTargetBlock.getProject() );
-		 
-		IRPModelElement theModelObject = m_SourceGraphElement.getModelObject();
-		String theSourceText = GeneralHelpers.getActionTextFrom( theModelObject );	
+		super( theAppID );
+	
+		m_ConfigSettings = theConfigSettings;
 		
-		Logger.writeLine("CreateTracedAttributePanel constructor (1) called with text '" + theSourceText + "'");
-		
-		createCommonContent( onTargetBlock, theSourceText );
+		IRPClass theBuildingBlock = 
+				m_ElementContext.getBuildingBlock();
+
+		if( theBuildingBlock == null ){
+			
+			buildUnableToRunDialog( 
+					"Sorry, this helper is unable to run this command because \n" +
+					"there was no execution context or block found in the model. \n " +
+					"You need to add the relevant package structure first." );
+			
+		} else { // theBuildingBlock != null
+			
+			IRPClass theBlock = m_ElementContext.getBlockUnderDev(
+					"Which Block do you want to add the Operation to?" );
+			
+			if( theBlock == null ){
+				buildUnableToRunDialog( 
+						"Sorry, this helper is unable to run this command because \n" +
+						"there was no execution context or block found in the model. \n " +
+						"You need to add the relevant package structure first." );
+			} else {
+				
+				IRPModelElement theModelObject = null;
+				IRPGraphElement theSelectedGraphEl = m_ElementContext.getSelectedGraphEl();
+				String theSourceText = "attributeName";
+
+				if( theSelectedGraphEl != null ){
+					theModelObject = theSelectedGraphEl.getModelObject();
+				}
+				
+				if( theModelObject != null ){
+					theSourceText = GeneralHelpers.getActionTextFrom( theModelObject );
+				}
+				
+				createCommonContent( m_ElementContext.getChosenBlock(), theSourceText );
+			}
+		}
+
 	}
 	
-	public CreateTracedAttributePanel(
-			IRPModelElement forModelElement, 
-			Set<IRPRequirement> withReqtsAlsoAdded,
-			IRPClassifier onTargetBlock ){
-		
-		super( forModelElement, withReqtsAlsoAdded, onTargetBlock, onTargetBlock.getProject() );
-		
-		String theSourceText = "attributeName";
-		
-		Logger.writeLine("CreateTracedAttributePanel constructor (2) called for " + Logger.elementInfo( forModelElement ) );
-		
-		createCommonContent( onTargetBlock, theSourceText );
-	}
+//	public CreateTracedAttributePanel(
+//			IRPGraphElement forSourceGraphElement, 
+//			final Set<IRPRequirement> withReqtsAlsoAdded,
+//			IRPClassifier onTargetBlock) {
+//		
+//		super( forSourceGraphElement, withReqtsAlsoAdded, onTargetBlock, onTargetBlock.getProject() );
+//		 
+//		IRPModelElement theModelObject = m_SourceGraphElement.getModelObject();
+//		String theSourceText = GeneralHelpers.getActionTextFrom( theModelObject );	
+//		
+//		Logger.writeLine("CreateTracedAttributePanel constructor (1) called with text '" + theSourceText + "'");
+//		
+//		createCommonContent( onTargetBlock, theSourceText );
+//	}
+	
+	
+//	public CreateTracedAttributePanel(
+//			IRPModelElement forModelElement, 
+//			Set<IRPRequirement> withReqtsAlsoAdded,
+//			IRPClassifier onTargetBlock ){
+//		
+//		super( forModelElement, withReqtsAlsoAdded, onTargetBlock, onTargetBlock.getProject() );
+//		
+//		String theSourceText = "attributeName";
+//		
+//		Logger.writeLine("CreateTracedAttributePanel constructor (2) called for " + Logger.elementInfo( forModelElement ) );
+//		
+//		createCommonContent( onTargetBlock, theSourceText );
+//	}
 
 	private void createCommonContent(
 			IRPClassifier onTargetBlock,
 			String theSourceText) {
 		
 		String theProposedName = GeneralHelpers.determineUniqueNameBasedOn( 
-				GeneralHelpers.toMethodName( theSourceText ), 
+				GeneralHelpers.toMethodName( theSourceText, 40 ), 
 				"Attribute", 
 				onTargetBlock );
 
@@ -180,12 +269,18 @@ public class CreateTracedAttributePanel extends CreateTracedElementPanel {
 			        
 			        boolean selected = abstractButton.getModel().isSelected();
 					
-					boolean isPopulate = 
-							FunctionalAnalysisSettings.getIsPopulateWantedByDefault(
-									m_TargetOwningElement.getProject() );
+			        IRPDiagram theSourceDiagram = m_ElementContext.getSourceDiagram();
+			        
+					boolean isPopulate = false;
 					
-			        m_CallOperationIsNeededCheckBox.setEnabled(selected);
-			        m_CallOperationIsNeededCheckBox.setSelected(selected && isPopulate);
+					if( theSourceDiagram != null ){
+						
+						isPopulate = StereotypeAndPropertySettings.getIsPopulateWantedByDefault(
+								theSourceDiagram );
+					}
+					
+			        m_CallOperationIsNeededCheckBox.setEnabled( selected );
+			        m_CallOperationIsNeededCheckBox.setSelected( selected && isPopulate );
 			        			        
 			      }} );
 		
@@ -268,64 +363,65 @@ public class CreateTracedAttributePanel extends CreateTracedElementPanel {
 		return thePanel;
 	}
 	
-	public static void launchThePanel(
-			final IRPGraphElement selectedDiagramEl, 
-			final IRPModelElement orTheModelElement,
-			final Set<IRPRequirement> withReqtsAlsoAdded,
-			final IRPProject inProject){
-
-		javax.swing.SwingUtilities.invokeLater(new Runnable() {
-
-			@Override
-			public void run() {
-				
-				IRPClass theBlock = getBlock( 
-						selectedDiagramEl, 
-						orTheModelElement, 
-						inProject, 
-						"Select Block to add attribute to:" );
-						
-				JFrame.setDefaultLookAndFeelDecorated( true );
-
-				JFrame frame = new JFrame(
-						"Create an attribute on " + theBlock.getUserDefinedMetaClass() 
-						+ " called " + theBlock.getName());
-
-				frame.setDefaultCloseOperation( JFrame.DISPOSE_ON_CLOSE );
-
-				if( selectedDiagramEl != null ){
-					
-					CreateTracedAttributePanel thePanel = 
-							new CreateTracedAttributePanel(
-									selectedDiagramEl, 
-									withReqtsAlsoAdded,
-									theBlock );
-
-					frame.setContentPane( thePanel );
-					
-				} else if( orTheModelElement != null ){
-					
-					CreateTracedAttributePanel thePanel = 
-							new CreateTracedAttributePanel(
-									orTheModelElement, 
-									withReqtsAlsoAdded,
-									theBlock );
-
-					frame.setContentPane( thePanel );
-				}
-
-				frame.pack();
-				frame.setLocationRelativeTo( null );
-				frame.setVisible( true );
-			}
-		});			
-	}
+//	public static void launchThePanel(
+//			final IRPGraphElement selectedDiagramEl, 
+//			final IRPModelElement orTheModelElement,
+//			final Set<IRPRequirement> withReqtsAlsoAdded,
+//			final IRPProject inProject){
+//
+//		javax.swing.SwingUtilities.invokeLater(new Runnable() {
+//
+//			@Override
+//			public void run() {
+//				
+//				IRPClass theBlock = getBlock( 
+//						selectedDiagramEl, 
+//						orTheModelElement, 
+//						"Select Block to add attribute to:" );
+//						
+//				JFrame.setDefaultLookAndFeelDecorated( true );
+//
+//				JFrame frame = new JFrame(
+//						"Create an attribute on " + theBlock.getUserDefinedMetaClass() 
+//						+ " called " + theBlock.getName());
+//
+//				frame.setDefaultCloseOperation( JFrame.DISPOSE_ON_CLOSE );
+//
+//				if( selectedDiagramEl != null ){
+//					
+//					CreateTracedAttributePanel thePanel = 
+//							new CreateTracedAttributePanel(
+//									selectedDiagramEl, 
+//									withReqtsAlsoAdded,
+//									theBlock );
+//
+//					frame.setContentPane( thePanel );
+//					
+//				} else if( orTheModelElement != null ){
+//					
+//					CreateTracedAttributePanel thePanel = 
+//							new CreateTracedAttributePanel(
+//									orTheModelElement, 
+//									withReqtsAlsoAdded,
+//									theBlock );
+//
+//					frame.setContentPane( thePanel );
+//				}
+//
+//				frame.pack();
+//				frame.setLocationRelativeTo( null );
+//				frame.setVisible( true );
+//			}
+//		});			
+//	}
 	
 	private void updateNames(){
 		
 		m_CheckOpName = GeneralHelpers.determineBestCheckOperationNameFor(
-				(IRPClassifier)m_TargetOwningElement, 
-				m_ChosenNameTextField.getText() );
+				m_ElementContext.getChosenBlock(),
+//				(IRPClassifier)m_TargetOwningElement, 
+				m_ChosenNameTextField.getText(),
+				40 );
 		
 		m_CheckOperationCheckBox.setText(
 				"Add a '" + m_CheckOpName + 
@@ -344,7 +440,7 @@ public class CreateTracedAttributePanel extends CreateTracedElementPanel {
 		
 		String theChosenName = m_ChosenNameTextField.getText();
 		
-		boolean isLegalName = GeneralHelpers.isLegalName( theChosenName );
+		boolean isLegalName = GeneralHelpers.isLegalName( theChosenName, m_ElementContext.getChosenBlock() );
 		
 		if( !isLegalName ){
 			
@@ -354,7 +450,7 @@ public class CreateTracedAttributePanel extends CreateTracedElementPanel {
 		} else if( !GeneralHelpers.isElementNameUnique(
 				m_ChosenNameTextField.getText(), 
 				"Attribute", 
-				m_TargetOwningElement, 
+				m_ElementContext.getChosenBlock(), 
 				1 ) ){
 
 			errorMessage = "Unable to proceed as the name '" + m_ChosenNameTextField.getText() + "' is not unique";
@@ -364,7 +460,7 @@ public class CreateTracedAttributePanel extends CreateTracedElementPanel {
 				   !GeneralHelpers.isElementNameUnique(
 						   m_CheckOpName,
 						   "Operation",
-						   m_TargetOwningElement, 
+						   m_ElementContext.getChosenBlock(), 
 						   1 ) ){
 
 			errorMessage = "Unable to proceed as the derived check operation name '" + 
@@ -410,7 +506,7 @@ public class CreateTracedAttributePanel extends CreateTracedElementPanel {
 			List<IRPRequirement> selectedReqtsList = m_RequirementsPanel.getSelectedRequirementsList();
 
 			IRPAttribute theAttribute = addAttributeTo( 
-					(IRPClassifier) m_TargetOwningElement, 
+					m_ElementContext.getChosenBlock(), 
 					m_ChosenNameTextField.getText(), 
 					m_InitialValueTextField.getText(),
 					selectedReqtsList );
@@ -427,12 +523,12 @@ public class CreateTracedAttributePanel extends CreateTracedElementPanel {
 				theCheckOp.highLightElement();
 			}
 			
-			if( m_SourceGraphElement != null ){
-				bleedColorToElementsRelatedTo( m_SourceGraphElement );
+			if( m_ElementContext.getSelectedGraphEl() != null ){
+				bleedColorToElementsRelatedTo( m_ElementContext.getSelectedGraphEl() );
 			}
 			
 			if( m_PubFlowPort.isSelected() ){
-				PortCreator.createPublishFlowportFor( theAttribute );
+				PortCreator.createPublishFlowportFor( theAttribute, m_ConfigSettings );
 			}
 
 			if( m_SubFlowPort.isSelected() ){
@@ -448,7 +544,7 @@ public class CreateTracedAttributePanel extends CreateTracedElementPanel {
 }
 
 /**
- * Copyright (C) 2016-2017  MBSE Training and Consulting Limited (www.executablembse.com)
+ * Copyright (C) 2016-2019  MBSE Training and Consulting Limited (www.executablembse.com)
 
     Change history:
     #028 01-JUN-2016: Add new menu to create a stand-alone attribute owned by the system (F.J.Chadburn)
@@ -470,6 +566,8 @@ public class CreateTracedAttributePanel extends CreateTracedElementPanel {
     #196 05-JUN-2017: Enhanced create traced element dialogs to be context aware for blocks/parts (F.J.Chadburn)
     #197 05-JUN-2017: Fix 8.2 issue in Incoming Event panel, create ValueProperty rather than attribute (F.J.Chadburn)
     #213 09-JUL-2017: Add dialogs to auto-connect «publish»/«subscribe» FlowPorts for white-box simulation (F.J.Chadburn)
+    #252 29-MAY-2019: Implement generic features for profile/settings loading (F.J.Chadburn)
+    #256 29-MAY-2019: Rewrite to Java Swing dialog launching to make thread safe between versions (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

@@ -1,349 +1,255 @@
 package functionalanalysisplugin;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
-import generalhelpers.ConfigurationSettings;
+//import generalhelpers.ConfigurationSettings;
 import generalhelpers.GeneralHelpers;
 import generalhelpers.Logger;
+import generalhelpers.StereotypeAndPropertySettings;
+import generalhelpers.UserInterfaceHelpers;
 
 import com.telelogic.rhapsody.core.*;
 
 public class FunctionalAnalysisSettings {
-	
-	private static final String tagNameForPackageUnderDev = "packageUnderDev";
-	private static final String tagNameForTraceabilityTypeToUseForFunctions = "traceabilityTypeToUseForFunctions";	
-	private static final String tagNameForIsPopulateOptionHidden = "isPopulateOptionHidden";
-	private static final String tagNameForIsPopulateWantedByDefault = "isPopulateWantedByDefault";
+
+	private static final String tagNameForAssemblyBlockUnderDev = "assemblyBlockUnderDev";
 	private static final String tagNameForPackageForEventsAndInterfaces = "packageForEventsAndInterfaces";
 	private static final String tagNameForPackageForActorsAndTest = "packageForActorsAndTest";
-	private static final String tagNameForIsSendEventViaPanelOptionEnabled = "isSendEventViaPanelOptionEnabled";
-	private static final String tagNameForIsSendEventViaPanelWantedByDefault = "isSendEventViaPanelWantedByDefault";
-	private static final String tagNameForIsConvertToDetailedADOptionEnabled = "isConvertToDetailedADOptionEnabled";
-	private static final String tagNameForIsConvertToDetailedADOptionWantedByDefault = "isConvertToDetailedADOptionWantedByDefault";
-	private static final String tagNameForIsCallOperationSupportEnabled = "isCallOperationSupportEnabled";
-	private static final String tagNameForStereotypesForBlockCreation = "stereotypesForBlockCreation";
-	
-	public static IRPPackage getPackageUnderDev(IRPProject inTheProject){
-		
-		IRPPackage thePackage = null;
-		
-		IRPModelElement theRootPackage = inTheProject.findNestedElementRecursive(
-				"FunctionalAnalysisPkg", "Package");
-		
-		if (theRootPackage != null){
-			IRPTag theTag = theRootPackage.getTag( tagNameForPackageUnderDev );
-			
-			if( theTag != null ){
-				String thePackageName = theTag.getValue();
-				
-				thePackage = (IRPPackage) inTheProject.findNestedElementRecursive(thePackageName, "Package");
-				
-				if( thePackage==null){
-					Logger.writeLine("Error in getPackageUnderDev, unable to find package called " + thePackageName);
-				}
-			} else {
-				Logger.writeLine("Error in getPackageUnderDev, unable to find tag called " + tagNameForPackageUnderDev + 
-						" underneath " + Logger.elementInfo( theRootPackage ) );
-			}
-		} else {
-			Logger.writeLine("Error in getPackageUnderDev, unable to find FunctionalAnalysisPkg");
-		}
-		
-		if (thePackage==null){
-			Logger.writeLine("Error in getPackageUnderDev, unable to determine packageUnderDev from the tag value");
-		}
-		
-		return thePackage;
+	private static final String tagNameForPackageForBlocks = "packageForBlocks";
+	private static final String tagNameForPackageForWorkingCopies = "packageForWorkingCopies";
+
+	public static void main(String[] args) {
+		IRPApplication theRhpApp = RhapsodyAppServer.getActiveRhapsodyApplication();
+		@SuppressWarnings("unused")
+		IRPModelElement theSelectedEl = theRhpApp.getSelectedElement();
 	}
-	
+
 	public static List<IRPModelElement> getNonActorOrTestBlocks(
 			IRPClass withInstancesUnderTheBlock ){
-	
+
 		@SuppressWarnings("unchecked")
 		List<IRPModelElement> theCandidateParts = 
-				withInstancesUnderTheBlock.getNestedElementsByMetaClass( "Instance", 1 ).toList();
-					
+		withInstancesUnderTheBlock.getNestedElementsByMetaClass( "Instance", 1 ).toList();
+
 		List<IRPModelElement> theNonActorOrTestBlocks = new ArrayList<IRPModelElement>();
-		
+
 		for( IRPModelElement theCandidatePart : theCandidateParts ) {
-			
+
 			IRPInstance theInstance = (IRPInstance)theCandidatePart;
 			IRPClassifier theClassifier = theInstance.getOtherClass();
-			
+
 			// don't add actors or test driver
 			if( theClassifier != null && 
-				theClassifier instanceof IRPClass &&
-				!GeneralHelpers.hasStereotypeCalled( "TestDriver", theClassifier ) &&
-				!theNonActorOrTestBlocks.contains( theClassifier ) ){
-				
+					theClassifier instanceof IRPClass &&
+					!GeneralHelpers.hasStereotypeCalled( "TestDriver", theClassifier ) &&
+					!theNonActorOrTestBlocks.contains( theClassifier ) ){
+
 				theNonActorOrTestBlocks.add( theClassifier );
 			}
 		}
-		
+
 		return theNonActorOrTestBlocks;
 	}
-	
+
 	public static List<IRPClass> getBuildingBlocks(
 			IRPPackage underneathThePkg ){
-		
+
 		List<IRPClass> theBuildingBlocks = new ArrayList<IRPClass>();
 
 		@SuppressWarnings("unchecked")
 		List<IRPModelElement> theCandidateBlocks = 
-				underneathThePkg.getNestedElementsByMetaClass( "Class", 1 ).toList();
-		
+		underneathThePkg.getNestedElementsByMetaClass( "Class", 1 ).toList();
+
 		for( IRPModelElement theCandidateBlock : theCandidateBlocks ) {
-			
+
 			@SuppressWarnings("unchecked")
 			List<IRPInstance> theInstances = 
-					theCandidateBlock.getNestedElementsByMetaClass( "Instance", 0 ).toList();
-			
+			theCandidateBlock.getNestedElementsByMetaClass( "Instance", 0 ).toList();
+
 			for (IRPInstance theInstance : theInstances) {
-			
+
 				if( theInstance.getUserDefinedMetaClass().equals("Object")){
 					theBuildingBlocks.add( (IRPClass) theCandidateBlock );
 					break;
 				}
 			}
 		}
-				
+
 		return theBuildingBlocks;
 	}
-	
+
 	public static IRPClass getBuildingBlock( 
-			IRPPackage underneathThePkg ){
-		
-		List<IRPClass> theBuildingBlocks = getBuildingBlocks( underneathThePkg );
+			IRPModelElement basedOnContextEl ){
 
-		IRPClass theBuildingBlock = null;
+		Logger.writeLine("getBuildingBlock was invoked for " + Logger.elementInfo( basedOnContextEl ) );
+		IRPClass theBuildingBlock =
+				(IRPClass) getElementNamedInFunctionalPackageTag(
+						basedOnContextEl, 
+						tagNameForAssemblyBlockUnderDev );
 
-		int theSize = theBuildingBlocks.size();
-		
-		if( theSize == 0 ){
-
-			Logger.writeLine( "Error in getBuildingBlock, no building block was found in " + 
-					Logger.elementInfo( underneathThePkg ) );
-			
-		} else if( theSize == 1 ){
-			
-			theBuildingBlock = theBuildingBlocks.get( 0 );
-			
-			Logger.writeLine( "getBuildingBlock called for " + Logger.elementInfo( underneathThePkg ) + 
-					" successfully found " + Logger.elementInfo( theBuildingBlock ));
-						
-		} else {
-
-			theBuildingBlock = theBuildingBlocks.get( 0 );
-			
-			Logger.writeLine( "Warning in getBuildingBlock, " + theSize + 
-					" building blocks were found when expecting just one." );
-			
-		}				
+		Logger.writeLine("... getBuildingBlock completed (" + Logger.elementInfo(theBuildingBlock) + " was found)");
 
 		return theBuildingBlock;
 	}
-	
-	public static IRPPackage getPackageForBlocks(
-			IRPProject inTheProject ){
 
-		IRPPackage thePackageUnderDev = getPackageUnderDev( inTheProject );
-
-		IRPPackage thePackage = thePackageUnderDev;
-				
-		@SuppressWarnings("unchecked")
-		List<IRPPackage> theCandidatePkgs = 
-				thePackageUnderDev.getNestedElementsByMetaClass(
-						"Package", 0 ).toList();
-		
-		for( IRPPackage theCandidatePkg : theCandidatePkgs ){
-			if( theCandidatePkg.getName().endsWith("BlockPkg") ){
-				thePackage = theCandidatePkg;
-			}
-		}
-		
-		return thePackage;
-	}
-	
 	public static IRPPackage getPackageForActorsAndTest(
-			IRPProject inTheProject ){
-		
-		IRPPackage thePackage = null;
+			IRPModelElement basedOnContextEl ){
 
-		IRPModelElement theRootPackage = inTheProject.findNestedElementRecursive(
-				"FunctionalAnalysisPkg", "Package");
-		
-		if (theRootPackage != null){
-			IRPTag theTag = theRootPackage.getTag( tagNameForPackageForActorsAndTest );
-			
-			if( theTag != null ){
-				String thePackageName = theTag.getValue();
-				
-				thePackage = (IRPPackage) inTheProject.findNestedElementRecursive(
-						thePackageName, "Package");
-				
-				if( thePackage==null){
-					Logger.writeLine("Error in getPackageForActorsAndTest, unable to find package called " + thePackageName);
-				}
-			} else {
-				Logger.writeLine("Error in getPackageForActorsAndTest, unable to find tag called " + tagNameForPackageForActorsAndTest + 
-						" underneath " + Logger.elementInfo( theRootPackage ) );
-			}
-		} else {
-			Logger.writeLine("Error in getPackageForActorsAndTest, unable to find FunctionalAnalysisPkg");
-		}
-		
-		if (thePackage==null){
-			Logger.writeLine("Error in getPackageForActorsAndTest, unable to determine package from the tag value");
-		
-			IRPClass theLogicalBlock = getBlockUnderDev( inTheProject, "Unable to determine package for actors and test, which Block is under dev" );
-			
-			// old projects may not have an test package hence use the package the block is in
-			IRPModelElement theOwner = theLogicalBlock.getOwner();
-			
-			if( theOwner instanceof IRPPackage ){
-				thePackage = (IRPPackage)theOwner;
-			} else {
-				Logger.writeLine( "Error in getPackageForActorsAndTest: Can't find pkg for " + Logger.elementInfo( theLogicalBlock ) );
-			}
-		}
-		
+		IRPPackage thePackage = getPkgNamedInFunctionalPackageTag(
+				basedOnContextEl, 
+				tagNameForPackageForActorsAndTest );
+
 		return thePackage;
 	}
-	
-	public static IRPPackage getPkgThatOwnsEventsAndInterfaces(
-			IRPProject inTheProject ){
-		
+
+	public static IRPModelElement getElementNamedInFunctionalPackageTag(
+			IRPModelElement basedOnContextEl,
+			String theTagName ){
+
+		IRPModelElement theEl = null;
+
+		IRPModelElement theSettingsPkg = 
+				getSimulationSettingsPackageBasedOn( basedOnContextEl );
+
+		if( theSettingsPkg != null ){
+			IRPTag theTag = theSettingsPkg.getTag( theTagName );
+
+			if( theTag != null ){
+
+				// retrieve tag value collection
+				IRPCollection valSpecs = theTag.getValueSpecifications();
+
+				@SuppressWarnings("rawtypes")
+				Iterator looper = valSpecs.toList().iterator();
+
+				// retrieve each element instance set as the tag value
+				while( looper.hasNext() ){
+
+					IRPInstanceValue ins = (IRPInstanceValue)looper.next();
+					theEl = ins.getValue();
+					break;
+				}
+			}
+		}
+
+		//		if( theEl == null ){
+		//			Logger.writeLine( "Error in getElementNamedInFunctionalPackageTag, " + 
+		//					"unable to find value for tag called " + theTagName + " under " + 
+		//					Logger.elementInfo( basedOnContextEl ) );
+		//		}
+
+		return theEl;
+	}
+
+	public static IRPPackage getPkgNamedInFunctionalPackageTag(
+			IRPModelElement basedOnContextEl,
+			String theTagName ){
+
 		IRPPackage thePackage = null;
 
-		IRPModelElement theRootPackage = inTheProject.findNestedElementRecursive(
-				"FunctionalAnalysisPkg", "Package");
-		
-		if (theRootPackage != null){
-			IRPTag theTag = theRootPackage.getTag( tagNameForPackageForEventsAndInterfaces );
-			
+		IRPModelElement theSettingsPkg = 
+				getSimulationSettingsPackageBasedOn( basedOnContextEl );
+
+		if( theSettingsPkg != null ){
+			IRPTag theTag = theSettingsPkg.getTag( theTagName );
+
 			if( theTag != null ){
 				String thePackageName = theTag.getValue();
-				
-				thePackage = (IRPPackage) inTheProject.findNestedElementRecursive(
+
+				thePackage = (IRPPackage) basedOnContextEl.getProject().findNestedElementRecursive(
 						thePackageName, "Package");
-				
-				if( thePackage==null){
-					Logger.writeLine("Error in getPkgThatOwnsEventsAndInterfaces, unable to find package called " + thePackageName);
+
+				if( thePackage == null ){
+					Logger.writeLine( "getPkgNamedInFunctionalPackageTag was unable to find package called " + 
+							thePackageName );
 				}
 			} else {
-				Logger.writeLine("Error in getPkgThatOwnsEventsAndInterfaces, unable to find tag called " + tagNameForPackageUnderDev + 
-						" underneath " + Logger.elementInfo( theRootPackage ) );
+				Logger.writeLine( "getPkgNamedInFunctionalPackageTag was unable to find tag called " + 
+						theTagName + " underneath " + Logger.elementInfo( theSettingsPkg ) );
 			}
 		} else {
-			Logger.writeLine("Error in getPkgThatOwnsEventsAndInterfaces, unable to find FunctionalAnalysisPkg");
+			Logger.writeLine("getPkgNamedInFunctionalPackageTag was unable to find a functional analysis pkg based on " + 
+					Logger.elementInfo( basedOnContextEl ) );
 		}
-		
-		if (thePackage==null){
-			Logger.writeLine("Error in getPkgThatOwnsEventsAndInterfaces, unable to determine packageUnderDev from the tag value");
-		
-			IRPClass theLogicalBlock = getBlockUnderDev( inTheProject, "Unable to determine Logical Block, please pick one" );
-			
+
+		if( thePackage == null ){
+
+			IRPClass theLogicalBlock = getBlockUnderDev( 
+					basedOnContextEl, 
+					"Unable to determine Logical Block, please pick one" );
+
 			// old projects may not have an InterfacesPkg hence use the package the block is in
 			IRPModelElement theOwner = theLogicalBlock.getOwner();
-			
+
 			if( theOwner instanceof IRPPackage ){
 				thePackage = (IRPPackage)theOwner;
 			} else {
 				Logger.writeLine( "Error in getPkgThatOwnsEventsAndInterfaces: Can't find event pkg for " + Logger.elementInfo( theLogicalBlock ) );
 			}
 		}
-		
+
 		return thePackage;
 	}
-	
-	public static IRPPackage getWorkingPkgUnderDev(IRPProject inTheProject){
-		
-		IRPPackage theWorkingPkg = null;
-		
-		int count = 0;
-		IRPPackage thePackageUnderDev = getPackageUnderDev( inTheProject );
-		
-		if( thePackageUnderDev != null ){
-			
-			@SuppressWarnings("unchecked")
-			List<IRPPackage> theNestedPkgs = 
-					thePackageUnderDev.getNestedElementsByMetaClass("Package", 1).toList();
-			
-			for (IRPPackage theNestedPkg : theNestedPkgs) {
-				
-				List<IRPModelElement> theDependencies = 
-						GeneralHelpers.findElementsWithMetaClassAndStereotype(
-								"Dependency", "AppliedProfile", theNestedPkg, 0 );
-				
-				for (IRPModelElement theDependencyElement : theDependencies) {
-					
-					IRPDependency theDependency = (IRPDependency)theDependencyElement;
-					
-					IRPModelElement theDependsOn = theDependency.getDependsOn();
-					
-					if (theDependsOn.getName().equals("RequirementsAnalysisProfile")){
-						IRPModelElement theDependent = theDependency.getDependent();
-						theWorkingPkg = (IRPPackage) theDependent;
-						count++;
-					}
-				}
-			}
-		}
-		
-		if (count==0){
-			Logger.writeLine("Error in getWorkingPkgUnderDev, no working package was found");
-		} else if (count > 1){
-			Logger.writeLine("Error in getWorkingPkgUnderDev, " + count + " working packages were found when expecting one");
-		}
-		
+
+	public static IRPPackage getPkgThatOwnsEventsAndInterfaces(
+			IRPModelElement basedOnContextEl ){
+
+		IRPPackage thePackage = 
+				(IRPPackage) getElementNamedInFunctionalPackageTag(
+						basedOnContextEl, 
+						tagNameForPackageForEventsAndInterfaces );
+
+		return thePackage;
+	}
+
+	public static IRPPackage getWorkingPkgUnderDev(
+			IRPModelElement basedOnContextEl ){
+
+		IRPPackage theWorkingPkg = 
+				(IRPPackage) getElementNamedInFunctionalPackageTag(
+						basedOnContextEl, 
+						tagNameForPackageForWorkingCopies );
+
 		return theWorkingPkg;
 	}
-	
+
 	public static IRPClass getBlockUnderDev(
-			IRPProject inTheProject,
+			IRPModelElement basedOnContextEl,
 			String theMsg ){
-		
+
 		IRPClass theBlockUnderDev = null;
-		
-		IRPPackage thePackageUnderDev = getPackageUnderDev( inTheProject );
-		
-		if( thePackageUnderDev == null ){
-			
-			Logger.writeLine( "Error in getBlockUnderDev, no package under development was found in " + 
-					Logger.elementInfo( inTheProject ) );	
+
+		IRPClass theBuildingBlock = 
+				FunctionalAnalysisSettings.getBuildingBlock( basedOnContextEl );
+
+		if( theBuildingBlock == null ){
+
+			Logger.writeLine( "Error in getBlockUnderDev, no building block was found underneath " + 
+					Logger.elementInfo( basedOnContextEl ) );
+
 		} else {
-			
-			IRPClass theBuildingBlock = 
-					FunctionalAnalysisSettings.getBuildingBlock( thePackageUnderDev );
-			
-			if( theBuildingBlock == null ){
-				
-				Logger.writeLine( "Error in getBlockUnderDev, no building block was found underneath " + 
-						Logger.elementInfo( thePackageUnderDev ) );
-			
+
+			List<IRPModelElement> theCandidates = 
+					getNonActorOrTestBlocks( theBuildingBlock );
+
+			if( theCandidates.isEmpty() ){
+
+				Logger.writeLine("Error in getBlockUnderDev, no parts typed by Blocks were found underneath " + 
+						Logger.elementInfo( theBuildingBlock ) );
 			} else {
-				
-				List<IRPModelElement> theCandidates = 
-						getNonActorOrTestBlocks( theBuildingBlock );
 
-				if( theCandidates.isEmpty() ){
+				if( theCandidates.size() > 1 ){
+					final IRPModelElement theChosenBlockEl = 
+							GeneralHelpers.launchDialogToSelectElement(
+									theCandidates, theMsg, true ); 
 
-					Logger.writeLine("Error in getBlockUnderDev, no parts typed by Blocks were found underneath " + 
-							Logger.elementInfo( theBuildingBlock ) );
-				} else {
-
-					if( theCandidates.size() > 1 ){
-						final IRPModelElement theChosenBlockEl = 
-								GeneralHelpers.launchDialogToSelectElement(
-										theCandidates, theMsg, true ); 
-
-						if( theChosenBlockEl != null && theChosenBlockEl instanceof IRPClass ){
-							theBlockUnderDev = (IRPClass) theChosenBlockEl;
-						}
-					} else {
-						theBlockUnderDev = (IRPClass) theCandidates.get( 0 );
+					if( theChosenBlockEl != null && theChosenBlockEl instanceof IRPClass ){
+						theBlockUnderDev = (IRPClass) theChosenBlockEl;
 					}
+				} else {
+					theBlockUnderDev = (IRPClass) theCandidates.get( 0 );
 				}
 			}
 		}
@@ -353,325 +259,271 @@ public class FunctionalAnalysisSettings {
 
 	public static IRPClass getTestBlock(
 			IRPClass withInstanceUnderTheBlock ){
-	
+
 		@SuppressWarnings("unchecked")
 		List<IRPModelElement> theCandidateParts = 
-				withInstanceUnderTheBlock.getNestedElementsByMetaClass( "Instance", 1 ).toList();
-					
+		withInstanceUnderTheBlock.getNestedElementsByMetaClass( "Object", 0 ).toList();
+
 		IRPClass theTestBlock = null;
-		
+
 		for( IRPModelElement theCandidatePart : theCandidateParts ) {
-			
+
 			IRPInstance theInstance = (IRPInstance)theCandidatePart;
 			IRPClassifier theClassifier = theInstance.getOtherClass();
-			
+
+			Logger.writeLine( "The instance is " + Logger.elementInfo( theInstance) + 
+					" typed by " + Logger.elementInfo( theClassifier ) );
+
 			// don't add actors or test driver
 			if( theClassifier != null && 
-				theClassifier instanceof IRPClass &&
-				GeneralHelpers.hasStereotypeCalled( "TestDriver", theClassifier ) ){
-				
+					theClassifier instanceof IRPClass &&
+					GeneralHelpers.hasStereotypeCalled( "TestDriver", theClassifier ) ){
+
+				Logger.writeLine("Found " + Logger.elementInfo( theClassifier ) );
 				theTestBlock = (IRPClass) theClassifier;
 			}
 		}
-		
+
 		return theTestBlock;
 	}
-	
+
 	public static List<IRPActor> getActors(
 			IRPClass withInstancesUnderTheBlock ){
-	
+
 		@SuppressWarnings("unchecked")
 		List<IRPModelElement> theCandidateParts = 
-				withInstancesUnderTheBlock.getNestedElementsByMetaClass( "Instance", 1 ).toList();
-					
+		withInstancesUnderTheBlock.getNestedElementsByMetaClass( "Instance", 1 ).toList();
+
 		List<IRPActor> theActors = new ArrayList<IRPActor>();
-		
+
 		for( IRPModelElement theCandidatePart : theCandidateParts ) {
-			
+
 			IRPInstance theInstance = (IRPInstance)theCandidatePart;
 			IRPClassifier theClassifier = theInstance.getOtherClass();
-			
+
 			// only add actors
 			if( theClassifier != null && 
-				theClassifier instanceof IRPActor ){
-				
+					theClassifier instanceof IRPActor ){
+
 				theActors.add( (IRPActor) theClassifier );
 			}
 		}
-		
+
 		return theActors;
 	}
-	
-	public static boolean getTagBooleanValue(
-			IRPProject inTheProject, String forTagName, boolean withDefault ){
-		
-		boolean result = false;
-		
-		IRPModelElement theRootPackage = 
-				inTheProject.findNestedElementRecursive(
-						"FunctionalAnalysisPkg", "Package" );
-		
-		if (theRootPackage != null){
-			IRPTag theTag = theRootPackage.getTag( forTagName );
-			
-			if( theTag != null ){
-				
-				String theTagValue = theTag.getValue();
-				
-				if( theTagValue.contains("true")){
-					result = true;
-				}
 
-			} else {
-				Logger.writeLine( "Warning in getTagBooleanValue, unable to find tag called " + 
-						forTagName + " underneath " + Logger.elementInfo( theRootPackage ) + " so using '" + withDefault + "' instead" );
-				result = withDefault;
-			}
-		} else {
-			Logger.writeLine( "Error in getTagBooleanValue, unable to find FunctionalAnalysisPkg while looking for tag called " + 
-					forTagName + " underneath " + Logger.elementInfo( theRootPackage ) + " so using '" + withDefault + "' instead" );			
-			result = withDefault;
-		}
-		
-		return result;
-	}
-	
-	public static boolean getIsSendEventViaPanelOptionEnabled(
-			IRPProject inTheProject ){
-		
-		boolean result = getTagBooleanValue(
-				inTheProject, tagNameForIsSendEventViaPanelOptionEnabled, true );
-		
-		return result;
-	}
-	
-	public static boolean getIsSendEventViaPanelWantedByDefault(
-			IRPProject inTheProject ){
-		
-		boolean result = getTagBooleanValue(
-				inTheProject, tagNameForIsSendEventViaPanelWantedByDefault, true );
-		
-		return result;
-	}
-	
-	public static boolean getIsPopulateWantedByDefault(
-			IRPProject inTheProject ){
-		
-		boolean result = getTagBooleanValue(
-				inTheProject, tagNameForIsPopulateWantedByDefault, false );
-		
-		return result;
-	}
-	
-	public static boolean getIsPopulateOptionHidden(
-			IRPProject inTheProject ){
-		
-		boolean result = getTagBooleanValue(
-				inTheProject, tagNameForIsPopulateOptionHidden, true );
-		
-		return result;
-	}
-	
-	public static boolean getIsConvertToDetailedADOptionEnabled(
-			IRPProject inTheProject ){
-		
-		boolean result = getTagBooleanValue(
-				inTheProject, tagNameForIsConvertToDetailedADOptionEnabled, false );
-		
-		return result;
-	}
-
-	public static boolean getIsConvertToDetailedADOptionWantedByDefault(
-			IRPProject inTheProject ){
-		
-		boolean result = getTagBooleanValue(
-				inTheProject, tagNameForIsConvertToDetailedADOptionWantedByDefault, false );
-		
-		return result;
-	}
-	
-	public static boolean getIsCallOperationSupportEnabled(
-			IRPProject inTheProject ){
-		
-		boolean result = getTagBooleanValue(
-				inTheProject, tagNameForIsCallOperationSupportEnabled, true );
-		
-		return result;
-	}
-	
-	public static List<IRPModelElement> getStereotypesForBlockPartCreation(
-			IRPProject inTheProject ){
-		
-		List<IRPModelElement> theStereotypes = new ArrayList<>();
-		
-		String thePackageName = "FunctionalAnalysisPkg";
-		
-		IRPModelElement theFunctionalAnalysisPkg = 
-				inTheProject.findElementsByFullName( thePackageName, "Package" );
-		
-		if( theFunctionalAnalysisPkg == null ){
-			
-			Logger.writeLine("Error in getStereotypesForBlockPartCreation, no " + thePackageName + " was found");
-			
-		} else {
-			
-			String theStereotypeList;
-
-			IRPTag theTag = theFunctionalAnalysisPkg.getTag( tagNameForStereotypesForBlockCreation );
-			
-			if( theTag != null ){
-				theStereotypeList = theTag.getValue();
-			} else {
-				
-				ConfigurationSettings theSettings = ConfigurationSettings.getInstance();
-				
-				theStereotypeList = theSettings.getProperty( 
-						tagNameForStereotypesForBlockCreation, "Component" );
-			}
-			
-			String[] split = theStereotypeList.split(",");
-			
-			for( String theString : split ){
-			
-				IRPModelElement theStereotypeElement = 
-						GeneralHelpers.findElementWithMetaClassAndName( 
-								"Stereotype", theString.trim(), inTheProject );
-				
-				if( theStereotypeElement != null ){
-					theStereotypes.add( theStereotypeElement );
-				}
-			}
-			
-			Logger.writeLine( "getStereotypesForBlockPartCreation was invoked and found " + theStereotypeList + 
-					", it is returning a list of x" + theStereotypes.size() + " stereotypes");
-		}
-		
-
-		
-		return theStereotypes;
-	}
-	
 	public static void setupFunctionalAnalysisTagsFor(
-			IRPProject theProject,
-			IRPPackage thePackageUnderDev,
+			IRPPackage theRootPackage,
+			IRPClass theAssemblyBlockUnderDev,
 			IRPPackage thePackageForEventsAndInterfaces, 
-			IRPPackage thePackageForActorsAndTest ){
+			IRPPackage thePackageForActorsAndTest,
+			IRPPackage thePackageForBlocks ){
 
-		IRPModelElement theRootPackage = 
-				theProject.findNestedElementRecursive(
-						"FunctionalAnalysisPkg", "Package" );
-		
 		if( theRootPackage != null ){
-			
-			ConfigurationSettings theSettings = ConfigurationSettings.getInstance();
 
-			setPackageTagValueOn( 
+			setModelElementTagValueOn( 
 					theRootPackage, 
-					tagNameForPackageUnderDev, 
-					thePackageUnderDev );
-			
-			setStringTagValueOn( 
-					theRootPackage, 
-					tagNameForTraceabilityTypeToUseForFunctions, 
-					theSettings.getProperty( tagNameForTraceabilityTypeToUseForFunctions, "satisfy" ) );
-					
-			setStringTagValueOn( 
-					theRootPackage, 
-					tagNameForIsPopulateOptionHidden, 
-					theSettings.getProperty( tagNameForIsPopulateOptionHidden, "true" ) );
-			
-			setStringTagValueOn( 
-					theRootPackage, 
-					tagNameForIsPopulateWantedByDefault, 
-					theSettings.getProperty( tagNameForIsPopulateWantedByDefault, "false" ) );
+					tagNameForAssemblyBlockUnderDev, 
+					"Class",
+					theAssemblyBlockUnderDev );
 
-			setStringTagValueOn( 
+			setModelElementTagValueOn( 
 					theRootPackage, 
-					tagNameForIsSendEventViaPanelOptionEnabled, 
-					theSettings.getProperty( tagNameForIsSendEventViaPanelOptionEnabled, "true" ) );
-			
-			setStringTagValueOn( 
-					theRootPackage, 
-					tagNameForIsSendEventViaPanelWantedByDefault, 
-					theSettings.getProperty( tagNameForIsSendEventViaPanelWantedByDefault, "false" ) );
-		
-			setStringTagValueOn( 
-					theRootPackage, 
-					tagNameForIsConvertToDetailedADOptionEnabled, 
-					theSettings.getProperty( tagNameForIsConvertToDetailedADOptionEnabled, "false" ) );
-			
-			setStringTagValueOn( 
-					theRootPackage, 
-					tagNameForIsConvertToDetailedADOptionWantedByDefault, 
-					theSettings.getProperty( tagNameForIsConvertToDetailedADOptionWantedByDefault, "false" ) );
+					tagNameForPackageForActorsAndTest,
+					"Package",
+					thePackageForActorsAndTest );
 
-			setStringTagValueOn( 
-					theRootPackage, 
-					tagNameForIsCallOperationSupportEnabled, 
-					theSettings.getProperty( tagNameForIsCallOperationSupportEnabled, "true" ) );
-			
-			setPackageTagValueOn( 
+			setModelElementTagValueOn( 
 					theRootPackage, 
 					tagNameForPackageForEventsAndInterfaces, 
+					"Package",
 					thePackageForEventsAndInterfaces );
-			
-			setPackageTagValueOn( 
+
+			setModelElementTagValueOn( 
 					theRootPackage, 
+					tagNameForPackageForBlocks, 
+					"Package",
+					thePackageForBlocks );	
+		}
+	}
+
+
+	public static void setupFunctionalAnalysisTagsFor2(
+			IRPPackage theRootPackage,
+			IRPClass theAssemblyBlockUnderDev,
+			IRPPackage thePackageForEventsAndInterfaces, 
+			IRPPackage thePackageForActorsAndTest,
+			IRPPackage thePackageForBlocks ){
+
+		if( theRootPackage != null ){
+
+			String theStereotypeName = 
+					StereotypeAndPropertySettings.getSimulationPackageStereotype( theRootPackage );
+
+			setElementTagValueOn( 
+					theRootPackage, 
+					theStereotypeName, 
+					tagNameForAssemblyBlockUnderDev, 
+					theAssemblyBlockUnderDev );
+
+			setElementTagValueOn( 
+					theRootPackage, 
+					theStereotypeName, 
 					tagNameForPackageForActorsAndTest, 
-					thePackageForActorsAndTest );	
-			
-			setStringTagValueOn( 
+					thePackageForActorsAndTest );
+
+			setElementTagValueOn( 
 					theRootPackage, 
-					tagNameForStereotypesForBlockCreation, 
-					theSettings.getProperty( tagNameForStereotypesForBlockCreation, "LogicalSystem,Component,Sensor,Actuator,ExternalSystem" ) );
+					theStereotypeName, 
+					tagNameForPackageForEventsAndInterfaces, 
+					thePackageForEventsAndInterfaces );
 
-		}
+			setElementTagValueOn( 
+					theRootPackage, 
+					theStereotypeName, 
+					tagNameForPackageForBlocks, 
+					thePackageForBlocks );	
+		}	
 	}
-	
-	private static void setStringTagValueOn( 
+
+	private static void setElementTagValueOn( 
+			IRPModelElement theOwner, 
+			String theStereotypeName,
+			String theTagName, 
+			IRPModelElement theValue ){
+
+		// In order to set a value for a tag that comes from a stereotype, you need to quote 
+		// the stereotype(stereotype_0)'s tag(tag_0) as its "base" tag
+
+		IRPStereotype theStereotype = 
+				GeneralHelpers.getExistingStereotype(
+						theStereotypeName, theOwner.getProject() );
+
+		IRPTag baseTag = theStereotype.getTag( theTagName );
+
+		// Return the newly created tag with value "value_A" and set it to class_0
+		IRPTag newTag = theOwner.setTagValue( baseTag, "" );
+
+		// Add other tags with different value to class_0, if the multiplicity > 1
+		newTag.addElementDefaultValue( theValue );
+	}
+
+	public static void setModelElementTagValueOn( 
 			IRPModelElement theOwner, 
 			String theTagName, 
-			String theValue ){
-		
-		IRPTag theTag = theOwner.getTag( theTagName );
-		
-		if( theTag != null ){
-			String theExistingTagValue = theTag.getValue();
-			Logger.writeLine(theOwner, "already has a tag called " + theTagName + ", set to '" + theExistingTagValue + "' (leaving unchanged)" );
+			String theTagTypeDeclaration,
+			IRPModelElement theValue ){
 
-		} else {
-			IRPTag theNewTag = (IRPTag)theOwner.addNewAggr( "Tag", theTagName );
-			theOwner.setTagValue(theNewTag, theValue);
-			Logger.writeLine( theNewTag, "has been added to " + Logger.elementInfo(theOwner) + " and set to '" + theNewTag.getValue() + "'");
-		}
-	}
-	
-	public static void setPackageTagValueOn( 
-			IRPModelElement theOwner, 
-			String theTagName, 
-			IRPPackage theValue ){
-		
 		IRPTag theTag = theOwner.getTag( theTagName );
-		
+
 		if( theTag != null ){
 			String theExistingTagValue = theTag.getValue();
 			theTag.deleteFromProject();
 			IRPTag theNewTag = (IRPTag)theOwner.addNewAggr( "Tag", theTagName );
-			theNewTag.setDeclaration("Package");
-			theOwner.setTagElementValue(theNewTag, theValue);
-			
+			theNewTag.setDeclaration( theTagTypeDeclaration );
+			theOwner.setTagElementValue( theNewTag, theValue );
+
 			Logger.writeLine(theOwner, "already has a tag called " + theTagName + ", changing it from '" + theExistingTagValue + "'" + " to '" + theNewTag.getValue() + "'");
 
 		} else {
 			IRPTag theNewTag = (IRPTag)theOwner.addNewAggr( "Tag", theTagName );
-			theOwner.setTagElementValue(theNewTag, theValue);
+			theNewTag.setDeclaration( theTagTypeDeclaration );
+			theOwner.setTagElementValue( theNewTag, theValue );
 			Logger.writeLine( theNewTag, "has been added to " + Logger.elementInfo(theOwner) + " and set to '" + theNewTag.getValue() + "'");
 		}
+	}
+
+	public static IRPPackage getSimulationSettingsPackageBasedOn(
+			IRPModelElement theContextEl ){
+
+		IRPPackage theSettingsPkg = null;
+
+		if( theContextEl instanceof IRPProject ){
+
+			List<IRPModelElement> thePackageEls = 
+					GeneralHelpers.findElementsWithMetaClassAndStereotype(
+							"Package", 
+							StereotypeAndPropertySettings.getSimulationPackageStereotype( theContextEl ), 
+							theContextEl.getProject(), 
+							1 );
+
+			if( thePackageEls.isEmpty() ){
+
+				IRPModelElement theFunctionalAnalysisPkg = 
+						theContextEl.findElementsByFullName( "FunctionalAnalysisPkg", "Package" );
+
+				if( theFunctionalAnalysisPkg == null ){
+					Logger.writeLine( "Warning in getSimulationSettingsPackageBasedOn, unable to find use case settings package");
+
+				} else {
+					theSettingsPkg = (IRPPackage) theFunctionalAnalysisPkg;
+				}
+
+			} else if( thePackageEls.size()==1){
+
+				theSettingsPkg = (IRPPackage) thePackageEls.get(0);
+
+			} else {
+				Logger.writeLine( "Error in getSimulationSettingsPackageBasedOn, unable to find use case settings package");
+
+				IRPModelElement theUserSelectedPkg = 
+						UserInterfaceHelpers.launchDialogToSelectElement(
+								thePackageEls, 
+								"Choose which settings to use", 
+								true );
+
+				if( theUserSelectedPkg != null ){
+					theSettingsPkg = (IRPPackage) theUserSelectedPkg;
+				}
+			}
+
+		} else if( theContextEl instanceof IRPPackage &&
+				GeneralHelpers.hasStereotypeCalled(
+						StereotypeAndPropertySettings.getSimulationPackageStereotype( theContextEl ), 
+						theContextEl ) ){
+
+			Logger.writeLine( "getSimulationSettingsPackageBasedOn, is returning " + Logger.elementInfo( theContextEl ) );
+
+			theSettingsPkg = (IRPPackage) theContextEl;
+
+		} else if( theContextEl instanceof IRPPackage &&
+				GeneralHelpers.hasStereotypeCalled(
+						StereotypeAndPropertySettings.getUseCasePackageStereotype( theContextEl ), 
+						theContextEl ) ){
+
+			@SuppressWarnings("unchecked")
+			List<IRPModelElement> theReferences = theContextEl.getReferences().toList();
+
+			for( IRPModelElement theReference : theReferences ){
+
+				if( theReference instanceof IRPDependency ){
+
+					IRPDependency theDependency = (IRPDependency)theReference;
+					IRPModelElement theDependent = theDependency.getDependent();
+
+					if( theDependent instanceof IRPPackage &&
+							GeneralHelpers.hasStereotypeCalled(
+									StereotypeAndPropertySettings.getSimulationPackageStereotype( theContextEl ), 
+									theDependent ) ){
+
+						theSettingsPkg = (IRPPackage) theDependent;
+					}
+				}
+			}
+
+		} else {
+
+			// recurse
+			theSettingsPkg = getSimulationSettingsPackageBasedOn(
+					theContextEl.getOwner() );
+		}
+
+		return theSettingsPkg;
 	}
 }
 
 /**
- * Copyright (C) 2016-2017  MBSE Training and Consulting Limited (www.executablembse.com)
+ * Copyright (C) 2016-2019  MBSE Training and Consulting Limited (www.executablembse.com)
 
     Change history:
     #006 02-MAY-2016: Add FunctionalAnalysisPkg helper support (F.J.Chadburn)
@@ -703,6 +555,7 @@ public class FunctionalAnalysisSettings {
     #216 09-JUL-2017: Added a new Add Block/Part command added to the Functional Analysis menus (F.J.Chadburn)
     #220 12-JUL-2017: Added customisable Stereotype choice to the Block and block/Part creation dialogs (F.J.Chadburn) 
     #230 20-SEP-2017: Initial alpha trial for create test case script from a sequence diagram (F.J.Chadburn)
+    #252 29-MAY-2019: Implement generic  for profile/settings loading (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

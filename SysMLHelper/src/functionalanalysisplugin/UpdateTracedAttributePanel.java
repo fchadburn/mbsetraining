@@ -156,7 +156,8 @@ public class UpdateTracedAttributePanel extends CreateTracedElementPanel {
 		
 		m_CheckOpName = GeneralHelpers.determineBestCheckOperationNameFor(
 				(IRPClassifier)m_TargetOwningElement, 
-				m_ChosenNameTextField.getText() );
+				m_ChosenNameTextField.getText(),
+				40 );
 		
 		if( m_ExistingCheckOp==null ){
 			m_CheckOperationCheckBox.setText(
@@ -176,7 +177,7 @@ public class UpdateTracedAttributePanel extends CreateTracedElementPanel {
 		
 		String theChosenName = m_ChosenNameTextField.getText();
 		
-		boolean isLegalName = GeneralHelpers.isLegalName( theChosenName );
+		boolean isLegalName = GeneralHelpers.isLegalName( theChosenName, m_TargetOwningElement );
 		
 		if (!isLegalName){
 			

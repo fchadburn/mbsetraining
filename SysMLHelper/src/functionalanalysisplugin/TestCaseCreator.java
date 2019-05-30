@@ -10,136 +10,133 @@ import generalhelpers.Logger;
 public class TestCaseCreator {
 
 	public static void main(String[] args) {
-		
+
 		IRPApplication theRhpApp = RhapsodyAppServer.getActiveRhapsodyApplication();
-				
+
 		IRPModelElement theSelectedEl = theRhpApp.getSelectedElement();
-		
+
 		if( theSelectedEl instanceof IRPSequenceDiagram ){
 			createTestCaseFor( (IRPSequenceDiagram) theSelectedEl );			
 		}
 	}
 
 	public static void createTestCaseFor( IRPSequenceDiagram theSD ){
-	
+
 		Logger.writeLine("createTestCaseFor invoked for " + Logger.elementInfo( theSD ) );
-		
+
 		IRPCollaboration theLogicalCollab = theSD.getLogicalCollaboration();
-		
+
 		@SuppressWarnings("unchecked")
 		List<IRPMessage> theMessages = theLogicalCollab.getMessages().toList();
-		
-		IRPPackage thePkgUnderDev = FunctionalAnalysisSettings.getPackageUnderDev( theSD.getProject() );
-		
-		if( thePkgUnderDev != null ){
 
-			IRPClass theBuildingBlock = 
-					FunctionalAnalysisSettings.getBuildingBlock( thePkgUnderDev );
-			
-			if( theBuildingBlock != null ){
-				
-				IRPClass theTestBlock = 
-						FunctionalAnalysisSettings.getTestBlock( theBuildingBlock );
-				
-				IRPOperation theTC = OperationCreator.createTestCaseFor( theTestBlock );
-				
-				String theCode = 
-						"comment(\"\");\n" +
-						"start_of_test();\n";
-		
-				List<IRPActor> theActors =
-						FunctionalAnalysisSettings.getActors( theBuildingBlock );
+		IRPClass theBuildingBlock = 
+				FunctionalAnalysisSettings.getBuildingBlock( theSD );
 
-				for (IRPMessage theMessage : theMessages) {
+		if( theBuildingBlock != null ){
 
-					IRPModelElement theSource = theMessage.getSource();
-					IRPInterfaceItem theInterfaceItem = theMessage.getFormalInterfaceItem();
+			IRPClass theTestBlock = 
+					FunctionalAnalysisSettings.getTestBlock( theBuildingBlock );
 
-					if (theInterfaceItem instanceof IRPEvent) {
-						Logger.writeLine(theMessage, " was found with source = " + Logger.elementInfo(theSource)
-								+ ", and theInterfaceItem=" + Logger.elementInfo(theInterfaceItem));
+			IRPOperation theTC = OperationCreator.createTestCaseFor( theTestBlock );
 
-						IRPEvent theEvent = (IRPEvent) theInterfaceItem;
+			String theCode = 
+					"comment(\"\");\n" +
+							"start_of_test();\n";
 
-						String theEventName = theEvent.getName().replaceFirst("req", "send_");
+			List<IRPActor> theActors =
+					FunctionalAnalysisSettings.getActors( theBuildingBlock );
 
-						for (IRPActor theActor : theActors) {
+			for (IRPMessage theMessage : theMessages) {
 
-							IRPModelElement theSend = GeneralHelpers.findElementWithMetaClassAndName("Reception",
-									theEventName, theActor);
+				IRPModelElement theSource = theMessage.getSource();
+				IRPInterfaceItem theInterfaceItem = theMessage.getFormalInterfaceItem();
 
-							if (theSend != null) {
-								Logger.writeLine("Voila, found " + Logger.elementInfo(theSend) + " owned by "
-										+ Logger.elementInfo(theActor));
+				if (theInterfaceItem instanceof IRPEvent) {
+					Logger.writeLine(theMessage, " was found with source = " + Logger.elementInfo(theSource)
+							+ ", and theInterfaceItem=" + Logger.elementInfo(theInterfaceItem));
 
-								IRPLink existingLinkConnectingBlockToActor = ActorMappingInfo
-										.getExistingLinkBetweenBaseClassifiersOf(theTestBlock, theActor);
+					IRPEvent theEvent = (IRPEvent) theInterfaceItem;
 
-								if (existingLinkConnectingBlockToActor != null) {
-									IRPPort theToPort = existingLinkConnectingBlockToActor.getToPort();
+					String theEventName = theEvent.getName().replaceFirst("req", "send_");
 
-									theCode += "OPORT(" + theToPort.getName() + ")->GEN(";
-									theCode += theSend.getName() + "(";
-									//theCode += theMessage.
-									theCode += "));\n";
-									theCode += "sleep(4);\n";
-									
-								} else {
-									Logger.writeLine("No connector found between " + Logger.elementInfo(theTestBlock) + " and "
-											+ Logger.elementInfo(theActor));
-								}
+					for (IRPActor theActor : theActors) {
+
+						IRPModelElement theSend = GeneralHelpers.findElementWithMetaClassAndName("Reception",
+								theEventName, theActor);
+
+						if (theSend != null) {
+							Logger.writeLine("Voila, found " + Logger.elementInfo(theSend) + " owned by "
+									+ Logger.elementInfo(theActor));
+
+							IRPLink existingLinkConnectingBlockToActor = ActorMappingInfo
+									.getExistingLinkBetweenBaseClassifiersOf(theTestBlock, theActor);
+
+							if (existingLinkConnectingBlockToActor != null) {
+								IRPPort theToPort = existingLinkConnectingBlockToActor.getToPort();
+
+								theCode += "OPORT(" + theToPort.getName() + ")->GEN(";
+								theCode += theSend.getName() + "(";
+								//theCode += theMessage.
+								theCode += "));\n";
+								theCode += "sleep(4);\n";
 
 							} else {
-								@SuppressWarnings("unchecked")
-								List<IRPClassifier> theBaseClassifiers = theActor.getBaseClassifiers().toList();
+								Logger.writeLine("No connector found between " + Logger.elementInfo(theTestBlock) + " and "
+										+ Logger.elementInfo(theActor));
+							}
 
-								for (IRPClassifier theBaseClassifier : theBaseClassifiers) {
+						} else {
+							@SuppressWarnings("unchecked")
+							List<IRPClassifier> theBaseClassifiers = theActor.getBaseClassifiers().toList();
 
-									IRPModelElement theSendAgain = GeneralHelpers.findElementWithMetaClassAndName(
-											"Reception", theEventName, theBaseClassifier);
+							for (IRPClassifier theBaseClassifier : theBaseClassifiers) {
 
-									if (theSendAgain != null) {
-										Logger.writeLine("Voila, found " + Logger.elementInfo(theSendAgain)
-												+ " owned by " + Logger.elementInfo(theBaseClassifier));
+								IRPModelElement theSendAgain = GeneralHelpers.findElementWithMetaClassAndName(
+										"Reception", theEventName, theBaseClassifier);
 
-										IRPLink existingLinkConnectingBlockToActor = ActorMappingInfo
-												.getExistingLinkBetweenBaseClassifiersOf(theTestBlock, theActor);
+								if (theSendAgain != null) {
+									Logger.writeLine("Voila, found " + Logger.elementInfo(theSendAgain)
+											+ " owned by " + Logger.elementInfo(theBaseClassifier));
 
-										if (existingLinkConnectingBlockToActor != null) {
-											IRPPort theToPort = existingLinkConnectingBlockToActor.getToPort();
+									IRPLink existingLinkConnectingBlockToActor = ActorMappingInfo
+											.getExistingLinkBetweenBaseClassifiersOf(theTestBlock, theActor);
 
-											theCode += "OPORT(" + theToPort.getName() + ")->GEN(";
-											theCode += theSendAgain.getName() + "(";
-											theCode += "));\n";
-											theCode += "sleep(4);\n";
-											
-										} else {
-											Logger.writeLine("No connector found between " + Logger.elementInfo(theTestBlock)
-													+ " and " + Logger.elementInfo(theActor));
-										}
+									if (existingLinkConnectingBlockToActor != null) {
+										IRPPort theToPort = existingLinkConnectingBlockToActor.getToPort();
+
+										theCode += "OPORT(" + theToPort.getName() + ")->GEN(";
+										theCode += theSendAgain.getName() + "(";
+										theCode += "));\n";
+										theCode += "sleep(4);\n";
+
+									} else {
+										Logger.writeLine("No connector found between " + Logger.elementInfo(theTestBlock)
+												+ " and " + Logger.elementInfo(theActor));
 									}
-
 								}
+
 							}
 						}
 					}
 				}
-
-				theCode += "end_of_test();\n";
-
-				theTC.setBody(theCode);
-				theTC.highLightElement();
 			}
+
+			theCode += "end_of_test();\n";
+
+			theTC.setBody(theCode);
+			theTC.highLightElement();
 		}
 	}
 }
 
 /**
- * Copyright (C) 2017  MBSE Training and Consulting Limited (www.executablembse.com)
+ * Copyright (C) 2017-2019  MBSE Training and Consulting Limited (www.executablembse.com)
 
     Change history:
     #230 20-SEP-2017: Initial alpha trial for create test case script from a sequence diagram (F.J.Chadburn)
-    
+    #252 29-MAY-2019: Implement generic features for profile/settings loading (F.J.Chadburn)
+    #256 29-MAY-2019: Rewrite to Java Swing dialog launching to make thread safe between versions (F.J.Chadburn)
+
     This file is part of SysMLHelperPlugin.
 
     SysMLHelperPlugin is free software: you can redistribute it and/or modify
