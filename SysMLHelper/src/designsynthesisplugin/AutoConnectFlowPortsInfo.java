@@ -7,8 +7,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import generalhelpers.ConfigurationSettings;
 import generalhelpers.GeneralHelpers;
 import generalhelpers.Logger;
+
 import javax.swing.JComboBox;
 import javax.swing.JTextField;
 
@@ -49,8 +51,12 @@ public class AutoConnectFlowPortsInfo {
 		
 		IRPModelElement theSelectedEl = theApp.getSelectedElement();
 		
+		ConfigurationSettings configSettings = new ConfigurationSettings(
+				"SysMLHelper.properties", 
+				"SysMLHelper_MessagesBundle" );
+		
 		if( theSelectedEl instanceof IRPAttribute ){
-			AutoConnectFlowPortsPanel.launchThePanel( (IRPAttribute) theSelectedEl );
+			AutoConnectFlowPortsPanel.launchThePanel( (IRPAttribute) theSelectedEl, configSettings );
 		}
 	}
 	
@@ -388,7 +394,8 @@ public class AutoConnectFlowPortsInfo {
 
     Change history:
     #213 09-JUL-2017: Add dialogs to auto-connect «publish»/«subscribe» FlowPorts for white-box simulation (F.J.Chadburn)
-        
+    #252 29-MAY-2019: Implement generic features for profile/settings loading (F.J.Chadburn)
+    
     This file is part of SysMLHelperPlugin.
 
     SysMLHelperPlugin is free software: you can redistribute it and/or modify
