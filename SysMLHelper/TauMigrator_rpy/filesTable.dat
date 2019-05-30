@@ -1,0 +1,11 @@
+I-Logix-RPY-Archive version 8.13.0 * 9794446
+
+- filesTable = { IRPYRawContainer 
+	- size = 4;
+	- value = "TauMigrator.rpy" ""
+	"TauMigrator_rpy\\NotUsedCmp.cmp" "NotUsedCmp"
+	"TauMigrator_rpy\\NotUsedPkg.sbs" "NotUsedPkg"
+	"TauMigrator_rpy\\TauMigratorProfile.sbs" "TauMigratorProfile"
+	
+}
+

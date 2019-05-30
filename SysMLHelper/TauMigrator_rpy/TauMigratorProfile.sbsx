@@ -1,0 +1,1791 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RhapsodyArchive>
+	<MagicNumber></MagicNumber>
+	<CODE-PAGE>1252</CODE-PAGE>
+	<version>100.831.0</version>
+	<lang>C++</lang>
+	<BuildNo>9835649</BuildNo>
+	
+	<RHAPSODY-MODEL>
+	<IProfile type="e">
+			<_id type="a">GUID 15a1b173-1be9-45f8-9b48-f29d7d6ce3d6</_id>
+			<_myState type="a">8192</_myState>
+			<_properties type="p"><IPropertyContainer type="e">
+				<Subjects type="c">
+					<IRPYRawContainer type="e">
+						<size type="a">8</size>
+						<IPropertySubject type="e">
+							<_Name type="a">Activity_diagram</_Name>
+							<Metaclasses type="c">
+								<IRPYRawContainer type="e">
+									<size type="a">30</size>
+									<IPropertyMetaclass type="e">
+										<_Name type="a">AcceptEventAction</_Name>
+										<Properties type="c">
+											<IRPYRawContainer type="e">
+												<size type="a">1</size>
+												<IProperty type="e">
+													<_Name type="a">ShowStereotype</_Name>
+													<_Value type="a">Bitmap</_Value>
+													<_Type type="a">Enum</_Type>
+													<_ExtraTypeInfo type="a">Label,Bitmap,None</_ExtraTypeInfo>
+												</IProperty>
+												
+											</IRPYRawContainer>
+										</Properties>
+									</IPropertyMetaclass>
+									
+									<IPropertyMetaclass type="e">
+										<_Name type="a">Action</_Name>
+										<Properties type="c">
+											<IRPYRawContainer type="e">
+												<size type="a">1</size>
+												<IProperty type="e">
+													<_Name type="a">ShowStereotype</_Name>
+													<_Value type="a">Bitmap</_Value>
+													<_Type type="a">Enum</_Type>
+													<_ExtraTypeInfo type="a">Label,Bitmap,None</_ExtraTypeInfo>
+												</IProperty>
+												
+											</IRPYRawContainer>
+										</Properties>
+									</IPropertyMetaclass>
+									
+									<IPropertyMetaclass type="e">
+										<_Name type="a">ActionBlock</_Name>
+										<Properties type="c">
+											<IRPYRawContainer type="e">
+												<size type="a">1</size>
+												<IProperty type="e">
+													<_Name type="a">ShowStereotype</_Name>
+													<_Value type="a">Bitmap</_Value>
+													<_Type type="a">Enum</_Type>
+													<_ExtraTypeInfo type="a">Label,Bitmap,None</_ExtraTypeInfo>
+												</IProperty>
+												
+											</IRPYRawContainer>
+										</Properties>
+									</IPropertyMetaclass>
+									
+									<IPropertyMetaclass type="e">
+										<_Name type="a">ActionPin</_Name>
+										<Properties type="c">
+											<IRPYRawContainer type="e">
+												<size type="a">1</size>
+												<IProperty type="e">
+													<_Name type="a">ShowStereotype</_Name>
+													<_Value type="a">Label</_Value>
+													<_Type type="a">Enum</_Type>
+													<_ExtraTypeInfo type="a">Label,None</_ExtraTypeInfo>
+												</IProperty>
+												
+											</IRPYRawContainer>
+										</Properties>
+									</IPropertyMetaclass>
+									
+									<IPropertyMetaclass type="e">
+										<_Name type="a">ActivityParameter</_Name>
+										<Properties type="c">
+											<IRPYRawContainer type="e">
+												<size type="a">1</size>
+												<IProperty type="e">
+													<_Name type="a">ShowStereotype</_Name>
+													<_Value type="a">Label</_Value>
+													<_Type type="a">Enum</_Type>
+													<_ExtraTypeInfo type="a">Label,None</_ExtraTypeInfo>
+												</IProperty>
+												
+											</IRPYRawContainer>
+										</Properties>
+									</IPropertyMetaclass>
+									
+									<IPropertyMetaclass type="e">
+										<_Name type="a">ButtonArray</_Name>
+										<Properties type="c">
+											<IRPYRawContainer type="e">
+												<size type="a">1</size>
+												<IProperty type="e">
+													<_Name type="a">ShowName</_Name>
+													<_Value type="a">BindedElement</_Value>
+													<_Type type="a">Enum</_Type>
+													<_ExtraTypeInfo type="a">BindedElementFullPath,BindedElement,Name,None</_ExtraTypeInfo>
+												</IProperty>
+												
+											</IRPYRawContainer>
+										</Properties>
+									</IPropertyMetaclass>
+									
+									<IPropertyMetaclass type="e">
+										<_Name type="a">CallBehavior</_Name>
+										<Properties type="c">
+											<IRPYRawContainer type="e">
+												<size type="a">2</size>
+												<IProperty type="e">
+													<_Name type="a">ShowAction</_Name>
+													<_Value type="a">Description</_Value>
+													<_Type type="a">Enum</_Type>
+													<_ExtraTypeInfo type="a">Action,Description,Label,ReferenceDescription</_ExtraTypeInfo>
+												</IProperty>
+												
+												<IProperty type="e">
+													<_Name type="a">ShowStereotype</_Name>
+													<_Value type="a">Bitmap</_Value>
+													<_Type type="a">Enum</_Type>
+													<_ExtraTypeInfo type="a">Label,Bitmap,None</_ExtraTypeInfo>
+												</IProperty>
+												
+											</IRPYRawContainer>
+										</Properties>
+									</IPropertyMetaclass>
+									
+									<IPropertyMetaclass type="e">
+										<_Name type="a">CallOperation</_Name>
+										<Properties type="c">
+											<IRPYRawContainer type="e">
+												<size type="a">1</size>
+												<IProperty type="e">
+													<_Name type="a">ShowStereotype</_Name>
+													<_Value type="a">Bitmap</_Value>
+													<_Type type="a">Enum</_Type>
+													<_ExtraTypeInfo type="a">Label,Bitmap,None</_ExtraTypeInfo>
+												</IProperty>
+												
+											</IRPYRawContainer>
+										</Properties>
+									</IPropertyMetaclass>
+									
+									<IPropertyMetaclass type="e">
+										<_Name type="a">Comment</_Name>
+										<Properties type="c">
+											<IRPYRawContainer type="e">
+												<size type="a">3</size>
+												<IProperty type="e">
+													<_Name type="a">CommentNotation</_Name>
+													<_Value type="a">Box_Style</_Value>
+													<_Type type="a">Enum</_Type>
+													<_ExtraTypeInfo type="a">Note_Style,Box_Style</_ExtraTypeInfo>
+												</IProperty>
+												
+												<IProperty type="e">
+													<_Name type="a">Compartments</_Name>
+													<_Value type="a">Description</_Value>
+													<_Type type="a">MultiLine</_Type>
+												</IProperty>
+												
+												<IProperty type="e">
+													<_Name type="a">ShowStereotype</_Name>
+													<_Value type="a">Label</_Value>
+													<_Type type="a">Enum</_Type>
+													<_ExtraTypeInfo type="a">Label,Bitmap,None</_ExtraTypeInfo>
+												</IProperty>
+												
+											</IRPYRawContainer>
+										</Properties>
+									</IPropertyMetaclass>
+									
+									<IPropertyMetaclass type="e">
+										<_Name type="a">Constraint</_Name>
+										<Properties type="c">
+											<IRPYRawContainer type="e">
+												<size type="a">3</size>
+												<IProperty type="e">
+													<_Name type="a">ConstraintNotation</_Name>
+													<_Value type="a">Box_Style</_Value>
+													<_Type type="a">Enum</_Type>
+													<_ExtraTypeInfo type="a">Note_Style,Box_Style</_ExtraTypeInfo>
+												</IProperty>
+												
+												<IProperty type="e">
+													<_Name type="a">ShowName</_Name>
+													<_Value type="a">Name_only</_Value>
+													<_Type type="a">Enum</_Type>
+													<_ExtraTypeInfo type="a">Full_path,Relative,Name_only,Label</_ExtraTypeInfo>
+												</IProperty>
+												
+												<IProperty type="e">
+													<_Name type="a">ShowStereotype</_Name>
+													<_Value type="a">Label</_Value>
+													<_Type type="a">Enum</_Type>
+													<_ExtraTypeInfo type="a">Label,Bitmap,None</_ExtraTypeInfo>
+												</IProperty>
+												
+											</IRPYRawContainer>
+										</Properties>
+									</IPropertyMetaclass>
+									
+									<IPropertyMetaclass type="e">
+										<_Name type="a">ControlFlow</_Name>
+										<Properties type="c">
+											<IRPYRawContainer type="e">
+												<size type="a">2</size>
+												<IProperty type="e">
+													<_Name type="a">ShowStereotype</_Name>
+													<_Value type="a">Bitmap</_Value>
+													<_Type type="a">Enum</_Type>
+													<_ExtraTypeInfo type="a">Label,Bitmap,None</_ExtraTypeInfo>
+												</IProperty>
+												
+												<IProperty type="e">
+													<_Name type="a">line_style</_Name>
+													<_Value type="a">rounded_rectilinear_arrows</_Value>
+													<_Type type="a">Enum</_Type>
+													<_ExtraTypeInfo type="a">straight_arrows,rectilinear_arrows,spline_arrows,rounded_rectilinear_arrows</_ExtraTypeInfo>
+												</IProperty>
+												
+											</IRPYRawContainer>
+										</Properties>
+									</IPropertyMetaclass>
+									
+									<IPropertyMetaclass type="e">
+										<_Name type="a">DecisionNode</_Name>
+										<Properties type="c">
+											<IRPYRawContainer type="e">
+												<size type="a">1</size>
+												<IProperty type="e">
+													<_Name type="a">show_name</_Name>
+													<_Value type="a">None</_Value>
+													<_Type type="a">Enum</_Type>
+													<_ExtraTypeInfo type="a">Name,Label,None</_ExtraTypeInfo>
+												</IProperty>
+												
+											</IRPYRawContainer>
+										</Properties>
+									</IPropertyMetaclass>
+									
+									<IPropertyMetaclass type="e">
+										<_Name type="a">DefaultTransition</_Name>
+										<Properties type="c">
+											<IRPYRawContainer type="e">
+												<size type="a">1</size>
+												<IProperty type="e">
+													<_Name type="a">line_style</_Name>
+													<_Value type="a">rounded_rectilinear_arrows</_Value>
+													<_Type type="a">Enum</_Type>
+													<_ExtraTypeInfo type="a">straight_arrows,rectilinear_arrows,spline_arrows,rounded_rectilinear_arrows</_ExtraTypeInfo>
+												</IProperty>
+												
+											</IRPYRawContainer>
+										</Properties>
+									</IPropertyMetaclass>
+									
+									<IPropertyMetaclass type="e">
+										<_Name type="a">DigitalDisplay</_Name>
+										<Properties type="c">
+											<IRPYRawContainer type="e">
+												<size type="a">1</size>
+												<IProperty type="e">
+													<_Name type="a">ShowName</_Name>
+													<_Value type="a">BindedElement</_Value>
+													<_Type type="a">Enum</_Type>
+													<_ExtraTypeInfo type="a">BindedElementFullPath,BindedElement,Name,None</_ExtraTypeInfo>
+												</IProperty>
+												
+											</IRPYRawContainer>
+										</Properties>
+									</IPropertyMetaclass>
+									
+									<IPropertyMetaclass type="e">
+										<_Name type="a">Gauge</_Name>
+										<Properties type="c">
+											<IRPYRawContainer type="e">
+												<size type="a">1</size>
+												<IProperty type="e">
+													<_Name type="a">ShowName</_Name>
+													<_Value type="a">BindedElement</_Value>
+													<_Type type="a">Enum</_Type>
+													<_ExtraTypeInfo type="a">BindedElementFullPath,BindedElement,Name,None</_ExtraTypeInfo>
+												</IProperty>
+												
+											</IRPYRawContainer>
+										</Properties>
+									</IPropertyMetaclass>
+									
+									<IPropertyMetaclass type="e">
+										<_Name type="a">Knob</_Name>
+										<Properties type="c">
+											<IRPYRawContainer type="e">
+												<size type="a">1</size>
+												<IProperty type="e">
+													<_Name type="a">ShowName</_Name>
+													<_Value type="a">BindedElement</_Value>
+													<_Type type="a">Enum</_Type>
+													<_ExtraTypeInfo type="a">BindedElementFullPath,BindedElement,Name,None</_ExtraTypeInfo>
+												</IProperty>
+												
+											</IRPYRawContainer>
+										</Properties>
+									</IPropertyMetaclass>
+									
+									<IPropertyMetaclass type="e">
+										<_Name type="a">Led</_Name>
+										<Properties type="c">
+											<IRPYRawContainer type="e">
+												<size type="a">1</size>
+												<IProperty type="e">
+													<_Name type="a">ShowName</_Name>
+													<_Value type="a">BindedElement</_Value>
+													<_Type type="a">Enum</_Type>
+													<_ExtraTypeInfo type="a">BindedElementFullPath,BindedElement,Name,None</_ExtraTypeInfo>
+												</IProperty>
+												
+											</IRPYRawContainer>
+										</Properties>
+									</IPropertyMetaclass>
+									
+									<IPropertyMetaclass type="e">
+										<_Name type="a">LevelIndicator</_Name>
+										<Properties type="c">
+											<IRPYRawContainer type="e">
+												<size type="a">1</size>
+												<IProperty type="e">
+													<_Name type="a">ShowName</_Name>
+													<_Value type="a">BindedElement</_Value>
+													<_Type type="a">Enum</_Type>
+													<_ExtraTypeInfo type="a">BindedElementFullPath,BindedElement,Name,None</_ExtraTypeInfo>
+												</IProperty>
+												
+											</IRPYRawContainer>
+										</Properties>
+									</IPropertyMetaclass>
+									
+									<IPropertyMetaclass type="e">
+										<_Name type="a">LoopTransition</_Name>
+										<Properties type="c">
+											<IRPYRawContainer type="e">
+												<size type="a">1</size>
+												<IProperty type="e">
+													<_Name type="a">line_style</_Name>
+													<_Value type="a">rectilinear_arrows</_Value>
+													<_Type type="a">Enum</_Type>
+													<_ExtraTypeInfo type="a">straight_arrows,rectilinear_arrows,spline_arrows,rounded_rectilinear_arrows</_ExtraTypeInfo>
+												</IProperty>
+												
+											</IRPYRawContainer>
+										</Properties>
+									</IPropertyMetaclass>
+									
+									<IPropertyMetaclass type="e">
+										<_Name type="a">MatrixDisplay</_Name>
+										<Properties type="c">
+											<IRPYRawContainer type="e">
+												<size type="a">1</size>
+												<IProperty type="e">
+													<_Name type="a">ShowName</_Name>
+													<_Value type="a">BindedElement</_Value>
+													<_Type type="a">Enum</_Type>
+													<_ExtraTypeInfo type="a">BindedElementFullPath,BindedElement,Name,None</_ExtraTypeInfo>
+												</IProperty>
+												
+											</IRPYRawContainer>
+										</Properties>
+									</IPropertyMetaclass>
+									
+									<IPropertyMetaclass type="e">
+										<_Name type="a">Meter</_Name>
+										<Properties type="c">
+											<IRPYRawContainer type="e">
+												<size type="a">1</size>
+												<IProperty type="e">
+													<_Name type="a">ShowName</_Name>
+													<_Value type="a">BindedElement</_Value>
+													<_Type type="a">Enum</_Type>
+													<_ExtraTypeInfo type="a">BindedElementFullPath,BindedElement,Name,None</_ExtraTypeInfo>
+												</IProperty>
+												
+											</IRPYRawContainer>
+										</Properties>
+									</IPropertyMetaclass>
+									
+									<IPropertyMetaclass type="e">
+										<_Name type="a">ObjectFlow</_Name>
+										<Properties type="c">
+											<IRPYRawContainer type="e">
+												<size type="a">2</size>
+												<IProperty type="e">
+													<_Name type="a">ShowStereotype</_Name>
+													<_Value type="a">Bitmap</_Value>
+													<_Type type="a">Enum</_Type>
+													<_ExtraTypeInfo type="a">Label,Bitmap,None</_ExtraTypeInfo>
+												</IProperty>
+												
+												<IProperty type="e">
+													<_Name type="a">line_style</_Name>
+													<_Value type="a">rounded_rectilinear_arrows</_Value>
+													<_Type type="a">Enum</_Type>
+													<_ExtraTypeInfo type="a">straight_arrows,rectilinear_arrows,spline_arrows,rounded_rectilinear_arrows</_ExtraTypeInfo>
+												</IProperty>
+												
+											</IRPYRawContainer>
+										</Properties>
+									</IPropertyMetaclass>
+									
+									<IPropertyMetaclass type="e">
+										<_Name type="a">OnOffSwitch</_Name>
+										<Properties type="c">
+											<IRPYRawContainer type="e">
+												<size type="a">1</size>
+												<IProperty type="e">
+													<_Name type="a">ShowName</_Name>
+													<_Value type="a">BindedElement</_Value>
+													<_Type type="a">Enum</_Type>
+													<_ExtraTypeInfo type="a">BindedElementFullPath,BindedElement,Name,None</_ExtraTypeInfo>
+												</IProperty>
+												
+											</IRPYRawContainer>
+										</Properties>
+									</IPropertyMetaclass>
+									
+									<IPropertyMetaclass type="e">
+										<_Name type="a">PushButton</_Name>
+										<Properties type="c">
+											<IRPYRawContainer type="e">
+												<size type="a">1</size>
+												<IProperty type="e">
+													<_Name type="a">ShowName</_Name>
+													<_Value type="a">BindedElement</_Value>
+													<_Type type="a">Enum</_Type>
+													<_ExtraTypeInfo type="a">BindedElementFullPath,BindedElement,Name,None</_ExtraTypeInfo>
+												</IProperty>
+												
+											</IRPYRawContainer>
+										</Properties>
+									</IPropertyMetaclass>
+									
+									<IPropertyMetaclass type="e">
+										<_Name type="a">Requirement</_Name>
+										<Properties type="c">
+											<IRPYRawContainer type="e">
+												<size type="a">3</size>
+												<IProperty type="e">
+													<_Name type="a">Compartments</_Name>
+													<_Value type="a">Specification</_Value>
+													<_Type type="a">MultiLine</_Type>
+												</IProperty>
+												
+												<IProperty type="e">
+													<_Name type="a">RequirementNotation</_Name>
+													<_Value type="a">Box_Style</_Value>
+													<_Type type="a">Enum</_Type>
+													<_ExtraTypeInfo type="a">Note_Style,Box_Style</_ExtraTypeInfo>
+												</IProperty>
+												
+												<IProperty type="e">
+													<_Name type="a">ShowName</_Name>
+													<_Value type="a">Name_only</_Value>
+													<_Type type="a">Enum</_Type>
+													<_ExtraTypeInfo type="a">Full_path,Relative,Name_only,Label</_ExtraTypeInfo>
+												</IProperty>
+												
+											</IRPYRawContainer>
+										</Properties>
+									</IPropertyMetaclass>
+									
+									<IPropertyMetaclass type="e">
+										<_Name type="a">SendAction</_Name>
+										<Properties type="c">
+											<IRPYRawContainer type="e">
+												<size type="a">2</size>
+												<IProperty type="e">
+													<_Name type="a">ShowNotation</_Name>
+													<_Value type="a">Label</_Value>
+													<_Type type="a">Enum</_Type>
+													<_ExtraTypeInfo type="a">Name,Label,FullNotation,Event</_ExtraTypeInfo>
+												</IProperty>
+												
+												<IProperty type="e">
+													<_Name type="a">ShowStereotype</_Name>
+													<_Value type="a">Bitmap</_Value>
+													<_Type type="a">Enum</_Type>
+													<_ExtraTypeInfo type="a">Label,Bitmap,None</_ExtraTypeInfo>
+												</IProperty>
+												
+											</IRPYRawContainer>
+										</Properties>
+									</IPropertyMetaclass>
+									
+									<IPropertyMetaclass type="e">
+										<_Name type="a">Slider</_Name>
+										<Properties type="c">
+											<IRPYRawContainer type="e">
+												<size type="a">1</size>
+												<IProperty type="e">
+													<_Name type="a">ShowName</_Name>
+													<_Value type="a">BindedElement</_Value>
+													<_Type type="a">Enum</_Type>
+													<_ExtraTypeInfo type="a">BindedElementFullPath,BindedElement,Name,None</_ExtraTypeInfo>
+												</IProperty>
+												
+											</IRPYRawContainer>
+										</Properties>
+									</IPropertyMetaclass>
+									
+									<IPropertyMetaclass type="e">
+										<_Name type="a">Swimlane</_Name>
+										<Properties type="c">
+											<IRPYRawContainer type="e">
+												<size type="a">2</size>
+												<IProperty type="e">
+													<_Name type="a">ShowName</_Name>
+													<_Value type="a">Represents</_Value>
+													<_Type type="a">Enum</_Type>
+													<_ExtraTypeInfo type="a">Name_only,Represents,RepresentsOnly,Label</_ExtraTypeInfo>
+												</IProperty>
+												
+												<IProperty type="e">
+													<_Name type="a">ShowStereotype</_Name>
+													<_Value type="a">Bitmap</_Value>
+													<_Type type="a">Enum</_Type>
+													<_ExtraTypeInfo type="a">Label,Bitmap,None</_ExtraTypeInfo>
+												</IProperty>
+												
+											</IRPYRawContainer>
+										</Properties>
+									</IPropertyMetaclass>
+									
+									<IPropertyMetaclass type="e">
+										<_Name type="a">TextBox</_Name>
+										<Properties type="c">
+											<IRPYRawContainer type="e">
+												<size type="a">1</size>
+												<IProperty type="e">
+													<_Name type="a">ShowName</_Name>
+													<_Value type="a">BindedElement</_Value>
+													<_Type type="a">Enum</_Type>
+													<_ExtraTypeInfo type="a">BindedElementFullPath,BindedElement,Name,None</_ExtraTypeInfo>
+												</IProperty>
+												
+											</IRPYRawContainer>
+										</Properties>
+									</IPropertyMetaclass>
+									
+									<IPropertyMetaclass type="e">
+										<_Name type="a">Transition</_Name>
+										<Properties type="c">
+											<IRPYRawContainer type="e">
+												<size type="a">1</size>
+												<IProperty type="e">
+													<_Name type="a">line_style</_Name>
+													<_Value type="a">rounded_rectilinear_arrows</_Value>
+													<_Type type="a">Enum</_Type>
+													<_ExtraTypeInfo type="a">straight_arrows,rectilinear_arrows,spline_arrows,rounded_rectilinear_arrows</_ExtraTypeInfo>
+												</IProperty>
+												
+											</IRPYRawContainer>
+										</Properties>
+									</IPropertyMetaclass>
+									
+								</IRPYRawContainer>
+							</Metaclasses>
+						</IPropertySubject>
+						
+						<IPropertySubject type="e">
+							<_Name type="a">General</_Name>
+							<Metaclasses type="c">
+								<IRPYRawContainer type="e">
+									<size type="a">2</size>
+									<IPropertyMetaclass type="e">
+										<_Name type="a">Graphics</_Name>
+										<Properties type="c">
+											<IRPYRawContainer type="e">
+												<size type="a">2</size>
+												<IProperty type="e">
+													<_Name type="a">AdditionalCompartments</_Name>
+													<_Value type="a">AllocatedFrom,AllocatedTo,ProxyPort,FullPort,FlowProperty,Subfunction,Function Block,Sequence Block</_Value>
+													<_Type type="a">String</_Type>
+												</IProperty>
+												
+												<IProperty type="e">
+													<_Name type="a">DefaultBoxView</_Name>
+													<_Value type="a">Specification</_Value>
+													<_Type type="a">Enum</_Type>
+													<_ExtraTypeInfo type="a">Specification,Structured,Default</_ExtraTypeInfo>
+												</IProperty>
+												
+											</IRPYRawContainer>
+										</Properties>
+									</IPropertyMetaclass>
+									
+									<IPropertyMetaclass type="e">
+										<_Name type="a">Profile</_Name>
+										<Properties type="c">
+											<IRPYRawContainer type="e">
+												<size type="a">1</size>
+												<IProperty type="e">
+													<_Name type="a">AutoReferences</_Name>
+													<_Value type="a">$OMROOT\Profiles\SysML\SysMLProfile_rpy\SysML.sbs</_Value>
+													<_Type type="a">String</_Type>
+												</IProperty>
+												
+											</IRPYRawContainer>
+										</Properties>
+									</IPropertyMetaclass>
+									
+								</IRPYRawContainer>
+							</Metaclasses>
+						</IPropertySubject>
+						
+						<IPropertySubject type="e">
+							<_Name type="a">Model</_Name>
+							<Metaclasses type="c">
+								<IRPYRawContainer type="e">
+									<size type="a">2</size>
+									<IPropertyMetaclass type="e">
+										<_Name type="a">Profile</_Name>
+										<Properties type="c">
+											<IRPYRawContainer type="e">
+												<size type="a">1</size>
+												<IProperty type="e">
+													<_Name type="a">PropertyFile</_Name>
+													<_Value type="a">$OMROOT\Profiles\SysMLHelper\properties\FunctionalDesign.prp</_Value>
+													<_Type type="a">File</_Type>
+												</IProperty>
+												
+											</IRPYRawContainer>
+										</Properties>
+									</IPropertyMetaclass>
+									
+									<IPropertyMetaclass type="e">
+										<_Name type="a">Stereotype</_Name>
+										<Properties type="c">
+											<IRPYRawContainer type="e">
+												<size type="a">1</size>
+												<IProperty type="e">
+													<_Name type="a">ModelTooltipPluginMethod</_Name>
+													<_Value type="a">InvokeTooltipFormatter</_Value>
+													<_Type type="a">String</_Type>
+												</IProperty>
+												
+											</IRPYRawContainer>
+										</Properties>
+									</IPropertyMetaclass>
+									
+								</IRPYRawContainer>
+							</Metaclasses>
+						</IPropertySubject>
+						
+						<IPropertySubject type="e">
+							<_Name type="a">ObjectModelGe</_Name>
+							<Metaclasses type="c">
+								<IRPYRawContainer type="e">
+									<size type="a">14</size>
+									<IPropertyMetaclass type="e">
+										<_Name type="a">Actor</_Name>
+										<Properties type="c">
+											<IRPYRawContainer type="e">
+												<size type="a">1</size>
+												<IProperty type="e">
+													<_Name type="a">ShowName</_Name>
+													<_Value type="a">Name_only</_Value>
+													<_Type type="a">Enum</_Type>
+													<_ExtraTypeInfo type="a">Full_path,Relative,Name_only,Label</_ExtraTypeInfo>
+												</IProperty>
+												
+											</IRPYRawContainer>
+										</Properties>
+									</IPropertyMetaclass>
+									
+									<IPropertyMetaclass type="e">
+										<_Name type="a">Aggregation</_Name>
+										<Properties type="c">
+											<IRPYRawContainer type="e">
+												<size type="a">3</size>
+												<IProperty type="e">
+													<_Name type="a">ShowSourceRole</_Name>
+													<_Value type="a">True</_Value>
+													<_Type type="a">Bool</_Type>
+												</IProperty>
+												
+												<IProperty type="e">
+													<_Name type="a">ShowTargetRole</_Name>
+													<_Value type="a">True</_Value>
+													<_Type type="a">Bool</_Type>
+												</IProperty>
+												
+												<IProperty type="e">
+													<_Name type="a">line_style</_Name>
+													<_Value type="a">rounded_rectilinear_arrows</_Value>
+													<_Type type="a">Enum</_Type>
+													<_ExtraTypeInfo type="a">straight_arrows,rectilinear_arrows,spline_arrows,rounded_rectilinear_arrows</_ExtraTypeInfo>
+												</IProperty>
+												
+											</IRPYRawContainer>
+										</Properties>
+									</IPropertyMetaclass>
+									
+									<IPropertyMetaclass type="e">
+										<_Name type="a">Association</_Name>
+										<Properties type="c">
+											<IRPYRawContainer type="e">
+												<size type="a">3</size>
+												<IProperty type="e">
+													<_Name type="a">ShowSourceRole</_Name>
+													<_Value type="a">True</_Value>
+													<_Type type="a">Bool</_Type>
+												</IProperty>
+												
+												<IProperty type="e">
+													<_Name type="a">ShowTargetRole</_Name>
+													<_Value type="a">True</_Value>
+													<_Type type="a">Bool</_Type>
+												</IProperty>
+												
+												<IProperty type="e">
+													<_Name type="a">line_style</_Name>
+													<_Value type="a">rounded_rectilinear_arrows</_Value>
+													<_Type type="a">Enum</_Type>
+													<_ExtraTypeInfo type="a">straight_arrows,rectilinear_arrows,spline_arrows,rounded_rectilinear_arrows</_ExtraTypeInfo>
+												</IProperty>
+												
+											</IRPYRawContainer>
+										</Properties>
+									</IPropertyMetaclass>
+									
+									<IPropertyMetaclass type="e">
+										<_Name type="a">Class</_Name>
+										<Properties type="c">
+											<IRPYRawContainer type="e">
+												<size type="a">3</size>
+												<IProperty type="e">
+													<_Name type="a">ShowAttributes</_Name>
+													<_Value type="a">Public</_Value>
+													<_Type type="a">Enum</_Type>
+													<_ExtraTypeInfo type="a">All,None,Public,Explicit</_ExtraTypeInfo>
+												</IProperty>
+												
+												<IProperty type="e">
+													<_Name type="a">ShowName</_Name>
+													<_Value type="a">Name_only</_Value>
+													<_Type type="a">Enum</_Type>
+													<_ExtraTypeInfo type="a">Full_path,Relative,Name_only,Label</_ExtraTypeInfo>
+												</IProperty>
+												
+												<IProperty type="e">
+													<_Name type="a">ShowOperations</_Name>
+													<_Value type="a">Explicit</_Value>
+													<_Type type="a">Enum</_Type>
+													<_ExtraTypeInfo type="a">All,None,Public,Explicit</_ExtraTypeInfo>
+												</IProperty>
+												
+											</IRPYRawContainer>
+										</Properties>
+									</IPropertyMetaclass>
+									
+									<IPropertyMetaclass type="e">
+										<_Name type="a">Comment</_Name>
+										<Properties type="c">
+											<IRPYRawContainer type="e">
+												<size type="a">3</size>
+												<IProperty type="e">
+													<_Name type="a">CommentNotation</_Name>
+													<_Value type="a">Box_Style</_Value>
+													<_Type type="a">Enum</_Type>
+													<_ExtraTypeInfo type="a">Note_Style,Box_Style</_ExtraTypeInfo>
+												</IProperty>
+												
+												<IProperty type="e">
+													<_Name type="a">Compartments</_Name>
+													<_Value type="a">Description</_Value>
+													<_Type type="a">MultiLine</_Type>
+												</IProperty>
+												
+												<IProperty type="e">
+													<_Name type="a">ShowName</_Name>
+													<_Value type="a">Name_only</_Value>
+													<_Type type="a">Enum</_Type>
+													<_ExtraTypeInfo type="a">Full_path,Relative,Name_only,Label</_ExtraTypeInfo>
+												</IProperty>
+												
+											</IRPYRawContainer>
+										</Properties>
+									</IPropertyMetaclass>
+									
+									<IPropertyMetaclass type="e">
+										<_Name type="a">Composition</_Name>
+										<Properties type="c">
+											<IRPYRawContainer type="e">
+												<size type="a">2</size>
+												<IProperty type="e">
+													<_Name type="a">ShowSourceRole</_Name>
+													<_Value type="a">True</_Value>
+													<_Type type="a">Bool</_Type>
+												</IProperty>
+												
+												<IProperty type="e">
+													<_Name type="a">ShowTargetRole</_Name>
+													<_Value type="a">True</_Value>
+													<_Type type="a">Bool</_Type>
+												</IProperty>
+												
+											</IRPYRawContainer>
+										</Properties>
+									</IPropertyMetaclass>
+									
+									<IPropertyMetaclass type="e">
+										<_Name type="a">Constraint</_Name>
+										<Properties type="c">
+											<IRPYRawContainer type="e">
+												<size type="a">3</size>
+												<IProperty type="e">
+													<_Name type="a">ConstraintNotation</_Name>
+													<_Value type="a">Box_Style</_Value>
+													<_Type type="a">Enum</_Type>
+													<_ExtraTypeInfo type="a">Note_Style,Box_Style</_ExtraTypeInfo>
+												</IProperty>
+												
+												<IProperty type="e">
+													<_Name type="a">ShowName</_Name>
+													<_Value type="a">Name_only</_Value>
+													<_Type type="a">Enum</_Type>
+													<_ExtraTypeInfo type="a">Full_path,Relative,Name_only,Label</_ExtraTypeInfo>
+												</IProperty>
+												
+												<IProperty type="e">
+													<_Name type="a">ShowStereotype</_Name>
+													<_Value type="a">Label</_Value>
+													<_Type type="a">Enum</_Type>
+													<_ExtraTypeInfo type="a">Label,Bitmap,None</_ExtraTypeInfo>
+												</IProperty>
+												
+											</IRPYRawContainer>
+										</Properties>
+									</IPropertyMetaclass>
+									
+									<IPropertyMetaclass type="e">
+										<_Name type="a">Inheritance</_Name>
+										<Properties type="c">
+											<IRPYRawContainer type="e">
+												<size type="a">1</size>
+												<IProperty type="e">
+													<_Name type="a">line_style</_Name>
+													<_Value type="a">straight_arrows</_Value>
+													<_Type type="a">Enum</_Type>
+													<_ExtraTypeInfo type="a">straight_arrows,rectilinear_arrows,spline_arrows,tree,rounded_rectilinear_arrows</_ExtraTypeInfo>
+												</IProperty>
+												
+											</IRPYRawContainer>
+										</Properties>
+									</IPropertyMetaclass>
+									
+									<IPropertyMetaclass type="e">
+										<_Name type="a">Interface</_Name>
+										<Properties type="c">
+											<IRPYRawContainer type="e">
+												<size type="a">2</size>
+												<IProperty type="e">
+													<_Name type="a">ShowAttributes</_Name>
+													<_Value type="a">None</_Value>
+													<_Type type="a">Enum</_Type>
+													<_ExtraTypeInfo type="a">All,None,Public,Explicit</_ExtraTypeInfo>
+												</IProperty>
+												
+												<IProperty type="e">
+													<_Name type="a">ShowName</_Name>
+													<_Value type="a">Name_only</_Value>
+													<_Type type="a">Enum</_Type>
+													<_ExtraTypeInfo type="a">Full_path,Relative,Name_only,Label</_ExtraTypeInfo>
+												</IProperty>
+												
+											</IRPYRawContainer>
+										</Properties>
+									</IPropertyMetaclass>
+									
+									<IPropertyMetaclass type="e">
+										<_Name type="a">Link</_Name>
+										<Properties type="c">
+											<IRPYRawContainer type="e">
+												<size type="a">2</size>
+												<IProperty type="e">
+													<_Name type="a">ShowName</_Name>
+													<_Value type="a">None</_Value>
+													<_Type type="a">Enum</_Type>
+													<_ExtraTypeInfo type="a">Name,Label,None</_ExtraTypeInfo>
+												</IProperty>
+												
+												<IProperty type="e">
+													<_Name type="a">line_style</_Name>
+													<_Value type="a">rounded_rectilinear_arrows</_Value>
+													<_Type type="a">Enum</_Type>
+													<_ExtraTypeInfo type="a">straight_arrows,rectilinear_arrows,spline_arrows,rounded_rectilinear_arrows</_ExtraTypeInfo>
+												</IProperty>
+												
+											</IRPYRawContainer>
+										</Properties>
+									</IPropertyMetaclass>
+									
+									<IPropertyMetaclass type="e">
+										<_Name type="a">Object</_Name>
+										<Properties type="c">
+											<IRPYRawContainer type="e">
+												<size type="a">2</size>
+												<IProperty type="e">
+													<_Name type="a">ShowName</_Name>
+													<_Value type="a">Name_only</_Value>
+													<_Type type="a">Enum</_Type>
+													<_ExtraTypeInfo type="a">Full_path,Relative,Name_only,Type,Label</_ExtraTypeInfo>
+												</IProperty>
+												
+												<IProperty type="e">
+													<_Name type="a">ShowOperations</_Name>
+													<_Value type="a">Explicit</_Value>
+													<_Type type="a">Enum</_Type>
+													<_ExtraTypeInfo type="a">All,None,Public,Explicit</_ExtraTypeInfo>
+												</IProperty>
+												
+											</IRPYRawContainer>
+										</Properties>
+									</IPropertyMetaclass>
+									
+									<IPropertyMetaclass type="e">
+										<_Name type="a">Realization</_Name>
+										<Properties type="c">
+											<IRPYRawContainer type="e">
+												<size type="a">1</size>
+												<IProperty type="e">
+													<_Name type="a">line_style</_Name>
+													<_Value type="a">straight_arrows</_Value>
+													<_Type type="a">Enum</_Type>
+													<_ExtraTypeInfo type="a">straight_arrows,rectilinear_arrows,spline_arrows,tree,rounded_rectilinear_arrows</_ExtraTypeInfo>
+												</IProperty>
+												
+											</IRPYRawContainer>
+										</Properties>
+									</IPropertyMetaclass>
+									
+									<IPropertyMetaclass type="e">
+										<_Name type="a">Requirement</_Name>
+										<Properties type="c">
+											<IRPYRawContainer type="e">
+												<size type="a">3</size>
+												<IProperty type="e">
+													<_Name type="a">Compartments</_Name>
+													<_Value type="a">Specification</_Value>
+													<_Type type="a">MultiLine</_Type>
+												</IProperty>
+												
+												<IProperty type="e">
+													<_Name type="a">RequirementNotation</_Name>
+													<_Value type="a">Box_Style</_Value>
+													<_Type type="a">Enum</_Type>
+													<_ExtraTypeInfo type="a">Note_Style,Box_Style</_ExtraTypeInfo>
+												</IProperty>
+												
+												<IProperty type="e">
+													<_Name type="a">ShowName</_Name>
+													<_Value type="a">Name_only</_Value>
+													<_Type type="a">Enum</_Type>
+													<_ExtraTypeInfo type="a">Full_path,Relative,Name_only,Label</_ExtraTypeInfo>
+												</IProperty>
+												
+											</IRPYRawContainer>
+										</Properties>
+									</IPropertyMetaclass>
+									
+									<IPropertyMetaclass type="e">
+										<_Name type="a">UseCase</_Name>
+										<Properties type="c">
+											<IRPYRawContainer type="e">
+												<size type="a">1</size>
+												<IProperty type="e">
+													<_Name type="a">ShowName</_Name>
+													<_Value type="a">Name_only</_Value>
+													<_Type type="a">Enum</_Type>
+													<_ExtraTypeInfo type="a">Full_path,Relative,Name_only,Label</_ExtraTypeInfo>
+												</IProperty>
+												
+											</IRPYRawContainer>
+										</Properties>
+									</IPropertyMetaclass>
+									
+								</IRPYRawContainer>
+							</Metaclasses>
+						</IPropertySubject>
+						
+						<IPropertySubject type="e">
+							<_Name type="a">PanelDiagram</_Name>
+							<Metaclasses type="c">
+								<IRPYRawContainer type="e">
+									<size type="a">12</size>
+									<IPropertyMetaclass type="e">
+										<_Name type="a">ButtonArray</_Name>
+										<Properties type="c">
+											<IRPYRawContainer type="e">
+												<size type="a">1</size>
+												<IProperty type="e">
+													<_Name type="a">ShowName</_Name>
+													<_Value type="a">BindedElement</_Value>
+													<_Type type="a">Enum</_Type>
+													<_ExtraTypeInfo type="a">BindedElementFullPath,BindedElement,Name,None</_ExtraTypeInfo>
+												</IProperty>
+												
+											</IRPYRawContainer>
+										</Properties>
+									</IPropertyMetaclass>
+									
+									<IPropertyMetaclass type="e">
+										<_Name type="a">DigitalDisplay</_Name>
+										<Properties type="c">
+											<IRPYRawContainer type="e">
+												<size type="a">1</size>
+												<IProperty type="e">
+													<_Name type="a">ShowName</_Name>
+													<_Value type="a">BindedElement</_Value>
+													<_Type type="a">Enum</_Type>
+													<_ExtraTypeInfo type="a">BindedElementFullPath,BindedElement,Name,None</_ExtraTypeInfo>
+												</IProperty>
+												
+											</IRPYRawContainer>
+										</Properties>
+									</IPropertyMetaclass>
+									
+									<IPropertyMetaclass type="e">
+										<_Name type="a">Gauge</_Name>
+										<Properties type="c">
+											<IRPYRawContainer type="e">
+												<size type="a">1</size>
+												<IProperty type="e">
+													<_Name type="a">ShowName</_Name>
+													<_Value type="a">BindedElement</_Value>
+													<_Type type="a">Enum</_Type>
+													<_ExtraTypeInfo type="a">BindedElementFullPath,BindedElement,Name,None</_ExtraTypeInfo>
+												</IProperty>
+												
+											</IRPYRawContainer>
+										</Properties>
+									</IPropertyMetaclass>
+									
+									<IPropertyMetaclass type="e">
+										<_Name type="a">Knob</_Name>
+										<Properties type="c">
+											<IRPYRawContainer type="e">
+												<size type="a">1</size>
+												<IProperty type="e">
+													<_Name type="a">ShowName</_Name>
+													<_Value type="a">BindedElement</_Value>
+													<_Type type="a">Enum</_Type>
+													<_ExtraTypeInfo type="a">BindedElementFullPath,BindedElement,Name,None</_ExtraTypeInfo>
+												</IProperty>
+												
+											</IRPYRawContainer>
+										</Properties>
+									</IPropertyMetaclass>
+									
+									<IPropertyMetaclass type="e">
+										<_Name type="a">Led</_Name>
+										<Properties type="c">
+											<IRPYRawContainer type="e">
+												<size type="a">1</size>
+												<IProperty type="e">
+													<_Name type="a">ShowName</_Name>
+													<_Value type="a">BindedElement</_Value>
+													<_Type type="a">Enum</_Type>
+													<_ExtraTypeInfo type="a">BindedElementFullPath,BindedElement,Name,None</_ExtraTypeInfo>
+												</IProperty>
+												
+											</IRPYRawContainer>
+										</Properties>
+									</IPropertyMetaclass>
+									
+									<IPropertyMetaclass type="e">
+										<_Name type="a">LevelIndicator</_Name>
+										<Properties type="c">
+											<IRPYRawContainer type="e">
+												<size type="a">1</size>
+												<IProperty type="e">
+													<_Name type="a">ShowName</_Name>
+													<_Value type="a">BindedElement</_Value>
+													<_Type type="a">Enum</_Type>
+													<_ExtraTypeInfo type="a">BindedElementFullPath,BindedElement,Name,None</_ExtraTypeInfo>
+												</IProperty>
+												
+											</IRPYRawContainer>
+										</Properties>
+									</IPropertyMetaclass>
+									
+									<IPropertyMetaclass type="e">
+										<_Name type="a">MatrixDisplay</_Name>
+										<Properties type="c">
+											<IRPYRawContainer type="e">
+												<size type="a">1</size>
+												<IProperty type="e">
+													<_Name type="a">ShowName</_Name>
+													<_Value type="a">BindedElement</_Value>
+													<_Type type="a">Enum</_Type>
+													<_ExtraTypeInfo type="a">BindedElementFullPath,BindedElement,Name,None</_ExtraTypeInfo>
+												</IProperty>
+												
+											</IRPYRawContainer>
+										</Properties>
+									</IPropertyMetaclass>
+									
+									<IPropertyMetaclass type="e">
+										<_Name type="a">Meter</_Name>
+										<Properties type="c">
+											<IRPYRawContainer type="e">
+												<size type="a">1</size>
+												<IProperty type="e">
+													<_Name type="a">ShowName</_Name>
+													<_Value type="a">BindedElement</_Value>
+													<_Type type="a">Enum</_Type>
+													<_ExtraTypeInfo type="a">BindedElementFullPath,BindedElement,Name,None</_ExtraTypeInfo>
+												</IProperty>
+												
+											</IRPYRawContainer>
+										</Properties>
+									</IPropertyMetaclass>
+									
+									<IPropertyMetaclass type="e">
+										<_Name type="a">OnOffSwitch</_Name>
+										<Properties type="c">
+											<IRPYRawContainer type="e">
+												<size type="a">1</size>
+												<IProperty type="e">
+													<_Name type="a">ShowName</_Name>
+													<_Value type="a">BindedElement</_Value>
+													<_Type type="a">Enum</_Type>
+													<_ExtraTypeInfo type="a">BindedElementFullPath,BindedElement,Name,None</_ExtraTypeInfo>
+												</IProperty>
+												
+											</IRPYRawContainer>
+										</Properties>
+									</IPropertyMetaclass>
+									
+									<IPropertyMetaclass type="e">
+										<_Name type="a">PushButton</_Name>
+										<Properties type="c">
+											<IRPYRawContainer type="e">
+												<size type="a">1</size>
+												<IProperty type="e">
+													<_Name type="a">ShowName</_Name>
+													<_Value type="a">BindedElement</_Value>
+													<_Type type="a">Enum</_Type>
+													<_ExtraTypeInfo type="a">BindedElementFullPath,BindedElement,Name,None</_ExtraTypeInfo>
+												</IProperty>
+												
+											</IRPYRawContainer>
+										</Properties>
+									</IPropertyMetaclass>
+									
+									<IPropertyMetaclass type="e">
+										<_Name type="a">Slider</_Name>
+										<Properties type="c">
+											<IRPYRawContainer type="e">
+												<size type="a">1</size>
+												<IProperty type="e">
+													<_Name type="a">ShowName</_Name>
+													<_Value type="a">BindedElement</_Value>
+													<_Type type="a">Enum</_Type>
+													<_ExtraTypeInfo type="a">BindedElementFullPath,BindedElement,Name,None</_ExtraTypeInfo>
+												</IProperty>
+												
+											</IRPYRawContainer>
+										</Properties>
+									</IPropertyMetaclass>
+									
+									<IPropertyMetaclass type="e">
+										<_Name type="a">TextBox</_Name>
+										<Properties type="c">
+											<IRPYRawContainer type="e">
+												<size type="a">1</size>
+												<IProperty type="e">
+													<_Name type="a">ShowName</_Name>
+													<_Value type="a">BindedElement</_Value>
+													<_Type type="a">Enum</_Type>
+													<_ExtraTypeInfo type="a">BindedElementFullPath,BindedElement,Name,None</_ExtraTypeInfo>
+												</IProperty>
+												
+											</IRPYRawContainer>
+										</Properties>
+									</IPropertyMetaclass>
+									
+								</IRPYRawContainer>
+							</Metaclasses>
+						</IPropertySubject>
+						
+						<IPropertySubject type="e">
+							<_Name type="a">SequenceDiagram</_Name>
+							<Metaclasses type="c">
+								<IRPYRawContainer type="e">
+									<size type="a">1</size>
+									<IPropertyMetaclass type="e">
+										<_Name type="a">Requirement</_Name>
+										<Properties type="c">
+											<IRPYRawContainer type="e">
+												<size type="a">1</size>
+												<IProperty type="e">
+													<_Name type="a">Compartments</_Name>
+													<_Value type="a">Specification</_Value>
+													<_Type type="a">MultiLine</_Type>
+												</IProperty>
+												
+											</IRPYRawContainer>
+										</Properties>
+									</IPropertyMetaclass>
+									
+								</IRPYRawContainer>
+							</Metaclasses>
+						</IPropertySubject>
+						
+						<IPropertySubject type="e">
+							<_Name type="a">StatechartDiagram</_Name>
+							<Metaclasses type="c">
+								<IRPYRawContainer type="e">
+									<size type="a">16</size>
+									<IPropertyMetaclass type="e">
+										<_Name type="a">ButtonArray</_Name>
+										<Properties type="c">
+											<IRPYRawContainer type="e">
+												<size type="a">1</size>
+												<IProperty type="e">
+													<_Name type="a">ShowName</_Name>
+													<_Value type="a">BindedElement</_Value>
+													<_Type type="a">Enum</_Type>
+													<_ExtraTypeInfo type="a">BindedElementFullPath,BindedElement,Name,None</_ExtraTypeInfo>
+												</IProperty>
+												
+											</IRPYRawContainer>
+										</Properties>
+									</IPropertyMetaclass>
+									
+									<IPropertyMetaclass type="e">
+										<_Name type="a">Comment</_Name>
+										<Properties type="c">
+											<IRPYRawContainer type="e">
+												<size type="a">3</size>
+												<IProperty type="e">
+													<_Name type="a">CommentNotation</_Name>
+													<_Value type="a">Box_Style</_Value>
+													<_Type type="a">Enum</_Type>
+													<_ExtraTypeInfo type="a">Note_Style,Box_Style</_ExtraTypeInfo>
+												</IProperty>
+												
+												<IProperty type="e">
+													<_Name type="a">Compartments</_Name>
+													<_Value type="a">Description</_Value>
+													<_Type type="a">MultiLine</_Type>
+												</IProperty>
+												
+												<IProperty type="e">
+													<_Name type="a">ShowName</_Name>
+													<_Value type="a">Name_only</_Value>
+													<_Type type="a">Enum</_Type>
+													<_ExtraTypeInfo type="a">Full_path,Relative,Name_only,Label</_ExtraTypeInfo>
+												</IProperty>
+												
+											</IRPYRawContainer>
+										</Properties>
+									</IPropertyMetaclass>
+									
+									<IPropertyMetaclass type="e">
+										<_Name type="a">DefaultTransition</_Name>
+										<Properties type="c">
+											<IRPYRawContainer type="e">
+												<size type="a">1</size>
+												<IProperty type="e">
+													<_Name type="a">line_style</_Name>
+													<_Value type="a">rectilinear_arrows</_Value>
+													<_Type type="a">Enum</_Type>
+													<_ExtraTypeInfo type="a">straight_arrows,rectilinear_arrows,spline_arrows,rounded_rectilinear_arrows</_ExtraTypeInfo>
+												</IProperty>
+												
+											</IRPYRawContainer>
+										</Properties>
+									</IPropertyMetaclass>
+									
+									<IPropertyMetaclass type="e">
+										<_Name type="a">DigitalDisplay</_Name>
+										<Properties type="c">
+											<IRPYRawContainer type="e">
+												<size type="a">1</size>
+												<IProperty type="e">
+													<_Name type="a">ShowName</_Name>
+													<_Value type="a">BindedElement</_Value>
+													<_Type type="a">Enum</_Type>
+													<_ExtraTypeInfo type="a">BindedElementFullPath,BindedElement,Name,None</_ExtraTypeInfo>
+												</IProperty>
+												
+											</IRPYRawContainer>
+										</Properties>
+									</IPropertyMetaclass>
+									
+									<IPropertyMetaclass type="e">
+										<_Name type="a">Gauge</_Name>
+										<Properties type="c">
+											<IRPYRawContainer type="e">
+												<size type="a">1</size>
+												<IProperty type="e">
+													<_Name type="a">ShowName</_Name>
+													<_Value type="a">BindedElement</_Value>
+													<_Type type="a">Enum</_Type>
+													<_ExtraTypeInfo type="a">BindedElementFullPath,BindedElement,Name,None</_ExtraTypeInfo>
+												</IProperty>
+												
+											</IRPYRawContainer>
+										</Properties>
+									</IPropertyMetaclass>
+									
+									<IPropertyMetaclass type="e">
+										<_Name type="a">Knob</_Name>
+										<Properties type="c">
+											<IRPYRawContainer type="e">
+												<size type="a">1</size>
+												<IProperty type="e">
+													<_Name type="a">ShowName</_Name>
+													<_Value type="a">BindedElement</_Value>
+													<_Type type="a">Enum</_Type>
+													<_ExtraTypeInfo type="a">BindedElementFullPath,BindedElement,Name,None</_ExtraTypeInfo>
+												</IProperty>
+												
+											</IRPYRawContainer>
+										</Properties>
+									</IPropertyMetaclass>
+									
+									<IPropertyMetaclass type="e">
+										<_Name type="a">Led</_Name>
+										<Properties type="c">
+											<IRPYRawContainer type="e">
+												<size type="a">1</size>
+												<IProperty type="e">
+													<_Name type="a">ShowName</_Name>
+													<_Value type="a">BindedElement</_Value>
+													<_Type type="a">Enum</_Type>
+													<_ExtraTypeInfo type="a">BindedElementFullPath,BindedElement,Name,None</_ExtraTypeInfo>
+												</IProperty>
+												
+											</IRPYRawContainer>
+										</Properties>
+									</IPropertyMetaclass>
+									
+									<IPropertyMetaclass type="e">
+										<_Name type="a">LevelIndicator</_Name>
+										<Properties type="c">
+											<IRPYRawContainer type="e">
+												<size type="a">1</size>
+												<IProperty type="e">
+													<_Name type="a">ShowName</_Name>
+													<_Value type="a">BindedElement</_Value>
+													<_Type type="a">Enum</_Type>
+													<_ExtraTypeInfo type="a">BindedElementFullPath,BindedElement,Name,None</_ExtraTypeInfo>
+												</IProperty>
+												
+											</IRPYRawContainer>
+										</Properties>
+									</IPropertyMetaclass>
+									
+									<IPropertyMetaclass type="e">
+										<_Name type="a">MatrixDisplay</_Name>
+										<Properties type="c">
+											<IRPYRawContainer type="e">
+												<size type="a">1</size>
+												<IProperty type="e">
+													<_Name type="a">ShowName</_Name>
+													<_Value type="a">BindedElement</_Value>
+													<_Type type="a">Enum</_Type>
+													<_ExtraTypeInfo type="a">BindedElementFullPath,BindedElement,Name,None</_ExtraTypeInfo>
+												</IProperty>
+												
+											</IRPYRawContainer>
+										</Properties>
+									</IPropertyMetaclass>
+									
+									<IPropertyMetaclass type="e">
+										<_Name type="a">Meter</_Name>
+										<Properties type="c">
+											<IRPYRawContainer type="e">
+												<size type="a">1</size>
+												<IProperty type="e">
+													<_Name type="a">ShowName</_Name>
+													<_Value type="a">BindedElement</_Value>
+													<_Type type="a">Enum</_Type>
+													<_ExtraTypeInfo type="a">BindedElementFullPath,BindedElement,Name,None</_ExtraTypeInfo>
+												</IProperty>
+												
+											</IRPYRawContainer>
+										</Properties>
+									</IPropertyMetaclass>
+									
+									<IPropertyMetaclass type="e">
+										<_Name type="a">OnOffSwitch</_Name>
+										<Properties type="c">
+											<IRPYRawContainer type="e">
+												<size type="a">1</size>
+												<IProperty type="e">
+													<_Name type="a">ShowName</_Name>
+													<_Value type="a">BindedElement</_Value>
+													<_Type type="a">Enum</_Type>
+													<_ExtraTypeInfo type="a">BindedElementFullPath,BindedElement,Name,None</_ExtraTypeInfo>
+												</IProperty>
+												
+											</IRPYRawContainer>
+										</Properties>
+									</IPropertyMetaclass>
+									
+									<IPropertyMetaclass type="e">
+										<_Name type="a">PushButton</_Name>
+										<Properties type="c">
+											<IRPYRawContainer type="e">
+												<size type="a">1</size>
+												<IProperty type="e">
+													<_Name type="a">ShowName</_Name>
+													<_Value type="a">BindedElement</_Value>
+													<_Type type="a">Enum</_Type>
+													<_ExtraTypeInfo type="a">BindedElementFullPath,BindedElement,Name,None</_ExtraTypeInfo>
+												</IProperty>
+												
+											</IRPYRawContainer>
+										</Properties>
+									</IPropertyMetaclass>
+									
+									<IPropertyMetaclass type="e">
+										<_Name type="a">Requirement</_Name>
+										<Properties type="c">
+											<IRPYRawContainer type="e">
+												<size type="a">3</size>
+												<IProperty type="e">
+													<_Name type="a">Compartments</_Name>
+													<_Value type="a">Specification</_Value>
+													<_Type type="a">MultiLine</_Type>
+												</IProperty>
+												
+												<IProperty type="e">
+													<_Name type="a">RequirementNotation</_Name>
+													<_Value type="a">Box_Style</_Value>
+													<_Type type="a">Enum</_Type>
+													<_ExtraTypeInfo type="a">Note_Style,Box_Style</_ExtraTypeInfo>
+												</IProperty>
+												
+												<IProperty type="e">
+													<_Name type="a">ShowName</_Name>
+													<_Value type="a">Name_only</_Value>
+													<_Type type="a">Enum</_Type>
+													<_ExtraTypeInfo type="a">Full_path,Relative,Name_only,Label</_ExtraTypeInfo>
+												</IProperty>
+												
+											</IRPYRawContainer>
+										</Properties>
+									</IPropertyMetaclass>
+									
+									<IPropertyMetaclass type="e">
+										<_Name type="a">Slider</_Name>
+										<Properties type="c">
+											<IRPYRawContainer type="e">
+												<size type="a">1</size>
+												<IProperty type="e">
+													<_Name type="a">ShowName</_Name>
+													<_Value type="a">BindedElement</_Value>
+													<_Type type="a">Enum</_Type>
+													<_ExtraTypeInfo type="a">BindedElementFullPath,BindedElement,Name,None</_ExtraTypeInfo>
+												</IProperty>
+												
+											</IRPYRawContainer>
+										</Properties>
+									</IPropertyMetaclass>
+									
+									<IPropertyMetaclass type="e">
+										<_Name type="a">TextBox</_Name>
+										<Properties type="c">
+											<IRPYRawContainer type="e">
+												<size type="a">1</size>
+												<IProperty type="e">
+													<_Name type="a">ShowName</_Name>
+													<_Value type="a">BindedElement</_Value>
+													<_Type type="a">Enum</_Type>
+													<_ExtraTypeInfo type="a">BindedElementFullPath,BindedElement,Name,None</_ExtraTypeInfo>
+												</IProperty>
+												
+											</IRPYRawContainer>
+										</Properties>
+									</IPropertyMetaclass>
+									
+									<IPropertyMetaclass type="e">
+										<_Name type="a">Transition</_Name>
+										<Properties type="c">
+											<IRPYRawContainer type="e">
+												<size type="a">1</size>
+												<IProperty type="e">
+													<_Name type="a">line_style</_Name>
+													<_Value type="a">rectilinear_arrows</_Value>
+													<_Type type="a">Enum</_Type>
+													<_ExtraTypeInfo type="a">straight_arrows,rectilinear_arrows,spline_arrows,rounded_rectilinear_arrows</_ExtraTypeInfo>
+												</IProperty>
+												
+											</IRPYRawContainer>
+										</Properties>
+									</IPropertyMetaclass>
+									
+								</IRPYRawContainer>
+							</Metaclasses>
+						</IPropertySubject>
+						
+						<IPropertySubject type="e">
+							<_Name type="a">UseCaseGe</_Name>
+							<Metaclasses type="c">
+								<IRPYRawContainer type="e">
+									<size type="a">6</size>
+									<IPropertyMetaclass type="e">
+										<_Name type="a">Actor</_Name>
+										<Properties type="c">
+											<IRPYRawContainer type="e">
+												<size type="a">1</size>
+												<IProperty type="e">
+													<_Name type="a">ShowName</_Name>
+													<_Value type="a">Name_only</_Value>
+													<_Type type="a">Enum</_Type>
+													<_ExtraTypeInfo type="a">Full_path,Relative,Name_only,Label</_ExtraTypeInfo>
+												</IProperty>
+												
+											</IRPYRawContainer>
+										</Properties>
+									</IPropertyMetaclass>
+									
+									<IPropertyMetaclass type="e">
+										<_Name type="a">Association</_Name>
+										<Properties type="c">
+											<IRPYRawContainer type="e">
+												<size type="a">2</size>
+												<IProperty type="e">
+													<_Name type="a">ShowSourceRole</_Name>
+													<_Value type="a">False</_Value>
+													<_Type type="a">Bool</_Type>
+												</IProperty>
+												
+												<IProperty type="e">
+													<_Name type="a">ShowTargetRole</_Name>
+													<_Value type="a">False</_Value>
+													<_Type type="a">Bool</_Type>
+												</IProperty>
+												
+											</IRPYRawContainer>
+										</Properties>
+									</IPropertyMetaclass>
+									
+									<IPropertyMetaclass type="e">
+										<_Name type="a">Comment</_Name>
+										<Properties type="c">
+											<IRPYRawContainer type="e">
+												<size type="a">3</size>
+												<IProperty type="e">
+													<_Name type="a">CommentNotation</_Name>
+													<_Value type="a">Box_Style</_Value>
+													<_Type type="a">Enum</_Type>
+													<_ExtraTypeInfo type="a">Note_Style,Box_Style</_ExtraTypeInfo>
+												</IProperty>
+												
+												<IProperty type="e">
+													<_Name type="a">Compartments</_Name>
+													<_Value type="a">Description</_Value>
+													<_Type type="a">MultiLine</_Type>
+												</IProperty>
+												
+												<IProperty type="e">
+													<_Name type="a">ShowName</_Name>
+													<_Value type="a">Name_only</_Value>
+													<_Type type="a">Enum</_Type>
+													<_ExtraTypeInfo type="a">Full_path,Relative,Name_only,Label</_ExtraTypeInfo>
+												</IProperty>
+												
+											</IRPYRawContainer>
+										</Properties>
+									</IPropertyMetaclass>
+									
+									<IPropertyMetaclass type="e">
+										<_Name type="a">Inheritance</_Name>
+										<Properties type="c">
+											<IRPYRawContainer type="e">
+												<size type="a">1</size>
+												<IProperty type="e">
+													<_Name type="a">line_style</_Name>
+													<_Value type="a">straight_arrows</_Value>
+													<_Type type="a">Enum</_Type>
+													<_ExtraTypeInfo type="a">straight_arrows,rectilinear_arrows,spline_arrows,tree,rounded_rectilinear_arrows</_ExtraTypeInfo>
+												</IProperty>
+												
+											</IRPYRawContainer>
+										</Properties>
+									</IPropertyMetaclass>
+									
+									<IPropertyMetaclass type="e">
+										<_Name type="a">Requirement</_Name>
+										<Properties type="c">
+											<IRPYRawContainer type="e">
+												<size type="a">3</size>
+												<IProperty type="e">
+													<_Name type="a">Compartments</_Name>
+													<_Value type="a">Specification</_Value>
+													<_Type type="a">MultiLine</_Type>
+												</IProperty>
+												
+												<IProperty type="e">
+													<_Name type="a">RequirementNotation</_Name>
+													<_Value type="a">Box_Style</_Value>
+													<_Type type="a">Enum</_Type>
+													<_ExtraTypeInfo type="a">Note_Style,Box_Style</_ExtraTypeInfo>
+												</IProperty>
+												
+												<IProperty type="e">
+													<_Name type="a">ShowName</_Name>
+													<_Value type="a">Name_only</_Value>
+													<_Type type="a">Enum</_Type>
+													<_ExtraTypeInfo type="a">Full_path,Relative,Name_only,Label</_ExtraTypeInfo>
+												</IProperty>
+												
+											</IRPYRawContainer>
+										</Properties>
+									</IPropertyMetaclass>
+									
+									<IPropertyMetaclass type="e">
+										<_Name type="a">UseCase</_Name>
+										<Properties type="c">
+											<IRPYRawContainer type="e">
+												<size type="a">1</size>
+												<IProperty type="e">
+													<_Name type="a">ShowName</_Name>
+													<_Value type="a">Name_only</_Value>
+													<_Type type="a">Enum</_Type>
+													<_ExtraTypeInfo type="a">Full_path,Relative,Name_only,Label</_ExtraTypeInfo>
+												</IProperty>
+												
+											</IRPYRawContainer>
+										</Properties>
+									</IPropertyMetaclass>
+									
+								</IRPYRawContainer>
+							</Metaclasses>
+						</IPropertySubject>
+						
+					</IRPYRawContainer>
+				</Subjects>
+			</IPropertyContainer>
+			</_properties>
+			<_name type="a">TauMigratorProfile</_name>
+			<_modifiedTimeWeak type="a">3.15.2019::11:56:40</_modifiedTimeWeak>
+			<_modifiedTime type="a">3.15.2019::11:56:40</_modifiedTime>
+			<_lastID type="a">14</_lastID>
+			<weakCGTime type="a">3.15.2019::11:56:40</weakCGTime>
+			<strongCGTime type="a">3.15.2019::11:56:40</strongCGTime>
+			<_defaultComposite type="s">GUID 1dbfa55f-c983-422a-af91-30896d05a472</_defaultComposite>
+			<_eventsBaseID type="a">-1</_eventsBaseID>
+			<_configurationRelatedTime type="a">8.27.2018::6:28:38</_configurationRelatedTime>
+			<AggregatesList type="e">
+				<value>GUID d27ac882-79a5-421a-a73b-94eb9f826163</value>
+				<value>GUID 1dbfa55f-c983-422a-af91-30896d05a472</value>
+			</AggregatesList>
+		</IProfile>
+		<IStereotype type="e">
+			<_id type="a">GUID d27ac882-79a5-421a-a73b-94eb9f826163</_id>
+			<_myState type="a">8192</_myState>
+			<_name type="a">ProfileInfo</_name>
+			<_modifiedTimeWeak type="a">2.11.2019::8:22:15</_modifiedTimeWeak>
+			<_modifiedTime type="a">2.11.2019::8:22:15</_modifiedTime>
+			<_lastID type="a">3</_lastID>
+			<_m2Classes type="c">
+				<IRPYRawContainer type="e">
+					<size type="a">1</size>
+					<value>Project</value>
+				</IRPYRawContainer>
+			</_m2Classes>
+			<AggregatesList type="e">
+				<value>GUID 5c243893-9a8a-46ce-81d2-56ae8f88151f</value>
+				<value>GUID 82870a95-d6b8-457e-a7dd-e14ca73e5eb8</value>
+				<value>GUID ace34df8-bffa-42a4-bdf4-e8a00966897d</value>
+			</AggregatesList>
+		</IStereotype>
+		<ITag type="e">
+			<_id type="a">GUID 5c243893-9a8a-46ce-81d2-56ae8f88151f</_id>
+			<_myState type="a">8192</_myState>
+			<_name type="a">ProfileDate</_name>
+			<_modifiedTimeWeak type="a">2.11.2019::8:22:15</_modifiedTimeWeak>
+			<_modifiedTime type="a">2.11.2019::8:22:15</_modifiedTime>
+			<_typeOf type="r">
+				<IHandle type="e">
+					<_hm2Class type="a">IType</_hm2Class>
+					<_hsubsystem type="a">PredefinedTypes</_hsubsystem>
+					<_hname type="a">RhpString</_hname>
+					<_hid type="a">GUID ae5e3720-4e3e-40f1-9346-9a8b4e501f35</_hid>
+				</IHandle>
+			</_typeOf>
+			<_isOrdered type="a">0</_isOrdered>
+			<AggregatesList type="e">
+				<value>GUID 7658cff7-e208-4c21-a5f9-8274faffd09c</value>
+			</AggregatesList>
+		</ITag>
+		<ILiteralSpecification type="e">
+			<_id type="a">GUID 7658cff7-e208-4c21-a5f9-8274faffd09c</_id>
+			<_modifiedTimeWeak type="a">2.11.2019::8:22:15</_modifiedTimeWeak>
+			<_modifiedTime type="a">2.11.2019::8:22:15</_modifiedTime>
+			<_value type="a">2019/02/11 08:22:00</_value>
+		</ILiteralSpecification>
+		<ITag type="e">
+			<_id type="a">GUID 82870a95-d6b8-457e-a7dd-e14ca73e5eb8</_id>
+			<_myState type="a">8192</_myState>
+			<_name type="a">ProfileVersion</_name>
+			<_modifiedTimeWeak type="a">2.11.2019::8:21:53</_modifiedTimeWeak>
+			<_modifiedTime type="a">2.11.2019::8:21:53</_modifiedTime>
+			<_typeOf type="r">
+				<IHandle type="e">
+					<_hm2Class type="a">IType</_hm2Class>
+					<_hsubsystem type="a">PredefinedTypes</_hsubsystem>
+					<_hname type="a">RhpString</_hname>
+					<_hid type="a">GUID ae5e3720-4e3e-40f1-9346-9a8b4e501f35</_hid>
+				</IHandle>
+			</_typeOf>
+			<_isOrdered type="a">0</_isOrdered>
+			<AggregatesList type="e">
+				<value>GUID 511220da-89ca-4130-8a23-4d651851dc34</value>
+			</AggregatesList>
+		</ITag>
+		<ILiteralSpecification type="e">
+			<_id type="a">GUID 511220da-89ca-4130-8a23-4d651851dc34</_id>
+			<_modifiedTimeWeak type="a">2.11.2019::8:21:53</_modifiedTimeWeak>
+			<_modifiedTime type="a">2.11.2019::8:21:53</_modifiedTime>
+			<_value type="a">3.0.o.Rhp82 (PreRelease)</_value>
+		</ILiteralSpecification>
+		<ITag type="e">
+			<_id type="a">GUID ace34df8-bffa-42a4-bdf4-e8a00966897d</_id>
+			<_myState type="a">8192</_myState>
+			<_name type="a">ProfileProperties</_name>
+			<_modifiedTimeWeak type="a">2.11.2019::8:21:41</_modifiedTimeWeak>
+			<_modifiedTime type="a">2.11.2019::8:21:41</_modifiedTime>
+			<_typeOf type="r">
+				<IHandle type="e">
+					<_hm2Class type="a">IType</_hm2Class>
+					<_hsubsystem type="a">PredefinedTypes</_hsubsystem>
+					<_hname type="a">RhpString</_hname>
+					<_hid type="a">GUID ae5e3720-4e3e-40f1-9346-9a8b4e501f35</_hid>
+				</IHandle>
+			</_typeOf>
+			<_isOrdered type="a">0</_isOrdered>
+			<AggregatesList type="e">
+				<value>GUID 55466fc2-16e3-4bf4-9e29-8e1eaf49422b</value>
+			</AggregatesList>
+		</ITag>
+		<ILiteralSpecification type="e">
+			<_id type="a">GUID 55466fc2-16e3-4bf4-9e29-8e1eaf49422b</_id>
+			<_modifiedTimeWeak type="a">2.11.2019::8:21:41</_modifiedTimeWeak>
+			<_modifiedTime type="a">2.11.2019::8:21:41</_modifiedTime>
+			<_value type="a">setPropertyForTauMigratorModel</_value>
+		</ILiteralSpecification>
+		<IClass type="e">
+			<_id type="a">GUID 1dbfa55f-c983-422a-af91-30896d05a472</_id>
+			<_myState type="a">40960</_myState>
+			<_name type="a">TopLevel</_name>
+			<_modifiedTimeWeak type="a">2.11.2019::8:22:15</_modifiedTimeWeak>
+			<_modifiedTime type="a">2.11.2019::8:21:11</_modifiedTime>
+			<weakCGTime type="a">2.11.2019::8:22:15</weakCGTime>
+			<strongCGTime type="a">2.11.2019::8:21:11</strongCGTime>
+			<_itsStateChart type="r">
+				<IHandle type="e">
+				</IHandle>
+			</_itsStateChart>
+			<_classModifier type="a">Unspecified</_classModifier>
+		</IClass>
+		
+	</RHAPSODY-MODEL>
+	<OslcLinks type="c">
+		<IRPYRawContainer type="e">
+			<size type="a">0</size>
+		</IRPYRawContainer>
+	</OslcLinks>
+
+<INCLUDES-RHAPSODY-INDEX>false</INCLUDES-RHAPSODY-INDEX>
+</RhapsodyArchive>
+

@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RhapsodyArchive>
+	<MagicNumber></MagicNumber>
+	<CODE-PAGE>1252</CODE-PAGE>
+	<version>100.831.0</version>
+	<lang>C++</lang>
+	<BuildNo>9835649</BuildNo>
+	
+	<RHAPSODY-MODEL>
+	<IProject type="e">
+			<_id type="a">GUID db2d59f3-a4b2-406d-b2b9-3dd0919de68e</_id>
+			<_myState type="a">8192</_myState>
+			<_properties type="p"><IPropertyContainer type="e">
+				<Subjects type="c">
+					<IRPYRawContainer type="e">
+						<size type="a">1</size>
+						<IPropertySubject type="e">
+							<_Name type="a">General</_Name>
+							<Metaclasses type="c">
+								<IRPYRawContainer type="e">
+									<size type="a">1</size>
+									<IPropertyMetaclass type="e">
+										<_Name type="a">Model</_Name>
+										<Properties type="c">
+											<IRPYRawContainer type="e">
+												<size type="a">1</size>
+												<IProperty type="e">
+													<_Name type="a">RenameUnusedFiles</_Name>
+													<_Value type="a">True</_Value>
+													<_Type type="a">Bool</_Type>
+												</IProperty>
+												
+											</IRPYRawContainer>
+										</Properties>
+									</IPropertyMetaclass>
+									
+								</IRPYRawContainer>
+							</Metaclasses>
+						</IPropertySubject>
+						
+					</IRPYRawContainer>
+				</Subjects>
+			</IPropertyContainer>
+			</_properties>
+			<_name type="a">TauMigrator</_name>
+			<Stereotypes type="c">
+				<IRPYRawContainer type="e">
+					<size type="a">1</size>
+					
+						<IHandle type="e">
+							<_hm2Class type="a">IStereotype</_hm2Class>
+							<_hsubsystem type="a">SysML</_hsubsystem>
+							<_hname type="a">SysML</_hname>
+							<_hid type="a">GUID 052b8171-a32b-4f45-a829-5585f79f9deb</_hid>
+						</IHandle>
+					
+				</IRPYRawContainer>
+			</Stereotypes>
+			<_modifiedTimeWeak type="a">2.11.2019::7:56:33</_modifiedTimeWeak>
+			<_modifiedTime type="a">2.11.2019::7:56:33</_modifiedTime>
+			<_lastID type="a">17</_lastID>
+			<_UserColors type="w">
+				<IRPYRawContainer type="e">
+					<size type="a">16</size>
+					<value>16777215</value>
+					<value>16777215</value>
+					<value>16777215</value>
+					<value>16777215</value>
+					<value>16777215</value>
+					<value>16777215</value>
+					<value>16777215</value>
+					<value>16777215</value>
+					<value>16777215</value>
+					<value>16777215</value>
+					<value>16777215</value>
+					<value>16777215</value>
+					<value>16777215</value>
+					<value>16777215</value>
+					<value>16777215</value>
+					<value>16777215</value>
+				</IRPYRawContainer>
+			</_UserColors>
+			<_defaultSubsystem type="r">
+				<ISubsystemHandle type="e">
+					<_hm2Class type="a">ISubsystem</_hm2Class>
+					<_hname type="a">NotUsedPkg</_hname>
+					<_hid type="a">GUID f7c3249f-ad5e-495b-9fee-8615705d48cc</_hid>
+				</ISubsystemHandle>
+			</_defaultSubsystem>
+			<_component type="r">
+				<IHandle type="e">
+					<_hm2Class type="a">IComponent</_hm2Class>
+					<_hname type="a">NotUsedCmp</_hname>
+					<_hid type="a">GUID 15e00bf1-6846-47dc-acb4-6a0add0593b4</_hid>
+				</IHandle>
+			</_component>
+			<Multiplicities type="c">
+				<IRPYRawContainer type="e">
+					<size type="a">4</size>
+					<IMultiplicityItem type="e">
+						<_name type="a">1</_name>
+						<_count type="a">-1</_count>
+					</IMultiplicityItem>
+					
+					<IMultiplicityItem type="e">
+						<_name type="a">*</_name>
+						<_count type="a">-1</_count>
+					</IMultiplicityItem>
+					
+					<IMultiplicityItem type="e">
+						<_name type="a">0,1</_name>
+						<_count type="a">-1</_count>
+					</IMultiplicityItem>
+					
+					<IMultiplicityItem type="e">
+						<_name type="a">1..*</_name>
+						<_count type="a">-1</_count>
+					</IMultiplicityItem>
+					
+				</IRPYRawContainer>
+			</Multiplicities>
+			<_isImportedFromDM type="a">0</_isImportedFromDM>
+			<Diagrams type="c">
+				<IRPYRawContainer type="e">
+					<size type="a">0</size>
+				</IRPYRawContainer>
+			</Diagrams>
+			<mapOslcAddedCollections type="c">
+				<IRPYRawContainer type="e">
+					<size type="a">0</size>
+				</IRPYRawContainer>
+			</mapOslcAddedCollections>
+			<mapAssociationsToRemove type="c">
+				<IRPYRawContainer type="e">
+					<size type="a">0</size>
+				</IRPYRawContainer>
+			</mapAssociationsToRemove>
+			<AggregatesList type="e">
+				<value>GUID d9689b73-885e-44c4-896b-de43defa0a33</value>
+				<value>GUID f7c3249f-ad5e-495b-9fee-8615705d48cc</value>
+				<value>GUID 15a1b173-1be9-45f8-9b48-f29d7d6ce3d6</value>
+				<value>GUID 00b0140e-6d06-4d19-ba99-8a8e40131db7</value>
+				<value>GUID 0a931094-5e7d-4d59-83e8-247a645b1176</value>
+				<value>GUID 393f0af9-b382-4c3e-aa31-ad304f2ac38c</value>
+				<value>GUID 15e00bf1-6846-47dc-acb4-6a0add0593b4</value>
+			</AggregatesList>
+		</IProject>
+		<IProfile type="e">
+			<fileName type="a">SysML</fileName>
+			<_persistAs type="a">$OMROOT\Profiles\SysML\SysMLProfile_rpy</_persistAs>
+			<_id type="a">GUID d9689b73-885e-44c4-896b-de43defa0a33</_id>
+			<_partOfTheModelKind type="a">referenceunit</_partOfTheModelKind>
+		</IProfile>
+		<ISubsystem type="e">
+			<fileName type="a">NotUsedPkg</fileName>
+			<_id type="a">GUID f7c3249f-ad5e-495b-9fee-8615705d48cc</_id>
+		</ISubsystem>
+		<IProfile type="e">
+			<fileName type="a">TauMigratorProfile</fileName>
+			<_id type="a">GUID 15a1b173-1be9-45f8-9b48-f29d7d6ce3d6</_id>
+		</IProfile>
+		<IProfile type="e">
+			<fileName type="a">CGCompatibilityPre821Cpp</fileName>
+			<_id type="a">GUID 00b0140e-6d06-4d19-ba99-8a8e40131db7</_id>
+		</IProfile>
+		<IProfile type="e">
+			<fileName type="a">GECompatibilityPre831</fileName>
+			<_id type="a">GUID 0a931094-5e7d-4d59-83e8-247a645b1176</_id>
+		</IProfile>
+		<IProfile type="e">
+			<fileName type="a">CGCompatibilityPre831Cpp</fileName>
+			<_id type="a">GUID 393f0af9-b382-4c3e-aa31-ad304f2ac38c</_id>
+		</IProfile>
+		<IComponent type="e">
+			<fileName type="a">NotUsedCmp</fileName>
+			<_id type="a">GUID 15e00bf1-6846-47dc-acb4-6a0add0593b4</_id>
+		</IComponent>
+		
+	</RHAPSODY-MODEL>
+	<OslcLinks type="c">
+		<IRPYRawContainer type="e">
+			<size type="a">0</size>
+		</IRPYRawContainer>
+	</OslcLinks>
+
+<INCLUDES-RHAPSODY-INDEX>false</INCLUDES-RHAPSODY-INDEX>
+</RhapsodyArchive>
+

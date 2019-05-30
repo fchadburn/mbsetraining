@@ -1,0 +1,41 @@
+I-Logix-RPY-Archive version 8.13.0 C++ 9794446
+{ ISubsystem 
+	- _id = GUID f7c3249f-ad5e-495b-9fee-8615705d48cc;
+	- _myState = 8192;
+	- _name = "NotUsedPkg";
+	- _modifiedTimeWeak = 2.11.2019::7:56:0;
+	- EmbededFiles = { IRPYRawContainer 
+		- size = 1;
+		- value = 
+		{ IEmbededFile 
+			- _id = GUID 13fbbea5-8f66-4a88-94e8-89a0b2d958d6;
+			- _name = "FunctionalDesignProfile.hep";
+			- _modifiedTimeWeak = 1.2.1990::0:0:0;
+			- _MayNeedToRelocate = 0;
+			- _LastKnownFullPath = "C:\\Users\\frase\\IBM\\Rational\\Rhapsody\\8.3.1x64\\Share\\Profiles\\SysMLHelper\\FunctionalDesign_rpy\\FunctionalDesignProfile.hep";
+		}
+	}
+	- weakCGTime = 2.11.2019::7:56:0;
+	- strongCGTime = 10.28.2018::8:13:31;
+	- _defaultComposite = GUID e92da296-135d-466c-ba13-69cb6ddbe537;
+	- _eventsBaseID = -1;
+	- Classes = { IRPYRawContainer 
+		- size = 1;
+		- value = 
+		{ IClass 
+			- _id = GUID e92da296-135d-466c-ba13-69cb6ddbe537;
+			- _myState = 40960;
+			- _name = "TopLevel";
+			- _modifiedTimeWeak = 1.9.2019::12:22:10;
+			- weakCGTime = 1.9.2019::12:22:10;
+			- strongCGTime = 10.28.2018::8:13:31;
+			- _multiplicity = "";
+			- _itsStateChart = { IHandle 
+				- _m2Class = "";
+			}
+			- _classModifier = Unspecified;
+		}
+	}
+	- _configurationRelatedTime = 1.2.1990::0:0:0;
+}
+

@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RhapsodyArchive>
+	<MagicNumber></MagicNumber>
+	<CODE-PAGE>1252</CODE-PAGE>
+	<version>100.831.0</version>
+	<lang>C++</lang>
+	<BuildNo>9835649</BuildNo>
+	
+	<RHAPSODY-MODEL>
+	<IComponent type="e">
+			<_id type="a">GUID 15e00bf1-6846-47dc-acb4-6a0add0593b4</_id>
+			<_myState type="a">139264</_myState>
+			<_name type="a">NotUsedCmp</_name>
+			<_modifiedTimeWeak type="a">2.11.2019::7:56:0</_modifiedTimeWeak>
+			<_modifiedTime type="a">2.11.2019::7:56:0</_modifiedTime>
+			<m_buildType type="a">Executable</m_buildType>
+			<m_configActive type="r">
+				<ICodeGenConfigInfoHandle type="e">
+					<_hm2Class type="a">ICodeGenConfigInfo</_hm2Class>
+					<_hid type="a">GUID 31735529-b514-43db-95ad-a1b810db49a6</_hid>
+				</ICodeGenConfigInfoHandle>
+			</m_configActive>
+			<HandlesInMe type="c">
+				<IRPYRawContainer type="e">
+					<size type="a">6</size>
+					
+						<IHandle type="e">
+							<_hm2Class type="a">IProfile</_hm2Class>
+							<_hfilename type="a">$OMROOT\Profiles\SysML\SysMLProfile_rpy\SysML.sbs</_hfilename>
+							<_hname type="a">SysML</_hname>
+							<_hid type="a">GUID d9689b73-885e-44c4-896b-de43defa0a33</_hid>
+						</IHandle>
+					
+					
+						<IHandle type="e">
+							<_hm2Class type="a">ISubsystem</_hm2Class>
+							<_hfilename type="a">.\NotUsedPkg.sbsx</_hfilename>
+							<_hname type="a">NotUsedPkg</_hname>
+							<_hid type="a">GUID f7c3249f-ad5e-495b-9fee-8615705d48cc</_hid>
+						</IHandle>
+					
+					
+						<IHandle type="e">
+							<_hm2Class type="a">IProfile</_hm2Class>
+							<_hfilename type="a">.\TauMigratorProfile.sbsx</_hfilename>
+							<_hname type="a">TauMigratorProfile</_hname>
+							<_hid type="a">GUID 15a1b173-1be9-45f8-9b48-f29d7d6ce3d6</_hid>
+						</IHandle>
+					
+					
+						<IHandle type="e">
+							<_hm2Class type="a">IProfile</_hm2Class>
+							<_hfilename type="a">.\CGCompatibilityPre821Cpp.sbsx</_hfilename>
+							<_hname type="a">CGCompatibilityPre821Cpp</_hname>
+							<_hid type="a">GUID 00b0140e-6d06-4d19-ba99-8a8e40131db7</_hid>
+						</IHandle>
+					
+					
+						<IHandle type="e">
+							<_hm2Class type="a">IProfile</_hm2Class>
+							<_hfilename type="a">.\GECompatibilityPre831.sbsx</_hfilename>
+							<_hname type="a">GECompatibilityPre831</_hname>
+							<_hid type="a">GUID 0a931094-5e7d-4d59-83e8-247a645b1176</_hid>
+						</IHandle>
+					
+					
+						<IHandle type="e">
+							<_hm2Class type="a">IProfile</_hm2Class>
+							<_hfilename type="a">.\CGCompatibilityPre831Cpp.sbsx</_hfilename>
+							<_hname type="a">CGCompatibilityPre831Cpp</_hname>
+							<_hid type="a">GUID 393f0af9-b382-4c3e-aa31-ad304f2ac38c</_hid>
+						</IHandle>
+					
+				</IRPYRawContainer>
+			</HandlesInMe>
+			<VariationPoints type="c">
+				<IRPYRawContainer type="e">
+					<size type="a">0</size>
+				</IRPYRawContainer>
+			</VariationPoints>
+			<SelectedVariants type="c">
+				<IRPYRawContainer type="e">
+					<size type="a">0</size>
+				</IRPYRawContainer>
+			</SelectedVariants>
+			<weakCGTime type="a">2.11.2019::7:56:0</weakCGTime>
+			<strongCGTime type="a">5.28.2015::6:51:2</strongCGTime>
+			<AggregatesList type="e">
+				<value>GUID 722e363b-582b-4466-8eba-db2bc85c168e</value>
+				<value>GUID 31735529-b514-43db-95ad-a1b810db49a6</value>
+			</AggregatesList>
+		</IComponent>
+		<IFolder type="e">
+			<_id type="a">GUID 722e363b-582b-4466-8eba-db2bc85c168e</_id>
+			<_myState type="a">73728</_myState>
+			<_name type="a">Files</_name>
+			<_modifiedTimeWeak type="a">3.5.2015::7:39:34</_modifiedTimeWeak>
+			<_modifiedTime type="a">3.5.2015::7:39:34</_modifiedTime>
+			<Elements type="c">
+				<IRPYRawContainer type="e">
+					<size type="a">0</size>
+				</IRPYRawContainer>
+			</Elements>
+			<Files type="c">
+				<IRPYRawContainer type="e">
+					<size type="a">0</size>
+				</IRPYRawContainer>
+			</Files>
+		</IFolder>
+		<ICodeGenConfigInfo type="e">
+			<_id type="a">GUID 31735529-b514-43db-95ad-a1b810db49a6</_id>
+			<_myState type="a">8192</_myState>
+			<_name type="a">NotUsedCfg</_name>
+			<_modifiedTimeWeak type="a">5.28.2015::6:51:9</_modifiedTimeWeak>
+			<_modifiedTime type="a">5.28.2015::6:51:9</_modifiedTime>
+			<_scopeType type="a">Explicit</_scopeType>
+			<_instrumentation type="a">Animation</_instrumentation>
+			<_timeModel type="a">RealTime</_timeModel>
+			<m_generateActors type="a">1</m_generateActors>
+			<_statechartImplementation type="a">Flat</_statechartImplementation>
+			<_checksList type="a">0 ,</_checksList>
+			<ScopeElements type="c">
+				<IRPYRawContainer type="e">
+					<size type="a">0</size>
+				</IRPYRawContainer>
+			</ScopeElements>
+			<InitialInstances type="c">
+				<IRPYRawContainer type="e">
+					<size type="a">0</size>
+				</IRPYRawContainer>
+			</InitialInstances>
+			<weakCGTime type="a">5.28.2015::6:51:9</weakCGTime>
+			<strongCGTime type="a">5.28.2015::6:51:9</strongCGTime>
+			<AnimScopeElements type="c">
+				<IRPYRawContainer type="e">
+					<size type="a">0</size>
+				</IRPYRawContainer>
+			</AnimScopeElements>
+			<m_allInAnimScope type="a">1</m_allInAnimScope>
+			<m_generateUsecases type="a">0</m_generateUsecases>
+			<AggregatesList type="e">
+				<value>GUID 937bfae2-2782-4846-b0ad-37cb829d9d69</value>
+				<value>GUID 7c0c43cb-0c1e-4093-9cc1-4b8d2dd1f434</value>
+				<value>GUID a00fbdbc-bb35-4e4e-928e-1b19e8feffcc</value>
+			</AggregatesList>
+		</ICodeGenConfigInfo>
+		<IMHyperLink type="e">
+			<_id type="a">GUID 937bfae2-2782-4846-b0ad-37cb829d9d69</_id>
+			<_modifiedTimeWeak type="a">1.2.1990::0:0:0</_modifiedTimeWeak>
+			<_modifiedTime type="a">1.2.1990::0:0:0</_modifiedTime>
+			<_dependsOn type="r">
+				<INObjectHandle type="e">
+				</INObjectHandle>
+			</_dependsOn>
+			<_linkDispName type="a">Edit Makefile</_linkDispName>
+			<_linkType type="a">FREE</_linkType>
+			<_linkTarget type="a">C:/Rhapsody81/Share/Profiles/SysMLHelper/NotUsedCmp/DefaultConfig/NotUsedCmp.mak</_linkTarget>
+			<isConfigurationFileHyperLink type="a">1</isConfigurationFileHyperLink>
+		</IMHyperLink>
+		<IMHyperLink type="e">
+			<_id type="a">GUID 7c0c43cb-0c1e-4093-9cc1-4b8d2dd1f434</_id>
+			<_modifiedTimeWeak type="a">1.2.1990::0:0:0</_modifiedTimeWeak>
+			<_modifiedTime type="a">1.2.1990::0:0:0</_modifiedTime>
+			<_dependsOn type="r">
+				<INObjectHandle type="e">
+				</INObjectHandle>
+			</_dependsOn>
+			<_linkDispName type="a">Edit Main File</_linkDispName>
+			<_linkType type="a">FREE</_linkType>
+			<_linkTarget type="a">C:/Rhapsody81/Share/Profiles/SysMLHelper/NotUsedCmp/DefaultConfig/MainNotUsedCmp</_linkTarget>
+			<isConfigurationFileHyperLink type="a">1</isConfigurationFileHyperLink>
+		</IMHyperLink>
+		<IFolder type="e">
+			<_id type="a">GUID a00fbdbc-bb35-4e4e-928e-1b19e8feffcc</_id>
+			<_myState type="a">8192</_myState>
+			<_name type="a">NotUsedCfg</_name>
+			<_modifiedTimeWeak type="a">5.28.2015::6:51:9</_modifiedTimeWeak>
+			<_modifiedTime type="a">5.28.2015::6:51:9</_modifiedTime>
+			<Elements type="c">
+				<IRPYRawContainer type="e">
+					<size type="a">0</size>
+				</IRPYRawContainer>
+			</Elements>
+			<Files type="c">
+				<IRPYRawContainer type="e">
+					<size type="a">0</size>
+				</IRPYRawContainer>
+			</Files>
+		</IFolder>
+		
+	</RHAPSODY-MODEL>
+	<OslcLinks type="c">
+		<IRPYRawContainer type="e">
+			<size type="a">0</size>
+		</IRPYRawContainer>
+	</OslcLinks>
+
+<INCLUDES-RHAPSODY-INDEX>false</INCLUDES-RHAPSODY-INDEX>
+</RhapsodyArchive>
+

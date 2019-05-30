@@ -1,0 +1,46 @@
+[Helpers]
+numberOfElements=34
+
+#REM: Definition of the plug-in
+name1=InvokeFunctionalDesignHelper
+JavaMainClass1=taumigrator.TauMigrator_RPUserPlugin
+JavaClassPath1=$OMROOT\Profiles\SysMLHelper\bin
+isPlugin1=1
+isVisible1=0
+DLLServerCompatible1=1
+
+#REM: Add pop-up menu
+name2=MBSE Method: Tau Migrator\Import Tau model from XML
+isPluginCommand2=1
+command2=InvokeFunctionalDesignHelper
+applicableTo2=Project,SysML
+isVisible2=1
+DLLServerCompatible2=1
+
+#REM: Add pop-up menu
+name3=MBSE Method: Tau Migrator\Setup project properties
+isPluginCommand3=1
+command3=InvokeFunctionalDesignHelper
+applicableTo3=Project,SysML
+isVisible3=1
+DLLServerCompatible3=1
+
+#REM Copyright (C) 2016-2018  MBSE Training and Consulting Limited (www.executablembse.com)
+#REM
+#REM Change history:
+#REM #256 11-SEP-2018: Add new Functional Design menu support as a variant of profile (F.J.Chadburn)
+#REM
+#REM This file is part of SysMLHelperPlugin.
+#REM
+#REM SysMLHelperPlugin is free software: you can redistribute it and/or modify
+#REM it under the terms of the GNU General Public License as published by
+#REM the Free Software Foundation, either version 3 of the License, or
+#REM (at your option) any later version.
+#REM
+#REM SysMLHelperPlugin is distributed in the hope that it will be useful,
+#REM but WITHOUT ANY WARRANTY; without even the implied warranty of
+#REM MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#REM GNU General Public License for more details.
+#REM
+#REM You should have received a copy of the GNU General Public License
+#REM along with SysMLHelperPlugin.  If not, see <http://www.gnu.org/licenses/>.
