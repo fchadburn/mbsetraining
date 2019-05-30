@@ -1,5 +1,6 @@
 package generalhelpers;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -11,30 +12,30 @@ public class TraceabilityHelper {
 	public static void copyRequirementTraceabilityFrom(
 			IRPModelElement theElement,
 			IRPModelElement toTheElement ){
-	
+
 		@SuppressWarnings("unchecked")
 		List<IRPDependency> theDependenciesOnSource = 
-				theElement.getDependencies().toList();
-	
+		theElement.getDependencies().toList();
+
 		for( IRPDependency theDependencyOnSource : theDependenciesOnSource ){
-			
+
 			IRPModelElement theDependsOn = theDependencyOnSource.getDependsOn();
-			
+
 			if( theDependsOn instanceof IRPRequirement ){
-				
+
 				IRPStereotype theStereotype = 
 						GeneralHelpers.getStereotypeAppliedTo( 
 								theDependencyOnSource, ".*" );
-				
+
 				if( theStereotype != null ){
 					addStereotypedDependencyIfOneDoesntExist(
 							toTheElement, theDependsOn, theStereotype );
 				}
-				
+
 			}
 		}
 	}
-	
+
 	public static int countStereotypedDependencies(
 			IRPModelElement fromElement, 
 			IRPModelElement toElement,
@@ -55,60 +56,158 @@ public class TraceabilityHelper {
 				isExistingFoundCount++;
 			}
 		}
-		
+
 		return isExistingFoundCount;
 	}
-	
+
 	public static IRPDependency getExistingStereotypedDependency(
 			IRPModelElement fromElement, 
 			IRPModelElement toElement,
 			String stereotypeName ){
 
 		IRPDependency theExistingDependency = null;
+
+		if( fromElement instanceof IRPInstance ){
+			IRPInstance theInstance = (IRPInstance)fromElement;
+			IRPClassifier theClassifier = theInstance.getOtherClass();
+			
+//			Logger.info("switching to look dependencies from " + 
+//					Logger.elementInfo( theClassifier  ) + " rather than " + 
+//					Logger.elementInfo ( theInstance ) );
+			
+			fromElement = theClassifier;
+		}
 		
-		List<IRPModelElement> existingDeps = 
-				GeneralHelpers.findElementsWithMetaClassAndStereotype(
-						"Dependency", stereotypeName, fromElement, 0 );
+		if( toElement instanceof IRPInstance ){
+			IRPInstance theInstance = (IRPInstance)toElement;
+			IRPClassifier theClassifier = theInstance.getOtherClass();
+			
+//			Logger.info("switching to look dependencies to " + 
+//					Logger.elementInfo( theClassifier  ) + " rather than " + 
+//					Logger.elementInfo ( theInstance ) );
+			
+			toElement = theClassifier;
+		}
+		
+		List<IRPDependency> theExistingDependencies = 
+				getExistingStereotypedDependencies(
+						fromElement, 
+						toElement,
+						stereotypeName );
 
-		int isExistingFoundCount = 0;
+		if( theExistingDependencies.size() > 0 ){
 
-		for( IRPModelElement theExistingDep : existingDeps ){
+			if( theExistingDependencies.size() > 1 ){
 
-			IRPDependency theDependency = (IRPDependency)theExistingDep;
-			IRPModelElement theDependsOn = theDependency.getDependsOn();
-
-			if( theDependsOn.equals( toElement )){
-				isExistingFoundCount++;
-				theExistingDependency = theDependency;
+				Logger.writeLine( "Duplicate «" + stereotypeName + 
+						"» dependencies to " + Logger.elementInfo( toElement ) + 
+						" were found on " + Logger.elementInfo( fromElement ) );
 			}
-		}
-		
-		if( isExistingFoundCount > 1 ){
-			Logger.writeLine( "Duplicate «" + stereotypeName + "» dependencies to " + Logger.elementInfo( toElement ) + 
-					" were found on " + Logger.elementInfo( fromElement ) );
-		}
-		
+
+			theExistingDependency = theExistingDependencies.get( 0 );
+		} 
+
 		return theExistingDependency;
 	}
-	
-	
+
+	@SuppressWarnings("unchecked")
+	public static List<IRPDependency> getExistingStereotypedDependencies(
+			IRPModelElement fromElement, 
+			IRPModelElement toElement,
+			String stereotypeName ){
+
+		List<IRPDependency> existingDeps = new ArrayList<>();
+
+		Logger.info( "getExistingStereotypedDependencies invoked to find " + stereotypeName + 
+				" from " + Logger.elementInfo( fromElement ) + " to " +
+				Logger.elementInfo( toElement ) );
+
+		if( fromElement instanceof IRPInstance ){
+			IRPInstance theInstance = (IRPInstance)fromElement;
+			IRPClassifier theClassifier = theInstance.getOtherClass();
+			
+//			Logger.info("switching to look dependencies from " + 
+//					Logger.elementInfo( theClassifier  ) + " rather than " + 
+//					Logger.elementInfo ( theInstance ) );
+			
+			fromElement = theClassifier;
+		}
+		
+		if( toElement instanceof IRPInstance ){
+			IRPInstance theInstance = (IRPInstance)toElement;
+			IRPClassifier theClassifier = theInstance.getOtherClass();
+			
+//			Logger.info("switching to look dependencies to " + 
+//					Logger.elementInfo( theClassifier  ) + " rather than " + 
+//					Logger.elementInfo ( theInstance ) );
+			
+			toElement = theClassifier;
+		}
+				
+		List<IRPGeneralization> theGeneralizations = new ArrayList<>();
+
+		if( fromElement instanceof IRPClassifier ){
+
+			IRPClassifier theClassifier = (IRPClassifier)fromElement;
+
+			theGeneralizations.addAll(
+					theClassifier.getGeneralizations().toList() );
+		}
+
+		for( IRPGeneralization theGeneralization : theGeneralizations ){
+
+			IRPClassifier theDerivedClass = theGeneralization.getDerivedClass();
+
+			List<IRPDependency> existingDerivedClassDependencies =
+					getExistingStereotypedDependencies(
+							theDerivedClass, 
+							toElement, 
+							stereotypeName );
+
+			existingDeps.addAll( existingDerivedClassDependencies );
+		}
+
+		List<IRPModelElement> candidates = 
+				GeneralHelpers.findElementsWithMetaClassAndStereotype(
+						"Dependency", 
+						stereotypeName, 
+						fromElement, 
+						0 ); // not recursive
+
+		for( IRPModelElement candidate : candidates ){
+
+			IRPDependency theDependency = (IRPDependency)candidate;
+			IRPModelElement theDependsOn = theDependency.getDependsOn();
+
+//			Logger.info( "Found " + Logger.elementInfo(candidate) + " from " + 
+//					Logger.elementInfo( fromElement ) + " to " +
+//					Logger.elementInfo( theDependsOn ) +" while looking for " + Logger.elementInfo( toElement ) );
+
+			if( theDependsOn.equals( toElement ) ){
+				existingDeps.add( (IRPDependency) candidate );
+			}
+		}
+
+		return existingDeps;
+	}
+
 	public static IRPDependency addStereotypedDependencyIfOneDoesntExist(
 			IRPModelElement fromElement, 
 			IRPModelElement toElement,
 			IRPStereotype theStereotype ){
-		
+
 		IRPDependency theDependency = null;
-		
+
 		int isExistingFoundCount = 
 				countStereotypedDependencies(
 						fromElement, 
 						toElement, 
 						theStereotype.getName() );
-		
+
 		if( isExistingFoundCount==0 ){
 			theDependency = fromElement.addDependencyTo( toElement );
 			theDependency.setStereotype( theStereotype );
-			
+
 			Logger.writeLine( "Added a «" + theStereotype.getName() + "» dependency to " + 
 					Logger.elementInfo( fromElement ) + 
 					" (to " + Logger.elementInfo( toElement ) + ")" );				
@@ -117,110 +216,136 @@ public class TraceabilityHelper {
 					" (to " + Logger.elementInfo( toElement ) + 
 					") as " + isExistingFoundCount + " already exists" );
 		}
-		
+
 		return theDependency;
 	}
-	
+
 	public static IRPDependency addAutoRippleDependencyIfOneDoesntExist(
 			IRPModelElement fromElement, 
 			IRPModelElement toElement ){
-		
+
 		IRPStereotype theAutoRippleStereotype = 
 				GeneralHelpers.getExistingStereotype( 
 						"AutoRipple", fromElement.getProject() );
-		
+
 		IRPDependency theDependency =
 				TraceabilityHelper.addStereotypedDependencyIfOneDoesntExist(
 						fromElement, 
 						toElement, 
 						theAutoRippleStereotype );
-		
+
 		return theDependency;
 	}
-	
+
 	public static Set<IRPRequirement> getRequirementsThatTraceFrom(
 			IRPModelElement theElement, boolean withWarning){
-		
+
 		Set<IRPRequirement> theReqts = new HashSet<IRPRequirement>();
-		
+
 		@SuppressWarnings("unchecked")
 		List<IRPDependency> theExistingDeps = theElement.getDependencies().toList();
-		
+
 		for (IRPDependency theDependency : theExistingDeps) {
-			
+
 			IRPModelElement theDependsOn = theDependency.getDependsOn();
-			
+
 			if (theDependsOn != null && theDependsOn instanceof IRPRequirement){
-				
+
 				IRPRequirement theReqt = (IRPRequirement)theDependsOn; 
-				
+
 				if (!theReqts.contains( theReqt )){
-					
+
 					theReqts.add( (IRPRequirement) theDependsOn );
-					
+
 				} else if (withWarning){
-					
+
 					Logger.writeLine( "Duplicate dependency to " + Logger.elementInfo( theDependsOn ) + 
 							" was found on " + Logger.elementInfo( theElement ));
 				} 			
 			}
 		}
-		
+
 		return theReqts;
 	}
-	
+
 	public static Set<IRPRequirement> getRequirementsThatTraceFromWithStereotype(
 			IRPModelElement theElement, String withDependencyStereotype){
-		
+
 		Set<IRPRequirement> theReqts = new HashSet<IRPRequirement>();
-		
+
 		@SuppressWarnings("unchecked")
 		List<IRPDependency> theExistingDeps = theElement.getDependencies().toList();
-		
+
 		for (IRPDependency theDependency : theExistingDeps) {
-			
+
 			IRPModelElement theDependsOn = theDependency.getDependsOn();
-			
+
 			if (theDependsOn != null && theDependsOn instanceof IRPRequirement){
-				
+
 				if (GeneralHelpers.hasStereotypeCalled( withDependencyStereotype, theDependency) ){
 					theReqts.add( (IRPRequirement) theDependsOn );
 				}	
 			}
 		}
-		
+
 		return theReqts;
 	}
-	
-	public static Set<IRPModelElement> getElementsThatHaveStereotypedDependenciesFrom(
+
+	public static Set<IRPModelElement> getStereotypedElementsThatHaveDependenciesFrom(
 			IRPModelElement theElement, 
-			String withDependencyStereotype ){
-		
+			String whereDependsOnHasStereotype ){
+
 		Set<IRPModelElement> theEls = new HashSet<IRPModelElement>();
-		
+
 		@SuppressWarnings("unchecked")
 		List<IRPDependency> theExistingDeps = theElement.getDependencies().toList();
-		
+
 		for( IRPDependency theDependency : theExistingDeps ){
-			
+
 			IRPModelElement theDependsOn = theDependency.getDependsOn();
-			
-			if( theDependsOn != null && theDependsOn instanceof IRPModelElement ){
-				
+
+			if( theDependsOn != null && 
+					theDependsOn instanceof IRPModelElement ){
+
 				if( GeneralHelpers.hasStereotypeCalled( 
-						withDependencyStereotype, theDependency) ){
-					
+						whereDependsOnHasStereotype, theDependsOn ) ){
+
 					theEls.add( theDependsOn );
 				}	
 			}
 		}
-		
+
+		return theEls;
+	}
+	public static Set<IRPModelElement> getElementsThatHaveStereotypedDependenciesFrom(
+			IRPModelElement theElement, 
+			String withDependencyStereotype ){
+
+		Set<IRPModelElement> theEls = new HashSet<IRPModelElement>();
+
+		@SuppressWarnings("unchecked")
+		List<IRPDependency> theExistingDeps = theElement.getDependencies().toList();
+
+		for( IRPDependency theDependency : theExistingDeps ){
+
+			IRPModelElement theDependsOn = theDependency.getDependsOn();
+
+			if( theDependsOn != null && theDependsOn instanceof IRPModelElement ){
+
+				if( GeneralHelpers.hasStereotypeCalled( 
+						withDependencyStereotype, theDependency) ){
+
+					theEls.add( theDependsOn );
+				}	
+			}
+		}
+
 		return theEls;
 	}
 }
 
 /**
- * Copyright (C) 2016-2017  MBSE Training and Consulting Limited (www.executablembse.com)
+ * Copyright (C) 2016-2019  MBSE Training and Consulting Limited (www.executablembse.com)
 
     Change history:
     #006 02-MAY-2016: Add FunctionalAnalysisPkg helper support (F.J.Chadburn)
@@ -236,6 +361,7 @@ public class TraceabilityHelper {
     #163 05-FEB-2017: Add new menus to Smart link: Start and Smart link: End (F.J.Chadburn)
     #175 02-APR-2017: Improved flowPort creation to copy req'ts traceability from attribute to flow-port (F.J.Chadburn)
     #227 06-SEP-2017: Increased robustness to stop smart link panel using non new term version of <<refine>> (F.J.Chadburn)
+    #252 29-MAY-2019: Implement generic features for profile/settings loading (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 
@@ -251,4 +377,4 @@ public class TraceabilityHelper {
 
     You should have received a copy of the GNU General Public License
     along with SysMLHelperPlugin.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */

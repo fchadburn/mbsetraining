@@ -5,10 +5,37 @@ import requirementsanalysisplugin.RequirementsAnalysisPlugin;
 import com.telelogic.rhapsody.core.*;
  
 public class Logger {
-  
-	public static void writeLine(String withMsg){
+	
+	public enum LoggerLevel {
+		Error,
+		Warning,
+		Info
+	}
+	
+	public static void writeLine( String withMsg ){
 		 
-		RequirementsAnalysisPlugin.getRhapsodyApp().writeToOutputWindow("SysMLHelper", withMsg + "\n");
+		RhapsodyAppServer.getActiveRhapsodyApplication().writeToOutputWindow(
+				"SysMLHelper", withMsg + "\n" );
+	}
+	
+	public static void info( String withMsg ){
+		 
+//		System.out.println( withMsg );
+		
+		RhapsodyAppServer.getActiveRhapsodyApplication().writeToOutputWindow(
+				"SysMLHelper", withMsg + "\n" );
+	}
+	
+	public static void warning( String withMsg ){
+		 
+		RhapsodyAppServer.getActiveRhapsodyApplication().writeToOutputWindow(
+				"SysMLHelper", "Warning: " + withMsg + "\n" );
+	}
+	
+	public static void error( String withMsg ){
+		 
+		RhapsodyAppServer.getActiveRhapsodyApplication().writeToOutputWindow(
+				"SysMLHelper", "Error: " + withMsg + "\n" );
 	}
 	
 	public static void writeLine(IRPModelElement aboutTheEl, String withMsg){
@@ -35,13 +62,14 @@ public class Logger {
 }
 
 /**
- * Copyright (C) 2016  MBSE Training and Consulting Limited (www.executablembse.com)
+ * Copyright (C) 2016=2019  MBSE Training and Consulting Limited (www.executablembse.com)
 
     Change history:
     #004 10-APR-2016: Re-factored projects into single workspace (F.J.Chadburn)
     #044 03-JUL-2016: Minor re-factoring/code corrections (F.J.Chadburn)
     #060 13-JUL-2016: Changed elementInfo to return user defined meta-class for log entries (F.J.Chadburn)
-        
+    #252 29-MAY-2019: Implement generic features for profile/settings loading (F.J.Chadburn)
+    
     This file is part of SysMLHelperPlugin.
 
     SysMLHelperPlugin is free software: you can redistribute it and/or modify

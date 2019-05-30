@@ -38,9 +38,13 @@ public class CreateGatewayProjectPanel extends CreateStructuralElementPanel {
 			
 		IRPModelElement theSelectedEl = theRhpApp.getSelectedElement();
 		
+		ConfigurationSettings configSettings = new ConfigurationSettings(
+				"SysMLHelper.properties", 
+				"SysMLHelper_MessagesBundle" );
+		
 		if (theSelectedEl instanceof IRPProject){
 			try { 
-				CreateGatewayProjectPanel.launchThePanel( (IRPProject)theSelectedEl, ".*.rqtf$" );
+				CreateGatewayProjectPanel.launchThePanel( (IRPProject)theSelectedEl, ".*.rqtf$", configSettings );
 
 			} catch (Exception e) {
 				Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking MBSE Method: General\\Quick hyperlink");
@@ -50,192 +54,205 @@ public class CreateGatewayProjectPanel extends CreateStructuralElementPanel {
 	
 	public static void launchThePanel(
 			final IRPProject forTheProject,
-			final String lookingForRqtfTemplatesThatMatchRegEx ){
+			final String lookingForRqtfTemplatesThatMatchRegEx,
+			ConfigurationSettings theConfigSettings ){
 	
-		String theReqtsPkgExpectedName = "RequirementsPkg";
-		
-		final List<IRPModelElement> theRequirementsPkgs = 
-				GeneralHelpers.findElementsWithMetaClassAndName(
-						"Package", theReqtsPkgExpectedName, forTheProject );
-		
-		String theSysMLHelperProfilePath =
-				RhapsodyAppServer.getActiveRhapsodyApplication().getOMROOT() + 
-				"\\Profiles\\SysMLHelper\\SysMLHelper_rpy";
-		
-		if( theRequirementsPkgs != null && !theRequirementsPkgs.isEmpty() ){
-						
-			File theChosenRqtfFile = getFile(
-					lookingForRqtfTemplatesThatMatchRegEx,
-					theSysMLHelperProfilePath,
-					"Which Gateway project template do you want to use?" );
-				
-			if( theChosenRqtfFile != null ){
-				
-				boolean isLaunchDialog = true;
-				
-				String theCandidateTypesFileName = 
-						theChosenRqtfFile.getName().substring(
-								0, theChosenRqtfFile.getName().length()-5 ) + ".types";
-				
-				Logger.writeLine( "The corresponding types file is " + theCandidateTypesFileName );
-				
-				final File theChosenTypesFile = getFile(
-						theCandidateTypesFileName, 
+		final String theAppID = 
+				UserInterfaceHelpers.getAppIDIfSingleRhpRunningAndWarnUserIfNot();
+
+		if( theAppID != null ){
+
+			ProfileVersionManager.checkAndSetProfileVersion( false, theConfigSettings, true );
+
+			String theReqtsPkgExpectedName = "RequirementsPkg";
+			
+			final List<IRPModelElement> theRequirementsPkgs = 
+					GeneralHelpers.findElementsWithMetaClassAndName(
+							"Package", theReqtsPkgExpectedName, forTheProject );
+			
+			String theSysMLHelperProfilePath =
+					RhapsodyAppServer.getActiveRhapsodyApplication().getOMROOT() + 
+					"\\Profiles\\SysMLHelper\\SysMLHelper_rpy";
+			
+			if( theRequirementsPkgs != null && !theRequirementsPkgs.isEmpty() ){
+							
+				File theChosenRqtfFile = getFile(
+						lookingForRqtfTemplatesThatMatchRegEx,
 						theSysMLHelperProfilePath,
-						"Which Gateway Types template do you want to use?" );
+						"Which Gateway project template do you want to use?" );
+					
+				if( theChosenRqtfFile != null ){
+					
+					boolean isLaunchDialog = true;
+					
+					String theCandidateTypesFileName = 
+							theChosenRqtfFile.getName().substring(
+									0, theChosenRqtfFile.getName().length()-5 ) + ".types";
+					
+					Logger.writeLine( "The corresponding types file is " + theCandidateTypesFileName );
+					
+					final File theChosenTypesFile = getFile(
+							theCandidateTypesFileName, 
+							theSysMLHelperProfilePath,
+							"Which Gateway Types template do you want to use?" );
 
-				if( theChosenTypesFile != null ){
-					
-					final GatewayFileParser theTemplateProjectFile = new GatewayFileParser( theChosenRqtfFile );
-					final GatewayFileParser theTemplateTypesFile = new GatewayFileParser( theChosenTypesFile );
+					if( theChosenTypesFile != null ){
+						
+						final GatewayFileParser theTemplateProjectFile = new GatewayFileParser( theChosenRqtfFile );
+						final GatewayFileParser theTemplateTypesFile = new GatewayFileParser( theChosenTypesFile );
 
-					File theExistingRqtfFile = getFile(
-							"^" + forTheProject.getName() + ".rqtf$",
-							forTheProject.getCurrentDirectory() + "\\" + forTheProject.getName() + "_rpy",
-							"Which existing Types file do you want to use?");
-					
-					// if project has an existing types file then we need to consider how to 
-					// merge in its contents					
-					if( theExistingRqtfFile != null ){
+						File theExistingRqtfFile = getFile(
+								"^" + forTheProject.getName() + ".rqtf$",
+								forTheProject.getCurrentDirectory() + "\\" + forTheProject.getName() + "_rpy",
+								"Which existing Types file do you want to use?");
 						
-						int answer = JOptionPane.showConfirmDialog(
-								null, 
-								"Do you want to setup a Gateway project based on a '" + theChosenRqtfFile.getName() + "' template?\n\n" + 
-								"Note: This project already has a Gateway project called " + theExistingRqtfFile.getName() + "\n" +
-								"Click 'Yes' to merge and see result, 'No' to delete and re-create from template, or 'Cancel' to do nothing \n\n" +
-								"If you click 'Cancel' then this can be done later using the 'Setup Gateway based on rqtf template' menu ", 
-								"Question?", 
-								JOptionPane.YES_NO_CANCEL_OPTION);
-					
-						if( answer == JOptionPane.YES_OPTION  ){
+						// if project has an existing types file then we need to consider how to 
+						// merge in its contents					
+						if( theExistingRqtfFile != null ){
 							
-							final GatewayFileParser theExistingProjectFile = 
-									new GatewayFileParser( theExistingRqtfFile );
-							
-							updateTheRqtfFile(
-									theTemplateProjectFile,
-									theExistingProjectFile );
+							int answer = JOptionPane.showConfirmDialog(
+									null, 
+									"Do you want to setup a Gateway project based on a '" + theChosenRqtfFile.getName() + "' template?\n\n" + 
+									"Note: This project already has a Gateway project called " + theExistingRqtfFile.getName() + "\n" +
+									"Click 'Yes' to merge and see result, 'No' to delete and re-create from template, or 'Cancel' to do nothing \n\n" +
+									"If you click 'Cancel' then this can be done later using the 'Setup Gateway based on rqtf template' menu ", 
+									"Question?", 
+									JOptionPane.YES_NO_CANCEL_OPTION);
 						
-						} else if( answer == JOptionPane.NO_OPTION ){
+							if( answer == JOptionPane.YES_OPTION  ){
+								
+								final GatewayFileParser theExistingProjectFile = 
+										new GatewayFileParser( theExistingRqtfFile );
+								
+								updateTheRqtfFile(
+										theTemplateProjectFile,
+										theExistingProjectFile );
 							
-							// don't update
-							Logger.writeLine("Deleting existing Gateway file called " + theExistingRqtfFile.getAbsolutePath() );
-							theExistingRqtfFile.delete();
+							} else if( answer == JOptionPane.NO_OPTION ){
+								
+								// don't update
+								Logger.writeLine("Deleting existing Gateway file called " + theExistingRqtfFile.getAbsolutePath() );
+								theExistingRqtfFile.delete();
+								
+							} else {
+								isLaunchDialog = false;
+							}
 							
-						} else {
-							isLaunchDialog = false;
-						}
-						
-					} else { // no existing rqtf file
-						
-						// check to see if model references external packages 
-						for( IRPModelElement theReqtsPkg : theRequirementsPkgs ) {
+						} else { // no existing rqtf file
 							
-							IRPPackage thePkg = (IRPPackage)theReqtsPkg;
-							
-							if( thePkg.isReferenceUnit()==1 ){
+							// check to see if model references external packages 
+							for( IRPModelElement theReqtsPkg : theRequirementsPkgs ) {
 								
-								Logger.writeLine("Detected that " + Logger.elementInfo( thePkg ) + " is added by reference");
+								IRPPackage thePkg = (IRPPackage)theReqtsPkg;
 								
-								IRPUnit theUnit = thePkg.getSaveUnit();
+								if( thePkg.isReferenceUnit()==1 ){
+									
+									Logger.writeLine("Detected that " + Logger.elementInfo( thePkg ) + " is added by reference");
+									
+									IRPUnit theUnit = thePkg.getSaveUnit();
+									
+									String theReferencedDir = theUnit.getCurrentDirectory();
+									
+									String theProjectName = extractProjectNameFrom( theReferencedDir );
+									
+									theExistingRqtfFile = getFile(
+											theProjectName + ".rqtf$",
+											theReferencedDir,
+											"Which Gateway project template in the referenced project do you want to use?" );
+		
+									if( theExistingRqtfFile != null ){
+										int answer = JOptionPane.showConfirmDialog(
+												null, 
+												"Do you want to setup a Gateway project based on a '" + theChosenRqtfFile.getName() + "' template?\n\n" + 
+												"Note: This project references a project that has a Gateway project called " + theExistingRqtfFile.getName() + "\n" +
+												"Click 'Yes' to merge and see result, 'No' to ignore referenced project, or 'Cancel' to do nothing \n\n" +
+												"If you click 'Cancel' then this can be done later using the 'Setup Gateway based on rqtf template' menu ", 
+												"Question?", 
+												JOptionPane.YES_NO_CANCEL_OPTION);
+										
+										if( answer == JOptionPane.YES_OPTION  ){
+											
+											final GatewayFileParser theExistingProjectFile = 
+													new GatewayFileParser( theExistingRqtfFile );
+											
+											updateTheRqtfFile(
+													theTemplateProjectFile,
+													theExistingProjectFile);	
+										
+										} else if( answer == JOptionPane.CANCEL_OPTION ){
+											isLaunchDialog = false;
+										}
+									}
+								}
 								
-								String theReferencedDir = theUnit.getCurrentDirectory();
-								
-								String theProjectName = extractProjectNameFrom( theReferencedDir );
-								
-								theExistingRqtfFile = getFile(
-										theProjectName + ".rqtf$",
-										theReferencedDir,
-										"Which Gateway project template in the referenced project do you want to use?" );
-	
-								if( theExistingRqtfFile != null ){
+								if( theExistingRqtfFile == null ){
+									
 									int answer = JOptionPane.showConfirmDialog(
 											null, 
-											"Do you want to setup a Gateway project based on a '" + theChosenRqtfFile.getName() + "' template?\n\n" + 
-											"Note: This project references a project that has a Gateway project called " + theExistingRqtfFile.getName() + "\n" +
-											"Click 'Yes' to merge and see result, 'No' to ignore referenced project, or 'Cancel' to do nothing \n\n" +
-											"If you click 'Cancel' then this can be done later using the 'Setup Gateway based on rqtf template' menu ", 
+											"Do you want to launch the dialog to setup a Gateway project to synchronize requirements \n" +
+											"based on a '" + theChosenRqtfFile.getName() + "' template?\n\n" +
+											"If you click 'No' then this can be done later using the 'Setup Gateway based on rqtf template' menu ", 
 											"Question?", 
-											JOptionPane.YES_NO_CANCEL_OPTION);
+											JOptionPane.YES_NO_OPTION );
 									
-									if( answer == JOptionPane.YES_OPTION  ){
-										
-										final GatewayFileParser theExistingProjectFile = 
-												new GatewayFileParser( theExistingRqtfFile );
-										
-										updateTheRqtfFile(
-												theTemplateProjectFile,
-												theExistingProjectFile);	
-									
-									} else if( answer == JOptionPane.CANCEL_OPTION ){
+									if( answer != JOptionPane.YES_OPTION ){
 										isLaunchDialog = false;
 									}
 								}
 							}
-							
-							if( theExistingRqtfFile == null ){
-								
-								int answer = JOptionPane.showConfirmDialog(
-										null, 
-										"Do you want to launch the dialog to setup a Gateway project to synchronize requirements \n" +
-										"based on a '" + theChosenRqtfFile.getName() + "' template?\n\n" +
-										"If you click 'No' then this can be done later using the 'Setup Gateway based on rqtf template' menu ", 
-										"Question?", 
-										JOptionPane.YES_NO_OPTION );
-								
-								if( answer != JOptionPane.YES_OPTION ){
-									isLaunchDialog = false;
-								}
-							}
 						}
-					}
-					
-					if( isLaunchDialog ){
 						
-						javax.swing.SwingUtilities.invokeLater(new Runnable() {
+						if( isLaunchDialog ){
+							
+							
+							javax.swing.SwingUtilities.invokeLater(new Runnable() {
 
-							@Override
-							public void run() {				
-								JFrame.setDefaultLookAndFeelDecorated( true );
-								
-								JFrame frame = new JFrame(
-										"Setup the Rhapsody Gateway for the project?");
-								
-								frame.setDefaultCloseOperation( JFrame.DISPOSE_ON_CLOSE );
-								
-								CreateGatewayProjectPanel thePanel = 
-										new CreateGatewayProjectPanel( 
-												theRequirementsPkgs, 
-												theTemplateProjectFile,
-												theTemplateTypesFile );
+								@Override
+								public void run() {				
+									JFrame.setDefaultLookAndFeelDecorated( true );
+									
+									JFrame frame = new JFrame(
+											"Setup the Rhapsody Gateway for the project?");
+									
+									frame.setDefaultCloseOperation( JFrame.DISPOSE_ON_CLOSE );
+									
+									CreateGatewayProjectPanel thePanel = 
+											new CreateGatewayProjectPanel(
+													theAppID,
+													theRequirementsPkgs, 
+													theTemplateProjectFile,
+													theTemplateTypesFile );
 
-								frame.setContentPane( thePanel );
-								frame.pack();
-								frame.setLocationRelativeTo( null );
-								frame.setVisible( true );
-							}
-						});
+									frame.setContentPane( thePanel );
+									frame.pack();
+									frame.setLocationRelativeTo( null );
+									frame.setVisible( true );
+								}
+							});
+						}
+
+					} else {
+						
+						Logger.writeLine("Error in CreateGatewayProjectPanel.launchThePanel, no types file matching '" + 
+								theCandidateTypesFileName + "' was found in " + theSysMLHelperProfilePath);
+
 					}
 
-				} else {
-					
-					Logger.writeLine("Error in CreateGatewayProjectPanel.launchThePanel, no types file matching '" + 
-							theCandidateTypesFileName + "' was found in " + theSysMLHelperProfilePath);
+				} // no rqtf file candidate was found
+			} else {
+				Logger.writeLine("Error in CreateGatewayProjectPanel.launchThePanel, unable to proceed as no packages called " + theReqtsPkgExpectedName + " were found in the project");
+			}
 
-				}
-
-			} // no rqtf file candidate was found
-		} else {
-			Logger.writeLine("Error in CreateGatewayProjectPanel.launchThePanel, unable to proceed as no packages called " + theReqtsPkgExpectedName + " were found in the project");
 		}
 	}
 
 	CreateGatewayProjectPanel(
+			String theAppID,
 			List<IRPModelElement> forSelectablePackages,
 			GatewayFileParser usingGatewayProject,
 			GatewayFileParser andGatewayTypes ){
 		
-		super();
+		super( theAppID );
 
 		m_Project = forSelectablePackages.get(0).getProject();
 		m_ChosenProjectFile = usingGatewayProject;
@@ -411,7 +428,7 @@ public class CreateGatewayProjectPanel extends CreateStructuralElementPanel {
 		return theEl;	
 	}
 	
-	private static File getFile(
+	public static File getFile(
 			final String matchingTheRegEx,
 			final String inPathToSearch,
 			final String withChoiceOfFileMsg ) {
@@ -457,7 +474,7 @@ public class CreateGatewayProjectPanel extends CreateStructuralElementPanel {
 		return theCandidateRqtfFile;
 	}
 	
-	private static List<File> getFilesMatching(
+	public static List<File> getFilesMatching(
 			String theRegEx, 
 			String inThePath ){
 		
@@ -646,7 +663,7 @@ public class CreateGatewayProjectPanel extends CreateStructuralElementPanel {
 			
 			String theChosenName = gatewayDocumentPanel.getReqtsPkgName();
 			
-			boolean isLegalName = GeneralHelpers.isLegalName( theChosenName );
+			boolean isLegalName = GeneralHelpers.isLegalName( theChosenName, m_Project );
 			
 			if (!isLegalName){
 				
@@ -730,7 +747,7 @@ public class CreateGatewayProjectPanel extends CreateStructuralElementPanel {
 }
 
 /**
- * Copyright (C) 2016-2017  MBSE Training and Consulting Limited (www.executablembse.com)
+ * Copyright (C) 2016-2019  MBSE Training and Consulting Limited (www.executablembse.com)
 
     Change history:
     #035 5-JUN-2016: New panel to configure requirements package naming and gateway set-up (F.J.Chadburn)
@@ -741,6 +758,8 @@ public class CreateGatewayProjectPanel extends CreateStructuralElementPanel {
     #101 14-SEP-2016: Provide hint on dialog that 'Setup Gateway based on rqtf template' menu is available (F.J.Chadburn)
     #141 18-DEC-2016: Automatically set-up GW .rqtf to export ADs and UCs into module (F.J.Chadburn)
     #218 12-JUL-2017: Add Gateway project Confirm dialogs to advise and provide option to delete and re-create (F.J.Chadburn)
+    #252 29-MAY-2019: Implement generic features for profile/settings loading (F.J.Chadburn)
+    #256 29-MAY-2019: Rewrite to Java Swing dialog launching to make thread safe between versions (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

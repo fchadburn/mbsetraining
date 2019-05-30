@@ -17,7 +17,7 @@ public class GatewayFileParser {
 	List<String> m_SectionNames;
 	List<GatewayFileSection> m_SectionContents;
 
-	GatewayFileParser(
+	public GatewayFileParser(
 			File theFile ) {
 	
 		m_File = theFile;
@@ -218,12 +218,13 @@ public class GatewayFileParser {
 }
 
 /**
- * Copyright (C) 2016  MBSE Training and Consulting Limited (www.executablembse.com)
+ * Copyright (C) 2016-2019  MBSE Training and Consulting Limited (www.executablembse.com)
 
     Change history:
     #035 15-JUN-2016: New panel to configure requirements package naming and gateway set-up (F.J.Chadburn)
     #051 06-JUL-2016: Re-factored the GW panel to allow it to incrementally add to previous setup (F.J.Chadburn)
     #063 17-JUL-2016: Gateway project creator now mimics GatewayProjectFiles pkg creation if necessary (F.J.Chadburn)
+    #256 29-MAY-2019: Rewrite to Java Swing dialog launching to make thread safe between versions (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

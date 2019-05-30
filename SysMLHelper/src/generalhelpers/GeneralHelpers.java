@@ -24,7 +24,14 @@ public class GeneralHelpers {
 		
 		for (IRPGraphElement theGraphEl : theGraphEls) {
 			dumpGraphicalPropertiesFor(theGraphEl);
+			
+			IRPModelElement theModelObject = theGraphEl.getModelObject();
+			
+			Logger.info( "theModelObject is " + theModelObject );
+			
+//			IRPConnector theConnector = (IRP)
 		}
+	
 	}
 	
 	// for test only
@@ -41,15 +48,78 @@ public class GeneralHelpers {
 		Logger.writeLine("---------------------------"); 
 	}
 	
-	public static boolean isLegalName(String theName){
+	public static IRPPackage addNewTermPackageAndSetUnitProperties( 
+			String theName,
+			IRPPackage theOwner,
+			String theNewTermName ){
 		
-		String regEx = "^(([a-zA-Z_][a-zA-Z0-9_]*)|(operator.+))$";
+		IRPPackage thePackage = theOwner.addNestedPackage( theName );
+
+		thePackage.changeTo( theNewTermName );
 		
-		boolean isLegal = theName.matches( regEx );
+		StereotypeAndPropertySettings.setSavedInSeparateDirectoryIfAppropriateFor( 
+				thePackage );
 		
-		if (!isLegal){
-			Logger.writeLine("Warning, detected that " + theName 
-					+ " is not a legal name as it does not conform to the regex=" + regEx);
+		StereotypeAndPropertySettings.setDontSaveAsSeparateUnitIfAppropriateFor(
+				thePackage );
+		
+		return thePackage;
+	}
+	
+	public static Set<IRPPackage> getPullFromPackage( 
+			IRPModelElement basedOnEl ){
+		
+		Set<IRPPackage> thePullFromPkgs = new HashSet<>();
+		
+		Set<IRPModelElement> theCandidateEls =
+				TraceabilityHelper.getStereotypedElementsThatHaveDependenciesFrom( 
+						basedOnEl, 
+						StereotypeAndPropertySettings.getUseCasePackageStereotype( basedOnEl ) );
+		
+		if( theCandidateEls.size()>0 ){
+			
+			for( IRPModelElement theCandidateEl : theCandidateEls ){
+				
+				if( theCandidateEl instanceof IRPPackage ){
+					thePullFromPkgs.add( (IRPPackage) theCandidateEl );
+				}
+			}
+
+		} else if( theCandidateEls.size()==0 ){
+			
+			IRPModelElement theOwner = basedOnEl.getOwner();
+			
+			if( !(theOwner instanceof IRPProject) ){
+				thePullFromPkgs = getPullFromPackage( theOwner );
+
+			} else {				
+		    	IRPModelElement theRequirementsAnalysisPkg = 
+		    			basedOnEl.getProject().findElementsByFullName(
+		    					"RequirementsAnalysisPkg", "Package" );
+		    	
+				if( theRequirementsAnalysisPkg != null ){
+					thePullFromPkgs.add( (IRPPackage) theRequirementsAnalysisPkg );				
+				}
+			}
+		}
+		
+		return thePullFromPkgs;
+	}
+	
+	public static boolean isLegalName(
+			String theName, 
+			IRPModelElement basedOnContext ){
+		
+		//String regEx = "^(([a-zA-Z_][a-zA-Z0-9_]*)|(operator.+))$";
+		
+		String theRegEx = basedOnContext.getPropertyValue( 
+				"General.Model.NamesRegExp" );
+		
+		boolean isLegal = theName.matches( theRegEx );
+		
+		if( !isLegal ){
+			Logger.warning( "Warning, detected that " + theName 
+					+ " is not a legal name as it does not conform to the regex=" + theRegEx );
 		}
 		
 		return isLegal;
@@ -92,14 +162,33 @@ public class GeneralHelpers {
 		return nameBuilder.toString();
 	}
 	
-	public static String toMethodName(String theInput) {
+	public static String makeLegalName(
+			String theInput ){
+		
+		StringBuilder nameBuilder = new StringBuilder(theInput.length());    
+		
+		for (char c:theInput.toCharArray()) {
+			if (Character.isJavaIdentifierPart(c)){
+				nameBuilder.append(c);
+
+			} else { //if (Character.isSpaceChar(c)){
+				
+				nameBuilder.append("_");
+			}
+		}
+		
+		return nameBuilder.toString();
+	}
+
+	public static String toMethodName(
+			String theInput,
+			int max ) {
 		
 		StringBuilder nameBuilder = new StringBuilder(theInput.length());    
 
 		boolean capitalizeNextChar = false;
 
 		int n = 1;
-		final int max = 40;
 		
 		for (char c:theInput.toCharArray()) {
 			if (Character.isJavaIdentifierPart(c)){
@@ -141,14 +230,15 @@ public class GeneralHelpers {
 		return theResult;	
 	}
 	
-	public static String capitalize(final String line) {
+	public static String capitalize(
+			final String line ){
 		
 		String theResult = null;
 		
-		if (line.length() > 1){
-			theResult = Character.toUpperCase(line.charAt(0)) + line.substring(1);
+		if( line.length() > 0 ){
+			theResult = Character.toUpperCase(
+					line.charAt(0) ) + line.substring( 1 );
 		} else {
-			Logger.writeLine("Error in capitalize");
 			theResult = line;
 		}
 		
@@ -173,7 +263,7 @@ public class GeneralHelpers {
 				IRPEvent theEvent = theAcceptEventAction.getEvent();
 				
 				if (theEvent==null){
-					Logger.writeLine("Event has no name so using Name");
+					Logger.info("Event has no name so using Name");
 					theSourceInfo = theState.getName();
 				} else {
 					theSourceInfo = theEvent.getName();
@@ -189,11 +279,11 @@ public class GeneralHelpers {
 					if (theEvent != null){
 						theSourceInfo = theEvent.getName();
 					} else {
-						Logger.writeLine("SendAction has no Event so using Name of action");
+						Logger.info("SendAction has no Event so using Name of action");
 						theSourceInfo = theState.getName();
 					}
 				} else {
-					Logger.writeLine("Error in deriveDownstreamRequirement, theSendAction is null");
+					Logger.warning("Error in deriveDownstreamRequirement, theSendAction is null");
 				}	
 				
 			} else if (theStateType.equals("TimeEvent")){
@@ -245,7 +335,8 @@ public class GeneralHelpers {
 		if( theSourceInfo != null ){
 			
 			if( theSourceInfo.isEmpty() ){
-				Logger.writeLine("Warning, " + Logger.elementInfo( theEl ) + " has no text");
+				
+				Logger.warning( "Warning, " + Logger.elementInfo( theEl ) + " has no text" );
 			} else {
 				theSourceInfo = decapitalize( theSourceInfo );
 			}
@@ -356,82 +447,82 @@ public class GeneralHelpers {
 		return theChosenStereotype;
 	}
 	
-	public static IRPStereotype getStereotypeIn(
-			IRPProject theProject, 
-			String basedOnTagName, 
-			String ownedByPackageName ){
-		
-		IRPStereotype theStereotype = null;
-		
-		IRPModelElement thePkg = 
-				theProject.findElementsByFullName( 
-						ownedByPackageName, "Package" );
-		
-		if( thePkg == null ){
-			
-			Logger.writeLine("Error in getStereotypeIn for basedOnTagName=" + basedOnTagName + 
-					", ownedByPackageName=" + ownedByPackageName + ", no " + ownedByPackageName + " was found" );
-			
-		} else {
-			
-			IRPTag theTag = thePkg.getTag( basedOnTagName );
-			
-			if( theTag == null ){
-				
-				Logger.writeLine("Warning in getStereotypeIn for basedOnTagName=" + basedOnTagName + 
-					", ownedByPackageName=" + ownedByPackageName + ", no tag called " + basedOnTagName + " was found" );				
-				
-				theTag = (IRPTag) thePkg.addNewAggr( "Tag", basedOnTagName );
-				theStereotype = selectAndPersistStereotype( theProject, thePkg, theTag );
-				
-			} else { // tag is not null
-				
-				String theValue = theTag.getValue();
-				
-				Logger.writeLine( "Read value of " + theValue + " from " + Logger.elementInfo( theTag ) );
-
-				theStereotype = getExistingStereotype( theValue, theProject );
-				
-				if( theStereotype == null ){
-					Logger.writeLine( "Error in getStereotypeForActionTracing, no Stereotyped called " + theValue + " was found" );
-
-					theStereotype = selectAndPersistStereotype( theProject, thePkg, theTag );
-
-				} else {				
-					Logger.writeLine( "Using " + Logger.elementInfo( theStereotype ) + " for action tracing" );
-				}
-			}
-		}
-		
-		return theStereotype;
-	}
+//	public static IRPStereotype getStereotypeIn(
+//			IRPProject theProject, 
+//			String basedOnTagName, 
+//			String ownedByPackageName ){
+//		
+//		IRPStereotype theStereotype = null;
+//		
+//		IRPModelElement thePkg = 
+//				theProject.findElementsByFullName( 
+//						ownedByPackageName, "Package" );
+//		
+//		if( thePkg == null ){
+//			
+//			Logger.writeLine("Error in getStereotypeIn for basedOnTagName=" + basedOnTagName + 
+//					", ownedByPackageName=" + ownedByPackageName + ", no " + ownedByPackageName + " was found" );
+//			
+//		} else {
+//			
+//			IRPTag theTag = thePkg.getTag( basedOnTagName );
+//			
+//			if( theTag == null ){
+//				
+//				Logger.writeLine("Warning in getStereotypeIn for basedOnTagName=" + basedOnTagName + 
+//					", ownedByPackageName=" + ownedByPackageName + ", no tag called " + basedOnTagName + " was found" );				
+//				
+//				theTag = (IRPTag) thePkg.addNewAggr( "Tag", basedOnTagName );
+//				theStereotype = selectAndPersistStereotype( theProject, thePkg, theTag );
+//				
+//			} else { // tag is not null
+//				
+//				String theValue = theTag.getValue();
+//				
+//				Logger.writeLine( "Read value of " + theValue + " from " + Logger.elementInfo( theTag ) );
+//
+//				theStereotype = getExistingStereotype( theValue, theProject );
+//				
+//				if( theStereotype == null ){
+//					Logger.writeLine( "Error in getStereotypeForActionTracing, no Stereotyped called " + theValue + " was found" );
+//
+//					theStereotype = selectAndPersistStereotype( theProject, thePkg, theTag );
+//
+//				} else {				
+//					Logger.writeLine( "Using " + Logger.elementInfo( theStereotype ) + " for action tracing" );
+//				}
+//			}
+//		}
+//		
+//		return theStereotype;
+//	}
 	
-	private static IRPStereotype selectAndPersistStereotype(
-			IRPProject inTheProject, 
-			IRPModelElement theReqtsAnalysisPkg, 
-			IRPTag theTag) {
-
-		IRPStereotype theStereotype = null;
-
-		@SuppressWarnings("unchecked")
-		List<IRPModelElement> theStereotypes = inTheProject.getNestedElementsByMetaClass("Stereotype", 1).toList();
-
-		if( theStereotypes.isEmpty() ){
-			Logger.writeLine("Error in selectAndPersistStereotype, there are no stereotypes in project");
-		} else {
-			IRPModelElement theSelectedEl = 
-					GeneralHelpers.launchDialogToSelectElement(
-							theStereotypes, "Pick a stereotype for " + Logger.elementInfo( theTag ), true);
-
-			if( theSelectedEl != null && theSelectedEl instanceof IRPStereotype ){
-				
-				theReqtsAnalysisPkg.setTagValue( theTag, theSelectedEl.getName() );
-				theStereotype = (IRPStereotype)theSelectedEl;
-			}
-		}
-
-		return theStereotype;
-	}
+//	private static IRPStereotype selectAndPersistStereotype(
+//			IRPProject inTheProject, 
+//			IRPModelElement theReqtsAnalysisPkg, 
+//			IRPTag theTag ){
+//
+//		IRPStereotype theStereotype = null;
+//
+//		@SuppressWarnings("unchecked")
+//		List<IRPModelElement> theStereotypes = inTheProject.getNestedElementsByMetaClass("Stereotype", 1).toList();
+//
+//		if( theStereotypes.isEmpty() ){
+//			Logger.writeLine("Error in selectAndPersistStereotype, there are no stereotypes in project");
+//		} else {
+//			IRPModelElement theSelectedEl = 
+//					GeneralHelpers.launchDialogToSelectElement(
+//							theStereotypes, "Pick a stereotype for " + Logger.elementInfo( theTag ), true);
+//
+//			if( theSelectedEl != null && theSelectedEl instanceof IRPStereotype ){
+//				
+//				theReqtsAnalysisPkg.setTagValue( theTag, theSelectedEl.getName() );
+//				theStereotype = (IRPStereotype)theSelectedEl;
+//			}
+//		}
+//
+//		return theStereotype;
+//	}
 	
 	public static IRPStereotype getStereotypeCalled(
 			String theName, 
@@ -538,16 +629,18 @@ public class GeneralHelpers {
 	public static List<IRPModelElement> findElementsWithMetaClassAndName(
 			String theMetaClass, 
 			String andName, 
-			IRPModelElement underneathTheEl){
+			IRPModelElement underneathTheEl ){
 		
 		List<IRPModelElement> theElements = new ArrayList<IRPModelElement>();
 		
 		@SuppressWarnings("unchecked")
 		List <IRPModelElement> theCandidates = 
-				underneathTheEl.getNestedElementsByMetaClass(theMetaClass, 1).toList();
+				underneathTheEl.getNestedElementsByMetaClass( 
+						theMetaClass, 
+						1 ).toList();
 		
-		for (IRPModelElement theCandidate : theCandidates) {
-			if (theCandidate.getName().equals( andName )){
+		for( IRPModelElement theCandidate : theCandidates ){
+			if( theCandidate.getName().equals( andName ) ){
 				theElements.add( theCandidate );
 			}
 		}
@@ -561,16 +654,17 @@ public class GeneralHelpers {
 			IRPModelElement underneathTheEl,
 			int recursive ){
 		
-		List <IRPModelElement> theFilteredList = new ArrayList<IRPModelElement>();
+		List<IRPModelElement> theFilteredList = new ArrayList<IRPModelElement>();
 		
 		@SuppressWarnings("unchecked")
-		List <IRPModelElement> theCandidates = 
-				underneathTheEl.getNestedElementsByMetaClass(theMetaClass, recursive).toList();
+		List<IRPModelElement> theCandidates = 
+				underneathTheEl.getNestedElementsByMetaClass(
+						theMetaClass, recursive ).toList();
 
-		for (IRPModelElement theCandidate : theCandidates) {
+		for( IRPModelElement theCandidate : theCandidates ){
 			
-			if (hasStereotypeCalled(andStereotype, theCandidate)){
-				theFilteredList.add(theCandidate);
+			if( hasStereotypeCalled( andStereotype, theCandidate ) ){
+				theFilteredList.add( theCandidate );
 			}
 		}
 		
@@ -581,18 +675,20 @@ public class GeneralHelpers {
 			String theMetaClass, 
 			String andStereotype, 
 			String andName, 
-			IRPModelElement underneathTheEl){
+			IRPModelElement underneathTheEl ){
 		
 		List <IRPModelElement> theFilteredList = new ArrayList<IRPModelElement>();
 		
 		List <IRPModelElement> theCandidates = 
 				findElementsWithMetaClassAndName(
-						theMetaClass, andName, underneathTheEl );
+						theMetaClass, 
+						andName, 
+						underneathTheEl );
 
-		for (IRPModelElement theCandidate : theCandidates) {
+		for( IRPModelElement theCandidate : theCandidates) {
 			
-			if (hasStereotypeCalled(andStereotype, theCandidate)){
-				theFilteredList.add(theCandidate);
+			if( hasStereotypeCalled( andStereotype, theCandidate ) ){
+				theFilteredList.add( theCandidate );
 			}
 		}
 		
@@ -603,21 +699,25 @@ public class GeneralHelpers {
 			String withTitle, 
 			String andQuestion, 
 			String andDefault, 
-			int size){
+			int size ){
 		
 		String theEntry = andDefault;
 		
 		JPanel panel = new JPanel();
 		
-		panel.add(new JLabel(andQuestion));
+		panel.add( new JLabel( andQuestion ) );
 		
-		JTextField theTextField = new JTextField(size);
+		JTextField theTextField = new JTextField( size );
 		panel.add( theTextField );
 		
 		if (!andDefault.isEmpty())
 			theTextField.setText(andDefault);
 		
-		int choice = JOptionPane.showConfirmDialog(null, panel, withTitle, JOptionPane.OK_CANCEL_OPTION);
+		int choice = JOptionPane.showConfirmDialog(
+				null, 
+				panel, 
+				withTitle, 
+				JOptionPane.OK_CANCEL_OPTION );
 		
 		if( choice==JOptionPane.OK_OPTION ){
 			String theTextEntered = theTextField.getText(); 
@@ -635,6 +735,8 @@ public class GeneralHelpers {
 	public static IRPStereotype getStereotypeAppliedTo(
 			IRPModelElement theElement, 
 			String thatMatchesRegEx ){
+		
+//		Logger.writeLine("getStereotypeAppliedTo " + Logger.elementInfo( theElement ) +" owned by " + Logger.elementInfo(theElement.getOwner()) );
 		
 		IRPStereotype foundStereotype = null;
 		
@@ -852,17 +954,47 @@ public class GeneralHelpers {
 		return isUnderAProfile;
 	}
 	
+	public static boolean isStateUnique(
+			String theProposedName, 
+			IRPState underneathTheEl ){
+				
+		int count = 0;
+		
+		@SuppressWarnings("unchecked")
+		List<IRPState> theExistingEls = 
+				underneathTheEl.getSubStates().toList();
+		
+		for (IRPModelElement theExistingEl : theExistingEls) {
+			
+			if (theExistingEl.getName().equals( theProposedName )){
+				count++;
+				break;
+			}
+		}
+		
+		if (count > 1){
+			Logger.writeLine("Warning in isStateUnique, there are " + count + " elements called " + 
+					theProposedName + ". This may cause issues.");
+		}
+				
+		boolean isUnique = (count == 0);
+
+		return isUnique;
+	}
+	
 	public static boolean isElementNameUnique(
 			String theProposedName, 
 			String ofMetaClass, 
 			IRPModelElement underneathTheEl,
-			int recursive){
+			int recursive ){
 				
 		int count = 0;
 		
 		@SuppressWarnings("unchecked")
 		List<IRPModelElement> theExistingEls = 
-				underneathTheEl.getNestedElementsByMetaClass(ofMetaClass, recursive).toList();
+				underneathTheEl.getNestedElementsByMetaClass(
+						ofMetaClass, 
+						recursive ).toList();
 		
 		for (IRPModelElement theExistingEl : theExistingEls) {
 			
@@ -882,6 +1014,23 @@ public class GeneralHelpers {
 		return isUnique;
 	}
 	
+	public static String determineUniqueNameForPackageBasedOn(
+			String theProposedNameWithoutPkg,
+			IRPModelElement underElement ){
+		
+		int count = 0;
+		
+		String theUniqueName = theProposedNameWithoutPkg;
+		
+		while( !GeneralHelpers.isElementNameUnique(
+				theUniqueName + "Pkg", "Package", underElement, 1 ) ){
+			
+			count++;
+			theUniqueName = theProposedNameWithoutPkg + count;
+		}
+		
+		return theUniqueName;
+	}
 	public static String determineUniqueNameBasedOn(
 			String theProposedName,
 			String ofMetaClass,
@@ -893,6 +1042,24 @@ public class GeneralHelpers {
 		
 		while( !isElementNameUnique(
 				theUniqueName, ofMetaClass, underElement, 1 ) ){
+			
+			count++;
+			theUniqueName = theProposedName + count;
+		}
+		
+		return theUniqueName;
+	}
+	
+	public static String determineUniqueStateBasedOn(
+			String theProposedName,
+			IRPState underElement ){
+		
+		int count = 0;
+		
+		String theUniqueName = theProposedName;
+		
+		while( !isStateUnique(
+				theUniqueName, underElement ) ){
 			
 			count++;
 			theUniqueName = theProposedName + count;
@@ -1007,10 +1174,11 @@ public class GeneralHelpers {
 		
 	public static String determineBestCheckOperationNameFor(
 			IRPClassifier onTargetBlock,
-			String theAttributeName){
+			String theAttributeName,
+			int max ){
 		
 		String theProposedName = GeneralHelpers.determineUniqueNameBasedOn( 
-				GeneralHelpers.toMethodName( "check" + GeneralHelpers.capitalize( theAttributeName ) ), 
+				GeneralHelpers.toMethodName( "check" + GeneralHelpers.capitalize( theAttributeName ), max ), 
 				"Attribute", 
 				onTargetBlock );
 		
@@ -1101,7 +1269,8 @@ public class GeneralHelpers {
 			
 			String theExpectedName = determineBestCheckOperationNameFor(
 					(IRPClassifier)theAttributeOwner, 
-					forTheAttribute.getName() );
+					forTheAttribute.getName(), 
+					40 );
 			
 			theExistingCheckOp = 
 					(IRPOperation) forTheAttribute.getOwner().findNestedElement(
@@ -1131,6 +1300,26 @@ public class GeneralHelpers {
 			Logger.writeLine( "Error in GeneralHelpers.setStringTagValueOn for " + 
 					Logger.elementInfo( theOwner) + ", unable to find tag called " + theTagName );
 		}
+	}
+	
+	public static String getStringForTagCalled( 
+			String theTagName,
+			IRPModelElement onElement,
+			String defaultIfNotSet ){
+	
+		String theValue = defaultIfNotSet;
+		
+		IRPTag theTag = onElement.getTag( theTagName );
+		
+		if( theTag != null ){
+			theValue = theTag.getValue();
+			
+			if( theValue.isEmpty() ){
+				theValue = defaultIfNotSet;
+			}
+		}
+		
+		return theValue;
 	}
 	
 	public static IRPPackage getExistingOrCreateNewPackageWith( 
@@ -1345,10 +1534,131 @@ public class GeneralHelpers {
 
 		return theResult;
 	}
+	
+	public static void cleanUpModelRemnants( 
+			IRPProject inProject ){
+		
+		PopulatePkg.deleteIfPresent( "Structure1", "StructureDiagram", inProject );
+		PopulatePkg.deleteIfPresent( "Model1", "ObjectModelDiagram", inProject );
+		PopulatePkg.deleteIfPresent( "Default", "Package", inProject );
+		
+		IRPModelElement theDefaultComponent = 
+				inProject.findElementsByFullName("DefaultComponent", "Component");
+		
+		if( theDefaultComponent != null ){
+			theDefaultComponent.setName( "NotUsedComp" );
+			
+			IRPModelElement theDefaultConfig = 
+					theDefaultComponent.findNestedElement("DefaultConfig", "Configuration");
+			
+			if( theDefaultConfig != null ){
+				theDefaultConfig.setName( "NotUsedComp" );
+			}
+		}
+	}
+	
+	public static IRPGraphElement getGraphElement(
+			IRPModelElement element,
+			IRPFlowchart fc) {
+
+		IRPGraphElement ret = null;
+
+		@SuppressWarnings("unchecked")
+		List<IRPGraphElement> gList = fc.getGraphicalElements().toList();
+		
+		if (!gList.isEmpty()) {
+			for (IRPGraphElement g : gList) {
+				if (g.getModelObject() != null) {
+					if(g.getModelObject().getGUID().equals(element.getGUID())) {
+
+						ret = g;
+						break;
+					}
+				}
+			}
+		}
+		
+		return ret;
+	}
+	
+	public static IRPGraphElement getCorrespondingGraphElement(
+			IRPModelElement forElement,
+			IRPActivityDiagram theAD ) throws Exception {
+
+		IRPGraphElement ret = null;
+
+		@SuppressWarnings("unchecked")
+		List<IRPGraphElement> theGraphEls = 
+				theAD.getCorrespondingGraphicElements( forElement ).toList();
+		
+		if( theGraphEls.size() > 1 ){
+			throw new Exception("There is more than one graph element for " + Logger.elementInfo(forElement));
+		} else if( theGraphEls.size() == 1 ){
+			ret = theGraphEls.get( 0 );
+		} else {
+			Logger.info("Warning, getCorrespondingGraphElement dif not find a graph element corresponding to " + 
+					Logger.elementInfo(forElement) + " on " + Logger.elementInfo(theAD) );
+		}
+		
+		return ret;
+	}
+	
+	
+	public static IRPPin getPin(
+			String withName,
+			IRPAcceptEventAction onAcceptEventAction ){
+		
+		IRPPin thePin = null;
+		
+		List<IRPPin> theCandidates = getPins( onAcceptEventAction );
+		
+		for( IRPPin theCandidate : theCandidates ){
+			
+			if( theCandidate.getName().equals( withName ) ){
+				thePin = theCandidate;
+			}
+		}
+		
+		return thePin;
+	}
+	
+	public static List<IRPPin> getPins(
+			IRPAcceptEventAction onAcceptEventAction ){
+		
+		List<IRPPin> thePins = new ArrayList<>();
+		
+		for( Object o: onAcceptEventAction.getSubStateVertices().toList()){
+			if( o instanceof IRPPin ){
+			
+				thePins.add( (IRPPin) o );
+			}
+		}
+		
+		return thePins;
+	}
+	
+	public static IRPStateVertex getTargetOfOutTransitionIfSingleOneExisting(
+			IRPStateVertex theStateVertex ){
+		
+		IRPStateVertex theTarget = null;
+		
+		@SuppressWarnings("unchecked")
+		List<IRPTransition> theOutTransitions = theStateVertex.getOutTransitions().toList();
+		
+		if( theOutTransitions.size() == 1 ){
+			
+			IRPTransition theTransition = theOutTransitions.get( 0 );
+			
+			theTarget = theTransition.getItsTarget();
+		}
+		
+		return theTarget;
+	}
+
 }
 
 /**
- * Copyright (C) 2016-2017  MBSE Training and Consulting Limited (www.executablembse.com)
+ * Copyright (C) 2016-2019  MBSE Training and Consulting Limited (www.executablembse.com)
 
     Change history:
     #004 10-APR-2016: Re-factored projects into single workspace (F.J.Chadburn)
@@ -1385,6 +1695,7 @@ public class GeneralHelpers {
     #216 09-JUL-2017: Added a new Add Block/Part command added to the Functional Analysis menus (F.J.Chadburn)
     #224 25-AUG-2017: Added new menu to roll up traceability to the transition and populate on STM (F.J.Chadburn)
     #227 06-SEP-2017: Increased robustness to stop smart link panel using non new term version of <<refine>> (F.J.Chadburn)
+    #252 29-MAY-2019: Implement generic features for profile/settings loading (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 

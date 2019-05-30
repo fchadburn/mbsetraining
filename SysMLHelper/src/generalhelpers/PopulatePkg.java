@@ -80,8 +80,8 @@ public class PopulatePkg {
 			}
 			
 		} else {
-			Logger.writeLine("Unable to delete " + andMetaClass + " with the name " 
-					+ theElementWithName  + " as it was not found underneath " + Logger.elementInfo( nestedUnderEl ) );
+//			Logger.writeLine("Unable to delete " + andMetaClass + " with the name " 
+//					+ theElementWithName  + " as it was not found underneath " + Logger.elementInfo( nestedUnderEl ) );
 		}
 	}	
 	
@@ -156,7 +156,7 @@ public class PopulatePkg {
     	}
 	}
 	
-	protected static IRPPackage addPackageFromProfileRpyFolder(
+	public static IRPPackage addPackageFromProfileRpyFolder(
 			String withTheName,
 			IRPProject toTheProject, 
 			boolean byReference ){

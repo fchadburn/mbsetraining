@@ -5,11 +5,42 @@ import java.util.List;
 
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
-
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import com.telelogic.rhapsody.core.*;
 
 public class UserInterfaceHelpers {
 
+	public static void setLookAndFeel(){
+		
+		try {
+			UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
+
+//			UIManager.setLookAndFeel(
+//					"com.sun.java.swing.plaf.motif.MotifLookAndFeel");
+
+//					"com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+				| UnsupportedLookAndFeelException e) {
+			Logger.writeLine("Unhandled exception while trying to UIManager.setLookAndFeel");
+			e.printStackTrace();
+		}
+	}
+	
+	public static void setLookAndFeel2(){
+		
+		JDialog.setDefaultLookAndFeelDecorated(true);
+/*
+		try {
+			UIManager.setLookAndFeel(
+					"com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+				| UnsupportedLookAndFeelException e) {
+			Logger.writeLine("Unhandled exception while trying to UIManager.setLookAndFeel");
+			e.printStackTrace();
+		}*/
+	}
+	
 	public static boolean askAQuestion(
 			String question ){
 		 
@@ -122,6 +153,30 @@ public class UserInterfaceHelpers {
 		}
 		
 		return isOK;
+	}
+	
+	public static String getAppIDIfSingleRhpRunningAndWarnUserIfNot(){
+		
+		String theAppID = null;
+		 
+		@SuppressWarnings({ "unchecked" })
+		List<String> theAppIDs = RhapsodyAppServer.getActiveRhapsodyApplicationIDList();
+		
+		if( theAppIDs.size() > 1 ){
+			
+			UserInterfaceHelpers.showWarningDialog( "The SysMLHelper has detected that there are x" + 
+					theAppIDs.size() + " Rhapsody clients running. \n" +
+					"The helpers are disabled to avoid the danger of writing to the wrong model.\n" +
+					"You need to close the clients you're not using and try running the command again.\n" +
+					"If the commands are not working, then you may need to reload the plugin by exiting\n" +
+					"and re-starting Rhapsody with the model you want it to work on.");
+			
+		} else if( theAppIDs.size() == 1 ){
+			
+			theAppID = theAppIDs.get( 0 );
+		}
+		
+		return theAppID;
 	}
 }
 
