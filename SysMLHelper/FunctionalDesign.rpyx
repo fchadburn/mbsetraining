@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RhapsodyArchive>
+	<MagicNumber></MagicNumber>
+	<CODE-PAGE>1252</CODE-PAGE>
+	<version>100.831.0</version>
+	<lang>C++</lang>
+	<BuildNo>9835550</BuildNo>
+	
+	<RHAPSODY-MODEL>
+	<IProject type="e">
+			<_id type="a">GUID db2d59f3-a4b2-406d-b2b9-3dd0919de68e</_id>
+			<_myState type="a">8192</_myState>
+			<_properties type="p"><IPropertyContainer type="e">
+				<Subjects type="c">
+					<IRPYRawContainer type="e">
+						<size type="a">1</size>
+						<IPropertySubject type="e">
+							<_Name type="a">General</_Name>
+							<Metaclasses type="c">
+								<IRPYRawContainer type="e">
+									<size type="a">1</size>
+									<IPropertyMetaclass type="e">
+										<_Name type="a">Model</_Name>
+										<Properties type="c">
+											<IRPYRawContainer type="e">
+												<size type="a">1</size>
+												<IProperty type="e">
+													<_Name type="a">RenameUnusedFiles</_Name>
+													<_Value type="a">True</_Value>
+													<_Type type="a">Bool</_Type>
+												</IProperty>
+												
+											</IRPYRawContainer>
+										</Properties>
+									</IPropertyMetaclass>
+									
+								</IRPYRawContainer>
+							</Metaclasses>
+						</IPropertySubject>
+						
+					</IRPYRawContainer>
+				</Subjects>
+			</IPropertyContainer>
+			</_properties>
+			<_name type="a">FunctionalDesign</_name>
+			<Stereotypes type="c">
+				<IRPYRawContainer type="e">
+					<size type="a">1</size>
+					
+						<IHandle type="e">
+							<_hm2Class type="a">IStereotype</_hm2Class>
+							<_hsubsystem type="a">SysML</_hsubsystem>
+							<_hname type="a">SysML</_hname>
+							<_hid type="a">GUID 052b8171-a32b-4f45-a829-5585f79f9deb</_hid>
+						</IHandle>
+					
+				</IRPYRawContainer>
+			</Stereotypes>
+			<_modifiedTimeWeak type="a">3.20.2019::10:18:56</_modifiedTimeWeak>
+			<_modifiedTime type="a">3.20.2019::10:18:56</_modifiedTime>
+			<_lastID type="a">17</_lastID>
+			<_UserColors type="w">
+				<IRPYRawContainer type="e">
+					<size type="a">16</size>
+					<value>16777215</value>
+					<value>16777215</value>
+					<value>16777215</value>
+					<value>16777215</value>
+					<value>16777215</value>
+					<value>16777215</value>
+					<value>16777215</value>
+					<value>16777215</value>
+					<value>16777215</value>
+					<value>16777215</value>
+					<value>16777215</value>
+					<value>16777215</value>
+					<value>16777215</value>
+					<value>16777215</value>
+					<value>16777215</value>
+					<value>16777215</value>
+				</IRPYRawContainer>
+			</_UserColors>
+			<_defaultSubsystem type="r">
+				<ISubsystemHandle type="e">
+					<_hm2Class type="a">ISubsystem</_hm2Class>
+					<_hname type="a">NotUsedPkg</_hname>
+					<_hid type="a">GUID f7c3249f-ad5e-495b-9fee-8615705d48cc</_hid>
+				</ISubsystemHandle>
+			</_defaultSubsystem>
+			<_component type="r">
+				<IHandle type="e">
+					<_hm2Class type="a">IComponent</_hm2Class>
+					<_hname type="a">NotUsedCmp</_hname>
+					<_hid type="a">GUID 15e00bf1-6846-47dc-acb4-6a0add0593b4</_hid>
+				</IHandle>
+			</_component>
+			<Multiplicities type="c">
+				<IRPYRawContainer type="e">
+					<size type="a">4</size>
+					<IMultiplicityItem type="e">
+						<_name type="a">1</_name>
+						<_count type="a">-1</_count>
+					</IMultiplicityItem>
+					
+					<IMultiplicityItem type="e">
+						<_name type="a">*</_name>
+						<_count type="a">-1</_count>
+					</IMultiplicityItem>
+					
+					<IMultiplicityItem type="e">
+						<_name type="a">0,1</_name>
+						<_count type="a">-1</_count>
+					</IMultiplicityItem>
+					
+					<IMultiplicityItem type="e">
+						<_name type="a">1..*</_name>
+						<_count type="a">-1</_count>
+					</IMultiplicityItem>
+					
+				</IRPYRawContainer>
+			</Multiplicities>
+			<_isImportedFromDM type="a">0</_isImportedFromDM>
+			<Diagrams type="c">
+				<IRPYRawContainer type="e">
+					<size type="a">0</size>
+				</IRPYRawContainer>
+			</Diagrams>
+			<mapOslcAddedCollections type="c">
+				<IRPYRawContainer type="e">
+					<size type="a">0</size>
+				</IRPYRawContainer>
+			</mapOslcAddedCollections>
+			<mapAssociationsToRemove type="c">
+				<IRPYRawContainer type="e">
+					<size type="a">0</size>
+				</IRPYRawContainer>
+			</mapAssociationsToRemove>
+			<AggregatesList type="e">
+				<value>GUID be274fa7-17c6-4305-8bde-82ec1f52a317</value>
+				<value>GUID 7928a07f-4dcc-4b85-aacb-50f01f28ff2f</value>
+				<value>GUID 44b0b7bb-7036-4e6e-a27f-e1db3ab1fc6a</value>
+				<value>GUID d9689b73-885e-44c4-896b-de43defa0a33</value>
+				<value>GUID d2b5f6ac-35b4-4276-bf7a-71540136a783</value>
+				<value>GUID f7c3249f-ad5e-495b-9fee-8615705d48cc</value>
+				<value>GUID 15e00bf1-6846-47dc-acb4-6a0add0593b4</value>
+			</AggregatesList>
+		</IProject>
+		<ITag type="e">
+			<_id type="a">GUID be274fa7-17c6-4305-8bde-82ec1f52a317</_id>
+			<_myState type="a">8192</_myState>
+			<_name type="a">ProfileDate</_name>
+			<_modifiedTimeWeak type="a">8.30.2018::7:48:10</_modifiedTimeWeak>
+			<_modifiedTime type="a">8.30.2018::7:48:10</_modifiedTime>
+			<_typeOf type="r">
+				<IHandle type="e">
+					<_hm2Class type="a">IType</_hm2Class>
+					<_hsubsystem type="a">PredefinedTypes</_hsubsystem>
+					<_hname type="a">RhpString</_hname>
+					<_hid type="a">GUID ae5e3720-4e3e-40f1-9346-9a8b4e501f35</_hid>
+				</IHandle>
+			</_typeOf>
+			<_isOrdered type="a">0</_isOrdered>
+			<_base type="r">
+				<IHandle type="e">
+					<_hm2Class type="a">ITag</_hm2Class>
+					<_hsubsystem type="a">FunctionalDesignProfile</_hsubsystem>
+					<_hclass type="a">ProfileInfo</_hclass>
+					<_hname type="a">ProfileDate</_hname>
+					<_hid type="a">GUID 0adbbbfc-eeb5-41ef-a6b7-b941c377231a</_hid>
+				</IHandle>
+			</_base>
+			<AggregatesList type="e">
+				<value>GUID d10f0fe1-7124-4a5e-ab13-a28111fad7e5</value>
+			</AggregatesList>
+		</ITag>
+		<ILiteralSpecification type="e">
+			<_id type="a">GUID d10f0fe1-7124-4a5e-ab13-a28111fad7e5</_id>
+			<_modifiedTimeWeak type="a">8.30.2018::7:48:10</_modifiedTimeWeak>
+			<_modifiedTime type="a">8.30.2018::7:48:10</_modifiedTime>
+			<_value type="a">2018/08/30 08:48:00</_value>
+		</ILiteralSpecification>
+		<ITag type="e">
+			<_id type="a">GUID 7928a07f-4dcc-4b85-aacb-50f01f28ff2f</_id>
+			<_myState type="a">8192</_myState>
+			<_name type="a">ProfileVersion</_name>
+			<_modifiedTimeWeak type="a">8.30.2018::7:48:17</_modifiedTimeWeak>
+			<_modifiedTime type="a">8.30.2018::7:48:17</_modifiedTime>
+			<_typeOf type="r">
+				<IHandle type="e">
+					<_hm2Class type="a">IType</_hm2Class>
+					<_hsubsystem type="a">PredefinedTypes</_hsubsystem>
+					<_hname type="a">RhpString</_hname>
+					<_hid type="a">GUID ae5e3720-4e3e-40f1-9346-9a8b4e501f35</_hid>
+				</IHandle>
+			</_typeOf>
+			<_isOrdered type="a">0</_isOrdered>
+			<_base type="r">
+				<IHandle type="e">
+					<_hm2Class type="a">ITag</_hm2Class>
+					<_hsubsystem type="a">FunctionalDesignProfile</_hsubsystem>
+					<_hclass type="a">ProfileInfo</_hclass>
+					<_hname type="a">ProfileVersion</_hname>
+					<_hid type="a">GUID 3be57412-b009-4479-8645-df631c2a4286</_hid>
+				</IHandle>
+			</_base>
+			<AggregatesList type="e">
+				<value>GUID e9357e3d-1401-4fec-9de2-f905e39b3008</value>
+			</AggregatesList>
+		</ITag>
+		<ILiteralSpecification type="e">
+			<_id type="a">GUID e9357e3d-1401-4fec-9de2-f905e39b3008</_id>
+			<_modifiedTimeWeak type="a">8.30.2018::7:48:17</_modifiedTimeWeak>
+			<_modifiedTime type="a">8.30.2018::7:48:17</_modifiedTime>
+			<_value type="a">3.0.i.Rhp821 (PreRelease)</_value>
+		</ILiteralSpecification>
+		<ITag type="e">
+			<_id type="a">GUID 44b0b7bb-7036-4e6e-a27f-e1db3ab1fc6a</_id>
+			<_myState type="a">8192</_myState>
+			<_name type="a">ProfileProperties</_name>
+			<_modifiedTimeWeak type="a">8.28.2018::9:22:33</_modifiedTimeWeak>
+			<_modifiedTime type="a">8.28.2018::9:22:33</_modifiedTime>
+			<_typeOf type="r">
+				<IHandle type="e">
+					<_hm2Class type="a">IType</_hm2Class>
+					<_hsubsystem type="a">PredefinedTypes</_hsubsystem>
+					<_hname type="a">RhpString</_hname>
+					<_hid type="a">GUID ae5e3720-4e3e-40f1-9346-9a8b4e501f35</_hid>
+				</IHandle>
+			</_typeOf>
+			<_isOrdered type="a">0</_isOrdered>
+			<_base type="r">
+				<IHandle type="e">
+					<_hm2Class type="a">ITag</_hm2Class>
+					<_hsubsystem type="a">FunctionalDesignProfile</_hsubsystem>
+					<_hclass type="a">ProfileInfo</_hclass>
+					<_hname type="a">ProfileProperties</_hname>
+					<_hid type="a">GUID 86da414d-95f5-44fc-afaa-8622d8202b1f</_hid>
+				</IHandle>
+			</_base>
+			<AggregatesList type="e">
+				<value>GUID fa4bde11-3f41-4ce0-bf30-34c5cd3a8b76</value>
+			</AggregatesList>
+		</ITag>
+		<ILiteralSpecification type="e">
+			<_id type="a">GUID fa4bde11-3f41-4ce0-bf30-34c5cd3a8b76</_id>
+			<_modifiedTimeWeak type="a">8.28.2018::9:22:33</_modifiedTimeWeak>
+			<_modifiedTime type="a">8.28.2018::9:22:33</_modifiedTime>
+			<_value type="a">setPropertyForFunctionalDesignModel</_value>
+		</ILiteralSpecification>
+		<IProfile type="e">
+			<fileName type="a">SysML</fileName>
+			<_persistAs type="a">$OMROOT\Profiles\SysML\SysMLProfile_rpy</_persistAs>
+			<_id type="a">GUID d9689b73-885e-44c4-896b-de43defa0a33</_id>
+			<_partOfTheModelKind type="a">referenceunit</_partOfTheModelKind>
+		</IProfile>
+		<IProfile type="e">
+			<fileName type="a">FunctionalDesignProfile</fileName>
+			<_id type="a">GUID d2b5f6ac-35b4-4276-bf7a-71540136a783</_id>
+		</IProfile>
+		<ISubsystem type="e">
+			<fileName type="a">NotUsedPkg</fileName>
+			<_id type="a">GUID f7c3249f-ad5e-495b-9fee-8615705d48cc</_id>
+		</ISubsystem>
+		<IComponent type="e">
+			<fileName type="a">NotUsedCmp</fileName>
+			<_id type="a">GUID 15e00bf1-6846-47dc-acb4-6a0add0593b4</_id>
+		</IComponent>
+		
+	</RHAPSODY-MODEL>
+	<OslcLinks type="c">
+		<IRPYRawContainer type="e">
+			<size type="a">0</size>
+		</IRPYRawContainer>
+	</OslcLinks>
+
+<INCLUDES-RHAPSODY-INDEX>false</INCLUDES-RHAPSODY-INDEX>
+</RhapsodyArchive>
+
