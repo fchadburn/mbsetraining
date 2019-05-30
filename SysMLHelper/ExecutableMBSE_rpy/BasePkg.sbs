@@ -1,0 +1,193 @@
+I-Logix-RPY-Archive version 8.13.0 C++ 9794446
+{ ISubsystem 
+	- _id = GUID c44ec7cb-7a75-45aa-92db-122629461c4b;
+	- _myState = 8192;
+	- _properties = { IPropertyContainer 
+		- Subjects = { IRPYRawContainer 
+			- size = 1;
+			- value = 
+			{ IPropertySubject 
+				- _Name = "Activity";
+				- Metaclasses = { IRPYRawContainer 
+					- size = 1;
+					- value = 
+					{ IPropertyMetaclass 
+						- _Name = "General";
+						- Properties = { IRPYRawContainer 
+							- size = 1;
+							- value = 
+							{ IProperty 
+								- _Name = "SimulationMode";
+								- _Value = "StateOriented";
+								- _Type = Enum;
+								- _ExtraTypeInfo = "StateOriented, TokenOriented";
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	- _name = "BasePkg";
+	- _modifiedTimeWeak = 10.13.2018::12:41:2;
+	- _lastID = 2;
+	- weakCGTime = 10.13.2018::12:41:2;
+	- strongCGTime = 10.13.2018::12:7:34;
+	- _defaultComposite = GUID ffd36ddc-ce50-4ff6-9a88-d2bda093b1b2;
+	- _eventsBaseID = 10601;
+	- Classes = { IRPYRawContainer 
+		- size = 1;
+		- value = 
+		{ IClass 
+			- _id = GUID ffd36ddc-ce50-4ff6-9a88-d2bda093b1b2;
+			- _myState = 40960;
+			- _name = "TopLevel";
+			- _modifiedTimeWeak = 10.13.2018::12:41:2;
+			- weakCGTime = 10.13.2018::12:41:2;
+			- strongCGTime = 10.13.2018::12:7:34;
+			- _multiplicity = "";
+			- _itsStateChart = { IHandle 
+				- _m2Class = "";
+			}
+			- _classModifier = Unspecified;
+		}
+	}
+	- Events = { IRPYRawContainer 
+		- size = 5;
+		- value = 
+		{ IEvent 
+			- _id = GUID 7ce0e62f-17f8-46bb-9791-943cd48ac4c2;
+			- _myState = 8192;
+			- _name = "chElapsedTime";
+			- Stereotypes = { IRPYRawContainer 
+				- size = 1;
+				- value = 
+				{ IHandle 
+					- _m2Class = "IStereotype";
+					- _subsystem = "PredefinedTypes";
+					- _name = "Web Managed";
+					- _id = GUID 8c262ab8-d5e1-45d1-bc5b-8a4ccd78870c;
+				}
+			}
+			- _modifiedTimeWeak = 10.13.2018::12:41:2;
+			- _virtual = 0;
+			- Args = { IRPYRawContainer 
+				- size = 0;
+			}
+		}
+		{ IEvent 
+			- _id = GUID 22018b60-ae20-4a5c-a1f2-840a6b75d995;
+			- _myState = 8192;
+			- _name = "reqElapsedTimeIsContinuous";
+			- Stereotypes = { IRPYRawContainer 
+				- size = 1;
+				- value = 
+				{ IHandle 
+					- _m2Class = "IStereotype";
+					- _subsystem = "PredefinedTypes";
+					- _name = "Web Managed";
+					- _id = GUID 8c262ab8-d5e1-45d1-bc5b-8a4ccd78870c;
+				}
+			}
+			- _modifiedTimeWeak = 10.13.2018::12:41:2;
+			- _lastID = 1;
+			- _virtual = 0;
+			- Args = { IRPYRawContainer 
+				- size = 1;
+				- value = 
+				{ IArgument 
+					- _id = GUID 3627d77e-08e2-4485-a2a6-30f974ef1f32;
+					- _myState = 8192;
+					- _name = "value";
+					- _modifiedTimeWeak = 8.9.2016::13:5:21;
+					- _typeOf = { IHandle 
+						- _m2Class = "IType";
+						- _subsystem = "PredefinedTypes";
+						- _name = "int";
+						- _id = GUID 6024c6ab-fe9e-402e-954f-27aca6d3b5e4;
+					}
+					- _isOrdered = 0;
+					- _argumentDirection = In;
+				}
+			}
+		}
+		{ IEvent 
+			- _id = GUID d62c6dca-e07e-48de-a469-bc8e32d5e7b0;
+			- _myState = 8192;
+			- _name = "reqElapsedTimeToggleMode";
+			- Stereotypes = { IRPYRawContainer 
+				- size = 1;
+				- value = 
+				{ IHandle 
+					- _m2Class = "IStereotype";
+					- _subsystem = "PredefinedTypes";
+					- _name = "Web Managed";
+					- _id = GUID 8c262ab8-d5e1-45d1-bc5b-8a4ccd78870c;
+				}
+			}
+			- _modifiedTimeWeak = 10.13.2018::12:41:2;
+			- _virtual = 0;
+			- Args = { IRPYRawContainer 
+				- size = 0;
+			}
+		}
+		{ IEvent 
+			- _id = GUID 74f2e436-02cb-4371-ae57-469fc55bf819;
+			- _myState = 8192;
+			- _name = "send_ElapsedTime";
+			- Stereotypes = { IRPYRawContainer 
+				- size = 1;
+				- value = 
+				{ IHandle 
+					- _m2Class = "IStereotype";
+					- _subsystem = "PredefinedTypes";
+					- _name = "Web Managed";
+					- _id = GUID 8c262ab8-d5e1-45d1-bc5b-8a4ccd78870c;
+				}
+			}
+			- _modifiedTimeWeak = 10.13.2018::12:41:2;
+			- _lastID = 1;
+			- _virtual = 0;
+			- Args = { IRPYRawContainer 
+				- size = 1;
+				- value = 
+				{ IArgument 
+					- _id = GUID 3293c35b-71ce-41b6-94b4-f615558414e4;
+					- _myState = 8192;
+					- _name = "value";
+					- _modifiedTimeWeak = 8.22.2016::10:7:33;
+					- _typeOf = { IHandle 
+						- _m2Class = "IType";
+						- _subsystem = "PredefinedTypes";
+						- _name = "int";
+						- _id = GUID 6024c6ab-fe9e-402e-954f-27aca6d3b5e4;
+					}
+					- _isOrdered = 0;
+					- _argumentDirection = In;
+				}
+			}
+		}
+		{ IEvent 
+			- _id = GUID 49ee3864-d6e5-4a75-939e-57545b33b5b7;
+			- _myState = 8192;
+			- _name = "send_ElapsedTimeTick";
+			- Stereotypes = { IRPYRawContainer 
+				- size = 1;
+				- value = 
+				{ IHandle 
+					- _m2Class = "IStereotype";
+					- _subsystem = "PredefinedTypes";
+					- _name = "Web Managed";
+					- _id = GUID 8c262ab8-d5e1-45d1-bc5b-8a4ccd78870c;
+				}
+			}
+			- _modifiedTimeWeak = 10.13.2018::12:41:2;
+			- _virtual = 0;
+			- Args = { IRPYRawContainer 
+				- size = 0;
+			}
+		}
+	}
+	- _configurationRelatedTime = 10.13.2018::12:36:2;
+}
+

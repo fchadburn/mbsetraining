@@ -1,0 +1,141 @@
+I-Logix-RPY-Archive version 8.13.0 C++ 9794446
+{ IComponent 
+	- _id = GUID 15e00bf1-6846-47dc-acb4-6a0add0593b4;
+	- _myState = 139264;
+	- _name = "NotUsedCmp";
+	- _modifiedTimeWeak = 5.28.2015::6:51:2;
+	- m_buildType = Executable;
+	- m_libraries = "";
+	- m_additionalSources = "";
+	- m_standardHeaders = "";
+	- m_includePath = "";
+	- m_initializationCode = "";
+	- m_folder = { IFolder 
+		- _id = GUID 722e363b-582b-4466-8eba-db2bc85c168e;
+		- _myState = 73728;
+		- _name = "Files";
+		- _modifiedTimeWeak = 3.5.2015::7:39:34;
+		- m_path = "";
+		- Elements = { IRPYRawContainer 
+			- size = 0;
+		}
+		- Files = { IRPYRawContainer 
+			- size = 0;
+		}
+	}
+	- m_configActive = { ICodeGenConfigInfoHandle 
+		- _m2Class = "ICodeGenConfigInfo";
+		- _id = GUID 31735529-b514-43db-95ad-a1b810db49a6;
+	}
+	- Configs = { IRPYRawContainer 
+		- size = 1;
+		- value = 
+		{ ICodeGenConfigInfo 
+			- _id = GUID 31735529-b514-43db-95ad-a1b810db49a6;
+			- _myState = 8192;
+			- _name = "NotUsedCfg";
+			- _modifiedTimeWeak = 5.28.2015::6:51:9;
+			- HyperLinks = { IRPYRawContainer 
+				- size = 2;
+				- value = 
+				{ IMHyperLink 
+					- _id = GUID 937bfae2-2782-4846-b0ad-37cb829d9d69;
+					- _modifiedTimeWeak = 1.2.1990::0:0:0;
+					- _dependsOn = { INObjectHandle 
+						- _m2Class = "";
+					}
+					- _linkDispName = "Edit Makefile";
+					- _linkType = "FREE";
+					- _linkTarget = "C:/Rhapsody81/Share/Profiles/SysMLHelper/NotUsedCmp/DefaultConfig/NotUsedCmp.mak";
+					- isConfigurationFileHyperLink = 1;
+				}
+				{ IMHyperLink 
+					- _id = GUID 7c0c43cb-0c1e-4093-9cc1-4b8d2dd1f434;
+					- _modifiedTimeWeak = 1.2.1990::0:0:0;
+					- _dependsOn = { INObjectHandle 
+						- _m2Class = "";
+					}
+					- _linkDispName = "Edit Main File";
+					- _linkType = "FREE";
+					- _linkTarget = "C:/Rhapsody81/Share/Profiles/SysMLHelper/NotUsedCmp/DefaultConfig/MainNotUsedCmp";
+					- isConfigurationFileHyperLink = 1;
+				}
+			}
+			- _scopeType = Explicit;
+			- _libraries = "";
+			- _additionalSources = "";
+			- _standardHeaders = "";
+			- _includePath = "";
+			- _targetMain = "";
+			- _instrumentation = Animation;
+			- _timeModel = RealTime;
+			- m_generateActors = 1;
+			- _statechartImplementation = Flat;
+			- _initializationCode = "";
+			- _checksList = 0 ;
+			- ScopeElements = { IRPYRawContainer 
+				- size = 0;
+			}
+			- InitialInstances = { IRPYRawContainer 
+				- size = 0;
+			}
+			- _root = { IFolder 
+				- _id = GUID a00fbdbc-bb35-4e4e-928e-1b19e8feffcc;
+				- _myState = 8192;
+				- _name = "NotUsedCfg";
+				- _modifiedTimeWeak = 5.28.2015::6:51:9;
+				- m_path = "";
+				- Elements = { IRPYRawContainer 
+					- size = 0;
+				}
+				- Files = { IRPYRawContainer 
+					- size = 0;
+				}
+			}
+			- weakCGTime = 5.28.2015::6:51:9;
+			- strongCGTime = 5.28.2015::6:51:9;
+			- AnimScopeElements = { IRPYRawContainer 
+				- size = 0;
+			}
+			- m_allInAnimScope = 1;
+			- m_generateUsecases = 0;
+		}
+	}
+	- HandlesInMe = { IRPYRawContainer 
+		- size = 4;
+		- value = 
+		{ IHandle 
+			- _m2Class = "IProfile";
+			- _filename = "C:\\Users\\frase\\IBM\\Rational\\Rhapsody\\8.2\\Share\\Profiles\\SysMLHelper\\ExecutableMBSE_rpy\\ExecutableMBSEProfile.sbs";
+			- _name = "ExecutableMBSEProfile";
+			- _id = GUID 1f16e485-bfb5-4a1d-b046-ef4230d5c187;
+		}
+		{ IHandle 
+			- _m2Class = "IProfile";
+			- _filename = "$OMROOT\\Profiles\\SysML\\SysMLProfile_rpy\\SysML.sbs";
+			- _name = "SysML";
+			- _id = GUID d9689b73-885e-44c4-896b-de43defa0a33;
+		}
+		{ IHandle 
+			- _m2Class = "ISubsystem";
+			- _filename = "C:\\Users\\frase\\IBM\\Rational\\Rhapsody\\8.2\\Share\\Profiles\\SysMLHelper\\ExecutableMBSE_rpy\\NotUsedPkg.sbs";
+			- _name = "NotUsedPkg";
+			- _id = GUID c3e7e210-b993-496d-bb8e-c1dec61ab214;
+		}
+		{ IHandle 
+			- _m2Class = "ISubsystem";
+			- _filename = "C:\\Users\\frase\\IBM\\Rational\\Rhapsody\\8.2\\Share\\Profiles\\SysMLHelper\\ExecutableMBSE_rpy\\BasePkg.sbs";
+			- _name = "BasePkg";
+			- _id = GUID c44ec7cb-7a75-45aa-92db-122629461c4b;
+		}
+	}
+	- VariationPoints = { IRPYRawContainer 
+		- size = 0;
+	}
+	- SelectedVariants = { IRPYRawContainer 
+		- size = 0;
+	}
+	- weakCGTime = 5.28.2015::6:51:2;
+	- strongCGTime = 5.28.2015::6:51:2;
+}
+

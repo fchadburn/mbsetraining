@@ -1,0 +1,12 @@
+I-Logix-RPY-Archive version 8.13.0 * 9794446
+
+- filesTable = { IRPYRawContainer 
+	- size = 5;
+	- value = "ExecutableMBSE.rpy" ""
+	"ExecutableMBSE_rpy\\BasePkg.sbs" "BasePkg"
+	"ExecutableMBSE_rpy\\ExecutableMBSEProfile.sbs" "ExecutableMBSEProfile"
+	"ExecutableMBSE_rpy\\NotUsedCmp.cmp" "NotUsedCmp"
+	"ExecutableMBSE_rpy\\NotUsedPkg.sbs" "NotUsedPkg"
+	
+}
+

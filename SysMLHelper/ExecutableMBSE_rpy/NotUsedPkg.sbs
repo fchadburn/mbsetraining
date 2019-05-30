@@ -1,0 +1,41 @@
+I-Logix-RPY-Archive version 8.13.0 C++ 9794446
+{ ISubsystem 
+	- _id = GUID c3e7e210-b993-496d-bb8e-c1dec61ab214;
+	- _myState = 8192;
+	- _name = "NotUsedPkg";
+	- _modifiedTimeWeak = 1.9.2019::11:38:57;
+	- EmbededFiles = { IRPYRawContainer 
+		- size = 1;
+		- value = 
+		{ IEmbededFile 
+			- _id = GUID 5b4ff6d6-95f5-47c0-a5db-d51a388a1e7a;
+			- _name = "ExecutableMBSEProfile.hep";
+			- _modifiedTimeWeak = 1.2.1990::0:0:0;
+			- _MayNeedToRelocate = 0;
+			- _LastKnownFullPath = "C:\\Users\\frase\\IBM\\Rational\\Rhapsody\\8.2\\Share\\Profiles\\SysMLHelper\\ExecutableMBSE_rpy\\ExecutableMBSEProfile.hep";
+		}
+	}
+	- weakCGTime = 1.9.2019::11:38:57;
+	- strongCGTime = 10.9.2018::15:50:2;
+	- _defaultComposite = GUID 870695f4-704a-4952-926d-6c52a4e3ec6c;
+	- _eventsBaseID = -1;
+	- Classes = { IRPYRawContainer 
+		- size = 1;
+		- value = 
+		{ IClass 
+			- _id = GUID 870695f4-704a-4952-926d-6c52a4e3ec6c;
+			- _myState = 40960;
+			- _name = "TopLevel";
+			- _modifiedTimeWeak = 10.9.2018::15:50:2;
+			- weakCGTime = 10.9.2018::15:50:2;
+			- strongCGTime = 10.9.2018::15:50:2;
+			- _multiplicity = "";
+			- _itsStateChart = { IHandle 
+				- _m2Class = "";
+			}
+			- _classModifier = Unspecified;
+		}
+	}
+	- _configurationRelatedTime = 1.2.1990::0:0:0;
+}
+
