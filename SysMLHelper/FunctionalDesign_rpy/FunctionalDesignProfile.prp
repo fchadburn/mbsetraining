@@ -1,0 +1,57 @@
+Subject Format
+	Metaclass CallOperation
+		Property DefaultSize String "0,0,408,73"
+		Property Fill.FillColor Color "225,235,245"
+		Property Font.Font String "Tahoma"
+		Property Font.Size Int "8"
+		Property Line.LineColor Color "109,163,217"
+		Property Line.LineWidth Int "1"
+	end
+	Metaclass Requirement
+		Property DefaultSize String "0,0,300,100"
+	end
+end
+Subject TestConductor
+	Metaclass Settings
+		Property CreateTestArchitectureTransparency Enum "BlackBox,GreyBox" "GreyBox"
+		Property OverwriteTestContextDiagram Enum "Never,Always,AskUser" "Always"
+	end
+	Metaclass TestCase
+		Property ExecutionIdleTimeout Int "10"
+	end
+end
+Subject ConfigurationManagement
+	Metaclass RationalTeamConcert
+		Property StoreInSeparateDirectoryActivation Enum "Disable,UserConfirmation,Automatic" "Automatic"
+		Property DeleteActivation Enum "Disable,UserConfirmation,Automatic" "Automatic"
+		Property RenameActivation Enum "Disable,UserConfirmation,Automatic" "Automatic"
+		Property MoveActivation Enum "Disable,UserConfirmation,Automatic" "Automatic"
+	end
+end
+Subject SysMLHelper
+        Metaclass General
+		Property StoreUnitInSeparateDirectoryNewTerms String ""
+		Property DontCreateSeparateUnitNewTerms String "Requirements Package,Actors Package,System Context Package,Function Breakdown Package,Parametrics Package"
+		Property RequirementPackageStereotype String "Requirements Package"
+		Property SystemContextPackageStereotype String "System Context Package"
+		Property FunctionsPackageStereotype String "Function Breakdown Package"
+		Property ParametricsPackageStereotype String "Parametrics Package"
+		Property SystemLevelPackageStereotypes String "1.1 System-Level Design"
+		Property RootPackageStereotypes String "1.2 PPMS Functional Design Specification,1.3 MCAS Functional Design Specification"
+		Property MasterActorPackageStereotype String "Master Actors Package"
+		Property MasterActorPackageStereotypes String "Master Actors Package"
+		Property ActorPackageStereotype String "Actors Package"
+		Property DefaultActorsForMasterActorsPackage String "Ship,Operator"
+		Property IsCreateParametricSubpackageSelected Bool "False"
+		Property UseCasePackageStereotype String "Not Used"
+		Property UseCasePackageWorkingStereotype String "Not Used"
+		Property SimulationPackageStereotype String "Not Used"
+		Property DesignPackageStereotype String "Not Used"
+		Property InterfacesPackageStereotype String "Not Used"
+		Property TestPackageStereotype String "Not Used"         
+	end
+        Metaclass FunctionalDesign
+		Property TemplateForActivityDiagram String "template_for_controlflowact"
+	end
+end
+end

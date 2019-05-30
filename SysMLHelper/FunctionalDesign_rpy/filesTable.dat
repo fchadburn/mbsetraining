@@ -1,0 +1,12 @@
+I-Logix-RPY-Archive version 8.13.0 * 9794446
+
+- filesTable = { IRPYRawContainer 
+	- size = 5;
+	- value = "FunctionalDesign.rpy" ""
+	"FunctionalDesign_rpy\\FunctionalDesignProfile.sbs" "FunctionalDesignProfile"
+	"FunctionalDesign_rpy\\FunctionalDesignProfile_copy.sbs" "FunctionalDesignProfile_copy"
+	"FunctionalDesign_rpy\\NotUsedCmp.cmp" "NotUsedCmp"
+	"FunctionalDesign_rpy\\NotUsedPkg.sbs" "NotUsedPkg"
+	
+}
+
