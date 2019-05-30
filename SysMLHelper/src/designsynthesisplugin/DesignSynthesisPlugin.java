@@ -17,7 +17,10 @@ public class DesignSynthesisPlugin extends RPUserPlugin {
 	public void RhpPluginInit(final IRPApplication theRhapsodyApp) {
 		
 		m_rhpApplication = theRhapsodyApp;
-		m_configSettings = ConfigurationSettings.getInstance();
+		
+		m_configSettings = new ConfigurationSettings(
+				"SysMLHelper.properties", 
+				"SysMLHelper_MessagesBundle" );
 		
 		String msg = "The DesignSynthesisPlugin component of the SysMLHelperPlugin V" + m_configSettings.getProperty("PluginVersion") + " was loaded successfully. New right-click 'MBSE Method' commands have been added.";		
 		Logger.writeLine(msg); 
@@ -55,7 +58,7 @@ public class DesignSynthesisPlugin extends RPUserPlugin {
 					
 					if (theSelectedEl instanceof IRPAttribute){
 						try {
-							PortCreator.createPublishFlowportsFor( theSelectedEls );
+							PortCreator.createPublishFlowportsFor( theSelectedEls, m_configSettings );
 							
 						} catch (Exception e) {
 							Logger.writeLine("Error: Exception in OnMenuItemSelect when invoking createPublishFlowportsFor");

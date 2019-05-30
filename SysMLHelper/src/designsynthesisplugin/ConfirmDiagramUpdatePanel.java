@@ -43,6 +43,9 @@ public class ConfirmDiagramUpdatePanel extends CreateStructuralElementPanel {
 	public static void launchThePanel(
 			final AutoConnectFlowPortsMap theAutoConnectFlowPortsMap ){
 
+		final String theAppID = 
+				UserInterfaceHelpers.getAppIDIfSingleRhpRunningAndWarnUserIfNot();
+
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 
 			@Override
@@ -56,6 +59,7 @@ public class ConfirmDiagramUpdatePanel extends CreateStructuralElementPanel {
 
 				ConfirmDiagramUpdatePanel thePanel = 
 						new ConfirmDiagramUpdatePanel( 
+								theAppID,
 								theAutoConnectFlowPortsMap );
 
 				frame.setContentPane( thePanel );
@@ -67,9 +71,10 @@ public class ConfirmDiagramUpdatePanel extends CreateStructuralElementPanel {
 	}
 	
 	public ConfirmDiagramUpdatePanel(
+			String theAppID,
 			final AutoConnectFlowPortsMap theAutoConnectFlowPortsMap ){
 		
-		super();
+		super( theAppID );
 		
 		m_AutoConnectFlowPortsMap = theAutoConnectFlowPortsMap;
 		m_DiagramCheckBoxMap = getDiagramCheckBoxMap();

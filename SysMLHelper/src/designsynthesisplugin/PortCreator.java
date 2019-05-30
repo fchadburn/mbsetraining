@@ -1,6 +1,7 @@
 package designsynthesisplugin;
 
 import functionalanalysisplugin.FunctionalAnalysisPlugin;
+import generalhelpers.ConfigurationSettings;
 import generalhelpers.GeneralHelpers;
 import generalhelpers.Logger;
 import generalhelpers.TraceabilityHelper;
@@ -21,13 +22,18 @@ public class PortCreator {
 
 		IRPModelElement theSelectedEl = FunctionalAnalysisPlugin.getRhapsodyApp().getSelectedElement();
 		
+		ConfigurationSettings configSettings = new ConfigurationSettings(
+				"SysMLHelper.properties", 
+				"SysMLHelper_MessagesBundle" );
+		
 		if( theSelectedEl instanceof IRPAttribute ){
-			createPublishFlowportFor( (IRPAttribute) theSelectedEl );
+			createPublishFlowportFor( (IRPAttribute) theSelectedEl, configSettings );
 		}
 	}
 	
 	public static void createPublishFlowportsFor(
-			List<IRPModelElement> theSelectedEls){
+			List<IRPModelElement> theSelectedEls,
+			ConfigurationSettings theConfigSettings ){
 
 		for (IRPModelElement selectedEl : theSelectedEls) {
 
@@ -36,7 +42,7 @@ public class PortCreator {
 				IRPAttribute theAttribute = (IRPAttribute)selectedEl;
 				Logger.writeLine(theAttribute, "is being processed");
 
-				createPublishFlowportFor(theAttribute);
+				createPublishFlowportFor(theAttribute, theConfigSettings);
 			} else {
 				Logger.writeLine("Doing nothing for " + Logger.elementInfo(selectedEl) 
 						+ " as it is not an Atttribute");
@@ -45,7 +51,8 @@ public class PortCreator {
 	}
 
 	public static IRPSysMLPort createPublishFlowportFor(
-			IRPAttribute theAttribute ){
+			IRPAttribute theAttribute,
+			ConfigurationSettings theConfigSettings ){
 
 		IRPSysMLPort thePort = getExistingOrCreateNewFlowPortFor( theAttribute );
 
@@ -76,7 +83,7 @@ public class PortCreator {
 			thePort.highLightElement();
 			theAttribute.highLightElement();
 			
-			AutoConnectFlowPortsPanel.launchThePanel( theAttribute );
+			AutoConnectFlowPortsPanel.launchThePanel( theAttribute, theConfigSettings );
 
 		} else {
 			Logger.writeLine("Error in createPublishFlowportFor, no port was created");

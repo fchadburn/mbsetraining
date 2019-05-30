@@ -1,9 +1,11 @@
 package designsynthesisplugin;
 
 import functionalanalysisplugin.FunctionalAnalysisSettings;
+import generalhelpers.ConfigurationSettings;
 import generalhelpers.CreateStructuralElementPanel;
 import generalhelpers.GeneralHelpers;
 import generalhelpers.Logger;
+import generalhelpers.ProfileVersionManager;
 import generalhelpers.UserInterfaceHelpers;
 
 import java.awt.BorderLayout;
@@ -13,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.GroupLayout;
@@ -43,21 +46,39 @@ public class AutoConnectFlowPortsPanel extends CreateStructuralElementPanel {
 		
 		IRPModelElement theEl = theApp.getSelectedElement();
 		
+		ConfigurationSettings configSettings = new ConfigurationSettings(
+				"SysMLHelper.properties", 
+				"SysMLHelper_MessagesBundle" );
+		
 		if( theEl instanceof IRPAttribute ){
-			launchThePanel( (IRPAttribute) theEl );
+			launchThePanel( (IRPAttribute) theEl, configSettings );
 		}
 	}
 	
 	public static void launchThePanel(
-			final IRPAttribute theAttribute ){
+			final IRPAttribute theAttribute,
+			ConfigurationSettings theConfigSettings ){
 		
-		IRPPackage thePackageUnderDev =
-				FunctionalAnalysisSettings.getPackageUnderDev( theAttribute.getProject() );
+		UserInterfaceHelpers.setLookAndFeel();
 		
-		if( thePackageUnderDev != null ){
+		final String theAppID = 
+				UserInterfaceHelpers.getAppIDIfSingleRhpRunningAndWarnUserIfNot();
+
+		if( theAppID != null ){
+
+			ProfileVersionManager.checkAndSetProfileVersion( 
+					false, 
+					theConfigSettings,
+					true );
+
+		}
+//		IRPPackage thePackageUnderDev =
+//				FunctionalAnalysisSettings.getPackageUnderDev( theAttribute.getProject() );
+//
+//		if( thePackageUnderDev != null ){
 
 			IRPClass theBuildingBlock = 
-					FunctionalAnalysisSettings.getBuildingBlock( thePackageUnderDev );
+					FunctionalAnalysisSettings.getBuildingBlock( theAttribute );
 			
 			if( theBuildingBlock != null ){
 				
@@ -107,6 +128,7 @@ public class AutoConnectFlowPortsPanel extends CreateStructuralElementPanel {
 
 								AutoConnectFlowPortsPanel thePanel = 
 										new AutoConnectFlowPortsPanel( 
+												theAppID,
 												theAttribute, 
 												thePort,
 												thePart );
@@ -122,16 +144,17 @@ public class AutoConnectFlowPortsPanel extends CreateStructuralElementPanel {
 				}
 				
 			}
-		}
+	//	}
 	}
 	
 	@SuppressWarnings("unchecked")
 	public AutoConnectFlowPortsPanel(
+			String theAppID,
 			IRPAttribute thePublishingAttribute,
 			IRPSysMLPort thePublishingFlowPort,
 			IRPInstance thePublishingPart ){
 		
-		super();
+		super( theAppID );
 		
 		m_PublishingAttribute = thePublishingAttribute;
 		m_PublishingPart = thePublishingPart;
@@ -268,7 +291,7 @@ public class AutoConnectFlowPortsPanel extends CreateStructuralElementPanel {
 				Logger.writeLine("Create new was selected for " + Logger.elementInfo( entry.getKey( ) ) +
 						" with value " + theChosenAttributeName); 
 
-				boolean isLegalName = GeneralHelpers.isLegalName( theChosenAttributeName );
+				boolean isLegalName = GeneralHelpers.isLegalName( theChosenAttributeName, theValue.getM_SubscribingBlock() );
 				
 				if( !isLegalName ){
 					errorMsg += theChosenAttributeName + " is not a legal name for an executable attribute\n";
