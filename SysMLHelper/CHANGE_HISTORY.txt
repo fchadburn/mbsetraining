@@ -404,3 +404,15 @@ RELEASE 2.1 (05-NOV-2017)
 ----------------------------------------------------------------------------------
 RELEASE 2.2 (08-APR-2018)
 ----------------------------------------------------------------------------------
+#249 29-MAY-2019: First official version of new ExecutableMBSEProfile  (F.J.Chadburn)
+#250 29-MAY-2019: First official version of new FunctionalDesignProfile  (F.J.Chadburn)
+#251 29-MAY-2019: First official version of new TauMigratorProfile (F.J.Chadburn)
+#252 29-MAY-2019: Implement generic features for profile/settings loading (F.J.Chadburn)
+#253 11-SEP-2018: Move from using tags to properties to control plugin behaviour (F.J.Chadburn)
+#254 11-SEP-2018: Moved .hep files into _rpy folder to enable default loading by profile (F.J.Chadburn)
+#255 30-MAY-2019: Removed SysMLHelper (Rhp813-Archive).zip as no longer applicable (F.J.Chadburn)
+#256 29-MAY-2019: Rewrite to Java Swing dialog launching to make thread safe between versions (F.J.Chadburn)
+#257 11-SEP-2018: Move populate requirements/update verifications for SD(s) menus to Reqts menu (F.J.Chadburn)
+----------------------------------------------------------------------------------
+UNDER DEV RELEASE 3.0.W.PRERELEASE (30-MAY-2019)
+----------------------------------------------------------------------------------
