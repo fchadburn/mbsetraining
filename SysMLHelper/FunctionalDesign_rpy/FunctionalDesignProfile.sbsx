@@ -4,7 +4,7 @@
 	<CODE-PAGE>1252</CODE-PAGE>
 	<version>100.831.0</version>
 	<lang>C++</lang>
-	<BuildNo>9835550</BuildNo>
+	<BuildNo>9835718</BuildNo>
 	
 	<RHAPSODY-MODEL>
 	<IProfile type="e">
@@ -1664,10 +1664,10 @@
 			</IPropertyContainer>
 			</_properties>
 			<_name type="a">FunctionalDesignProfile</_name>
-			<_modifiedTimeWeak type="a">3.20.2019::12:32:58</_modifiedTimeWeak>
-			<_modifiedTime type="a">3.20.2019::12:32:58</_modifiedTime>
+			<_modifiedTimeWeak type="a">7.2.2020::7:51:30</_modifiedTimeWeak>
+			<_modifiedTime type="a">7.2.2020::7:51:30</_modifiedTime>
 			<_lastID type="a">15</_lastID>
-			<weakCGTime type="a">3.20.2019::12:32:58</weakCGTime>
+			<weakCGTime type="a">7.2.2020::7:51:30</weakCGTime>
 			<strongCGTime type="a">3.20.2019::10:59:28</strongCGTime>
 			<_defaultComposite type="s">GUID f0a84551-8e03-42bc-842c-2b003828fdc9</_defaultComposite>
 			<_eventsBaseID type="a">-1</_eventsBaseID>
@@ -2269,7 +2269,7 @@
 			<_properties type="p"><IPropertyContainer type="e">
 				<Subjects type="c">
 					<IRPYRawContainer type="e">
-						<size type="a">1</size>
+						<size type="a">2</size>
 						<IPropertySubject type="e">
 							<_Name type="a">Model</_Name>
 							<Metaclasses type="c">
@@ -2306,13 +2306,45 @@
 							</Metaclasses>
 						</IPropertySubject>
 						
+						<IPropertySubject type="e">
+							<_Name type="a">ObjectModelGe</_Name>
+							<Metaclasses type="c">
+								<IRPYRawContainer type="e">
+									<size type="a">1</size>
+									<IPropertyMetaclass type="e">
+										<_Name type="a">Class</_Name>
+										<Properties type="c">
+											<IRPYRawContainer type="e">
+												<size type="a">2</size>
+												<IProperty type="e">
+													<_Name type="a">ShowAttributes</_Name>
+													<_Value type="a">None</_Value>
+													<_Type type="a">Enum</_Type>
+													<_ExtraTypeInfo type="a">All,None,Public,Explicit</_ExtraTypeInfo>
+												</IProperty>
+												
+												<IProperty type="e">
+													<_Name type="a">ShowOperations</_Name>
+													<_Value type="a">None</_Value>
+													<_Type type="a">Enum</_Type>
+													<_ExtraTypeInfo type="a">All,None,Public,Explicit</_ExtraTypeInfo>
+												</IProperty>
+												
+											</IRPYRawContainer>
+										</Properties>
+									</IPropertyMetaclass>
+									
+								</IRPYRawContainer>
+							</Metaclasses>
+						</IPropertySubject>
+						
 					</IRPYRawContainer>
 				</Subjects>
 			</IPropertyContainer>
 			</_properties>
 			<_name type="a">Function Breakdown Package</_name>
-			<_modifiedTimeWeak type="a">3.20.2019::12:32:58</_modifiedTimeWeak>
-			<_modifiedTime type="a">3.20.2019::12:32:58</_modifiedTime>
+			<_modifiedTimeWeak type="a">7.2.2020::7:50:26</_modifiedTimeWeak>
+			<_modifiedTime type="a">7.2.2020::7:50:26</_modifiedTime>
 			<_m2Classes type="c">
 				<IRPYRawContainer type="e">
 					<size type="a">1</size>
@@ -2532,7 +2564,7 @@
 												
 												<IProperty type="e">
 													<_Name type="a">ShowAttributes</_Name>
-													<_Value type="a">All</_Value>
+													<_Value type="a">None</_Value>
 													<_Type type="a">Enum</_Type>
 													<_ExtraTypeInfo type="a">All,None,Public,Explicit</_ExtraTypeInfo>
 												</IProperty>
@@ -2607,8 +2639,8 @@
 			</IPropertyContainer>
 			</_properties>
 			<_name type="a">Function Hierarchy - Block Definition Diagram</_name>
-			<_modifiedTimeWeak type="a">3.20.2019::12:22:49</_modifiedTimeWeak>
-			<_modifiedTime type="a">3.20.2019::12:22:49</_modifiedTime>
+			<_modifiedTimeWeak type="a">7.2.2020::7:50:48</_modifiedTimeWeak>
+			<_modifiedTime type="a">7.2.2020::7:50:48</_modifiedTime>
 			<_m2Classes type="c">
 				<IRPYRawContainer type="e">
 					<size type="a">1</size>
@@ -2740,11 +2772,25 @@
 										<_Name type="a">Class</_Name>
 										<Properties type="c">
 											<IRPYRawContainer type="e">
-												<size type="a">1</size>
+												<size type="a">3</size>
 												<IProperty type="e">
 													<_Name type="a">Compartments</_Name>
 													<_Value type="a">Function Block</_Value>
 													<_Type type="a">MultiLine</_Type>
+												</IProperty>
+												
+												<IProperty type="e">
+													<_Name type="a">ShowAttributes</_Name>
+													<_Value type="a">None</_Value>
+													<_Type type="a">Enum</_Type>
+													<_ExtraTypeInfo type="a">All,None,Public,Explicit</_ExtraTypeInfo>
+												</IProperty>
+												
+												<IProperty type="e">
+													<_Name type="a">ShowOperations</_Name>
+													<_Value type="a">None</_Value>
+													<_Type type="a">Enum</_Type>
+													<_ExtraTypeInfo type="a">All,None,Public,Explicit</_ExtraTypeInfo>
 												</IProperty>
 												
 											</IRPYRawContainer>
@@ -2875,8 +2921,8 @@
 			</IPropertyContainer>
 			</_properties>
 			<_name type="a">System Context Diagram</_name>
-			<_modifiedTimeWeak type="a">3.20.2019::12:24:46</_modifiedTimeWeak>
-			<_modifiedTime type="a">3.20.2019::12:24:46</_modifiedTime>
+			<_modifiedTimeWeak type="a">7.2.2020::7:51:30</_modifiedTimeWeak>
+			<_modifiedTime type="a">7.2.2020::7:51:30</_modifiedTime>
 			<_m2Classes type="c">
 				<IRPYRawContainer type="e">
 					<size type="a">1</size>

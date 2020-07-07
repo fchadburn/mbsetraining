@@ -20,11 +20,7 @@ IsFileBased=0
 Section1Name=Object
 Section1Tree=<Object number="$i"><Attribute value="$l" name="Object Heading"></Attribute><Picture>$g</Picture></Object>
 Requirement1Name=Requirement
-Requirement1Value1Key=WizardExact
-Requirement1Value1Value=Object Type
-Requirement1Tree=<Object id="$i"><Picture>$g</Picture><Text>$t</Text><Attribute name="Requirement" value="^True$"></Attribute></Object>
-Reference1Name=System to Customer
-Reference1Tree=<Out-link target="$i" linkModule="System to Customer"></Out-link>
+Requirement1Tree=<Object id="$i"><Picture>$g</Picture><Text>$t</Text><Attribute name="Object Type" value="Requirement"></Attribute></Object>
 TextFormat=1
 Type=xml
 

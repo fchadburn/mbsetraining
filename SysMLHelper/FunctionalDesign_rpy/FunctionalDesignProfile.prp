@@ -37,11 +37,11 @@ Subject SysMLHelper
 		Property FunctionsPackageStereotype String "Function Breakdown Package"
 		Property ParametricsPackageStereotype String "Parametrics Package"
 		Property SystemLevelPackageStereotypes String "1.1 System-Level Design"
-		Property RootPackageStereotypes String "1.2 PPMS Functional Design Specification,1.3 MCAS Functional Design Specification"
+		Property RootPackageStereotypes String "1.3 Functional Design Specification"
 		Property MasterActorPackageStereotype String "Master Actors Package"
 		Property MasterActorPackageStereotypes String "Master Actors Package"
 		Property ActorPackageStereotype String "Actors Package"
-		Property DefaultActorsForMasterActorsPackage String "Ship,Operator"
+		Property DefaultActorsForMasterActorsPackage String "Population,Environment,Virus"
 		Property IsCreateParametricSubpackageSelected Bool "False"
 		Property UseCasePackageStereotype String "Not Used"
 		Property UseCasePackageWorkingStereotype String "Not Used"
@@ -52,6 +52,246 @@ Subject SysMLHelper
 	end
         Metaclass FunctionalDesign
 		Property TemplateForActivityDiagram String "template_for_controlflowact"
+	end
+end
+Subject ObjectModelGe
+	Metaclass General
+		Property SysMLDiagramKindTitle String ""
+	end
+	Metaclass ClassDiagram
+		Property Fillcolor Color "243,243,243"
+		Property TreeContainmentStyle Bool "False"
+	end
+	Metaclass Complete
+		Property Complete_Relation Bool "True"
+	end
+	Metaclass AutoPopulate
+		Property ArrowDirection Enum "Top-Bottom,Bottom-Top" "Bottom-Top"
+		Property LayoutStyle Enum "Hierarchical,Orthogonal,Functional Flow,Visibility Representation" "Hierarchical"
+		Property EnabledOnUpdateModel Bool "False"
+	end
+	Metaclass Package
+		Property ShowName Enum  "Full_path,Relative,Name_only,Label" "Name_only"
+		Property ShowStereotype Enum "Label,Bitmap,None" "Label"
+		Property QuickNavigationCategories String "MainBehavior,MainDiagram,Hyperlinks,Diagrams"
+	end
+	Metaclass Class
+		Property ShowAttributes Enum "All,None,Public,Explicit" "None"
+		Property ShowOperations Enum "All,None,Public,Explicit" "None"
+		Property ShowStereotype Enum "Label,Bitmap,None" "Label"
+		Property ShowName Enum  "Full_path,Relative,Name_only,Label" "Relative"
+		Property ShowPorts Bool "True"
+		Property ShowPortsInterfaces Bool "True"
+		Property PortsSingleLabelLayout Enum "Off,Internal,External" "Off"
+		Property Compartments MultiLine ""
+		Property ShowInheritedAttributes Bool "False"
+		Property ShowInheritedOperations Bool "False"
+		Property QuickNavigationCategories String "MainBehavior,MainDiagram,Hyperlinks,Diagrams"
+	end
+	Metaclass Operation
+		Property ShowName Enum  "Full_path,Relative,Name_only,Label" "Name_only"
+		Property ShowStereotype Enum "Label,Bitmap,None" "Label"
+		Property Compartments MultiLine ""
+		Property QuickNavigationCategories String "Hyperlinks"
+	end
+	Metaclass Attribute
+		Property ShowName Enum  "Full_path,Relative,Name_only,Label" "Name_only"
+		Property ShowStereotype Enum "Label,Bitmap,None" "Label"
+		Property Compartments MultiLine ""
+		Property ShowRedefinesLabel Bool "True"
+		Property QuickNavigationCategories String "Hyperlinks"
+	end
+	Metaclass Type
+		Property ShowName Enum  "Full_path,Relative,Name_only,Label" "Name_only"
+		Property ShowStereotype Enum "Label,Bitmap,None" "Label"
+		Property Compartments MultiLine ""
+		Property QuickNavigationCategories String "Hyperlinks"
+	end
+	Metaclass Stereotype
+		Property ShowName Enum  "Full_path,Relative,Name_only,Label" "Name_only"
+		Property ShowStereotype Enum "Label,Bitmap,None" "Label"
+		Property Compartments MultiLine "Tag,"
+		Property QuickNavigationCategories String "Hyperlinks"
+	end
+	Metaclass Tag
+		Property ShowName Enum  "Full_path,Relative,Name_only,Label" "Name_only"
+		Property ShowStereotype Enum "Label,Bitmap,None" "Label"
+		Property Compartments MultiLine ""
+		Property CompartmentDisplayFormat String "?<IsConditionalProperty>$<Name>:$<Type>?<begin>$<Value>?<==>?<?>?<:>=$<Value>?<end>"
+		Property DisplayNameFormat String "?<IsConditionalProperty>$<Name>:$<Type>?<begin>$<Value>?<==>?<?>?<:>=$<Value>?<end>"
+		Property QuickNavigationCategories String "Hyperlinks"
+	end
+	Metaclass Object
+		Property ShowAttributes Enum "All,None,Public,Explicit" "Public"
+		Property ShowOperations Enum "All,None,Public,Explicit" "Public"
+		Property ShowStereotype Enum "Label,Bitmap,None" "Label"
+		Property ShowStereotypeOfClass Bool "True"
+		Property ShowName Enum  "Full_path,Relative,Name_only,Type,Label" "Relative"
+		Property ShowType Bool "True"
+		Property ShowPorts Bool "True"
+		Property ShowPortsInterfaces Bool "True"
+		Property PortsSingleLabelLayout Enum "Off,Internal,External" "Off"
+		Property MultilineNameCompartment Bool "False"
+		Property Compartments MultiLine ""
+		Property ShowInheritedAttributes Bool "False"
+		Property ShowInheritedOperations Bool "False"
+		Property ShowRedefinesLabel Bool "True"
+		Property QuickNavigationCategories String "MainBehavior,MainDiagram,Hyperlinks,Diagrams"
+	end	
+	Metaclass Aggregation
+		Property line_style Enum "straight_arrows,rectilinear_arrows,spline_arrows,rounded_rectilinear_arrows" "rectilinear_arrows"
+		Property ShowName Enum  "Name,Label,None" "Name"
+		Property ShowStereotype Enum "Label,Bitmap,None" "None"
+		Property ShowSourceRole Bool "True"
+		Property ShowTargetRole Bool "True"
+		Property ShowSourceMultiplicity Bool "True"
+		Property ShowTargetMultiplicity Bool "True"
+		Property ShowSourceQualifier Bool "True"
+		Property ShowTargetQualifier Bool "True"
+		Property ShowRoleVisibility Bool "False"
+		Property ShowRedefinesLabel Bool "True"
+		Property DefaultLabel Enum "Association,Source_Role,Target_Role,Source_Multiplicity,Target_Multiplicity" "Target_Role"
+	end
+	Metaclass Composition
+		Property line_style Enum "straight_arrows,rectilinear_arrows,spline_arrows,rounded_rectilinear_arrows" "rectilinear_arrows"
+		Property ShowName Enum  "Name,Label,None" "Name"
+		Property ShowStereotype Enum "Label,Bitmap,None" "None"
+		Property ShowSourceRole Bool "True"
+		Property ShowTargetRole Bool "True"
+		Property ShowSourceMultiplicity Bool "True"
+		Property ShowTargetMultiplicity Bool "True"
+		Property ShowSourceQualifier Bool "True"
+		Property ShowTargetQualifier Bool "True"
+		Property RepresentParts Bool "False"
+		Property ShowRoleVisibility Bool "False"
+		Property ShowRedefinesLabel Bool "True"
+		Property DefaultLabel Enum "Association,Source_Role,Target_Role,Source_Multiplicity,Target_Multiplicity" "Target_Role"
+	end
+	Metaclass Association
+		Property line_style Enum "straight_arrows,rectilinear_arrows,spline_arrows,rounded_rectilinear_arrows" "rectilinear_arrows"
+		Property ShowName Enum  "Name,Label,None" "Name"
+		Property ShowStereotype Enum "Label,Bitmap,None" "None"
+		Property ShowSourceRole Bool "True"
+		Property ShowTargetRole Bool "True"
+		Property ShowSourceMultiplicity Bool "True"
+		Property ShowTargetMultiplicity Bool "True"
+		Property ShowSourceQualifier Bool "True"
+		Property ShowTargetQualifier Bool "True"
+		Property ShowRoleVisibility Bool "False"
+		Property ShowRedefinesLabel Bool "True"
+		Property DefaultLabel Enum "Association,Source_Role,Target_Role,Source_Multiplicity,Target_Multiplicity" "Target_Role"
+	end
+	Metaclass Link
+		Property line_style Enum "straight_arrows,rectilinear_arrows,spline_arrows,rounded_rectilinear_arrows" "rectilinear_arrows"
+		Property ShowName Enum  "Name,Label,None" "Name"
+		Property ShowStereotype Enum "Label,Bitmap,None" "None"
+		Property ShowSourceRole Bool "False"
+		Property ShowTargetRole Bool "False"
+		Property ShowSourceMultiplicity Bool "False"
+		Property ShowTargetMultiplicity Bool "False"
+		Property ShowRoleVisibility Bool "False"
+	end	
+	Metaclass Inheritance
+		Property line_style Enum "straight_arrows,rectilinear_arrows,spline_arrows,tree,rounded_rectilinear_arrows" "tree"
+		Property ShowName Enum  "Name,Label,None" "None"
+		Property ShowStereotype Enum "Label,Bitmap,None" "Label"
+	end
+	Metaclass Realization
+		Property line_style Enum "straight_arrows,rectilinear_arrows,spline_arrows,tree,rounded_rectilinear_arrows" "tree"
+		Property ShowName Enum  "Name,Label,None" "None"
+		Property ShowStereotype Enum "Label,Bitmap,None" "None"
+	end
+	Metaclass Depends
+		Property line_style Enum "straight_arrows,rectilinear_arrows,spline_arrows,rounded_rectilinear_arrows" "straight_arrows"
+		Property ShowName Enum  "Name,Label,None" "None"
+		Property ShowStereotype Enum "Label,Bitmap,None" "Label"
+	end
+	Metaclass Flow
+		Property line_style Enum "straight_arrows,rectilinear_arrows,spline_arrows,rounded_rectilinear_arrows" "rectilinear_arrows"
+		Property flowKeyword Bool "True"
+		Property ShowConveyed Enum  "Name,Label,None" "Name"
+	end
+	Metaclass UseCase
+		Property ShowName Enum  "Full_path,Relative,Name_only,Label" "Relative"
+		Property ShowStereotype Enum "Label,Bitmap,None" "Label"
+		Property ShowPorts Bool "True"
+		Property ShowPortsInterfaces Bool "True"
+	end
+	Metaclass Actor
+		Property ShowName Enum  "Full_path,Relative,Name_only,Label" "Relative"
+		Property ShowStereotype Enum "Label,Bitmap,None" "Label"
+		Property ShowPorts Bool "True"
+		Property ShowPortsInterfaces Bool "True"
+	end
+	Metaclass Requirement
+		Property Compartments MultiLine "ID, Specification"
+		Property RequirementNotation Enum "Note_Style,Box_Style" "Note_Style"
+		Property ShowAnnotationContents Enum  "Name,Specification,Description,Label" "Description"
+		Property ShowForm Enum "Plain,Note,Pushpin" "Note"
+		Property ShowName Enum  "Full_path,Relative,Name_only,Label" "Name_only"
+		Property ShowStereotype Enum "Label,Bitmap,None" "Label"
+		Property SpecificationAnnotationFormat MultiLine "$Specification"
+		Property QuickNavigationCategories String "Hyperlinks"
+	end
+	Metaclass Comment
+		Property Compartments MultiLine ""
+		Property CommentNotation Enum "Note_Style,Box_Style" "Note_Style"
+		Property ShowAnnotationContents Enum  "Name,Description,Label" "Description"
+		Property ShowForm Enum "Plain,Note,Pushpin" "Note"
+		Property ShowName Enum  "Full_path,Relative,Name_only,Label" "Name_only"
+		Property ShowStereotype Enum "Label,Bitmap,None" "Label"
+		Property QuickNavigationCategories String "Hyperlinks"
+    end
+	Metaclass Note
+		Property ShowForm Enum "Note,Pushpin" "Note"
+    end
+	Metaclass Constraint
+		Property Compartments MultiLine "Specification"
+		Property ConstraintNotation Enum "Note_Style,Box_Style" "Note_Style"
+		Property ShowAnnotationContents Enum  "Name,Specification,Description,Label" "Description"
+		Property ShowForm Enum "Plain,Note,Pushpin" "Note"
+		Property ShowName Enum  "Full_path,Relative,Name_only,Label" "Name_only"
+		Property ShowStereotype Enum "Label,Bitmap,None" "Label"
+		Property QuickNavigationCategories String "Hyperlinks"
+    end
+	Metaclass ContainArrow
+		Property line_style Enum "straight_arrows,rectilinear_arrows,spline_arrows,rounded_rectilinear_arrows" "rectilinear_arrows"
+		Property ShowName Enum  "Name,Label,None" "Name"
+	end
+	Metaclass Interface
+		Property ShowAttributes Enum "All,None,Public,Explicit" "Explicit"
+		Property ShowOperations Enum "All,None,Public,Explicit" "Explicit"
+		Property ShowStereotype Enum "Label,Bitmap,None" "Label"
+		Property ShowName Enum  "Full_path,Relative,Name_only,Label" "Relative"
+		Property ShowPorts Bool "True"
+		Property PortsSingleLabelLayout Enum "Off,Internal,External" "Off"
+		Property ShowPortsInterfaces Bool "True"
+		Property Compartments MultiLine ""
+		Property ShowInheritedAttributes Bool "False"
+		Property ShowInheritedOperations Bool "False"
+		Property QuickNavigationCategories String "MainBehavior,MainDiagram,Hyperlinks,Diagrams"
+	end
+	Metaclass flowPort
+		Property ShowName Enum "Name,NameAndType,Type,Label,None" "NameAndType"
+		Property ShowStereotype Enum "Label,None" "None"
+		Property ShowRedefinesLabel Bool "True"
+		Property SingleLabelFormat String "$Stereotype $Name"
+	end
+	Metaclass DiagramFrame
+		Property ShowName Enum "Name,Label" "Name"
+		Property ShowStereotype Enum "Label,None" "Label"
+		Property DefaultSize String "20,20,590,500"
+	end
+	Metaclass Port
+		Property ShowName Enum  "Name,NameAndType,Type,Label,None" "NameAndType"
+		Property ShowStereotype Enum "Label,None" "None"
+		Property ShowRedefinesLabel Bool "True"
+		Property SingleLabelFormat String "$Stereotype $Name $Interface"
+	end
+	Metaclass InstanceSpecification
+		Property ShowInnerSlots Enum "None,ExcludeReferencesToOtherInstances,All", "None"
+		Property QuickNavigationCategories String "MainBehavior,Hyperlinks"
+		Property Compartments MultiLine "InstanceSlot"
 	end
 end
 end

@@ -397,7 +397,7 @@ public class SelectedElementContext {
 		return theEl;
 	}
 
-	public static IRPPackage getSimulationSettingsPackageBasedOn(
+	public IRPPackage getSimulationSettingsPackageBasedOn(
 			IRPModelElement theContextEl ){
 
 		IRPPackage theSettingsPkg = null;

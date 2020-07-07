@@ -618,7 +618,7 @@ public class CreateGatewayProjectPanel extends CreateStructuralElementPanel {
 			theUMLModelDoc.setVariableXValue( "doorsModule", theDoorsInfo.getPathName() );
 		}
 
-		String theUMLModelPath = "..\\" + m_Project.getName() + ".rpy";
+		String theUMLModelPath = "..\\" + m_Project.getName() + ".rpyx";
 		theUMLModelDoc.setValueFor( "Path", theUMLModelPath );
 	}
 
@@ -760,6 +760,7 @@ public class CreateGatewayProjectPanel extends CreateStructuralElementPanel {
     #218 12-JUL-2017: Add Gateway project Confirm dialogs to advise and provide option to delete and re-create (F.J.Chadburn)
     #252 29-MAY-2019: Implement generic features for profile/settings loading (F.J.Chadburn)
     #256 29-MAY-2019: Rewrite to Java Swing dialog launching to make thread safe between versions (F.J.Chadburn)
+    #261 07-JUL-2020: Fix to Gateway project builder so that it assumes .rpyx rather than .rpy projects (F.J.Chadburn)
 
     This file is part of SysMLHelperPlugin.
 
