@@ -422,4 +422,8 @@ UNDER DEV RELEASE 3.0.W.PRERELEASE (30-MAY-2019)
 #261 07-JUL-2020: Fix to Gateway project builder so that it assumes .rpyx rather than .rpy projects (F.J.Chadburn)
 #262 07-JUL-2020: Fix to remove spaces from ReferenceUnitPath properties so that they get set-up correctly (F.J.Chadburn)
 #263 07-JUL-2020: Some FunctionalDesignProfile property file tweaks (F.J.Chadburn)
+#264 07-JUL-2020: Update version number in txt files (F.J.Chadburn)
+----------------------------------------------------------------------------------
+UNDER DEV RELEASE 3.0.X.PRERELEASE (07-JUL-2020)
+----------------------------------------------------------------------------------
  
